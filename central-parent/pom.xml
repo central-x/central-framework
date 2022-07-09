@@ -1,0 +1,184 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Spring Boot -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>2.7.1</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>org.central-x</groupId>
+    <artifactId>central-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.x-SNAPSHOT</version>
+    <description>Central Framework Parent</description>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <!-- 开发者信息 -->
+    <developers>
+        <developer>
+            <name>Alan Yeh</name>
+            <url>https://github.com/alan-yeh</url>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>17</java.version>
+        <spring-cloud.version>2021.0.3</spring-cloud.version>
+        <jsr305.version>3.0.2</jsr305.version>
+        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
+    </properties>
+
+    <!-- 依赖版本管理 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Cloud 组件 -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- JSR305 规范 -->
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${jsr305.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- 所有子项目都必须添加的依赖 -->
+    <dependencies>
+        <!-- JSR 305 标准，用于提供 @Nonnull、@Nullable 等注解 -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- Unit test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.svn</exclude>
+                    <exclude>**/Thumbs.db</exclude>
+                    <exclude>**/.gitkeep</exclude>
+                    <exclude>**/.DS_Store</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <!-- 插件版本管理 -->
+        <pluginManagement>
+            <plugins>
+                <!-- Docker 插件 -->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>${dockerfile-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <!-- 所有子项目都必须添加的插件 -->
+        <plugins>
+            <!-- 编码插件配置 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- 编译插件配置，指定Java编译版本 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <!-- JUnit 报告 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <reportFormat>xml</reportFormat>
+                </configuration>
+            </plugin>
+
+            <!-- 版本号管理 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- 镜像仓库 -->
+    <repositories>
+        <repository>
+            <id>mirror</id>
+            <name>Mirror Repository</name>
+            <url>https://mirror.yeh.cn/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+    <!-- 插件仓库 -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>mirror</id>
+            <name>Mirror Repository</name>
+            <url>https://mirror.yeh.cn/repository/maven-public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <!-- 发布仓库 -->
+    <distributionManagement>
+        <repository>
+            <id>centralx-releases</id>
+            <name>CentralX Release Repository</name>
+            <url>https://deploy.yeh.cn/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>centralx-snapshots</id>
+            <name>CentralX Snapshot Repository</name>
+            <url>https://deploy.yeh.cn/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>
