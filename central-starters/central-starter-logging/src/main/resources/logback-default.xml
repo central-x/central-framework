@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="LOG_LEVEL" source="central.logging.level" defaultValue="INFO"/>
+    <springProperty scope="context" name="LOG_HOME" source="central.logging.path" defaultValue="./logs"/>
+
+    <!-- 定义属性 -->
+    <property name="LOG_PATTERN" value="%n%d{HH:mm:ss.SSS}${LOG_LEVEL_PATTERN:-%5p} ${PID:- } [%thread] %logger:%n%msg%n"/>
+    <property name="LOG_CONSOLE_PATTERN" value="%n%clr(%d{HH:mm:ss.SSS}){faint}%clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr([%thread]){magenta} %clr(%logger){cyan}:%n%msg%n"/>
+
+    <springProperty scope="context" name="SERVICE_NAME" source="spring.application.name" defaultValue=""/>
+
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+
+    <!-- 控制台日志 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_CONSOLE_PATTERN}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${LOG_LEVEL}</level>
+        </filter>
+    </appender>
+
+    <!-- 文件日志 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${SERVICE_NAME}.current.log</file>
+
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${LOG_HOME}/history/${SERVICE_NAME}.%d{yyyy-MM-dd_HH}.log.gz
+            </fileNamePattern>
+            <maxHistory>720</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="com.alibaba.nacos" level="OFF"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

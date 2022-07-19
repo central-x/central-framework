@@ -27,6 +27,8 @@ project:unit-test:
       junit:
         - central-*/target/surefire-reports/TEST-*.xml
         - central-*/target/failsafe-reports/TEST-*.xml
+        - central-starters/central-*/target/surefire-reports/TEST-*.xml
+        - central-starters/central-*/target/failsafe-reports/TEST-*.xml
 
 # 使用 GitLab Pages 功能托管代码质量报告
 pages:
