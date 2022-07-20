@@ -1,8 +1,10 @@
 package central.util.function;
 
-import central.util.Assertx;
+import central.lang.Assertx;
+import central.lang.Exceptionx;
 import lombok.SneakyThrows;
 
+import javax.annotation.Nonnull;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -31,8 +33,8 @@ public interface ThrowableFunction<T, R, E extends Exception> {
      * @param <RE>  下一个函数可能抛出的异常
      * @return 被包装后的函数
      */
-    default <V, RE extends Exception> ThrowableFunction<T, V, RE> andThen(ThrowableFunction<? super R, ? extends V, RE> after) {
-        Assertx.mustNotNull("after", after);
+    default <V, RE extends Exception> ThrowableFunction<T, V, RE> andThen(@Nonnull ThrowableFunction<? super R, ? extends V, RE> after) {
+        Assertx.mustNotNull(after, "Argument 'after' must not null");
 
         return (T t) -> after.apply(sneakThrows().apply(t));
     }
@@ -45,7 +47,7 @@ public interface ThrowableFunction<T, R, E extends Exception> {
      * @return 被包装后的函数
      */
     default <RE extends Exception> ThrowableConsumer<T, RE> andThen(ThrowableConsumer<? super R, RE> after) {
-        Assertx.mustNotNull("after", after);
+        Assertx.mustNotNull(after, "Argument 'after' must not null");
 
         return (T t) -> after.accept(sneakThrows().apply(t));
     }

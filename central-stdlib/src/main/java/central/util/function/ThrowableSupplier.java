@@ -1,6 +1,6 @@
 package central.util.function;
 
-import central.util.Assertx;
+import central.lang.Assertx;
 import lombok.SneakyThrows;
 
 import java.util.function.Function;

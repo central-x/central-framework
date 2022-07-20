@@ -2,7 +2,7 @@ package central.net.http.body.request;
 
 import central.net.http.body.Body;
 import central.net.http.body.InputStreamBody;
-import central.util.Assertx;
+import central.lang.Assertx;
 import central.util.Listx;
 import central.io.IOStreamx;
 import central.util.Stringx;

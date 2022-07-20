@@ -1,6 +1,7 @@
 package central.util;
 
 import central.bean.InitializeException;
+import central.lang.Assertx;
 import central.lang.reflect.TypeReference;
 import central.util.converter.ConvertException;
 import central.util.converter.Converter;

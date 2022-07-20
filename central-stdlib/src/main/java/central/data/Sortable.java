@@ -1,6 +1,6 @@
 package central.data;
 
-import central.util.Assertx;
+import central.lang.Assertx;
 import central.util.Objectx;
 import lombok.AllArgsConstructor;
 import lombok.Data;

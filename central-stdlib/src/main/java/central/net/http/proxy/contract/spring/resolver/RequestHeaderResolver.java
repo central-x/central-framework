@@ -3,7 +3,7 @@ package central.net.http.proxy.contract.spring.resolver;
 import central.net.http.HttpRequest;
 import central.net.http.body.HttpConverters;
 import central.net.http.proxy.contract.spring.SpringResolver;
-import central.util.Assertx;
+import central.lang.Assertx;
 import central.util.Objectx;
 import central.util.Stringx;
 import org.springframework.web.bind.annotation.RequestHeader;

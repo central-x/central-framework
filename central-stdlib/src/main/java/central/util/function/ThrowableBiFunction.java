@@ -1,8 +1,9 @@
 package central.util.function;
 
-import central.util.Assertx;
+import central.lang.Assertx;
 import lombok.SneakyThrows;
 
+import javax.annotation.Nonnull;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -36,8 +37,8 @@ public interface ThrowableBiFunction<T, U, R, E extends Exception> {
      * @param <RE>  下一个函数可能抛出的异常
      * @return 被包装后的函数
      */
-    default <V, RE extends Exception> ThrowableBiFunction<T, U, V, RE> andThen(ThrowableFunction<R, V, RE> after) {
-        Assertx.mustNotNull("after", after);
+    default <V, RE extends Exception> ThrowableBiFunction<T, U, V, RE> andThen(@Nonnull ThrowableFunction<R, V, RE> after) {
+        Assertx.mustNotNull(after, "Argument 'after' must not null");
 
         return (T t, U u) -> after.apply(sneakThrows().apply(t, u));
     }
@@ -49,8 +50,8 @@ public interface ThrowableBiFunction<T, U, R, E extends Exception> {
      * @param <RE>  下一个函数可能抛出的异常
      * @return 被包装后的函数
      */
-    default <RE extends Exception> ThrowableBiConsumer<T, U, RE> andThen(ThrowableConsumer<R, RE> after) {
-        Assertx.mustNotNull("after", after);
+    default <RE extends Exception> ThrowableBiConsumer<T, U, RE> andThen(@Nonnull ThrowableConsumer<R, RE> after) {
+        Assertx.mustNotNull(after, "Argument 'after' must not null");
 
         return (T t, U u) -> after.accept(sneakThrows().apply(t, u));
     }

@@ -6,7 +6,7 @@ import central.pluglet.binder.ControlBinder;
 import central.pluglet.control.ControlResolver;
 import central.pluglet.control.PlugletControl;
 import central.util.Arrayx;
-import central.util.Assertx;
+import central.lang.Assertx;
 import central.util.Stringx;
 
 import java.util.*;

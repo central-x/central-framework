@@ -1,6 +1,6 @@
 package central.io;
 
-import central.util.Assertx;
+import central.lang.Assertx;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
