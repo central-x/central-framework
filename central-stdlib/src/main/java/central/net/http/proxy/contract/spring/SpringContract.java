@@ -5,7 +5,7 @@ import central.net.http.HttpUrl;
 import central.net.http.proxy.Contract;
 import central.net.http.proxy.contract.spring.resolver.*;
 import central.util.Arrayx;
-import central.util.Assertx;
+import central.lang.Assertx;
 import central.util.Listx;
 import central.util.Stringx;
 import org.springframework.core.annotation.AnnotatedElementUtils;

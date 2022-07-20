@@ -5,7 +5,7 @@ import central.net.http.body.Body;
 import central.net.http.body.InputStreamBody;
 import central.net.http.body.request.*;
 import central.net.http.proxy.contract.spring.SpringResolver;
-import central.util.Assertx;
+import central.lang.Assertx;
 import central.util.Stringx;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;

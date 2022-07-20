@@ -6,7 +6,7 @@ import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.impl.LoggerProcessor;
 import central.net.http.proxy.contract.internal.InternalContract;
 import central.util.Arrayx;
-import central.util.Assertx;
+import central.lang.Assertx;
 import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.Proxy;

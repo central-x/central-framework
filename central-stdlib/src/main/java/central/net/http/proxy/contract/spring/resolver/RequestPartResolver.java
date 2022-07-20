@@ -7,7 +7,7 @@ import central.net.http.body.request.MultipartFormBody;
 import central.net.http.body.request.MultipartFormPart;
 import central.net.http.body.request.UrlEncodedBody;
 import central.net.http.proxy.contract.spring.SpringResolver;
-import central.util.Assertx;
+import central.lang.Assertx;
 import central.util.Objectx;
 import central.util.Stringx;
 import lombok.SneakyThrows;
