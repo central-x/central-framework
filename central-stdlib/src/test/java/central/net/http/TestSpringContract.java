@@ -135,7 +135,7 @@ public class TestSpringContract {
     public void case5() {
         var info = this.server.info();
         Assertions.assertNotNull(info.get("headers"));
-        var headers = Mapx.caseInsensitiveMap((Map<String, Object>) info.get("headers"));
+        var headers = Mapx.caseInsensitive((Map<String, Object>) info.get("headers"));
         Assertions.assertEquals("https", headers.get("X-Forwarded-Proto"));
         Assertions.assertEquals("443", headers.get("X-Forwarded-Port"));
     }
@@ -160,6 +160,15 @@ public class TestSpringContract {
         }
     }
 
+    /**
+     * Test default method
+     */
+    @Test
+    public void case7() throws Exception {
+        var result = this.server.testDefault();
+        Assertions.assertEquals("success", result);
+    }
+
     @RequestMapping("/api")
     public interface Server {
 
@@ -180,5 +189,9 @@ public class TestSpringContract {
 
         @PostMapping(value = "/uploads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
         Upload upload(@RequestPart File file);
+
+        default String testDefault(){
+            return "success";
+        }
     }
 }

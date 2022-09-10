@@ -24,13 +24,12 @@
 
 package central.net.http.server.controller.param;
 
-import central.util.validate.group.Insert;
-import central.util.validate.group.Update;
+import central.validation.group.Insert;
+import central.validation.group.Update;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * 创建用户参数

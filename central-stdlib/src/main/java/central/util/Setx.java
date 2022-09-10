@@ -24,6 +24,8 @@
 
 package central.util;
 
+import lombok.experimental.UtilityClass;
+
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -36,7 +38,22 @@ import java.util.stream.Stream;
  * @author Alan Yeh
  * @since 2022/07/12
  */
+@UtilityClass
 public class Setx {
+
+    /**
+     * 获取 Set 中的任一元素
+     *
+     * @param set 集合
+     */
+    public static <T> T getAny(@Nullable Set<T> set) {
+        if (set == null || set.isEmpty()) {
+            return null;
+        } else {
+            return set.iterator().next();
+        }
+    }
+
     /**
      * 将可空集合变成不可空集合
      *
@@ -79,11 +96,12 @@ public class Setx {
 
     /**
      * 快速创建一个不可变集合
+     *
      * @param elements 元素
-     * @param <T> 元素类型
+     * @param <T>      元素类型
      */
     @SafeVarargs
-    public static <T> Set<T> of(T... elements){
+    public static <T> Set<T> of(T... elements) {
         return Set.of(elements);
     }
 

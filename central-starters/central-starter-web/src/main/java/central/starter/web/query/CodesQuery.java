@@ -24,6 +24,7 @@
 
 package central.starter.web.query;
 
+import central.validation.Label;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
@@ -42,9 +43,7 @@ public class CodesQuery implements Serializable {
     @Serial
     private static final long serialVersionUID = -6439623074180542011L;
 
-    /**
-     * 标识集合
-     */
-    @NotEmpty(message = "标识[codes]必须不为空")
+    @NotEmpty
+    @Label("标识集合")
     private List<String> codes;
 }

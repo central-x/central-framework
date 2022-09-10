@@ -24,6 +24,14 @@
 
 package central.lang.reflect;
 
+import central.util.Stringx;
+
+import java.io.Serializable;
+import java.lang.invoke.SerializedLambda;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.function.Function;
+
 /**
  * Property Reference
  * 属性引用
@@ -31,5 +39,21 @@ package central.lang.reflect;
  * @author Alan Yeh
  * @since 2022/07/13
  */
-public class PropertyReference {
+@FunctionalInterface
+public interface PropertyReference<T, R> extends Function<T, R>, Serializable {
+    /**
+     * 根据属性名
+     */
+    default String getPropertyName() {
+        try {
+            Method method = this.getClass().getDeclaredMethod("writeReplace");
+            method.setAccessible(true);
+            SerializedLambda lambda = (SerializedLambda) method.invoke(this);
+
+            String getter = lambda.getImplMethodName();
+            return Stringx.lowerCaseFirstLetter(Stringx.removePrefix(Stringx.removePrefix(getter, "get"), "is"));
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            throw new RuntimeException("[PropertyReference] 解析属性异常", ex);
+        }
+    }
 }

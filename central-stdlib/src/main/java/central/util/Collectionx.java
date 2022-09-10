@@ -24,6 +24,8 @@
 
 package central.util;
 
+import lombok.experimental.UtilityClass;
+
 import javax.annotation.Nullable;
 import java.util.Collection;
 
@@ -33,6 +35,7 @@ import java.util.Collection;
  * @author Alan Yeh
  * @since 2022/07/12
  */
+@UtilityClass
 public class Collectionx {
     /**
      * 判断集合是否为空

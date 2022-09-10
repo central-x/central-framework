@@ -28,6 +28,7 @@ import central.util.Arrayx;
 import central.util.Collectionx;
 import central.util.Mapx;
 import central.util.Stringx;
+import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,12 +43,14 @@ import java.util.function.Supplier;
  * @author Alan Yeh
  * @since 2022/07/05
  */
+@PublicApi
+@UtilityClass
 public class Assertx {
 
     /**
      * Assertx.must(b instance Integer, () -> new ClassCastException("Cannot case 'b' to java.lang.Integer"));
      */
-    public static <E extends Exception> void must(boolean expression, Supplier<E> throwable) throws E {
+    private static <E extends Exception> void must(boolean expression, Supplier<E> throwable) throws E {
         if (!expression) {
             throw throwable.get();
         }

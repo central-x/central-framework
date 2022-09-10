@@ -41,7 +41,7 @@ import java.lang.reflect.Type;
  */
 public abstract class InstanceReference<T> {
     @Getter(onMethod_ = @Nonnull)
-    private final TypeReference<T> type;
+    private final TypeReference<? extends T> type;
 
     @Getter(onMethod_ = @Nullable)
     private final T instance;
@@ -50,17 +50,15 @@ public abstract class InstanceReference<T> {
         this(null, instance);
     }
 
-    protected InstanceReference(@Nullable TypeReference<T> type, @Nullable T instance) {
-        if (type == null) {
+    protected InstanceReference(@Nullable TypeReference<? extends T> type, @Nullable T instance) {
+        if (type == null && instance == null) {
+            this.type = null;
+        } else if (type == null) {
             var superClass = (ParameterizedType) this.getClass().getGenericSuperclass();
             Type actualType = superClass.getActualTypeArguments()[0];
             if ("T".equals(actualType.getTypeName())) {
                 // 获取类型失败
-                if (instance != null) {
-                    this.type = (TypeReference<T>) TypeReference.of(instance.getClass());
-                } else {
-                    throw new InitializeException("无法获取类型");
-                }
+                this.type = (TypeReference<T>) TypeReference.of(instance.getClass());
             } else {
                 this.type = TypeReference.of(actualType);
             }
@@ -75,9 +73,14 @@ public abstract class InstanceReference<T> {
         };
     }
 
-    public static <T> InstanceReference<T> of(@Nonnull T instance) {
-        return new InstanceReference<>(instance) {
-        };
+    public static <T> InstanceReference<T> of(@Nullable T instance) {
+        if (instance == null) {
+            return new InstanceReference<>(null) {
+            };
+        } else {
+            return new InstanceReference<>(TypeReference.of((Class<? extends T>) instance.getClass()), instance) {
+            };
+        }
     }
 
     /**

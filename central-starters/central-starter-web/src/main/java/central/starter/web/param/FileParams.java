@@ -24,6 +24,7 @@
 
 package central.starter.web.param;
 
+import central.validation.Label;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,9 +43,7 @@ public class FileParams implements Serializable {
     @Serial
     private static final long serialVersionUID = 1246745196976725735L;
 
-    /**
-     * 文件参数
-     */
-    @NotNull(message = "文件[file]必须不为空")
+    @NotNull
+    @Label("文件")
     private MultipartFile file;
 }

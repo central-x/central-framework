@@ -24,6 +24,7 @@
 
 package central.starter.web.param;
 
+import central.validation.Label;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
@@ -43,9 +44,7 @@ public class CodesParams implements Serializable {
     @Serial
     private static final long serialVersionUID = -1789169044490209864L;
 
-    /**
-     * 标识集合
-     */
-    @NotEmpty(message = "标识[codes]必须不为空")
+    @NotEmpty
+    @Label("标识集合")
     private List<String> codes;
 }

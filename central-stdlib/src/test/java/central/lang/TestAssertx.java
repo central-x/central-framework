@@ -41,13 +41,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestAssertx {
 
     @Test
-    public void case1() {
-        assertThrows(RuntimeException.class, () -> {
-            Assertx.must("test".getBytes().length < 1, () -> new RuntimeException("Test must"));
-        });
-    }
-
-    @Test
     public void case2() {
         assertThrows(IllegalArgumentException.class, () -> {
             Assertx.mustTrue("test".getBytes().length < 1, "Test Assertx#mustTrue");

@@ -24,7 +24,7 @@
 
 package central.lang;
 
-import central.data.OptionalEnum;
+import central.bean.OptionalEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -38,6 +38,7 @@ import lombok.Getter;
  * @since 2022/07/13
  */
 @Getter
+@PublicApi
 @AllArgsConstructor
 public enum CompareResultEnum implements OptionalEnum<String> {
 
@@ -58,5 +59,19 @@ public enum CompareResultEnum implements OptionalEnum<String> {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 是否匹配结果
+     * 例：
+     * {@code CompareResultEnum.GREATER.matches(first, second) } 的结果为 true 时，表示 first > second
+     * {@code CompareResultEnum.LESS.matches(first, second) } 的结果为 true 时，表示 first < second
+     *
+     * @param first  第一个待比较的对象
+     * @param second 第二个待比较的对象
+     * @return 匹配结果
+     */
+    public <T extends Comparable<T>> boolean matches(T first, T second) {
+        return first.compareTo(second) == this.result;
     }
 }

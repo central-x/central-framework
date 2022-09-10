@@ -24,7 +24,7 @@
 
 package central.lang;
 
-import central.data.OptionalEnum;
+import central.bean.OptionalEnum;
 import central.util.Stringx;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
@@ -38,6 +38,7 @@ import lombok.Getter;
  * @since 2022/07/13
  */
 @Getter
+@PublicApi
 @AllArgsConstructor
 public enum BooleanEnum implements OptionalEnum<String> {
 

@@ -36,6 +36,7 @@ import java.util.function.Supplier;
  * @author Alan Yeh
  * @since 2022/07/13
  */
+@PublicApi
 @RequiredArgsConstructor
 public class Attribute<T> {
     /**

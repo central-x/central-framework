@@ -24,7 +24,7 @@
 
 package central.net.http.body.converter;
 
-import central.data.OptionalEnum;
+import central.bean.OptionalEnum;
 import central.net.http.body.HttpConverter;
 
 import javax.annotation.Nullable;

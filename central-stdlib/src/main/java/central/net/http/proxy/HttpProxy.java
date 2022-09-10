@@ -35,7 +35,6 @@ import org.springframework.http.MediaType;
 
 import java.io.File;
 import java.io.InputStream;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
@@ -57,21 +56,13 @@ public class HttpProxy implements InvocationHandler {
 
     private final Contract contract;
 
-    protected MethodHandles.Lookup lookup;
-
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.isDefault()) {
             // interface 的 default 方法
-            var caller = method.getDeclaringClass();
-            if (lookup == null) {
-                var constructor = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class, int.class);
-                constructor.setAccessible(true);
-                lookup = constructor.newInstance(caller, MethodHandles.Lookup.PUBLIC | MethodHandles.Lookup.PRIVATE);
-            }
-            // 通过 lookup 直接调有和默认实现
-            return lookup.unreflectSpecial(method, caller).bindTo(proxy).invokeWithArguments(args);
+            return InvocationHandler.invokeDefault(proxy, method, args);
         } else if (Objects.equals("toString", method.getName())) {
+            // 输出 client 的相关信息
             return Stringx.format("{}@({})", this.proxyType.getSimpleName(), this.client.getBaseUrl());
         } else {
             HttpRequest request = null;

@@ -24,6 +24,7 @@
 
 package central.starter.web.param;
 
+import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -41,9 +42,7 @@ public class IdParams implements Serializable {
     @Serial
     private static final long serialVersionUID = 6321780117652753197L;
 
-    /**
-     * 主键
-     */
-    @NotBlank(message = "主键[id]必须不为空")
+    @NotBlank
+    @Label("主键")
     private String id;
 }

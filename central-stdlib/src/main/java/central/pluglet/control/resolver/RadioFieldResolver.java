@@ -25,8 +25,8 @@
 package central.pluglet.control.resolver;
 
 import central.bean.TypeCheckException;
-import central.data.NameValue;
-import central.data.OptionalEnum;
+import central.sql.data.NameValue;
+import central.bean.OptionalEnum;
 import central.lang.reflect.FieldReference;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
