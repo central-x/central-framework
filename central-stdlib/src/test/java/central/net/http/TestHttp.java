@@ -160,7 +160,7 @@ public abstract class TestHttp {
 
             var info = response.getBody().extract(new JsonExtractor<>(TypeReference.forMapType(String.class, Object.class)));
             Assertions.assertNotNull(info.get("headers"));
-            var headers = Mapx.caseInsensitiveMap((Map<String, Object>) info.get("headers"));
+            var headers = Mapx.caseInsensitive((Map<String, Object>) info.get("headers"));
             Assertions.assertEquals("https", headers.get("X-Forwarded-Proto"));
             Assertions.assertEquals("443", headers.get("X-Forwarded-Port"));
         }

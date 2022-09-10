@@ -24,6 +24,7 @@
 
 package central.starter.web.param;
 
+import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -41,9 +42,7 @@ public class CodeParams implements Serializable {
     @Serial
     private static final long serialVersionUID = 546203729981715685L;
 
-    /**
-     * 标识
-     */
-    @NotBlank(message = "标识[code]必须不为空")
+    @NotBlank
+    @Label("标识")
     private String code;
 }

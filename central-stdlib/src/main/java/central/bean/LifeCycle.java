@@ -24,12 +24,15 @@
 
 package central.bean;
 
+import central.lang.PublicApi;
+
 /**
  * Bean Life Cycle
  *
  * @author Alan Yeh
  * @since 2022/07/11
  */
+@PublicApi
 public interface LifeCycle {
     /**
      * 实例刚被创建

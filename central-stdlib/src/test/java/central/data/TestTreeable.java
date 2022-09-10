@@ -24,6 +24,7 @@
 
 package central.data;
 
+import central.sql.data.Treeable;
 import lombok.Data;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

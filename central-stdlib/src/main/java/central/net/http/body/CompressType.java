@@ -24,7 +24,7 @@
 
 package central.net.http.body;
 
-import central.data.OptionalEnum;
+import central.bean.OptionalEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

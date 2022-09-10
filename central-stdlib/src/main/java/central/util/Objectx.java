@@ -26,6 +26,7 @@ package central.util;
 
 import central.lang.Assertx;
 import central.lang.reflect.TypeReference;
+import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
  * @author Alan Yeh
  * @since 2022/07/05
  */
+@UtilityClass
 public class Objectx {
 
     /**

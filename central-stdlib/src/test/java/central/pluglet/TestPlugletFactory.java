@@ -25,7 +25,7 @@
 package central.pluglet;
 
 import central.bean.LifeCycle;
-import central.data.OptionalEnum;
+import central.bean.OptionalEnum;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
 import central.util.Listx;

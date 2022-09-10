@@ -24,8 +24,14 @@
 
 package central.util;
 
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
+import org.jetbrains.annotations.NotNull;
+
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Stream;
 
 /**
@@ -34,6 +40,7 @@ import java.util.stream.Stream;
  * @author Alan Yeh
  * @since 2022/07/12
  */
+@UtilityClass
 public class Mapx {
 
     /**
@@ -141,21 +148,176 @@ public class Mapx {
     }
 
     /**
+     * 将 Map 转换线程安全类
+     *
+     * @param unsafe 非线程安全集合
+     * @return 线程安全集合
+     */
+    public static <K, V> Map<K, V> threadSafe(Map<K, V> unsafe) {
+        return new ThreadSafeMap<>(unsafe);
+    }
+
+    @RequiredArgsConstructor
+    private static class ThreadSafeMap<K, V> implements Map<K, V> {
+        private final Map<K, V> internal;
+
+        private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+
+        private final Lock readLock = lock.readLock();
+
+        private final Lock writeLock = lock.writeLock();
+
+        @Override
+        public int size() {
+            try {
+                readLock.lock();
+                return this.internal.size();
+            } finally {
+                readLock.unlock();
+            }
+        }
+
+        @Override
+        public boolean isEmpty() {
+            try {
+                readLock.lock();
+                return this.internal.isEmpty();
+            } finally {
+                readLock.unlock();
+            }
+        }
+
+        @Override
+        public boolean containsKey(Object key) {
+            try {
+                readLock.lock();
+                return this.internal.containsKey(key);
+            } finally {
+                readLock.unlock();
+            }
+        }
+
+        @Override
+        public boolean containsValue(Object value) {
+            try {
+                readLock.lock();
+                return this.internal.containsValue(value);
+            } finally {
+                readLock.unlock();
+            }
+        }
+
+        @Override
+        public V get(Object key) {
+            try {
+                readLock.lock();
+                return this.internal.get(key);
+            } finally {
+                readLock.unlock();
+            }
+        }
+
+        @Override
+        public V put(K key, V value) {
+            try {
+                writeLock.lock();
+                return this.internal.put(key, value);
+            } finally {
+                writeLock.unlock();
+            }
+        }
+
+        @Override
+        public V remove(Object key) {
+            try {
+                writeLock.lock();
+                return this.internal.remove(key);
+            } finally {
+                writeLock.unlock();
+            }
+        }
+
+        @Override
+        public void putAll(@NotNull Map<? extends K, ? extends V> m) {
+            try {
+                writeLock.lock();
+                this.internal.putAll(m);
+            } finally {
+                writeLock.unlock();
+            }
+        }
+
+        @Override
+        public void clear() {
+            try {
+                writeLock.lock();
+                this.internal.clear();
+            } finally {
+                writeLock.unlock();
+            }
+        }
+
+        @NotNull
+        @Override
+        public Set<K> keySet() {
+            try {
+                readLock.lock();
+                return this.internal.keySet();
+            } finally {
+                readLock.unlock();
+            }
+        }
+
+        @NotNull
+        @Override
+        public Collection<V> values() {
+            try {
+                readLock.lock();
+                return this.internal.values();
+            } finally {
+                readLock.unlock();
+            }
+        }
+
+        @NotNull
+        @Override
+        public Set<Entry<K, V>> entrySet() {
+            try {
+                readLock.lock();
+                return this.internal.entrySet();
+            } finally {
+                readLock.unlock();
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof ThreadSafeMap<?, ?> safe) {
+                return this.internal.equals(safe.internal);
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            return this.internal.hashCode();
+        }
+    }
+
+    /**
      * 将 Map 转换大小写不敏感的 Map
      *
      * @param map 原 Map
      * @param <V> 值类型
      */
-    public static <V> Map<String, V> caseInsensitiveMap(Map<String, V> map) {
+    public static <V> Map<String, V> caseInsensitive(Map<String, V> map) {
         return new CaseInsensitiveMap<>(map);
     }
 
+    @RequiredArgsConstructor
     private static class CaseInsensitiveMap<V> implements Map<String, V> {
         private final Map<String, V> internal;
-
-        public CaseInsensitiveMap(Map<String, V> source) {
-            this.internal = source;
-        }
 
         @Override
         public int size() {

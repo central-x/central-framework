@@ -24,6 +24,8 @@
 
 package central.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +35,7 @@ import java.util.Map;
  * @author Alan Yeh
  * @since 2022/07/05
  */
+@UtilityClass
 public class Numberx {
     /**
      * 62 进制声明

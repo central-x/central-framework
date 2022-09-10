@@ -24,7 +24,7 @@
 
 package central.pluglet.binder;
 
-import central.data.OptionalEnum;
+import central.bean.OptionalEnum;
 import central.lang.reflect.FieldReference;
 import central.lang.reflect.InstanceReference;
 import central.pluglet.FieldBinder;

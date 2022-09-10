@@ -24,7 +24,9 @@
 
 package central.bean;
 
+import central.lang.PublicApi;
 import central.util.Stringx;
+import lombok.experimental.StandardException;
 
 import java.io.Serial;
 
@@ -34,19 +36,15 @@ import java.io.Serial;
  * @author Alan Yeh
  * @since 2022/07/12
  */
+@PublicApi
+@StandardException
 public class TypeCheckException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 7212345137343048200L;
 
-    public TypeCheckException(String message) {
-        super(message);
-    }
-
-    public TypeCheckException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public TypeCheckException(Class<?> expected, Class<?> actual) {
-        super(Stringx.format("Type checked failed: Required type '{}' but provides '{}'", expected.getName(), actual.getName()));
+    public static void asserts(Class<?> expected, Class<?> actual) {
+        if (actual.isAssignableFrom(expected)) {
+            throw new TypeCheckException(Stringx.format("Type checked failed: Required type '{}' but provides '{}'", expected.getName(), actual.getName()));
+        }
     }
 }

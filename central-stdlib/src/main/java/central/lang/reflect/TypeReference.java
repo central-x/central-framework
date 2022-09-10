@@ -31,8 +31,12 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 
 import javax.annotation.Nullable;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -136,10 +140,19 @@ public abstract class TypeReference<T> {
     private final LazyValue<List<? extends TypeReference<?>>> interfaceTypes = new LazyValue<>(() -> getRawClass() == null ? Collections.emptyList() : Arrayx.asStream(getRawClass().getAnnotatedInterfaces()).map(AnnotatedType::getType).map(TypeReference::of).toList());
 
     /**
-     * 获取已声明的接口
+     * 获取继承的接口
      */
     public List<? extends TypeReference<?>> getInterfaceTypes() {
         return this.interfaceTypes.get();
+    }
+
+    /**
+     * 获取继承的接口
+     *
+     * @param index 下标
+     */
+    public TypeReference<?> getInterfaceType(int index) {
+        return this.getInterfaceTypes().get(index);
     }
 
     /**
@@ -149,13 +162,29 @@ public abstract class TypeReference<T> {
         return getRawClass().isEnum();
     }
 
-    public final LazyValue<List<FieldReference>> fields = new LazyValue<>(() -> getRawClass() == null ? Collections.emptyList() : Arrayx.asStream(getRawClass().getDeclaredFields()).map(FieldReference::of).toList());
+    private final LazyValue<List<FieldReference>> fields = new LazyValue<>(() -> getRawClass() == null ? Collections.emptyList() : Arrayx.asStream(getRawClass().getDeclaredFields()).map(FieldReference::of).toList());
 
     /**
      * 获取字段信息
      */
     public List<FieldReference> getFields() {
         return fields.get();
+    }
+
+    private final LazyValue<List<PropertyDescriptor>> properties = new LazyValue<>(new Supplier<List<PropertyDescriptor>>() {
+        @Override
+        @SneakyThrows
+        public List<PropertyDescriptor> get() {
+            return getRawClass() == null ? Collections.emptyList() : Arrayx.asStream(Introspector.getBeanInfo(getRawClass()).getPropertyDescriptors()).toList();
+        }
+    });
+
+    public List<PropertyDescriptor> getProperties() {
+        return properties.get();
+    }
+
+    public PropertyDescriptor getProperty(String property) {
+        return Listx.asStream(this.getProperties()).filter(it -> property.equals(it.getName())).findFirst().orElse(null);
     }
 
     /**

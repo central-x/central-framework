@@ -24,6 +24,9 @@
 
 package central.io;
 
+import central.lang.PublicApi;
+import lombok.experimental.UtilityClass;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -40,6 +43,8 @@ import java.io.IOException;
  * @author Alan Yeh
  * @since 2022/07/05
  */
+@PublicApi
+@UtilityClass
 public class Imagex {
     /**
      * 调整图片大小

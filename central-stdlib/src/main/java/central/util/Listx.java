@@ -24,6 +24,8 @@
 
 package central.util;
 
+import lombok.experimental.UtilityClass;
+
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
@@ -34,6 +36,7 @@ import java.util.stream.Stream;
  * @author Alan Yeh
  * @since 2022/07/12
  */
+@UtilityClass
 public class Listx {
 
     /**

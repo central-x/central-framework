@@ -24,6 +24,7 @@
 
 package central.starter.web.query;
 
+import central.validation.Label;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
@@ -42,9 +43,7 @@ public class IdsQuery implements Serializable {
     @Serial
     private static final long serialVersionUID = -4904725290170815070L;
 
-    /**
-     * 主键集合
-     */
-    @NotEmpty(message = "主键[ids]必须不为空")
+    @NotEmpty
+    @Label("主键集合")
     private List<String> ids;
 }

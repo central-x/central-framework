@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scripts xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://central-x.org/schemas/orm/database.xsd">
+    <tables>
+        <add>
+            <table name="C_TEST_ACCOUNT" comment="帐户信息">
+                <column name="ID" type="STRING" length="36" primaryKey="true" comment="主键"/>
+                <column name="NAME" type="STRING" length="50" comment="姓名"/>
+                <column name="AGE" type="INTEGER" comment="年龄"/>
+
+                <column name="CREATOR_ID" type="STRING" length="36" comment="创建人唯一标识"/>
+                <column name="CREATE_DATE" type="DATETIME" comment="更新时间"/>
+                <column name="MODIFIER_ID" type="STRING" length="36" comment="更新人唯一标识"/>
+                <column name="MODIFY_DATE" type="DATETIME" comment="更新时间"/>
+            </table>
+        </add>
+        <add>
+            <table name="C_TEST_DEPT" comment="单位信息">
+                <column name="ID" type="STRING" length="36" comment="主键"/>
+                <column name="NAME" type="STRING" length="50" comment="部门名称"/>
+
+                <column name="CREATOR_ID" type="STRING" length="36" comment="创建人唯一标识"/>
+                <column name="CREATE_DATE" type="DATETIME" comment="更新时间"/>
+                <column name="MODIFIER_ID" type="STRING" length="36" comment="更新人唯一标识"/>
+                <column name="MODIFY_DATE" type="DATETIME" comment="更新时间"/>
+            </table>
+        </add>
+    </tables>
+</scripts>

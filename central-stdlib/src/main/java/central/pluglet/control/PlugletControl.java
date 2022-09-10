@@ -24,7 +24,7 @@
 
 package central.pluglet.control;
 
-import central.data.NameValue;
+import central.sql.data.NameValue;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;

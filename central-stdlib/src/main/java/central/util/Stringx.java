@@ -25,6 +25,7 @@
 package central.util;
 
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,6 +44,7 @@ import java.util.Objects;
  * @author Alan Yeh
  * @since 2022/07/05
  */
+@UtilityClass
 public class Stringx {
     private static final char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 

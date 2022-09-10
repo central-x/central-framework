@@ -24,6 +24,8 @@
 
 package central.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.UUID;
 
 /**
@@ -32,6 +34,7 @@ import java.util.UUID;
  * @author Alan Yeh
  * @since 2022/07/05
  */
+@UtilityClass
 public class Guidx {
     private static String digits(long val, int digits) {
         var hi = 1L << (digits * 4);

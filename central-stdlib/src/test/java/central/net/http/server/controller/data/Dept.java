@@ -24,7 +24,7 @@
 
 package central.net.http.server.controller.data;
 
-import central.data.ModifiableEntity;
+import central.sql.data.ModifiableEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

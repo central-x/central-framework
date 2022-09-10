@@ -25,6 +25,7 @@
 package central.lang;
 
 import central.util.Stringx;
+import lombok.experimental.UtilityClass;
 
 /**
  * Exception 工具类
@@ -32,6 +33,8 @@ import central.util.Stringx;
  * @author Alan Yeh
  * @since 2022/07/20
  */
+@PublicApi
+@UtilityClass
 public class Exceptionx {
     public static IllegalArgumentException newIllegalNullArgument(String argument) {
         return new IllegalArgumentException(Stringx.format("Illegal argument '{}'", argument));

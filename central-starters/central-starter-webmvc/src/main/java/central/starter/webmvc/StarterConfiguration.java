@@ -27,10 +27,13 @@ package central.starter.webmvc;
 import central.starter.web.converter.LongToTimestampConverter;
 import central.starter.webmvc.exception.JsonExceptionResolver;
 import central.starter.webmvc.interceptor.ActionReportInterceptor;
+import central.validation.MessageInterpolator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import jakarta.validation.Validation;
 import lombok.Setter;
+import org.hibernate.validator.HibernateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -39,6 +42,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -95,5 +100,14 @@ public class StarterConfiguration implements WebMvcConfigurer {
         converter.getObjectMapper().enable(JsonParser.Feature.ALLOW_COMMENTS);
 
         return converter;
+    }
+
+    @Override
+    public Validator getValidator() {
+        return new SpringValidatorAdapter(Validation.byProvider(HibernateValidator.class)
+                .configure()
+                .messageInterpolator(new MessageInterpolator())
+                .buildValidatorFactory()
+                .getValidator());
     }
 }

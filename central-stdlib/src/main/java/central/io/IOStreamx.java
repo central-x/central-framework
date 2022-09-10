@@ -25,6 +25,8 @@
 package central.io;
 
 import central.lang.Assertx;
+import central.lang.PublicApi;
+import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,6 +39,8 @@ import java.nio.charset.Charset;
  * @author Alan Yeh
  * @since 2022/07/05
  */
+@PublicApi
+@UtilityClass
 public class IOStreamx {
     public static final int BUFFER_SIZE = 4096;
 
@@ -181,6 +185,18 @@ public class IOStreamx {
             return buffered;
         } else {
             return new BufferedOutputStream(output);
+        }
+    }
+
+    /**
+     * 关闭指定对象
+     */
+    public static void close(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException ignored) {
+            }
         }
     }
 }

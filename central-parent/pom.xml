@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>3.0.0-M3</version>
+        <version>3.0.0-M4</version>
         <relativePath/>
     </parent>
 
@@ -37,16 +37,18 @@
         <central.version>1.0.x-SNAPSHOT</central.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <spring-cloud.version>2022.0.0-M3</spring-cloud.version>
+        <spring-cloud.version>2022.0.0-M4</spring-cloud.version>
         <jsr305.version>3.0.2</jsr305.version>
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
-        <bcpkix-jdk15on.version>1.65</bcpkix-jdk15on.version>
-        <bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
+        <bcpkix-jdk15on.version>1.70</bcpkix-jdk15on.version>
+        <bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
+        <beetlsql.version>3.17.1-RELEASE</beetlsql.version>
     </properties>
 
     <!-- 依赖版本管理 -->
     <dependencyManagement>
         <dependencies>
+
             <!-- Spring Cloud 组件 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -61,19 +63,6 @@
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
                 <version>${jsr305.version}</version>
-            </dependency>
-
-            <!-- 加解密算法 -->
-            <dependency>
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcpkix-jdk15on</artifactId>
-                <version>${bcpkix-jdk15on.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcprov-jdk15on</artifactId>
-                <version>${bcprov-jdk15on.version}</version>
             </dependency>
 
             <!-- Central -->
@@ -101,6 +90,33 @@
                 <groupId>org.central-x</groupId>
                 <artifactId>central-starter-webmvc</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
+            </dependency>
+
+            <!-- 加解密算法 -->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk15on</artifactId>
+                <version>${bcpkix-jdk15on.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>${bcprov-jdk15on.version}</version>
+            </dependency>
+
+            <!-- Druid -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>1.2.11</version>
+            </dependency>
+
+            <!-- BeetlSql -->
+            <dependency>
+                <groupId>com.ibeetl</groupId>
+                <artifactId>beetlsql</artifactId>
+                <version>${beetlsql.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

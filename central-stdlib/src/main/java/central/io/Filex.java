@@ -24,8 +24,10 @@
 
 package central.io;
 
+import central.lang.PublicApi;
 import central.util.Arrayx;
 import central.lang.Assertx;
+import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
 import java.io.*;
@@ -44,6 +46,8 @@ import java.util.zip.ZipOutputStream;
  * @author Alan Yeh
  * @since 2022/07/05
  */
+@PublicApi
+@UtilityClass
 public class Filex {
     /**
      * 获取文件扩展名
