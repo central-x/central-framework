@@ -43,6 +43,8 @@
         <bcpkix-jdk15on.version>1.70</bcpkix-jdk15on.version>
         <bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
         <beetlsql.version>3.17.1-RELEASE</beetlsql.version>
+        <graphql.version>19.2</graphql.version>
+        <transmittable-thread-local.version>2.14.0</transmittable-thread-local.version>
     </properties>
 
     <!-- 依赖版本管理 -->
@@ -117,6 +119,19 @@
                 <groupId>com.ibeetl</groupId>
                 <artifactId>beetlsql</artifactId>
                 <version>${beetlsql.version}</version>
+            </dependency>
+
+            <!-- GraphQL -->
+            <dependency>
+                <groupId>com.graphql-java</groupId>
+                <artifactId>graphql-java</artifactId>
+                <version>${graphql.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable-thread-local.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
