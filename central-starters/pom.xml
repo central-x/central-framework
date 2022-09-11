@@ -10,6 +10,7 @@
 
     <modules>
         <module>central-starter</module>
+        <module>central-starter-graphql</module>
         <module>central-starter-logging</module>
         <module>central-starter-web</module>
         <module>central-starter-webmvc</module>
