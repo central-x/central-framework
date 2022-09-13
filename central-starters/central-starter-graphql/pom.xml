@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.central-x</groupId>
+        <groupId>com.central-x</groupId>
         <artifactId>central-parent</artifactId>
         <version>1.0.x-SNAPSHOT</version>
         <relativePath>../../central-parent</relativePath>
@@ -17,7 +17,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.central-x</groupId>
+            <groupId>com.central-x</groupId>
             <artifactId>central-starter-webmvc</artifactId>
         </dependency>
 

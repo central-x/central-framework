@@ -11,7 +11,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>org.central-x</groupId>
+    <groupId>com.central-x</groupId>
     <artifactId>central-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.x-SNAPSHOT</version>
@@ -69,27 +69,27 @@
 
             <!-- Central -->
             <dependency>
-                <groupId>org.central-x</groupId>
+                <groupId>com.central-x</groupId>
                 <artifactId>central-stdlib</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.central-x</groupId>
+                <groupId>com.central-x</groupId>
                 <artifactId>central-starter</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.central-x</groupId>
+                <groupId>com.central-x</groupId>
                 <artifactId>central-starter-logging</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.central-x</groupId>
+                <groupId>com.central-x</groupId>
                 <artifactId>central-starter-web</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.central-x</groupId>
+                <groupId>com.central-x</groupId>
                 <artifactId>central-starter-webmvc</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
