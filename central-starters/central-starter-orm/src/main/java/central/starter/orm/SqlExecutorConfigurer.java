@@ -1,0 +1,99 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2022-present Alan Yeh <alan@yeh.cn>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package central.starter.orm;
+
+import central.security.Cipherx;
+import central.sql.*;
+import central.sql.conversion.UnderlineConversion;
+import central.sql.datasource.migration.DataSourceMigrator;
+import central.sql.impl.standard.*;
+
+import javax.sql.DataSource;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * SqlExecutor 配置
+ *
+ * @author Alan Yeh
+ * @since 2022/09/22
+ */
+public interface SqlExecutorConfigurer {
+    /**
+     * 自定义数据源
+     */
+    default DataSource getDataSource() {
+        return null;
+    }
+
+    /**
+     * 元数据管理
+     */
+    default SqlMetaManager getMetaManager() {
+        return new StandardMetaManager();
+    }
+
+    /**
+     * 加密器
+     */
+    default SqlCipher getCipher() {
+        return new StandardCipher(Cipherx.NONE, null, null);
+    }
+
+    /**
+     * 命名规则
+     */
+    default SqlConversion getConversion() {
+        return new UnderlineConversion();
+    }
+
+    /**
+     * 类型转换器
+     */
+    default SqlConverter getConverter() {
+        return new StandardConverter();
+    }
+
+    /**
+     * 类型转换器
+     */
+    default SqlTransformer getTransformer() {
+        return new StandardTransformer();
+    }
+
+    /**
+     * 数据库迁移
+     */
+    default DataSourceMigrator getMigrator() {
+        return null;
+    }
+
+    /**
+     * Sql 拦载器
+     */
+    default List<SqlInterceptor> getInterceptors() {
+        return Collections.emptyList();
+    }
+}

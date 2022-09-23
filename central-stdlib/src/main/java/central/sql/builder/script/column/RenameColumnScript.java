@@ -28,7 +28,9 @@ import central.sql.SqlType;
 import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 重命名字段
@@ -37,6 +39,8 @@ import lombok.Data;
  * @since 2022/08/09
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RenameColumnScript {
 
     @NotBlank

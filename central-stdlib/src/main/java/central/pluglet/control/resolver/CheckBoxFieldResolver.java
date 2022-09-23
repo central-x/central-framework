@@ -24,8 +24,9 @@
 
 package central.pluglet.control.resolver;
 
-import central.sql.data.NameValue;
+import central.bean.NameValue;
 import central.bean.OptionalEnum;
+import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.reflect.FieldReference;
 import central.pluglet.annotation.Control;
@@ -60,8 +61,7 @@ public class CheckBoxFieldResolver extends FieldResolver {
 
         // 枚举列表
         var options = Arrayx.asStream(enumType.getRawClass().getEnumConstants())
-                .peek(it -> Assertx.mustInstanceOf(OptionalEnum.class, it, "Enum '{}' MUST implements Optional<String>"))
-                .map(it -> (OptionalEnum<String>) it)
+                .map(it -> (OptionalEnum<String>)Assertx.requireInstanceOf(OptionalEnum.class, it, "Enum '{}' MUST implements Optional<String>"))
                 .map(it -> new NameValue<>(it.getName(), it.getValue()))
                 .toList();
 

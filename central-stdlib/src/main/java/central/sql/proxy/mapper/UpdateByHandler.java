@@ -26,12 +26,13 @@ package central.sql.proxy.mapper;
 
 import central.lang.Assertx;
 import central.sql.Conditions;
+import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -45,13 +46,13 @@ import java.sql.SQLException;
  */
 public class UpdateByHandler implements MapperHandler {
     @Override
-    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, EntityMeta meta, Method method, Object[] args) throws SQLException {
+    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
         var entity = Arrayx.getFirst(args);
         Assertx.mustNotNull(entity, "参数[entity]必须不为空");
 
         // 获取更新条件
         var conditions = (Conditions) Arrayx.get(args, 1);
-        var script = executor.getBuilder().forUpdateBy(executor, meta, entity, conditions);
-        return executor.execute(script);
+        var script = builder.forUpdateBy(executor, meta, entity, conditions);
+        return executor.execute(script) > 0;
     }
 }

@@ -38,21 +38,21 @@ public class NormalLifeCycleProcessor implements LifeCycleProcessor {
 
     @Override
     public void afterCreated(InstanceReference<?> instance) {
-        if (instance instanceof LifeCycle cycle) {
+        if (instance.getInstance() instanceof LifeCycle cycle) {
             cycle.created();
         }
     }
 
     @Override
     public void afterPropertySet(InstanceReference<?> instance) {
-        if (instance instanceof LifeCycle cycle) {
+        if (instance.getInstance() instanceof LifeCycle cycle) {
             cycle.initialized();
         }
     }
 
     @Override
     public void beforeDestroy(InstanceReference<?> instance) {
-        if (instance instanceof LifeCycle cycle) {
+        if (instance.getInstance() instanceof LifeCycle cycle) {
             cycle.destroy();
         }
     }

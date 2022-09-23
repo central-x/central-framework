@@ -88,7 +88,7 @@ public interface Mapper<E extends Entity> {
      * @param id 数据主键
      * @return 受影响数据量
      */
-    long deleteByIds(@Nonnull String id);
+    long deleteById(@Nonnull String id);
 
     /**
      * 根据条件删除数据

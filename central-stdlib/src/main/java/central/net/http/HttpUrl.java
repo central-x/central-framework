@@ -26,7 +26,7 @@ package central.net.http;
 
 import central.util.Listx;
 import central.util.Mapx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.LinkedMultiValueMap;

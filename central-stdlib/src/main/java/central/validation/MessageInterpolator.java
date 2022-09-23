@@ -24,10 +24,8 @@
 
 package central.validation;
 
-import central.util.Setx;
 import org.hibernate.validator.internal.engine.MessageInterpolatorContext;
 import org.hibernate.validator.internal.engine.messageinterpolation.InterpolationTerm;
-import org.hibernate.validator.messageinterpolation.AbstractMessageInterpolator;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 
@@ -37,6 +35,8 @@ import java.util.Locale;
 import java.util.Objects;
 
 /**
+ * 错误信息修改
+ *
  * @author Alan Yeh
  * @since 2022/08/05
  */
@@ -49,7 +49,7 @@ public class MessageInterpolator extends ResourceBundleMessageInterpolator {
 
     @Override
     protected String interpolate(Context context, Locale locale, String term) {
-        if (InterpolationTerm.isElExpression(term)){
+        if (InterpolationTerm.isElExpression(term)) {
             if (context instanceof MessageInterpolatorContext ctx) {
                 if (Objects.equals("${property}", term)) {
                     return ctx.getPropertyPath().toString();
@@ -61,10 +61,6 @@ public class MessageInterpolator extends ResourceBundleMessageInterpolator {
         }
 
         return super.interpolate(context, locale, term);
-    }
-
-    protected String removeCurlyBraces(String parameter) {
-        return parameter.substring(2, parameter.length() - 1);
     }
 
     protected String getLabelByPath(Class<?> type, String[] paths) {

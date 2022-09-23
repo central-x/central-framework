@@ -24,10 +24,9 @@
 
 package central.lang;
 
-import central.util.Arrayx;
+import central.lang.reflect.TypeReference;
 import central.util.Collectionx;
 import central.util.Mapx;
-import central.util.Stringx;
 import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
@@ -35,6 +34,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -46,6 +46,15 @@ import java.util.function.Supplier;
 @PublicApi
 @UtilityClass
 public class Assertx {
+
+    /**
+     * Assertx.must(b instance Integer, ClassCastException::new, "Cannot case 'b' to {}", Integer.class.getName());
+     */
+    private static <E extends Exception> void must(boolean expression, Function<String, E> throwable, String message, Object... args) throws E {
+        if (!expression) {
+            throw throwable.apply(Stringx.format(message, args));
+        }
+    }
 
     /**
      * Assertx.must(b instance Integer, () -> new ClassCastException("Cannot case 'b' to java.lang.Integer"));
@@ -60,13 +69,41 @@ public class Assertx {
      * Assertx.mustTrue(i > 0, "The value must be greater than zero");
      */
     public static void mustTrue(boolean expression, String message, Object... args) {
-        must(expression, () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(expression, IllegalArgumentException::new, message, args);
     }
 
     /**
-     * Assertx.mustTrue(index > length, () -> new IndexOutOfBoundsException(index));
+     * Assertx.mustTrue(index > length, IndexOutOfBoundsException::new, "Index out of range: " + index);
+     */
+    public static <E extends Exception> void mustTrue(boolean expression, Function<String, E> throwable, String message, Object... args) throws E {
+        must(expression, throwable, message, args);
+    }
+
+    /**
+     * Assertx.mustTrue(index > length, () -> new IndexOutOfBoundsException("Index out of range: " + index));
      */
     public static <E extends Exception> void mustTrue(boolean expression, Supplier<E> throwable) throws E {
+        must(expression, throwable);
+    }
+
+    /**
+     * Assertx.mustFalse(i <= 0, "The value must be greater than zero");
+     */
+    public static void mustFalse(boolean expression, String message, Object... args) {
+        must(expression, IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustFalse(index <= length, IndexOutOfBoundsException::new, "Index out of range: " + index);
+     */
+    public static <E extends Exception> void mustFalse(boolean expression, Function<String, E> throwable, String message, Object... args) throws E {
+        must(expression, throwable, message, args);
+    }
+
+    /**
+     * Assertx.mustFalse(index <= length, () -> new IndexOutOfBoundsException("Index out of range: " + index));
+     */
+    public static <E extends Exception> void mustFalse(boolean expression, Supplier<E> throwable) throws E {
         must(expression, throwable);
     }
 
@@ -74,7 +111,14 @@ public class Assertx {
      * Assertx.mustEquals(a, b, "a must equals to b");
      */
     public static void mustEquals(Object expected, Object actual, String message, Object... args) {
-        must(Objects.equals(expected, actual), () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(Objects.equals(expected, actual), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustEquals(a, b, IllegalArgumentException::new, "Expected same object")
+     */
+    public static <E extends Exception> void mustEquals(Object expected, Object actual, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Objects.equals(expected, actual), throwable, message, args);
     }
 
     /**
@@ -88,7 +132,14 @@ public class Assertx {
      * Assertx.mustNotEquals(a, b, "a must not equals to b");
      */
     public static void mustNotEquals(Object unexpected, Object actual, String message, Object... args) {
-        must(!Objects.equals(unexpected, actual), () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(!Objects.equals(unexpected, actual), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustNotEquals(a, b, IllegalArgumentException::new, "Unexpected same object")
+     */
+    public static <E extends Exception> void mustNotEquals(Object unexpected, Object actual, Function<String, E> throwable, String message, Object... args) throws E {
+        must(!Objects.equals(unexpected, actual), throwable, message, args);
     }
 
     /**
@@ -102,21 +153,59 @@ public class Assertx {
      * Assertx.mustNull(value, "The value must be null");
      */
     public static void mustNull(@Nullable Object object, String message, Object... args) {
-        must(object == null, () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(object == null, IllegalArgumentException::new, message, args);
     }
 
     /**
-     * Assertx.mustNull(value, () -> new IllegalArgumentException("Unexpected same object"))
+     * Assertx.mustNull(value, IllegalArgumentException::new, "Expect null object")
+     */
+    public static <E extends Exception> void mustNull(@Nullable Object object, Function<String, E> throwable, String message, Object... args) throws E {
+        must(object == null, throwable, message, args);
+    }
+
+    /**
+     * Assertx.mustNull(value, () -> new IllegalArgumentException("Expect null object"))
      */
     public static <E extends Exception> void mustNull(@Nullable Object object, Supplier<E> throwable) throws E {
         must(object == null, throwable);
     }
 
     /**
+     * var value = Assertx#requireNotNull(value, "The value must not be null")
+     */
+    public static <R> @Nonnull R requireNotNull(@Nullable R object, String message, Object... args) {
+        must(object != null, IllegalArgumentException::new, message, args);
+        return object;
+    }
+
+    /**
+     * var value = Assertx#requireNotNull(value, IllegalArgumentException::new, "The value must not be null")
+     */
+    public static <R, E extends Exception> @Nonnull R requireNotNull(@Nullable R object, Function<String, E> throwable, String message, Object... args) throws E {
+        must(object != null, throwable, message, args);
+        return object;
+    }
+
+    /**
+     * var value = Assertx#requireNotNull(value, () -> new IllegalArgumentException("The value must not be null"))
+     */
+    public static <R, E extends Exception> @Nonnull R requireNotNull(@Nullable R object, Supplier<E> throwable) throws E {
+        must(object != null, throwable);
+        return object;
+    }
+
+    /**
      * Assertx.mustNotNull(value, "The value must not be null");
      */
     public static void mustNotNull(@Nullable Object object, String message, Object... args) {
-        must(object != null, () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(object != null, IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustNotNull(value, IllegalArgumentException::new, "The value must not be null")
+     */
+    public static <E extends Exception> void mustNotNull(@Nullable Object object, Function<String, E> throwable, String message, Object... args) throws E {
+        must(object != null, throwable, message, args);
     }
 
     /**
@@ -126,18 +215,42 @@ public class Assertx {
         must(object != null, throwable);
     }
 
-//    /**
-//     * Assertx.mustNotNull("name", value);
-//     */
-//    public static void mustNotNull(String parameter, Object object) {
-//        must(object != null, () -> new IllegalArgumentException(Stringx.format("Argument '{}' must not null", parameter)));
-//    }
+    /**
+     * var string = Assertx.requireNotEmpty(value, "The value must not empty");
+     */
+    public static @Nonnull String requireNotEmpty(@Nullable String text, String message, Object... args) {
+        must(Stringx.isNotEmpty(text), IllegalArgumentException::new, message, args);
+        return text;
+    }
+
+    /**
+     * var string = Assertx.requireNotEmpty(value, IllegalArgumentException::new, "The value must not empty")
+     */
+    public static <E extends Exception> @Nonnull String requireNotEmpty(@Nullable String text, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Stringx.isNotEmpty(text), throwable, message, args);
+        return text;
+    }
+
+    /**
+     * var string = Assertx.requireNotEmpty(value, () -> new IllegalArgumentException("The value must not empty"))
+     */
+    public static <E extends Exception> @Nonnull String requireNotEmpty(@Nullable String text, Supplier<E> throwable) throws E {
+        must(Stringx.isNotEmpty(text), throwable);
+        return text;
+    }
 
     /**
      * Assertx.mustNotEmpty(value, "The value must not empty");
      */
     public static void mustNotEmpty(@Nullable String text, String message, Object... args) {
-        must(Stringx.isNotEmpty(text), () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(Stringx.isNotEmpty(text), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustNotEmpty(value, IllegalArgumentException::new, "The value must not empty")
+     */
+    public static <E extends Exception> void mustNotEmpty(@Nullable String text, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Stringx.isNotEmpty(text), throwable, message, args);
     }
 
     /**
@@ -151,7 +264,14 @@ public class Assertx {
      * Assertx.mustNullOrEmpty(value, "The value must be null or empty")
      */
     public static void mustNullOrEmpty(@Nullable String text, String message, Object... args) {
-        must(Stringx.isNullOrEmpty(text), () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(Stringx.isNullOrEmpty(text), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustNullOrEmpty(value, IllegalArgumentException::new, "The value must be null or empty")
+     */
+    public static <E extends Exception> void mustNullOrEmpty(@Nullable String text, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Stringx.isNullOrEmpty(text), throwable, message, args);
     }
 
     /**
@@ -162,14 +282,45 @@ public class Assertx {
     }
 
     /**
-     * Assertx.mustNotBlank(value, "The value must not blank");
+     * Assertx.requireNotBlank(value, "The value must not blank")
      */
-    public static void mustNotBlank(@Nullable String text, String message, Object... args) {
-        must(Stringx.isNotBlank(text), () -> new IllegalArgumentException(Stringx.format(message, args)));
+    public static @Nonnull String requireNotBlank(@Nullable String text, String message, Object... args) {
+        must(Stringx.isNotBlank(text), IllegalArgumentException::new, message, args);
+        return text;
     }
 
     /**
-     * Assertx.mustNotBlank(value, new IllegalArgumentException("The value must not blank"));
+     * Assertx.requireNotBlank(value, IllegalArgumentException::new, "The value must not blank")
+     */
+    public static <E extends Exception> @Nonnull String requireNotBlank(@Nullable String text, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Stringx.isNotBlank(text), throwable, message, args);
+        return text;
+    }
+
+    /**
+     * Assertx.requireNotBlank(value, () -> new IllegalArgumentException("The value must not blank"))
+     */
+    public static <E extends Exception> @Nonnull String requireNotBlank(@Nullable String text, Supplier<E> throwable) throws E {
+        must(Stringx.isNotBlank(text), throwable);
+        return text;
+    }
+
+    /**
+     * Assertx.mustNotBlank(value, "The value must not blank")
+     */
+    public static void mustNotBlank(@Nullable String text, String message, Object... args) {
+        must(Stringx.isNotBlank(text), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustNotBlank(value, IllegalArgumentException::new, "The value must not blank")
+     */
+    public static <E extends Exception> void mustNotBlank(@Nullable String text, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Stringx.isNotBlank(text), throwable, message, args);
+    }
+
+    /**
+     * Assertx.mustNotBlank(value, () -> new IllegalArgumentException("The value must not blank"))
      */
     public static <E extends Exception> void mustNotBlank(@Nullable String text, Supplier<E> throwable) throws E {
         must(Stringx.isNotBlank(text), throwable);
@@ -179,7 +330,14 @@ public class Assertx {
      * Assertx.mustNullOrBlank(value, "The value must null or blank")
      */
     public static void mustNullOrBlank(@Nullable String text, String message, Object... args) {
-        must(Stringx.isNullOrBlank(text), () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(Stringx.isNullOrBlank(text), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustNullOrBlank(value, IllegalArgumentException::new, "The value must null or blank")
+     */
+    public static <E extends Exception> void mustNullOrBlank(@Nullable String text, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Stringx.isNullOrBlank(text), throwable, message, args);
     }
 
     /**
@@ -190,14 +348,45 @@ public class Assertx {
     }
 
     /**
-     * Assertx.mustNotEmpty(array, "The value must contain elements");
+     * Assertx.requireNotEmpty(array, "The value must contain elements")
      */
-    public static <T> void mustNotEmpty(@Nullable T[] array, String message, Object... args) {
-        must(Arrayx.isNotEmpty(array), () -> new IllegalArgumentException(Stringx.format(message, args)));
+    public static <T> T[] requireNotEmpty(@Nullable T[] array, String message, Object... args) {
+        must(Arrayx.isNotEmpty(array), IllegalArgumentException::new, message, args);
+        return array;
     }
 
     /**
-     * Assertx.mustNotEmpty(array, () -> new IllegalArgumentException("The value must contain elements"));
+     * Assertx.requireNotEmpty(array, IllegalArgumentException::new, "The value must contain elements")
+     */
+    public static <T, E extends Exception> T[] requireNotEmpty(@Nullable T[] array, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Arrayx.isNotEmpty(array), throwable, message, args);
+        return array;
+    }
+
+    /**
+     * Assertx.requireNotEmpty(array, () -> new IllegalArgumentException("The value must contain elements"))
+     */
+    public static <T, E extends Exception> T[] requireNotEmpty(@Nullable T[] array, Supplier<E> throwable) throws E {
+        must(Arrayx.isNotEmpty(array), throwable);
+        return array;
+    }
+
+    /**
+     * Assertx.mustNotEmpty(array, "The value must contain elements")
+     */
+    public static <T> void mustNotEmpty(@Nullable T[] array, String message, Object... args) {
+        must(Arrayx.isNotEmpty(array), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustNotEmpty(array, IllegalArgumentException::new, "The value must contain elements")
+     */
+    public static <T, E extends Exception> void mustNotEmpty(@Nullable T[] array, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Arrayx.isNotEmpty(array), throwable, message, args);
+    }
+
+    /**
+     * Assertx.mustNotEmpty(array, () -> new IllegalArgumentException("The value must contain elements"))
      */
     public static <T, E extends Exception> void mustNotEmpty(@Nullable T[] array, Supplier<E> throwable) throws E {
         must(Arrayx.isNotEmpty(array), throwable);
@@ -207,21 +396,59 @@ public class Assertx {
      * Assertx.mustNullOrEmpty(value, "The value must be null or empty")
      */
     public static <T> void mustNullOrEmpty(@Nullable T[] array, String message, Object... args) {
-        must(Arrayx.isNullOrEmpty(array), () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(Arrayx.isNullOrEmpty(array), IllegalArgumentException::new, message, args);
     }
 
     /**
-     * Assertx.mustNullOrEmpty(value, () -> new IllegalArgumentException("The value must be null or empty")）
+     * Assertx.mustNullOrEmpty(value, IllegalArgumentException::new, "The value must be null or empty")
+     */
+    public static <T, E extends Exception> void mustNullOrEmpty(@Nullable T[] array, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Arrayx.isNullOrEmpty(array), throwable, message, args);
+    }
+
+    /**
+     * Assertx.mustNullOrEmpty(value, () -> IllegalArgumentException("The value must be null or empty"))
      */
     public static <T, E extends Exception> void mustNullOrEmpty(@Nullable T[] array, Supplier<E> throwable) throws E {
         must(Arrayx.isNullOrEmpty(array), throwable);
     }
 
     /**
-     * Assertx.mustNotEmpty(array, "The value must contain elements");
+     * Assertx.requireNotEmpty(array, "The value must contain elements")
+     */
+    public static <C extends Collection<T>, T> C requireNotEmpty(@Nullable C collection, String message, Object... args) {
+        must(Collectionx.isNotEmpty(collection), IllegalArgumentException::new, message, args);
+        return collection;
+    }
+
+    /**
+     * Assertx.requireNotEmpty(array, IllegalArgumentException::new, "The value must contain elements")
+     */
+    public static <C extends Collection<T>, T, E extends Exception> C requireNotEmpty(@Nullable C collection, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Collectionx.isNotEmpty(collection), throwable, message, args);
+        return collection;
+    }
+
+    /**
+     * Assertx.requireNotEmpty(array, () -> new IllegalArgumentException("The value must contain elements"))
+     */
+    public static <C extends Collection<T>, T, E extends Exception> C requireNotEmpty(@Nullable C collection, Supplier<E> throwable) throws E {
+        must(Collectionx.isNotEmpty(collection), throwable);
+        return collection;
+    }
+
+    /**
+     * Assertx.mustNotEmpty(array, "The value must contain elements")
      */
     public static <T> void mustNotEmpty(@Nullable Collection<T> collection, String message, Object... args) {
-        must(Collectionx.isNotEmpty(collection), () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(Collectionx.isNotEmpty(collection), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustNotEmpty(array, IllegalArgumentException::new, "The value must contain elements")
+     */
+    public static <T, E extends Exception> void mustNotEmpty(@Nullable Collection<T> collection, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Collectionx.isNotEmpty(collection), throwable, message, args);
     }
 
     /**
@@ -235,7 +462,14 @@ public class Assertx {
      * Assertx.mustNullOrEmpty(value, "The value must be null or empty")
      */
     public static <T> void mustNullOrEmpty(@Nullable Collection<T> collection, String message, Object... args) {
-        must(Collectionx.isNullOrEmpty(collection), () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(Collectionx.isNullOrEmpty(collection), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustNullOrEmpty(value, IllegalArgumentException::new, "The value must be null or empty")
+     */
+    public static <T, E extends Exception> void mustNullOrEmpty(@Nullable Collection<T> collection, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Collectionx.isNullOrEmpty(collection), throwable, message, args);
     }
 
     /**
@@ -246,10 +480,41 @@ public class Assertx {
     }
 
     /**
+     * Assertx.requireNotEmpty(map, "The map must contain entries");
+     */
+    public static <M extends Map<K, V>, K, V> M requireNotEmpty(@Nullable M map, String message, Object... args) {
+        must(Mapx.isNotEmpty(map), IllegalArgumentException::new, message, args);
+        return map;
+    }
+
+    /**
+     * Assertx.requireNotEmpty(map, IllegalArgumentException::new, "The map must contain entries")
+     */
+    public static <M extends Map<K, V>, K, V, E extends Exception> M requireNotEmpty(@Nullable M map, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Mapx.isNotEmpty(map), throwable, message, args);
+        return map;
+    }
+
+    /**
+     * Assertx.requireNotEmpty(map, () -> new IllegalArgumentException("The map must contain entries"))
+     */
+    public static <M extends Map<K, V>, K, V, E extends Exception> M requireNotEmpty(@Nullable M map, Supplier<E> throwable) throws E {
+        must(Mapx.isNotEmpty(map), throwable);
+        return map;
+    }
+
+    /**
      * Assertx.notEmpty(map, "The map must contain entries");
      */
     public static <K, V> void mustNotEmpty(@Nullable Map<K, V> map, String message, Object... args) {
-        must(Mapx.isNotEmpty(map), () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(Mapx.isNotEmpty(map), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.notEmpty(map, IllegalArgumentException::new, "The map must contain entries")
+     */
+    public static <K, V, E extends Exception> void mustNotEmpty(@Nullable Map<K, V> map, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Mapx.isNotEmpty(map), throwable, message, args);
     }
 
     /**
@@ -263,7 +528,14 @@ public class Assertx {
      * Assertx.mustNullOrEmpty(value, "The value must be null or empty")
      */
     public static <K, V> void mustNullOrEmpty(@Nullable Map<K, V> map, String message, Object... args) {
-        must(Mapx.isNullOrEmpty(map), () -> new IllegalArgumentException(Stringx.format(message, args)));
+        must(Mapx.isNullOrEmpty(map), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustNullOrEmpty(value, IllegalArgumentException::new, "The value must be null or empty")
+     */
+    public static <K, V, E extends Exception> void mustNullOrEmpty(@Nullable Map<K, V> map, Function<String, E> throwable, String message, Object... args) throws E {
+        must(Mapx.isNullOrEmpty(map), throwable, message, args);
     }
 
     /**
@@ -273,32 +545,90 @@ public class Assertx {
         must(Mapx.isNullOrEmpty(map), throwable);
     }
 
-    /**
-     * Assertx.mustInstanceOf(Number.class, myClass, "Number expected");
-     */
-    public static void mustInstanceOf(@Nonnull Class<?> type, @Nullable Object obj, String message, Object... args) {
-        mustNotNull(type, () -> new NullPointerException("Argument 'type' must not null"));
-        must(type.isInstance(obj), () -> new IllegalArgumentException(Stringx.format(message, args)));
+    public static <T> T requireInstanceOf(@Nonnull TypeReference<T> type, @Nullable Object obj, String message, Object... args) {
+        mustNotNull(type, NullPointerException::new, "Argument 'type' must not null");
+        must(type.isInstance(obj), IllegalArgumentException::new, message, args);
+        return (T) obj;
     }
 
+    public static <T, E extends Exception> T requireInstanceOf(@Nonnull TypeReference<T> type, @Nullable Object obj, Function<String, E> throwable, String message, Object... args) throws E {
+        mustNotNull(type, NullPointerException::new, "Argument 'type' must not null");
+        must(type.getRawClass().isInstance(obj), throwable, message, args);
+        return (T) obj;
+    }
+
+    /**
+     * Assertx.requireInstanceOf(Number.class, myClass, "Number expected")
+     */
+    public static <T> T requireInstanceOf(@Nonnull Class<T> type, @Nullable Object obj, String message, Object... args) {
+        mustNotNull(type, NullPointerException::new, "Argument 'type' must not null");
+        must(type.isInstance(obj), IllegalArgumentException::new, message, args);
+        return (T) obj;
+    }
+
+    /**
+     * Assertx.requireInstanceOf(Number.class, myClass, IllegalArgumentException::new, "Number expected")
+     */
+    public static <T, E extends Exception> T requireInstanceOf(@Nonnull Class<T> type, @Nullable Object obj, Function<String, E> throwable, String message, Object... args) throws E {
+        mustNotNull(type, NullPointerException::new, "Argument 'type' must not null");
+        must(type.isInstance(obj), throwable, message, args);
+        return (T) obj;
+    }
+
+    /**
+     * Assertx.requireInstanceOf(Number.class, myClass, () -> new IllegalArgumentException("Number expected"))
+     */
+    public static <T, E extends Exception> T requireInstanceOf(@Nonnull Class<T> type, @Nullable Object obj, Supplier<E> throwable) throws E {
+        mustNotNull(type, NullPointerException::new, "Argument 'type' must not null");
+        must(type.isInstance(obj), throwable);
+        return (T) obj;
+    }
+
+    /**
+     * Assertx.mustInstanceOf(Number.class, myClass, "Number expected")
+     */
+    public static void mustInstanceOf(@Nonnull Class<?> type, @Nullable Object obj, String message, Object... args) {
+        mustNotNull(type, NullPointerException::new, "Argument 'type' must not null");
+        must(type.isInstance(obj), IllegalArgumentException::new, message, args);
+    }
+
+    /**
+     * Assertx.mustInstanceOf(Number.class, myClass, IllegalArgumentException::new, "Number expected")
+     */
+    public static <E extends Exception> void mustInstanceOf(@Nonnull Class<?> type, @Nullable Object obj, Function<String, E> throwable, String message, Object... args) throws E {
+        mustNotNull(type, NullPointerException::new, "Argument 'type' must not null");
+        must(type.isInstance(obj), throwable, message, args);
+    }
+
+    /**
+     * Assertx.mustInstanceOf(Number.class, myClass, () -> new IllegalArgumentException("Number expected"))
+     */
     public static <E extends Exception> void mustInstanceOf(@Nonnull Class<?> type, @Nullable Object obj, Supplier<E> throwable) throws E {
-        mustNotNull(type, () -> new NullPointerException("Argument 'type' must not null"));
+        mustNotNull(type, NullPointerException::new, "Argument 'type' must not null");
         must(type.isInstance(obj), throwable);
     }
 
     /**
-     * Assertx.mustAssignableFrom(Number.class, myClass, "Number expected");
+     * Assertx.mustAssignableFrom(Number.class, myClass, "Number expected")
      */
     public static void mustAssignableFrom(@Nonnull Class<?> superType, @Nullable Class<?> subType, String message, Object... args) {
-        mustNotNull(superType, () -> new NullPointerException("Argument 'superType' must not null"));
-        must(subType != null && superType.isAssignableFrom(subType), () -> new IllegalArgumentException(Stringx.format(message, args)));
+        mustNotNull(superType, NullPointerException::new, "Argument 'superType' must not null");
+        must(subType != null && superType.isAssignableFrom(subType), IllegalArgumentException::new, message, args);
     }
 
     /**
-     * Assertx.mustAssignableFrom(Number.class, myClass, () -> new FormatException("Number expected"));
+     * Assertx.mustAssignableFrom(Number.class, myClass, FormatException::new, "Number expected")
+     */
+    public static <E extends Exception> void mustAssignableFrom(@Nonnull Class<?> superType, @Nullable Class<?> subType, Function<String, E> throwable, String message, Object... args) throws E {
+        mustNotNull(superType, NullPointerException::new, "Argument 'superType' must not null");
+        must(subType != null && superType.isAssignableFrom(subType), throwable, message, args);
+    }
+
+    /**
+     * Assertx.mustAssignableFrom(Number.class, myClass, () -> new FormatException("Number expected"))
      */
     public static <E extends Exception> void mustAssignableFrom(@Nonnull Class<?> superType, @Nullable Class<?> subType, Supplier<E> throwable) throws E {
-        mustNotNull(superType, () -> new NullPointerException("Argument 'superType' must not null"));
+        mustNotNull(superType, NullPointerException::new, "Argument 'superType' must not null");
         must(subType != null && superType.isAssignableFrom(subType), throwable);
     }
 }

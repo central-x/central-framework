@@ -25,7 +25,7 @@
 package central.net.http.body.request;
 
 import central.net.http.body.Body;
-import central.util.Stringx;
+import central.lang.Stringx;
 import org.springframework.http.MediaType;
 
 import java.io.ByteArrayInputStream;

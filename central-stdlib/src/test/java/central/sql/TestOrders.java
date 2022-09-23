@@ -24,7 +24,7 @@
 
 package central.sql;
 
-import central.sql.data.Account;
+import central.sql.data.AccountEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,16 +38,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestOrders {
     @Test
     public void case1(){
-        var orders = Orders.order().asc(Account::getAge);
+        var orders = Orders.order().asc(AccountEntity::getAge);
         assertEquals(orders.toSql(), "age");
 
-        orders = Orders.order().desc(Account::getAge);
+        orders = Orders.order().desc(AccountEntity::getAge);
         assertEquals(orders.toSql(), "age DESC");
     }
 
     @Test
     public void case2(){
-        var orders = Orders.order().asc(Account::getAge).desc(Account::getName);
+        var orders = Orders.order().asc(AccountEntity::getAge).desc(AccountEntity::getName);
         assertEquals(orders.toSql(), "age, name DESC");
     }
 }

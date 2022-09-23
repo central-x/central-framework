@@ -26,9 +26,9 @@ package central.net.http.body.request;
 
 import central.net.http.body.Body;
 import central.net.http.body.HttpConverters;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.util.Objectx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
@@ -66,15 +66,13 @@ public class UrlEncodedBody implements Body {
     // 属性反射
     @SneakyThrows
     public UrlEncodedBody(Object instance) {
-        if (instance == null) {
-
-        } else if (instance instanceof Map<?, ?> map) {
+        if (instance instanceof Map<?, ?> map) {
             for (Map.Entry<?, ?> it : map.entrySet()) {
                 this.body.set(it.getKey().toString(), Objectx.toString(it.getValue()));
             }
         } else if (instance instanceof List<?>) {
             throw new IllegalArgumentException(Stringx.format("Unsupported type '{}' for UrlEncodedBody", List.class.getName()));
-        } else {
+        } else if (instance != null) {
             // 反射获取所有属性
             BeanInfo info = Introspector.getBeanInfo(instance.getClass());
             PropertyDescriptor[] properties = info.getPropertyDescriptors();

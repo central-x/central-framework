@@ -25,7 +25,7 @@
 package central.starter.graphql.core.resolver;
 
 import central.starter.graphql.GraphQLParameterResolver;
-import central.starter.graphql.core.ExecuteContext;
+import central.util.Context;
 import graphql.schema.DataFetchingEnvironment;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -71,7 +71,7 @@ public class ServletParameterResolver implements GraphQLParameterResolver {
         return this.resolves(parameter, environment.getContext());
     }
 
-    private Object resolves(Parameter parameter, ExecuteContext context) {
+    private Object resolves(Parameter parameter, Context context) {
         if (context == null) {
             return null;
         }

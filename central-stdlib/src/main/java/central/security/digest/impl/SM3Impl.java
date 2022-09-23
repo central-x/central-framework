@@ -24,7 +24,7 @@
 
 package central.security.digest.impl;
 
-import central.util.Stringx;
+import central.lang.Stringx;
 import central.security.digest.DigestImpl;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -63,7 +63,7 @@ public class SM3Impl implements DigestImpl {
         int BUFFER_SIZE = 8 * 1024;
         try (BufferedInputStream buffered = new BufferedInputStream(is, BUFFER_SIZE)) {
             byte[] buffer = new byte[BUFFER_SIZE];
-            int length = -1;
+            int length;
 
             while ((length = buffered.read(buffer)) != -1) {
                 sm3.update(buffer, 0, length);

@@ -26,8 +26,6 @@ package central.sql;
 
 import central.sql.data.Entity;
 
-import java.lang.reflect.Field;
-
 /**
  * Sql 与 Java 的命名转换
  *

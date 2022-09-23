@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  * Blob 解析
@@ -42,14 +43,22 @@ import java.sql.SQLException;
 public class BlobTypeResolver implements SqlTypeResolver {
     @Override
     public Object resolve(SqlDialect dialect, ResultSet cursor, ResultSetMetaData meta, int index) throws SQLException {
-        var blob = cursor.getBlob(index);
-        if (cursor.wasNull()) {
-            return null;
-        } else {
+        if (meta.getColumnType(index) == Types.BINARY) {
             try {
-                return IOStreamx.readBytes(blob.getBinaryStream());
+                return IOStreamx.readBytes(cursor.getBinaryStream(index));
             } catch (IOException ex) {
                 throw new SQLException(ex);
+            }
+        } else {
+            var blob = cursor.getBlob(index);
+            if (cursor.wasNull()) {
+                return null;
+            } else {
+                try {
+                    return IOStreamx.readBytes(blob.getBinaryStream());
+                } catch (IOException ex) {
+                    throw new SQLException(ex);
+                }
             }
         }
     }

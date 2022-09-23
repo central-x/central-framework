@@ -27,7 +27,7 @@ package central.starter.graphql.core.command;
 import central.starter.graphql.GraphQLParameterResolver;
 import central.starter.graphql.GraphQLService;
 import central.util.Listx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.Getter;

@@ -33,7 +33,7 @@ import central.net.http.body.request.UrlEncodedBody;
 import central.net.http.proxy.contract.spring.SpringResolver;
 import central.lang.Assertx;
 import central.util.Objectx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestPart;

@@ -28,13 +28,13 @@ import central.bean.TypeCheckException;
 import central.bean.OptionalEnum;
 import central.lang.reflect.FieldReference;
 import central.lang.reflect.InstanceReference;
+import central.lang.reflect.TypeReference;
 import central.pluglet.FieldBinder;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.util.Objectx;
-import central.util.Stringx;
 
 import java.util.Map;
 
@@ -56,11 +56,11 @@ public class RadioControlBinder implements FieldBinder {
         var annotation = field.getAnnotation(Control.class);
 
         // 类型检查
-        Assertx.mustTrue(field.getType().isEnum(), () -> new TypeCheckException(Stringx.format("Field '{}' requires Enum type", field.getName())));
+        Assertx.mustTrue(field.getType().isEnum(), TypeCheckException::new, "Field '{}' requires Enum type", field.getName());
+
         // 枚举列表
         var options = Arrayx.asStream(field.getType().getRawClass().getEnumConstants())
-                .peek(it -> Assertx.mustInstanceOf(OptionalEnum.class, it, () -> new TypeCheckException("Enum '{}' MUST implements Optional<String>")))
-                .map(it -> (OptionalEnum<String>) it)
+                .map(it -> (OptionalEnum<String>) Assertx.requireInstanceOf(OptionalEnum.class, it, TypeCheckException::new, "Enum '{}' MUST implements Optional<String>"))
                 .toList();
 
         var name = Objectx.get(annotation.name(), field.getName());

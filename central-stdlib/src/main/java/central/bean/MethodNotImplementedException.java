@@ -26,7 +26,7 @@ package central.bean;
 
 import central.lang.PublicApi;
 import central.lang.reflect.MethodReference;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.experimental.StandardException;
 
 import java.io.Serial;

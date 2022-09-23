@@ -24,8 +24,8 @@
 
 package central.starter.web.query;
 
-import central.util.Arrayx;
-import central.util.Stringx;
+import central.lang.Arrayx;
+import central.lang.Stringx;
 import lombok.Data;
 
 import javax.annotation.Nonnull;

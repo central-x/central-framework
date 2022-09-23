@@ -39,6 +39,7 @@ import org.bouncycastle.math.ec.ECCurve;
 import org.bouncycastle.math.ec.ECPoint;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.Key;
@@ -93,6 +94,7 @@ public class SM2Impl implements CipherImpl {
 
     @RequiredArgsConstructor
     private static class SM2EncryptKey implements Key {
+        @Serial
         private static final long serialVersionUID = 7138366658809908375L;
 
         @Getter
@@ -128,6 +130,7 @@ public class SM2Impl implements CipherImpl {
     }
 
     private static class SM2DecryptKey implements Key {
+        @Serial
         private static final long serialVersionUID = 644493133111452334L;
         private static final int PRIVKEY_SIZE = 32;
 

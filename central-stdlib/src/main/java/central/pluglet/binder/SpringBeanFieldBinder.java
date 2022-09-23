@@ -28,7 +28,7 @@ import central.bean.InitializeException;
 import central.lang.reflect.FieldReference;
 import central.lang.reflect.InstanceReference;
 import central.pluglet.FieldBinder;
-import central.util.Stringx;
+import central.lang.Stringx;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -24,7 +24,7 @@
 
 package central.sql.meta.entity;
 
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.Data;
 
 /**

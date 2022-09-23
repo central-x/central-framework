@@ -24,7 +24,7 @@
 
 package central.data;
 
-import central.sql.data.CodeValues;
+import central.bean.CodeValues;
 import central.util.Setx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

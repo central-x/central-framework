@@ -25,7 +25,7 @@
 package central.starter.graphql.core.resolver;
 
 import central.starter.graphql.GraphQLParameterResolver;
-import central.starter.graphql.core.ExecuteContext;
+import central.util.Context;
 import lombok.Getter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.format.support.FormattingConversionService;
@@ -41,6 +41,8 @@ public abstract class AnnotatedParameterResolver implements GraphQLParameterReso
     @Getter
     private final Class<? extends Annotation> annotation;
 
+    private final Object lock = new Object();
+
     public AnnotatedParameterResolver(Class<? extends Annotation> annotation) {
         this.annotation = annotation;
     }
@@ -52,9 +54,9 @@ public abstract class AnnotatedParameterResolver implements GraphQLParameterReso
 
     private volatile FormattingConversionService converter;
 
-    protected FormattingConversionService getConverter(ExecuteContext context) {
+    protected FormattingConversionService getConverter(Context context) {
         if (this.converter == null) {
-            synchronized (this) {
+            synchronized (this.lock) {
                 if (this.converter == null) {
                     ApplicationContext applicationContext = context.get(ApplicationContext.class);
                     if (applicationContext != null) {

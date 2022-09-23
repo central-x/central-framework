@@ -44,7 +44,7 @@ public class AddIndexMigration implements MigrateAction {
 
     @Override
     public void migrate(SqlExecutor executor) throws SQLException {
-        var scripts = executor.getBuilder().forAddIndex(this.script);
+        var scripts = executor.getSource().getDialect().getBuilder().forAddIndex(this.script);
         for (var script : scripts) {
             executor.execute(script);
         }

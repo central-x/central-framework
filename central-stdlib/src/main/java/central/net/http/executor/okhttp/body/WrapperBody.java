@@ -30,9 +30,9 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
 import okio.Okio;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 /**
@@ -53,14 +53,13 @@ public class WrapperBody extends RequestBody {
         return body.getContentLength();
     }
 
-    @Nullable
     @Override
-    public MediaType contentType() {
+    public @Nullable MediaType contentType() {
         return MediaType.parse(this.body.getContentType().toString());
     }
 
     @Override
-    public void writeTo(@NotNull BufferedSink bufferedSink) throws IOException {
+    public void writeTo(@Nonnull BufferedSink bufferedSink) throws IOException {
         var contentLength = this.contentLength();
         if (contentLength == -1) {
             // 未知长度，一直读取到流结束

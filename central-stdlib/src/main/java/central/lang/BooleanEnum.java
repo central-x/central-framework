@@ -25,7 +25,6 @@
 package central.lang;
 
 import central.bean.OptionalEnum;
-import central.util.Stringx;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

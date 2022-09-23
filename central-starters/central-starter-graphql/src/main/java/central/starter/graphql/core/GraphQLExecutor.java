@@ -25,6 +25,7 @@
 package central.starter.graphql.core;
 
 import central.starter.graphql.GraphQLRequest;
+import central.util.Context;
 import graphql.*;
 import graphql.execution.AbortExecutionException;
 import graphql.execution.NonNullableFieldWasNullError;
@@ -49,7 +50,7 @@ public class GraphQLExecutor {
     @Setter
     private LoaderCommandRegistry registry;
 
-    public Object execute(GraphQLRequest request, ExecuteContext context) {
+    public Object execute(GraphQLRequest request, Context context) {
         // 构建输入
         ExecutionInput.Builder builder = new ExecutionInput.Builder()
                 // 每次执行的时候，都需要重新构建 DataLoaderRegistry

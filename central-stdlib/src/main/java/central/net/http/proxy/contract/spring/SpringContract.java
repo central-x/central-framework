@@ -28,10 +28,10 @@ import central.net.http.HttpRequest;
 import central.net.http.HttpUrl;
 import central.net.http.proxy.Contract;
 import central.net.http.proxy.contract.spring.resolver.*;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.util.Listx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -95,7 +95,7 @@ public class SpringContract implements Contract {
         // 处理 produces，也就是添加 ACCEPT 请求头
         if (annotation != null && Arrayx.isNotEmpty(annotation.produces())) {
             var accepts = Arrayx.asStream(annotation.produces()).filter(Stringx::isNotBlank).map(MediaType::parseMediaType).toList();
-            if (Listx.isNotEmpty(accepts)) {
+            if (!accepts.isEmpty()) {
                 request.getHeaders().setAccept(accepts);
             }
         }

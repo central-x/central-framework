@@ -24,6 +24,7 @@
 
 package central.util;
 
+import central.lang.Numberx;
 import lombok.experimental.UtilityClass;
 
 import java.util.UUID;
@@ -45,14 +46,10 @@ public class Guidx {
     public static String nextID() {
         var uuid = UUID.randomUUID();
 
-        var result = new StringBuilder();
-
-        result.append(digits(uuid.getMostSignificantBits() >> 32, 8));
-        result.append(digits(uuid.getMostSignificantBits() >> 16, 4));
-        result.append(digits(uuid.getMostSignificantBits(), 4));
-        result.append(digits(uuid.getLeastSignificantBits() >> 48, 4));
-        result.append(digits(uuid.getLeastSignificantBits(), 12));
-
-        return result.toString();
+        return digits(uuid.getMostSignificantBits() >> 32, 8) +
+                digits(uuid.getMostSignificantBits() >> 16, 4) +
+                digits(uuid.getMostSignificantBits(), 4) +
+                digits(uuid.getLeastSignificantBits() >> 48, 4) +
+                digits(uuid.getLeastSignificantBits(), 12);
     }
 }

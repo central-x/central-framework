@@ -27,6 +27,7 @@ package central.security;
 import central.security.digest.DigestImpl;
 import central.security.digest.impl.SM3Impl;
 import central.security.digest.impl.StandardImpl;
+import lombok.experimental.UtilityClass;
 
 /**
  * 消息摘要
@@ -34,6 +35,7 @@ import central.security.digest.impl.StandardImpl;
  * @author Alan Yeh
  * @since 2022/07/05
  */
+@UtilityClass
 public class Digestx {
     public static final DigestImpl MD5 = new StandardImpl("MD5");
     public static final DigestImpl SHA1 = new StandardImpl("SHA1");

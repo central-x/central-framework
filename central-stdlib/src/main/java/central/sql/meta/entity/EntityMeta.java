@@ -28,7 +28,7 @@ import central.sql.SqlConversion;
 import central.sql.data.Entity;
 import central.util.Listx;
 import central.util.Objectx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

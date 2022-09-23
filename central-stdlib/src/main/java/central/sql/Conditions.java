@@ -25,22 +25,24 @@
 package central.sql;
 
 import central.sql.data.Entity;
-import central.sql.data.Sortable;
-import central.sql.data.Treeable;
+import central.bean.Sortable;
+import central.bean.Treeable;
 import central.validation.Validatable;
 import central.lang.Assertx;
 import central.lang.reflect.PropertyReference;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.util.Collectionx;
 import central.util.Listx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -99,10 +101,14 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
     }
 
     @Override
+    @SneakyThrows(CloneNotSupportedException.class)
     public Conditions clone() {
-        Conditions conditions = new Conditions(this.getId(), new AtomicInteger(this.idGenerator.get()));
+        Conditions conditions = (Conditions) super.clone();
+
+        conditions.setId(this.getId());
+        conditions.idGenerator.set(this.idGenerator.get());
         conditions.index.set(this.index.get());
-        conditions.conditions = Listx.asStream(this.conditions).map(Condition::clone).collect(Collectors.toList());
+        conditions.conditions = new ArrayList<>(Listx.asStream(this.conditions).map(Condition::clone).toList());
         conditions.properties = new HashSet<>(this.properties);
         return conditions;
     }
@@ -510,7 +516,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
             // 处理当前集合的关系
             Conditions clone = conditions.clone();
 
-            List<String> ids = clone.stream().map(Condition::getId).mapToInt(Integer::parseInt).sorted().mapToObj(String::valueOf).collect(Collectors.toList());
+            List<String> ids = clone.stream().map(Condition::getId).mapToInt(Integer::parseInt).sorted().mapToObj(String::valueOf).toList();
             Map<String, String> idMap = new HashMap<>();
             for (String id : ids) {
                 idMap.put(id, String.valueOf(this.idGenerator.getAndIncrement()));
@@ -874,8 +880,9 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
         }
 
         @Override
+        @SneakyThrows(CloneNotSupportedException.class)
         protected Condition clone() {
-            Condition clone = new Condition();
+            var clone = (Condition) super.clone();
             clone.setId(this.getId());
             clone.setParentId(this.getParentId());
             clone.setType(this.getType());
@@ -886,7 +893,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
             clone.setValues(this.getValues());
 
             if (Listx.isNotEmpty(this.getChildren())) {
-                clone.setChildren(this.getChildren().stream().map(Condition::clone).collect(Collectors.toList()));
+                clone.setChildren(new ArrayList<>(this.getChildren().stream().map(Condition::clone).toList()));
             }
             return clone;
         }
@@ -966,7 +973,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    @SuppressWarnings("SuspiciousToArrayCall")
+    public <T> T[] toArray(@Nonnull T[] a) {
         return this.conditions.toArray(a);
     }
 
@@ -990,23 +998,24 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-        return this.conditions.containsAll(c);
+    @SuppressWarnings("SlowListContainsAll")
+    public boolean containsAll(@Nonnull Collection<?> collection) {
+        return this.conditions.containsAll(collection);
     }
 
     @Override
-    public boolean addAll(Collection<? extends Condition> c) {
-        return this.conditions.addAll(c);
+    public boolean addAll(@Nonnull Collection<? extends Condition> collection) {
+        return this.conditions.addAll(collection);
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
-        return this.conditions.removeAll(c);
+    public boolean removeAll(@Nonnull Collection<?> collection) {
+        return this.conditions.removeAll(collection);
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
-        return this.conditions.retainAll(c);
+    public boolean retainAll(@Nonnull Collection<?> collection) {
+        return this.conditions.retainAll(collection);
     }
 
     @Override

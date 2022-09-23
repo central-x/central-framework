@@ -25,6 +25,7 @@
 package central.starter.graphql.core;
 
 import central.starter.graphql.core.command.LoaderCommand;
+import central.util.Context;
 import lombok.Getter;
 import org.dataloader.DataLoaderFactory;
 import org.dataloader.DataLoaderOptions;
@@ -78,7 +79,7 @@ public class LoaderCommandRegistry {
      *
      * @param context 执行上下文
      */
-    public DataLoaderRegistry buildRegistry(ExecuteContext context) {
+    public DataLoaderRegistry buildRegistry(Context context) {
         var registry = new DataLoaderRegistry();
         var options = DataLoaderOptions.newOptions().setCachingEnabled(false).setBatchingEnabled(true).setMaxBatchSize(1000).setBatchLoaderContextProvider(() -> context);
         for (var loader : this.commands.entrySet()) {

@@ -44,7 +44,7 @@ public class AddTableMigration implements MigrateAction {
 
     @Override
     public void migrate(SqlExecutor executor) throws SQLException {
-        var scripts = executor.getBuilder().forAddTable(this.script);
+        var scripts = executor.getSource().getDialect().getBuilder().forAddTable(this.script);
         for (var script : scripts) {
             executor.execute(script);
         }

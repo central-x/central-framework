@@ -24,6 +24,7 @@
 
 package central.sql.proxy.mapper;
 
+import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
@@ -42,8 +43,8 @@ import java.sql.SQLException;
  */
 public class DeleteAllHandler implements MapperHandler {
     @Override
-    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var script = executor.getBuilder().forDeleteBy(executor, meta, null);
+    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
+        var script = builder.forDeleteBy(executor, meta, null);
         return executor.execute(script);
     }
 }

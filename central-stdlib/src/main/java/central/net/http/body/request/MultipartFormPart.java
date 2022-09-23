@@ -29,7 +29,7 @@ import central.net.http.body.InputStreamBody;
 import central.lang.Assertx;
 import central.util.Listx;
 import central.io.IOStreamx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.springframework.http.ContentDisposition;
@@ -38,8 +38,7 @@ import org.springframework.http.MediaType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * MultipartForm Part
@@ -95,14 +94,13 @@ public class MultipartFormPart implements Body {
 
     @Override
     public InputStream getInputStream() throws IOException {
-        Vector<InputStream> streams = new Vector<>();
+        var streams = new ArrayList<InputStream>(3);
 
         streams.add(getHeaderInputStream());
-
         streams.add(new ByteArrayInputStream(CRLF));
         streams.add(this.body.getInputStream());
 
-        return new SequenceInputStream(streams.elements());
+        return new SequenceInputStream(Collections.enumeration(streams));
     }
 
     @Override
@@ -111,7 +109,7 @@ public class MultipartFormPart implements Body {
     }
 
     private InputStream getHeaderInputStream() {
-        Vector<InputStream> streams = new Vector<>();
+        var streams = new ArrayList<InputStream>();
         if (this.getContentType() != null) {
             this.headers.setContentType(this.getBody().getContentType());
         }
@@ -128,7 +126,7 @@ public class MultipartFormPart implements Body {
             }
         }
 
-        return new SequenceInputStream(streams.elements());
+        return new SequenceInputStream(Collections.enumeration(streams));
     }
 
     @Override

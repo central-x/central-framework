@@ -24,6 +24,7 @@
 
 package central.sql.data;
 
+import central.bean.Identifiable;
 import central.validation.Label;
 import lombok.Data;
 

@@ -26,22 +26,17 @@ package central.sql;
 
 import central.io.Resourcex;
 import central.sql.data.Entity;
-import central.sql.datasource.migration.DataSourceMigrator;
-import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.util.Converterx;
 import central.util.MarkdownResources;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.SneakyThrows;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.sql.DataSource;
 import java.lang.reflect.Proxy;
 import java.net.URI;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -85,42 +80,14 @@ public interface SqlExecutor {
     }
 
     /**
-     * 获取元数据
-     */
-    EntityMeta getMeta(Class<? extends Entity> type) throws SQLException;
-
-    /**
-     * 获取方言
-     */
-    SqlBuilder getBuilder();
-
-    /**
      * 获取数据源
      */
-    DataSource getDataSource();
-
-    /**
-     * 获取数据库连接
-     * 获取出来的数据库连接不允许关闭，应在使用完后通过 #returnConnection 归还
-     */
-    Connection getConnection() throws SQLException;
-
-    /**
-     * 归还数据库连接
-     *
-     * @param connection 待归还数据库连接
-     */
-    void returnConnection(Connection connection) throws SQLException;
+    SqlSource getSource();
 
     /**
      * 获取数据转换器
      */
-    Converterx getConverter();
-
-    /**
-     * 数据库迁移
-     */
-    DataSourceMigrator getMigrator();
+    SqlConverter getConverter();
 
     /**
      * 数据加密器
@@ -128,9 +95,21 @@ public interface SqlExecutor {
     SqlCipher getCipher();
 
     /**
-     * 数据库命名风格
+     * 元数据管理
      */
-    SqlConversion getConversion();
+    SqlMetaManager getMetaManager();
+
+    /**
+     * 实体转换器
+     */
+    SqlTransformer getTransformer();
+
+    /**
+     * 添加拦截器
+     *
+     * @param interceptor Sql 拦截器
+     */
+    void addInterceptor(SqlInterceptor interceptor);
 
     /**
      * 执行查询，并返回一个结果

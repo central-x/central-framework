@@ -29,8 +29,10 @@ import central.security.cipher.KeyPair;
 import lombok.Getter;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.util.Arrays;
 
 /**
  * 不加密
@@ -51,6 +53,7 @@ public class NoneImpl implements CipherImpl {
     private static final Key EMPTY_KEY = new EmptyKey();
 
     private static class EmptyKey implements Key {
+        @Serial
         private static final long serialVersionUID = -6945045424439243787L;
 
         @Override
@@ -71,6 +74,11 @@ public class NoneImpl implements CipherImpl {
         @Override
         public boolean equals(Object obj) {
             return obj instanceof EmptyKey;
+        }
+
+        @Override
+        public int hashCode() {
+            return Arrays.hashCode(new byte[0]);
         }
     }
 

@@ -124,7 +124,7 @@ public class TableMigrator implements Table {
         script.setColumn(index.getColumn());
         this.migrator.addAction(new AddIndexMigration(script));
 
-        this.table.getIndices().add(new IndexData(index.getName(), index.getColumn()));
+        this.table.getIndices().add(new IndexData(index.getName(), index.isUnique(), index.getColumn()));
 
         return this;
     }

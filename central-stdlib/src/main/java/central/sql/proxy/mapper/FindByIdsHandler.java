@@ -25,12 +25,13 @@
 package central.sql.proxy.mapper;
 
 import central.sql.Conditions;
+import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -46,13 +47,13 @@ import java.util.List;
  */
 public class FindByIdsHandler implements MapperHandler {
     @Override
-    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, EntityMeta meta, Method method, Object[] args) throws SQLException {
+    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
         if (Arrayx.isNullOrEmpty(args)) {
             return Collections.emptyList();
         }
 
         var ids = (List<String>) Arrayx.getFirst(args);
-        var script = executor.getBuilder().forFindBy(executor, meta, null, null, Conditions.where().in(meta.getId().getName(), ids), null);
+        var script = builder.forFindBy(executor, meta, null, null, Conditions.where().in(meta.getId().getName(), ids), null);
         return executor.select(script, meta.getType());
     }
 }

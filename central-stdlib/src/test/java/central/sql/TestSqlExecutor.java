@@ -24,10 +24,7 @@
 
 package central.sql;
 
-import central.sql.datasource.factory.hikari.HikariDataSourceFactory;
-import central.sql.impl.standard.StandardSqlExecutor;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
 /**
  * StandardSqlExecutor Test Cases
@@ -43,14 +40,17 @@ public class TestSqlExecutor {
 
     }
 
-    @Test
-    public void case1(){
-        var dataSource = new HikariDataSourceFactory().build("org.h2.Driver", "jdbc:h2:mem:centralx", "centralx", "central.x");
-
-        var executor = StandardSqlExecutor.builder()
-                .dataSource(dataSource)
-                .dialect(SqlDialect.H2)
-                .build();
-
-    }
+//    @Test
+//    public void case1(){
+//        var dataSource = new HikariDataSourceFactory().build("org.h2.Driver", "jdbc:h2:mem:centralx", "centralx", "central.x");
+//        var dialectDataSource = StandardDialectDataSource.builder()
+//                .dataSource(dataSource)
+//                .dialect(SqlDialect.H2)
+//                .build();
+//
+//        var executor = StandardExecutor.builder()
+//                .dataSource(dialectDataSource)
+//                .build();
+//
+//    }
 }

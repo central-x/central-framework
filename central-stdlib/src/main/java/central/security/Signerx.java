@@ -27,6 +27,7 @@ package central.security;
 import central.security.signer.SignerImpl;
 import central.security.signer.impl.RSAImpl;
 import central.security.signer.impl.SM2Impl;
+import lombok.experimental.UtilityClass;
 
 /**
  * 数字签名算法
@@ -34,8 +35,15 @@ import central.security.signer.impl.SM2Impl;
  * @author Alan Yeh
  * @since 2022/07/10
  */
+@UtilityClass
 public class Signerx {
+    /**
+     * RSA 签名算法
+     */
     public static final SignerImpl RSA = new RSAImpl();
 
+    /**
+     * SM2 签名算法
+     */
     public static final SignerImpl SM2 = new SM2Impl();
 }

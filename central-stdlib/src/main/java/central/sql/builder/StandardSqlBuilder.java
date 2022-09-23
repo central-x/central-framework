@@ -24,6 +24,7 @@
 
 package central.sql.builder;
 
+import central.lang.Stringx;
 import central.sql.Conditions;
 import central.sql.Orders;
 import central.sql.builder.script.column.AddColumnScript;
@@ -34,7 +35,7 @@ import central.sql.builder.script.index.DropIndexScript;
 import central.sql.builder.script.table.AddTableScript;
 import central.sql.builder.script.table.DropTableScript;
 import central.sql.builder.script.table.RenameTableScript;
-import central.sql.data.Treeable;
+import central.bean.Treeable;
 import central.lang.Assertx;
 import central.sql.*;
 import central.sql.meta.entity.EntityMeta;
@@ -42,9 +43,9 @@ import central.sql.meta.entity.ForeignMeta;
 import central.sql.meta.entity.ForeignTableMeta;
 import central.sql.meta.entity.PropertyMeta;
 import central.util.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.SneakyThrows;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLSyntaxErrorException;
 import java.util.*;
@@ -75,9 +76,10 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public SqlScript forCountBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException {
+        conditions = Conditions.where(conditions);
         // SELECT COUNT( DISTINCT a.ID ) FROM ${TABLE} AS a
 
-        var sql = new StringBuilder(Stringx.format("SELECT COUNT( DISTINCT a.{} ) FROM {} AS a\n", processColumn(meta.getTableName(executor.getConversion()))));
+        var sql = new StringBuilder(Stringx.format("SELECT COUNT( DISTINCT a.{} ) FROM {} AS a\n", processColumn(meta.getId().getColumnName(executor.getSource().getConversion())), processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
 
         var whereSql = new StringBuilder();
@@ -108,7 +110,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         applyConditions(executor, meta, whereSql, args, conditions);
 
         if (whereSql.length() > 0) {
-            sql.append("WHERE\n")
+            sql.append("WHERE\n  ")
                     .append(whereSql);
         }
 
@@ -117,8 +119,10 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Conditions conditions, Orders orders) throws SQLSyntaxErrorException {
+        conditions = Conditions.where(conditions);
+        orders = Orders.order(orders);
         // SELECT DISTINCT a.* FROM ${TABLE} AS a
-        var sql = new StringBuilder(Stringx.format("SELECT a.* FROM {} AS a\n", this.processTable(meta.getTableName(executor.getConversion()))));
+        var sql = new StringBuilder(Stringx.format("SELECT a.* FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
         var whereSql = new StringBuilder();
 
@@ -129,7 +133,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         if (aliases.size() >= 1) {
             if (aliases.size() > 1 || !"a".equals(Setx.getAny(aliases))) {
                 // 存在关联查询，会有重复数据，需要去重
-                sql = new StringBuilder(Stringx.format("SELECT DISTINCT a.* FROM {} AS a\n", this.processTable(meta.getTableName(executor.getConversion()))));
+                sql = new StringBuilder(Stringx.format("SELECT DISTINCT a.* FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
             }
         }
 
@@ -155,7 +159,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         applyConditions(executor, meta, whereSql, args, conditions);
 
         if (whereSql.length() > 0) {
-            sql.append("WHERE\n").append(whereSql).append("\n");
+            sql.append("WHERE\n  ").append(whereSql).append("\n");
         }
         // 处理排序
         this.applyOrders(executor, meta, orders, sql);
@@ -183,12 +187,12 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         // INSERT INTO ${TABLE}(ID, COL1, COL2, ...) VALUES (?, ?, ?, ...)
 
         // 构建 Sql
-        var sql = new StringBuilder(Stringx.format("INSERT INTO {}(", this.processTable(meta.getTableName(executor.getConversion()))));
+        var sql = new StringBuilder(Stringx.format("INSERT INTO {}(", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var valueSql = new StringBuilder(") VALUES (");
 
         var properties = meta.getProperties();
         for (var property : properties) {
-            sql.append(this.processColumn(property.getColumnName(executor.getConversion()))).append(", ");
+            sql.append(this.processColumn(property.getColumnName(executor.getSource().getConversion()))).append(", ");
             valueSql.append("?, ");
         }
 
@@ -217,9 +221,10 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException {
+        conditions = Conditions.where(conditions);
         // DELETE FROM ${TABLE} AS a
 
-        var sql = new StringBuilder(Stringx.format("DELETE a FROM {} AS a\n", this.processTable(meta.getTableName(executor.getConversion()))));
+        var sql = new StringBuilder(Stringx.format("DELETE FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
 
         if (Collectionx.isNotEmpty(conditions)) {
@@ -230,13 +235,13 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
             // 看看会使用哪些关联查询
             var aliases = this.getAliases(conditions);
 
-            Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), () -> new SQLSyntaxErrorException("DELETE 不支持外键条件"));
+            Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), SQLSyntaxErrorException::new, "DELETE 不支持外键条件");
 
             // 处理条件
             applyConditions(executor, meta, whereSql, args, conditions);
 
             if (whereSql.length() > 0) {
-                sql.append("WHERE\n")
+                sql.append("WHERE\n  ")
                         .append(whereSql);
             }
         }
@@ -261,10 +266,11 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
      */
     @SneakyThrows({IllegalAccessException.class, InvocationTargetException.class})
     protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions conditions, boolean includeNull) throws SQLSyntaxErrorException {
+        conditions = Conditions.where(conditions);
         // UPDATE ${TABLE} AS a set a.col = ? where id = ? and condition1 = ?
-        Assertx.mustInstanceOf(meta.getType(), entity, () -> new SQLSyntaxErrorException("entity 必须是 {} 类型", meta.getType().getName()));
+        Assertx.mustInstanceOf(meta.getType(), entity, SQLSyntaxErrorException::new, "entity 必须是 {} 类型", meta.getType().getName());
 
-        var sql = new StringBuilder(Stringx.format("UPDATE {} AS a\n", this.processTable(meta.getTableName(executor.getConversion()))));
+        var sql = new StringBuilder(Stringx.format("UPDATE {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
         var whereSql = new StringBuilder();
         var whereArgs = Listx.newArrayList();
@@ -275,7 +281,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         if (Collectionx.isNullOrEmpty(conditions)) {
             // 如果更新条件为 null，则要求必须使用 id 进行更新
             var id = meta.getId().getDescriptor().getReadMethod().invoke(entity);
-            Assertx.mustNotNull(id, () -> new SQLSyntaxErrorException("entity#{} 必须不为空", meta.getId().getName()));
+            Assertx.mustNotNull(id, SQLSyntaxErrorException::new, "entity#{} 必须不为空", meta.getId().getName());
             conditions = Conditions.where().eq(meta.getId().getName(), id);
         }
 
@@ -302,14 +308,14 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
             }
 
             if (value == null) {
-                setSql.append("  a.").append(this.processColumn(property.getColumnName(executor.getConversion()))).append(" = NULL");
+                setSql.append("  a.").append(this.processColumn(property.getColumnName(executor.getSource().getConversion()))).append(" = NULL");
             } else {
-                setSql.append("  a.").append(this.processColumn(property.getColumnName(executor.getConversion()))).append(" = ?");
+                setSql.append("  a.").append(this.processColumn(property.getColumnName(executor.getSource().getConversion()))).append(" = ?");
                 setArgs.add(this.convertValue(executor, meta, property, value));
             }
         }
 
-        Assertx.mustTrue(!setSql.isEmpty(), () -> new SQLSyntaxErrorException("找不到待更新字段"));
+        Assertx.mustTrue(!setSql.isEmpty(), SQLSyntaxErrorException::new, "找不到待更新字段");
 
         sql.append("SET\n").append(setSql).append("\n");
         args.addAll(setArgs);
@@ -318,13 +324,13 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         // 查找此次查询，会使用哪些关联查询
         var aliases = getAliases(conditions);
 
-        Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), () -> new SQLSyntaxErrorException("UPDATE 不支持外键条件"));
+        Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), SQLSyntaxErrorException::new, "UPDATE 不支持外键条件");
 
         // 处理条件
         applyConditions(executor, meta, whereSql, whereArgs, conditions);
 
         if (!whereSql.isEmpty()) {
-            sql.append("WHERE\n").append(whereSql);
+            sql.append("WHERE\n  ").append(whereSql);
             args.addAll(whereArgs);
         }
 
@@ -361,11 +367,11 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         EntityMeta target = foreign.getTarget();
 
         sql.append(Stringx.format("  LEFT JOIN {} AS {} ON a.{} = {}.{} \n",
-                this.processTable(target.getTableName(executor.getConversion())),
+                this.processTable(target.getTableName(executor.getSource().getConversion())),
                 foreign.getAlias(),
-                this.processColumn(foreign.getProperty().getColumnName(executor.getConversion())),
+                this.processColumn(foreign.getProperty().getColumnName(executor.getSource().getConversion())),
                 foreign.getAlias(),
-                this.processColumn(foreign.getReferencedProperty().getColumnName(executor.getConversion()))));
+                this.processColumn(foreign.getReferencedProperty().getColumnName(executor.getSource().getConversion()))));
     }
 
     protected void applyJoin(SqlExecutor executor, EntityMeta main, ForeignTableMeta foreign, StringBuilder sql) {
@@ -373,19 +379,19 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         EntityMeta target = foreign.getTarget();
 
         sql.append(Stringx.format("  LEFT JOIN {} AS {}_rel ON a.{} = {}_rel.{}\n",
-                this.processTable(rel.getTableName(executor.getConversion())),
+                this.processTable(rel.getTableName(executor.getSource().getConversion())),
                 foreign.getAlias(),
-                this.processColumn(foreign.getProperty().getColumnName(executor.getConversion())),
+                this.processColumn(foreign.getProperty().getColumnName(executor.getSource().getConversion())),
                 foreign.getAlias(),
-                this.processColumn(foreign.getRelationProperty().getColumnName(executor.getConversion()))));
+                this.processColumn(foreign.getRelationProperty().getColumnName(executor.getSource().getConversion()))));
 
         sql.append(Stringx.format("  LEFT JOIN {} AS {} ON {}_rel.{} = {}.{}\n",
-                this.processTable(target.getTableName(executor.getConversion())),
+                this.processTable(target.getTableName(executor.getSource().getConversion())),
                 foreign.getAlias(),
                 foreign.getAlias(),
-                this.processColumn(foreign.getTargetRelationProperty().getColumnName(executor.getConversion())),
+                this.processColumn(foreign.getTargetRelationProperty().getColumnName(executor.getSource().getConversion())),
                 foreign.getAlias(),
-                this.processColumn(foreign.getTargetProperty().getColumnName(executor.getConversion()))));
+                this.processColumn(foreign.getTargetProperty().getColumnName(executor.getSource().getConversion()))));
     }
 
     protected void applyOrders(SqlExecutor executor, EntityMeta main, Orders orders, StringBuilder sql) throws SQLSyntaxErrorException {
@@ -398,7 +404,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         for (Orders.Order order : orders) {
             // 主表排序
             PropertyMeta property = main.getProperty(order.getProperty());
-            Assertx.mustNotNull(property, () -> new SQLSyntaxErrorException(Stringx.format("在 {} 没有找到属性 {}，请改正后再试", main.getType().getSimpleName(), order.getProperty())));
+            Assertx.mustNotNull(property, SQLSyntaxErrorException::new, "在 {} 没有找到属性 {}，请改正后再试", main.getType().getSimpleName(), order.getProperty());
 
             // 构建主表查询条件
             applyOrder(executor, "a", orderBy, order, property);
@@ -421,9 +427,9 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         }
 
         if (order.isDesc()) {
-            orderBy.append(Stringx.format("  {}{} DESC", alias, this.processColumn(property.getColumnName(executor.getConversion()))));
+            orderBy.append(Stringx.format("  {}{} DESC", alias, this.processColumn(property.getColumnName(executor.getSource().getConversion()))));
         } else {
-            orderBy.append(Stringx.format("  {}{} ASC", alias, this.processColumn(property.getColumnName(executor.getConversion()))));
+            orderBy.append(Stringx.format("  {}{} ASC", alias, this.processColumn(property.getColumnName(executor.getSource().getConversion()))));
         }
     }
 
@@ -440,7 +446,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         }
     }
 
-    protected void applyCondition(SqlExecutor executor, @NotNull EntityMeta meta, StringBuilder where, List<Object> args, Conditions.Condition condition) {
+    protected void applyCondition(SqlExecutor executor, @Nonnull EntityMeta meta, StringBuilder where, List<Object> args, Conditions.Condition condition) {
         if (Collectionx.isNotEmpty(condition.getChildren())) {
             // 这是一个用于嵌套的分组条件
             where.append("(");
@@ -494,19 +500,19 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
             switch (condition.getOperator()) {
                 case EQ, NE, GT, GE, LT, LE, LIKE, NOT_LIKE -> {
-                    where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getConversion())), "?"));
+                    where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getSource().getConversion())), "?"));
                     args.add(convertValue(executor, target, property, condition.getValues()[0]));
                 }
                 case BETWEEN, NOT_BETWEEN -> {
-                    where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getConversion())), "?", "?"));
+                    where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getSource().getConversion())), "?", "?"));
                     args.add(convertValue(executor, target, property, condition.getValues()[0]));
                     args.add(convertValue(executor, target, property, condition.getValues()[1]));
                 }
                 case IS_NULL, IS_NOT_NULL -> {
-                    where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getConversion()))));
+                    where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getSource().getConversion()))));
                 }
                 case IN, NOT_IN -> {
-                    where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getConversion())), IntStream.range(0, condition.getValues().length).mapToObj(i -> "?").collect(Collectors.joining(", "))));
+                    where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getSource().getConversion())), IntStream.range(0, condition.getValues().length).mapToObj(i -> "?").collect(Collectors.joining(", "))));
                     args.addAll(Arrays.stream(condition.getValues()).map(it -> convertValue(executor, target, property, it)).toList());
                 }
             }
@@ -523,9 +529,10 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         if (source == null) {
             return null;
         }
-        if (!executor.getConverter().support(source.getClass(), property.getDescriptor().getPropertyType())) {
-            throw new IllegalArgumentException(Stringx.format("{}.{} 是 {} 类型，无法转换 {}", meta.getType().getSimpleName(), property.getDescriptor().getName(), property.getDescriptor().getPropertyType().getSimpleName(), source));
-        }
+
+        Assertx.mustTrue(executor.getConverter().support(source.getClass(), property.getDescriptor().getPropertyType()),
+                IllegalArgumentException::new, "{}.{} 是 {} 类型，无法转换 {}", meta.getType().getSimpleName(), property.getDescriptor().getName(), property.getDescriptor().getPropertyType().getSimpleName(), source);
+
         Object value = executor.getConverter().convert(source, property.getDescriptor().getPropertyType());
 
         if (value != null && property.isEncrypted()) {
@@ -543,7 +550,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
             case INTEGER -> "INT";
             case LONG -> "BIGINT";
             case BOOLEAN -> "TINYINT";
-            case BIGDECIMAL -> "VARCHAR(" + Objectx.get(length, 128) + ")";
+            case BIG_DECIMAL -> "VARCHAR(" + Objectx.get(length, 128) + ")";
             case DATETIME -> "DATETIME";
             default -> throw new RuntimeException("不支持的数据类型: " + type);
         };
@@ -553,15 +560,15 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     public List<SqlScript> forAddTable(AddTableScript script) throws SQLSyntaxErrorException {
         // CREATE TABLE MC_AUTH_CREDENTIAL (
         //     "ID"             VARCHAR(36)    PRIMARY KEY NOT NULL,
-        //     "ACCOUNT_ID"     VARCHAR(36)    DEFAULT NULL,
-        //     "TYPE"           VARCHAR(255)   DEFAULT NULL,
-        //     "CREDENTIAL"     VARCHAR(255)   DEFAULT NULL,
-        //     "ENABLED"        VARCHAR(2)     DEFAULT NULL,
-        //     "CREATE_DATE"    DATETIME       DEFAULT NULL,
-        //     "CREATOR_ID"     VARCHAR(36)    DEFAULT NULL,
-        //     "MODIFY_DATE"    DATETIME       DEFAULT NULL,
-        //     "MODIFIER_ID"    VARCHAR(36)    DEFAULT NULL,
-        //     "TENANT_CODE"    VARCHAR(36)    DEFAULT NULL
+        //     "ACCOUNT_ID"     VARCHAR(36)    NOT NULL,
+        //     "TYPE"           VARCHAR(255)   NOT NULL,
+        //     "CREDENTIAL"     VARCHAR(255)   NOT NULL,
+        //     "ENABLED"        VARCHAR(2)     NOT NULL,
+        //     "CREATE_DATE"    DATETIME       NOT NULL,
+        //     "CREATOR_ID"     VARCHAR(36)    NOT NULL,
+        //     "MODIFY_DATE"    DATETIME       NOT NULL,
+        //     "MODIFIER_ID"    VARCHAR(36)    NOT NULL,
+        //     "TENANT_CODE"    VARCHAR(36)    NOT NULL
         //);
         //
         // COMMENT ON TABLE MC_AUTH_CREDENTIAL IS '第三方应用登录授权';
@@ -578,7 +585,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
         var result = new ArrayList<SqlScript>(script.getColumns().size() + 1);
         var builder = new StringBuilder("CREATE TABLE ").append(this.processTable(script.getName())).append(" (\n");
-        result.add(new SqlScript(Stringx.format("COMMENT ON TABLE {} IS '{}}'", this.processTable(script.getName()), script.getRemarks())));
+        result.add(new SqlScript(Stringx.format("COMMENT ON TABLE {} IS '{}'", this.processTable(script.getName()), script.getRemarks())));
 
         AddTableScript.Column primaryKey = null;
         var columnBuilder = new StringBuilder();
@@ -652,9 +659,15 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public List<SqlScript> forAddIndex(AddIndexScript script) throws SQLSyntaxErrorException {
-        // CREATE INDEX `IDX_MC_API_CODE` ON `MC_API` ( `CODE` );
+        // CREATE [UNIQUE] INDEX `IDX_MC_API_CODE` ON `MC_API` ( `CODE` );
 
-        var result = new SqlScript(Stringx.format("CREATE INDEX {} ON {} ({})", this.processTable(script.getName()), this.processTable(script.getTable()), this.processColumn(script.getColumn())));
+        var builder = new StringBuilder("CREATE ");
+        if (script.isUnique()) {
+            builder.append("UNIQUE ");
+        }
+        builder.append(Stringx.format("INDEX {} ON {} ({})", this.processTable(script.getName()), this.processTable(script.getTable()), this.processColumn(script.getColumn())));
+
+        var result = new SqlScript(builder.toString());
         return Collections.singletonList(result);
     }
 

@@ -29,7 +29,7 @@ import central.sql.data.Entity;
 import java.lang.annotation.*;
 
 /**
- * 一对一关联
+ * 一对一、一对多关联
  *
  * @author Alan Yeh
  * @since 2022/08/01

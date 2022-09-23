@@ -50,14 +50,15 @@ public class IndexData implements Serializable {
     private String name;
 
     @Label("是否唯一")
-    private final boolean unique = false;
+    private boolean unique = false;
 
     @Label("字段名")
     private String column;
 
-    public static IndexData fromMeta(IndexMeta meta){
+    public static IndexData fromMeta(IndexMeta meta) {
         var data = new IndexData();
         data.setName(meta.getName());
+        data.setUnique(meta.isUnique());
         data.setColumn(meta.getColumn());
         return data;
     }

@@ -25,16 +25,14 @@
 package central.util.concurrent;
 
 import central.util.Guidx;
+import lombok.experimental.Delegate;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
-import javax.annotation.Nonnull;
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
@@ -49,6 +47,11 @@ import java.util.function.Consumer;
 public class ConsumableQueue<E, Queue extends BlockingQueue<E>> implements BlockingQueue<E>, Closeable {
 
     private final Queue queue;
+
+    @Delegate
+    private BlockingQueue<E> getQueue() {
+        return this.queue;
+    }
 
     private ExecutorService executor;
     private final Map<String, Future<?>> runners = new HashMap<>();
@@ -130,131 +133,5 @@ public class ConsumableQueue<E, Queue extends BlockingQueue<E>> implements Block
     public void removeConsumer(String key) {
         Future<?> future = this.runners.remove(key);
         future.cancel(true);
-    }
-
-    // =================================================================================================================
-    @Override
-    public boolean add(@Nonnull E element) {
-        return this.queue.add(element);
-    }
-
-    @Override
-    public boolean offer(@Nonnull E element) {
-        return this.queue.offer(element);
-    }
-
-    @Override
-    public E remove() {
-        return this.queue.remove();
-    }
-
-    @Override
-    public E poll() {
-        return this.queue.poll();
-    }
-
-    @Override
-    public E element() {
-        return this.queue.element();
-    }
-
-    @Override
-    public E peek() {
-        return this.queue.peek();
-    }
-
-    @Override
-    public void put(@Nonnull E element) throws InterruptedException {
-        this.queue.put(element);
-    }
-
-    @Override
-    public boolean offer(@Nonnull E element, long timeout, @Nonnull TimeUnit unit) throws InterruptedException {
-        return this.queue.offer(element, timeout, unit);
-    }
-
-    @Override
-    public E take() throws InterruptedException {
-        return this.queue.take();
-    }
-
-    @Override
-    public E poll(long timeout, @Nonnull TimeUnit unit) throws InterruptedException {
-        return this.queue.poll(timeout, unit);
-    }
-
-    @Override
-    public int remainingCapacity() {
-        return this.queue.remainingCapacity();
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        return this.queue.remove(o);
-    }
-
-    @Override
-    public boolean containsAll(@Nonnull Collection<?> c) {
-        return this.queue.containsAll(c);
-    }
-
-    @Override
-    public boolean addAll(@Nonnull Collection<? extends E> c) {
-        return this.queue.addAll(c);
-    }
-
-    @Override
-    public boolean removeAll(@Nonnull Collection<?> c) {
-        return this.queue.removeAll(c);
-    }
-
-    @Override
-    public boolean retainAll(@Nonnull Collection<?> c) {
-        return this.queue.retainAll(c);
-    }
-
-    @Override
-    public void clear() {
-        this.queue.clear();
-    }
-
-    @Override
-    public int size() {
-        return this.queue.size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return this.queue.isEmpty();
-    }
-
-    @Override
-    public boolean contains(Object o) {
-        return this.queue.contains(o);
-    }
-
-    @Override
-    public Iterator<E> iterator() {
-        return this.queue.iterator();
-    }
-
-    @Override
-    public Object[] toArray() {
-        return this.queue.toArray();
-    }
-
-    @Override
-    public <T> T[] toArray(@Nonnull T[] a) {
-        return this.queue.toArray(a);
-    }
-
-    @Override
-    public int drainTo(@Nonnull Collection<? super E> c) {
-        return this.queue.drainTo(c);
-    }
-
-    @Override
-    public int drainTo(@Nonnull Collection<? super E> c, int maxElements) {
-        return this.queue.drainTo(c, maxElements);
     }
 }

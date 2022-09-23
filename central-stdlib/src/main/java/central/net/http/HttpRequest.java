@@ -27,7 +27,7 @@ package central.net.http;
 import central.lang.Attribute;
 import central.net.http.body.Body;
 import central.util.Objectx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpHeaders;

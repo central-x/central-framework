@@ -27,7 +27,7 @@ package central.net.http.body.request;
 import central.lang.reflect.TypeReference;
 import central.net.http.body.Body;
 import central.util.Jsonx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import org.springframework.http.MediaType;
 
 import java.io.ByteArrayInputStream;
@@ -53,7 +53,7 @@ public class JsonBody implements Body {
     }
 
     public JsonBody(Object obj) {
-        this.json.putAll(Jsonx.Default().deserialize(Jsonx.Default().serialize(obj), TypeReference.forMapType(String.class, Object.class)));
+        this.json.putAll(Jsonx.Default().deserialize(Jsonx.Default().serialize(obj), TypeReference.ofMap(String.class, Object.class)));
     }
 
     public JsonBody(Map<String, ?> map) {
@@ -61,7 +61,7 @@ public class JsonBody implements Body {
     }
 
     public JsonBody(String json) {
-        this.json.putAll(Jsonx.Default().deserialize(json, TypeReference.forMapType(String.class, Object.class)));
+        this.json.putAll(Jsonx.Default().deserialize(json, TypeReference.ofMap(String.class, Object.class)));
     }
 
     public JsonBody set(String name, Object value) {

@@ -27,7 +27,7 @@ package central.sql.datasource.factory.hikari;
 import central.sql.SqlDialect;
 import central.sql.datasource.factory.DataSourceFactory;
 import central.util.Objectx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
@@ -61,11 +61,11 @@ public class HikariDataSourceFactory extends HikariProperties implements DataSou
         dataSource.setConnectionTimeout(this.getConnectionTimeout());
         dataSource.setIdleTimeout(this.getIdleTimeout());
         dataSource.setMaxLifetime(this.getMaxLifetime());
-        switch (SqlDialect.fromUrl(url)) {
-            case MySql -> {
+        switch (SqlDialect.resolve(url)) {
+            case MySql, PostgreSql -> {
                 dataSource.setConnectionTestQuery(Objectx.get(this.getConnectionTestQuery(), "SELECT 1"));
             }
-            case Oracle, Kingbase, Oscar, H2, Vastbase, PostgreSql, Dameng -> {
+            case Oracle, Kingbase, Oscar, H2, Vastbase, Dameng -> {
                 dataSource.setConnectionTestQuery(Objectx.get(this.getConnectionTestQuery(), "SELECT 1 FROM DUAL"));
             }
             case HighGo -> {

@@ -26,7 +26,7 @@ package central.starter.graphql.core.command;
 
 import central.starter.graphql.GraphQLParameterResolver;
 import central.util.Listx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import com.alibaba.ttl.threadpool.TtlExecutors;
 import lombok.Getter;
 import lombok.Setter;

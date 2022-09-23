@@ -26,8 +26,8 @@ package central.util;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
@@ -238,7 +238,7 @@ public class Mapx {
         }
 
         @Override
-        public void putAll(@NotNull Map<? extends K, ? extends V> m) {
+        public void putAll(@Nonnull Map<? extends K, ? extends V> m) {
             try {
                 writeLock.lock();
                 this.internal.putAll(m);
@@ -257,9 +257,8 @@ public class Mapx {
             }
         }
 
-        @NotNull
         @Override
-        public Set<K> keySet() {
+        public @Nonnull Set<K> keySet() {
             try {
                 readLock.lock();
                 return this.internal.keySet();
@@ -268,9 +267,8 @@ public class Mapx {
             }
         }
 
-        @NotNull
         @Override
-        public Collection<V> values() {
+        public @Nonnull Collection<V> values() {
             try {
                 readLock.lock();
                 return this.internal.values();
@@ -279,9 +277,8 @@ public class Mapx {
             }
         }
 
-        @NotNull
         @Override
-        public Set<Entry<K, V>> entrySet() {
+        public @Nonnull Set<Entry<K, V>> entrySet() {
             try {
                 readLock.lock();
                 return this.internal.entrySet();
@@ -375,17 +372,17 @@ public class Mapx {
         }
 
         @Override
-        public Set<String> keySet() {
+        public @Nonnull Set<String> keySet() {
             return this.internal.keySet();
         }
 
         @Override
-        public Collection<V> values() {
+        public @Nonnull Collection<V> values() {
             return this.internal.values();
         }
 
         @Override
-        public Set<Entry<String, V>> entrySet() {
+        public @Nonnull Set<Entry<String, V>> entrySet() {
             return this.internal.entrySet();
         }
     }

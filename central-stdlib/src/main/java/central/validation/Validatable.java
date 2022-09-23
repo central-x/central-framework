@@ -37,6 +37,6 @@ public interface Validatable {
      * @param groups 参数组
      */
     default void validate(Class<?>... groups) {
-        Validatorx.Default().validate(this, groups);
+        Validatex.Default().validate(this, groups);
     }
 }

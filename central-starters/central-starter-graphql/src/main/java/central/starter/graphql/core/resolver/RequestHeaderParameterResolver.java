@@ -24,9 +24,9 @@
 
 package central.starter.graphql.core.resolver;
 
-import central.starter.graphql.core.ExecuteContext;
+import central.util.Context;
 import central.util.Objectx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,7 +61,7 @@ public class RequestHeaderParameterResolver extends AnnotatedParameterResolver {
         return this.resolves(method, parameter, environment.getContext());
     }
 
-    private Object resolves(Method method, Parameter parameter, ExecuteContext context) {
+    private Object resolves(Method method, Parameter parameter, Context context) {
         RequestHeader header = parameter.getAnnotation(RequestHeader.class);
         String name = parameter.getName();
         if (header.value().length() > 0 || header.name().length() > 0) {

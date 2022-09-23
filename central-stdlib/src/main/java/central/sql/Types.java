@@ -24,7 +24,7 @@
 
 package central.sql;
 
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

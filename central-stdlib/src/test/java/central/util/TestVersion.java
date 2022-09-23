@@ -56,6 +56,6 @@ public class TestVersion {
         var first = new Version("1.0.0");
         var second = new Version("1.0.2");
 
-        Assertions.assertTrue(CompareResultEnum.LESS.isCompatibleWith(first.compareTo(second)));
+        Assertions.assertTrue(CompareResultEnum.LT.isCompatibleWith(first.compareTo(second)));
     }
 }

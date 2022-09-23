@@ -24,7 +24,7 @@
 
 package central.util.converter;
 
-import central.util.Stringx;
+import central.lang.Stringx;
 
 import java.io.Serial;
 

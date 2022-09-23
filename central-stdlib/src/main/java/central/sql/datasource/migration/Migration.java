@@ -24,6 +24,8 @@
 
 package central.sql.datasource.migration;
 
+import central.lang.Assertx;
+import central.lang.CompareResultEnum;
 import central.sql.SqlExecutor;
 import central.util.Version;
 import central.validation.Label;
@@ -54,16 +56,26 @@ public abstract class Migration implements Validatable {
     }
 
     public Migration(Version end) {
-        this.begin = null;
+        this.begin = Version.of("0");
         this.end = end;
+        Assertx.mustTrue(CompareResultEnum.GT.matches(this.end, this.begin), "结束版本[end]必须比开始版本[start]大");
     }
 
     /**
      * 表结构迁移
      *
-     * @param migrator 结构迁移工具
+     * @param database 数据库
      */
-    public void migrate(Migrator migrator) throws SQLException {
+    public void upgrade(Database database) throws SQLException {
+
+    }
+
+    /**
+     * 回滚表结构
+     *
+     * @param database 数据库
+     */
+    public void downgrade(Database database) throws SQLException {
 
     }
 
@@ -72,7 +84,16 @@ public abstract class Migration implements Validatable {
      *
      * @param executor Sql 执行器
      */
-    public void migrate(SqlExecutor executor) throws SQLException {
+    public void upgrade(SqlExecutor executor) throws SQLException {
+
+    }
+
+    /**
+     * 回滚数据
+     *
+     * @param executor Sql 执行器
+     */
+    public void downgrade(SqlExecutor executor) throws SQLException {
 
     }
 }

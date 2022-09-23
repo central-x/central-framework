@@ -26,7 +26,9 @@ package central.sql.builder.script.column;
 
 import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 删除字段
@@ -35,6 +37,8 @@ import lombok.Data;
  * @since 2022/08/09
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DropColumnScript {
 
     @NotBlank

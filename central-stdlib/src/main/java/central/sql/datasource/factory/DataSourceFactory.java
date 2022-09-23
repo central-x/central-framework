@@ -24,6 +24,10 @@
 
 package central.sql.datasource.factory;
 
+import central.sql.SqlDialect;
+import central.sql.SqlSource;
+import central.sql.impl.standard.StandardSource;
+
 import javax.sql.DataSource;
 
 /**
@@ -42,4 +46,21 @@ public interface DataSourceFactory {
      * @param password 密码
      */
     DataSource build(String driver, String url, String username, String password);
+
+    /**
+     * 构建方言数据源
+     * 通过 url 识别数据库方言
+     *
+     * @param driver   驱动
+     * @param url      数据库连接
+     * @param username 用户名
+     * @param password 密码
+     * @return 方言数据库
+     */
+    default SqlSource buildDialect(String driver, String url, String username, String password) {
+        return StandardSource.builder()
+                .dataSource(this.build(driver, url, username, password))
+                .dialect(SqlDialect.resolve(url))
+                .build();
+    }
 }

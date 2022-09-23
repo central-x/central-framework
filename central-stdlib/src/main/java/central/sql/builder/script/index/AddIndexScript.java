@@ -26,7 +26,9 @@ package central.sql.builder.script.index;
 
 import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 添加索引
@@ -35,6 +37,8 @@ import lombok.Data;
  * @since 2022/08/09
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddIndexScript {
 
     @NotBlank
@@ -48,4 +52,7 @@ public class AddIndexScript {
     @NotBlank
     @Label("字段名")
     private String column;
+
+    @Label("唯一索引")
+    private boolean unique;
 }

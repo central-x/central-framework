@@ -25,13 +25,15 @@
 package central.lang.reflect;
 
 import central.bean.InitializeException;
+import central.bean.OptionalEnum;
+import central.lang.Arrayx;
 import central.lang.Assertx;
+import central.lang.Stringx;
 import central.util.*;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
 import javax.annotation.Nullable;
-import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;
@@ -249,6 +251,14 @@ public abstract class TypeReference<T> {
         }
     }
 
+    public boolean isInstance(Object object){
+        if (object == null){
+            return false;
+        }
+
+        return this.getRawClass().isInstance(object);
+    }
+
     protected TypeReference() {
         this(null);
     }
@@ -283,7 +293,7 @@ public abstract class TypeReference<T> {
     }
 
     @SneakyThrows
-    public static TypeReference<?> forName(String typeName) {
+    public static TypeReference<?> of(String typeName) {
         Assertx.mustNotNull("typeName", typeName);
         return new TypeReference<>(Class.forName(typeName.trim())) {
         };
@@ -294,7 +304,7 @@ public abstract class TypeReference<T> {
      *
      * @param elementType 元数类型
      */
-    public static <T extends List<V>, V> TypeReference<T> forListType(TypeReference<V> elementType) {
+    public static <T extends List<V>, V> TypeReference<T> ofList(TypeReference<V> elementType) {
         return new TypeReference<>(new ParameterizedTypeImpl(List.class, new Type[]{elementType.getType()})) {
         };
     }
@@ -304,7 +314,7 @@ public abstract class TypeReference<T> {
      *
      * @param elementType 元数类型
      */
-    public static <T extends List<E>, E> TypeReference<T> forListType(Class<? extends E> elementType) {
+    public static <T extends List<E>, E> TypeReference<T> ofList(Class<? extends E> elementType) {
         return new TypeReference<>(new ParameterizedTypeImpl(List.class, new Type[]{elementType})) {
         };
     }
@@ -315,7 +325,7 @@ public abstract class TypeReference<T> {
      * @param keyType   Key 类型
      * @param valueType Value 类型
      */
-    public static <T extends Map<K, V>, K, V> TypeReference<T> forMapType(TypeReference<K> keyType, TypeReference<V> valueType) {
+    public static <T extends Map<K, V>, K, V> TypeReference<T> ofMap(TypeReference<K> keyType, TypeReference<V> valueType) {
         return new TypeReference<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType.getType(), valueType.getType()})) {
         };
     }
@@ -326,7 +336,7 @@ public abstract class TypeReference<T> {
      * @param keyType   Key 类型
      * @param valueType Value 类型
      */
-    public static <T extends Map<K, V>, K, V> TypeReference<T> forMapType(Class<? extends K> keyType, TypeReference<V> valueType) {
+    public static <T extends Map<K, V>, K, V> TypeReference<T> ofMap(Class<? extends K> keyType, TypeReference<V> valueType) {
         return new TypeReference<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType, valueType.getType()})) {
         };
     }
@@ -337,7 +347,7 @@ public abstract class TypeReference<T> {
      * @param keyType   Key 类型
      * @param valueType Value 类型
      */
-    public static <T extends Map<K, V>, K, V> TypeReference<T> forMapType(Class<? extends K> keyType, Class<? extends V> valueType) {
+    public static <T extends Map<K, V>, K, V> TypeReference<T> ofMap(Class<? extends K> keyType, Class<? extends V> valueType) {
         return new TypeReference<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType, valueType})) {
         };
     }
@@ -348,7 +358,7 @@ public abstract class TypeReference<T> {
      * @param rawType             原生类型
      * @param actualTypeArguments 泛型参数
      */
-    public static <T> TypeReference<T> forParameterizedType(Type rawType, Type... actualTypeArguments) {
+    public static <T> TypeReference<T> ofParameterized(Type rawType, Type... actualTypeArguments) {
         return new TypeReference<>(new ParameterizedTypeImpl(rawType, actualTypeArguments)) {
         };
     }

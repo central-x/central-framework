@@ -29,7 +29,7 @@ import central.net.http.body.HttpConverters;
 import central.net.http.proxy.contract.spring.SpringResolver;
 import central.lang.Assertx;
 import central.util.Objectx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ValueConstants;
 

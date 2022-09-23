@@ -39,13 +39,15 @@ public class LazyValue<T> {
 
     private final Supplier<T> supplier;
 
+    private final Object lock = new Object();
+
     public LazyValue(Supplier<T> supplier) {
         this.supplier = supplier;
     }
 
     public T get() {
         if (this.instance == null) {
-            synchronized (this) {
+            synchronized (this.lock) {
                 if (this.instance == null) {
                     this.instance = InstanceReference.of(supplier.get());
                 }

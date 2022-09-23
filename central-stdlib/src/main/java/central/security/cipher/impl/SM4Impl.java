@@ -37,6 +37,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.SecureRandom;
@@ -77,6 +78,7 @@ public class SM4Impl implements CipherImpl {
 
     @RequiredArgsConstructor
     private static class SM4Key implements Key {
+        @Serial
         private static final long serialVersionUID = 6807028080317910008L;
 
         @Getter

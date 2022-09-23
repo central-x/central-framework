@@ -26,7 +26,7 @@ package central.sql;
 
 import central.bean.OptionalEnum;
 import central.sql.resolver.*;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.util.Listx;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +35,7 @@ import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,11 +50,12 @@ public enum SqlType implements OptionalEnum<String> {
     STRING("字符串", "STRING", String.class, new StringTypeResolver(), Listx.of(Types.LONGVARCHAR, Types.NCHAR, Types.NVARCHAR, Types.ROWID, Types.LONGVARCHAR, Types.CHAR, Types.VARCHAR, Types.CLOB, Types.NCLOB)),
     INTEGER("整型", "INTEGER", Integer.class, new IntegerTypeResolver(), Listx.of(Types.TINYINT, Types.INTEGER, Types.SMALLINT)),
     LONG("长整型", "LONG", Long.class, new LongTypeResolver(), Listx.of(Types.BIGINT)),
-
-    BIGDECIMAL("大数字", "BIGDECIMAL", BigDecimal.class, new BigDecimalTypeResolver(), Listx.of(Types.NUMERIC, Types.DECIMAL, Types.FLOAT, Types.REAL, Types.DOUBLE)),
+    BIG_DECIMAL("大数字", "BIG_DECIMAL", BigDecimal.class, new BigDecimalTypeResolver(), Listx.of(Types.NUMERIC, Types.DECIMAL, Types.FLOAT, Types.REAL, Types.DOUBLE)),
     BLOB("二进制", "BLOB", byte[].class, new BlobTypeResolver(), Listx.of(Types.LONGVARBINARY, Types.VARBINARY, Types.BINARY, Types.BLOB)),
     DATETIME("日期", "DATETIME", Timestamp.class, new TimestampTypeResolver(), Listx.of(Types.DATE, Types.TIME, Types.TIMESTAMP)),
-    BOOLEAN("布尔值", "BOOLEAN", Boolean.class, new BooleanTypeResolver(), Listx.of(Types.BIT, Types.BOOLEAN));
+    BOOLEAN("布尔值", "BOOLEAN", Boolean.class, new BooleanTypeResolver(), Listx.of(Types.BIT, Types.BOOLEAN)),
+
+    UNKNOWN("未知", "UNKNOWN", Object.class, null, Collections.emptyList());
 
     private final String name;
 

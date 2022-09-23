@@ -25,6 +25,8 @@
 package central.pluglet.binder;
 
 import central.bean.InitializeException;
+import central.lang.Arrayx;
+import central.lang.Stringx;
 import central.lang.reflect.FieldReference;
 import central.lang.reflect.InstanceReference;
 import central.pluglet.FieldBinder;
@@ -57,13 +59,13 @@ public class ControlBinder implements FieldBinder {
         var name = Objectx.get(annotation.name(), field.getName());
         var value = params.get(name);
         if (value == null){
-            value = Objectx.get(Arrayx.getFirst(annotation.defaultValue()), () -> null);
+            value = Arrayx.getFirst(annotation.defaultValue());
         }
         if (value != null) {
-            if (!Converterx.Default().support(value.getClass(), field.getType().getRawClass())) {
+            if (!Convertx.Default().support(value.getClass(), field.getType().getRawClass())) {
                 throw new InitializeException(target.getType().getRawClass(), Stringx.format("Cannot convert '{}' to '{}'", value, field.getType().getRawClass().getName()));
             }
-            value = Converterx.Default().convert(value, field.getType().getRawClass());
+            value = Convertx.Default().convert(value, field.getType().getRawClass());
             field.setValue(target, value);
         }
     }

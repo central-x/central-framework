@@ -25,6 +25,7 @@
 package central.util;
 
 import central.lang.Assertx;
+import central.lang.Stringx;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -68,7 +69,7 @@ public class MarkdownResources implements Map<String, MarkdownResources.Resource
      */
     public MarkdownResources(@Nonnull InputStream stream) throws IOException {
         Assertx.mustNotNull(stream, "[MarkdownResources] 参数错误: stream 不能为空");
-        this.load(stream);
+        this.load(null, stream);
     }
 
     /**
@@ -81,20 +82,37 @@ public class MarkdownResources implements Map<String, MarkdownResources.Resource
         Assertx.mustTrue(markdown.isFile(), "[MarkdownResources] 参数错误: markdown 不是文件类型");
         Assertx.mustTrue(".md".equals(Stringx.substringAfter(markdown.getName(), ".")), "[MarkdownResources] 参数错误: markdown 不是 .md 文件类型");
 
-        this.load(new FileInputStream(markdown));
+        this.load(null, new FileInputStream(markdown));
     }
 
-    // 加载文件
-    private void load(InputStream stream) throws IOException {
-        this.resources = new LinkedHashMap<>();
+    /**
+     * 加载文件
+     *
+     * @param stream 数据流
+     */
+    public void load(InputStream stream) throws IOException {
+        this.load(null, stream);
+    }
 
+    /**
+     * 加载资源
+     *
+     * @param prefix 前缀
+     * @param stream 数据流
+     */
+    public void load(String prefix, InputStream stream) throws IOException {
         try (Reader reader = new Reader(stream)) {
             do {
-                Resource resource = reader.next();
+                var resource = reader.next();
                 if (resource == null) {
                     break;
                 }
-                resources.put(resource.getId(), resource);
+
+                if (Stringx.isNotBlank(prefix)) {
+                    resources.put(prefix + "." + resource.getId(), resource);
+                } else {
+                    resources.put(resource.getId(), resource);
+                }
             } while (true);
         }
     }

@@ -24,7 +24,7 @@
 
 package central.sql.mapper;
 
-import central.sql.data.Dept;
+import central.sql.data.DeptEntity;
 import central.sql.proxy.Mapper;
 
 /**
@@ -33,5 +33,5 @@ import central.sql.proxy.Mapper;
  * @author Alan Yeh
  * @since 2022/09/09
  */
-public interface DeptMapper extends Mapper<Dept> {
+public interface DeptMapper extends Mapper<DeptEntity> {
 }
