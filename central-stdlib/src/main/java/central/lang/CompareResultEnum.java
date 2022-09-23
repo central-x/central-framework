@@ -28,6 +28,8 @@ import central.bean.OptionalEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 /**
  * 比较结果
  * -1: left < right
@@ -42,20 +44,22 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CompareResultEnum implements OptionalEnum<String> {
 
-    LESS("小于", "<", -1),
-    EQUALS("等于", "=", 0),
-    GREATER("大于", ">", 1);
+    LT("小于", "<", List.of(-1)),
+    LE("小于等于", "<=", List.of(-1, 0)),
+    EQUALS("等于", "=", List.of(0)),
+    GT("大于", ">", List.of(1)),
+    GE("大于等于", ">=", List.of(0, 1));
 
     private final String name;
     private final String value;
-    private final int result;
+    private final List<Integer> result;
 
     @Override
     public boolean isCompatibleWith(Object value) {
         if (value instanceof String s) {
             return this.getValue().equals(s);
         } else if (value instanceof Number n) {
-            return this.result == n.intValue();
+            return this.result.stream().anyMatch(it -> it == n.intValue());
         } else {
             return false;
         }
@@ -72,6 +76,7 @@ public enum CompareResultEnum implements OptionalEnum<String> {
      * @return 匹配结果
      */
     public <T extends Comparable<T>> boolean matches(T first, T second) {
-        return first.compareTo(second) == this.result;
+        int compare = first.compareTo(second);
+        return this.result.stream().anyMatch(it -> it == compare);
     }
 }

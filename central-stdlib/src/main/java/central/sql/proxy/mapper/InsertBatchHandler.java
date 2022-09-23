@@ -24,12 +24,13 @@
 
 package central.sql.proxy.mapper;
 
+import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.util.Listx;
 
 import java.lang.reflect.Method;
@@ -46,12 +47,12 @@ import java.util.List;
  */
 public class InsertBatchHandler implements MapperHandler {
     @Override
-    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, EntityMeta meta, Method method, Object[] args) throws SQLException {
+    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
         var entities = (List<Object>) Arrayx.getFirst(args);
         if (Listx.isNullOrEmpty(entities)) {
             return 0L;
         }
-        var script = executor.getBuilder().forInsertBatch(executor, meta, entities);
+        var script = builder.forInsertBatch(executor, meta, entities);
         long[] result = executor.executeBatch(script);
         return Arrays.stream(result).sum();
     }

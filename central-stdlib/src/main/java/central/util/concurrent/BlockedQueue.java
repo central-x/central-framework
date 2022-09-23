@@ -325,6 +325,7 @@ public class BlockedQueue<E> extends AbstractQueue<E> implements BlockingQueue<E
     }
 
     @Override
+    @SuppressWarnings("SuspiciousToArrayCall")
     public <T> T[] toArray(@Nonnull T[] a) {
         final ReentrantLock lock = this.lock;
         lock.lock();
@@ -381,7 +382,6 @@ public class BlockedQueue<E> extends AbstractQueue<E> implements BlockingQueue<E
             return cursor < array.length;
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public E next() {
             if (cursor >= array.length) {

@@ -25,7 +25,8 @@
 package central.security;
 
 import central.lang.Assertx;
-import central.util.Stringx;
+import central.lang.Stringx;
+import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
 import java.nio.charset.StandardCharsets;
@@ -41,6 +42,7 @@ import java.security.SecureRandom;
  * @author Alan Yeh
  * @since 2022/07/05
  */
+@UtilityClass
 public class Passwordx {
     // 密钥大小
     private static final int SALT_SIZE = 8;

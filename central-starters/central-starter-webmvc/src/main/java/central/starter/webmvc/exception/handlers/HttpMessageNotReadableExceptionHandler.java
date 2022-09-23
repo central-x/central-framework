@@ -26,7 +26,7 @@ package central.starter.webmvc.exception.handlers;
 
 import central.starter.webmvc.exception.ExceptionHandler;
 import central.util.Mapx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.servlet.http.HttpServletRequest;

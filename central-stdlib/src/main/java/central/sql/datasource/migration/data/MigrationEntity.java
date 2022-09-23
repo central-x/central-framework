@@ -29,9 +29,7 @@ import central.validation.Label;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serial;
 
@@ -43,6 +41,8 @@ import java.io.Serial;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "X_DS_MIGRATION")
 @EqualsAndHashCode(callSuper = true)
 public class MigrationEntity extends ModifiableEntity {

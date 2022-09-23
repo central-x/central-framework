@@ -33,6 +33,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Delegate;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,6 +46,11 @@ import java.util.stream.Collectors;
  */
 public class Orders implements Collection<Orders.Order>, Validatable {
     private List<Order> orders = new ArrayList<>();
+
+    @Delegate
+    private Collection<Orders.Order> getDelegate() {
+        return this.orders;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -248,74 +254,5 @@ public class Orders implements Collection<Orders.Order>, Validatable {
         public int hashCode() {
             return Objects.hash(property, desc);
         }
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Collection 方法
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Override
-    public int size() {
-        return this.orders.size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return this.orders.isEmpty();
-    }
-
-    @Override
-    public boolean contains(Object o) {
-        return this.orders.contains(o);
-    }
-
-    @Override
-    public Iterator<Order> iterator() {
-        return this.orders.iterator();
-    }
-
-    @Override
-    public Object[] toArray() {
-        return this.orders.toArray();
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return this.orders.toArray(a);
-    }
-
-    @Override
-    public boolean add(Order order) {
-        return this.orders.add(order);
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        return this.orders.remove(o);
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        return this.orders.containsAll(c);
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends Order> c) {
-        return this.orders.addAll(c);
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return this.orders.removeAll(c);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return this.orders.retainAll(c);
-    }
-
-    @Override
-    public void clear() {
-        this.orders.clear();
     }
 }

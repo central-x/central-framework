@@ -29,7 +29,7 @@ import central.net.http.HttpExecutor;
 import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.impl.LoggerProcessor;
 import central.net.http.proxy.contract.internal.InternalContract;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.lang.Assertx;
 import lombok.RequiredArgsConstructor;
 

@@ -54,6 +54,8 @@ public class CachedSupplier<T extends Serializable> implements Supplier<T> {
      */
     private volatile Value<T> value;
 
+    private final Object lock = new Object();
+
     public CachedSupplier(long timeout, Supplier<T> supplier) {
         this.timeout = timeout;
         this.supplier = supplier;
@@ -66,7 +68,7 @@ public class CachedSupplier<T extends Serializable> implements Supplier<T> {
     public T get() {
         if (value == null) {
             // 还没获取值，因此需要先获取值
-            synchronized (this) {
+            synchronized (lock) {
                 if (value == null) {
                     value = Value.of(supplier.get());
                     last = System.currentTimeMillis();
@@ -82,7 +84,7 @@ public class CachedSupplier<T extends Serializable> implements Supplier<T> {
                 return supplier.get();
             } else if (System.currentTimeMillis() - this.last > this.timeout) {
                 // 缓存失效
-                synchronized (this) {
+                synchronized (lock) {
                     if (System.currentTimeMillis() - this.last > this.timeout) {
                         value = Value.of(supplier.get());
                         last = System.currentTimeMillis();
@@ -100,7 +102,7 @@ public class CachedSupplier<T extends Serializable> implements Supplier<T> {
      * 清除已缓存的值
      */
     public void clear() {
-        synchronized (this) {
+        synchronized (lock) {
             this.value = null;
             this.last = 0;
         }

@@ -35,7 +35,7 @@ import central.sql.meta.entity.ForeignTableMeta;
 import central.util.Collectionx;
 import central.util.Listx;
 import central.util.Setx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
@@ -57,9 +57,10 @@ public class OracleBuilder extends StandardSqlBuilder {
      */
     @Override
     public SqlScript forCountBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException {
+        conditions = Conditions.where(conditions);
         // SELECT COUNT( DISTINCT a.ID ) FROM ${TABLE} a
 
-        var sql = new StringBuilder(Stringx.format("SELECT COUNT( DISTINCT a.{} ) FROM {} a\n", processColumn(meta.getId().getColumnName(executor.getConversion()))));
+        var sql = new StringBuilder(Stringx.format("SELECT COUNT( DISTINCT a.{} ) FROM {} a\n", processColumn(meta.getId().getColumnName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
 
         var whereSql = new StringBuilder();
@@ -102,8 +103,10 @@ public class OracleBuilder extends StandardSqlBuilder {
      */
     @Override
     public SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Conditions conditions, Orders orders) throws SQLSyntaxErrorException {
+        conditions = Conditions.where(conditions);
+        orders = Orders.order(orders);
         // SELECT DISTINCT a.* FROM ${TABLE} a
-        var sql = new StringBuilder(Stringx.format("SELECT a.* FROM {} a\n", this.processTable(meta.getTableName(executor.getConversion()))));
+        var sql = new StringBuilder(Stringx.format("SELECT a.* FROM {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
         var whereSql = new StringBuilder();
 
@@ -114,7 +117,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         if (aliases.size() >= 1) {
             if (aliases.size() > 1 || !"a".equals(Setx.getAny(aliases))) {
                 // 存在关联查询，会有重复数据，需要去重
-                sql = new StringBuilder(Stringx.format("SELECT DISTINCT a.* FROM {} a\n", this.processTable(meta.getTableName(executor.getConversion()))));
+                sql = new StringBuilder(Stringx.format("SELECT DISTINCT a.* FROM {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
             }
         }
 
@@ -160,9 +163,10 @@ public class OracleBuilder extends StandardSqlBuilder {
      */
     @Override
     public SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException {
+        conditions = Conditions.where(conditions);
         // DELETE FROM ${TABLE} a WHERE
 
-        var sql = new StringBuilder(Stringx.format("DELETE FROM {} a\n", this.processTable(meta.getTableName(executor.getConversion()))));
+        var sql = new StringBuilder(Stringx.format("DELETE FROM {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = new LinkedList<>();
 
         if (Collectionx.isNotEmpty(conditions)) {
@@ -172,7 +176,7 @@ public class OracleBuilder extends StandardSqlBuilder {
             // 查找此次查询，会使用哪些关联查询
             Set<String> aliases = getAliases(conditions);
 
-            Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), () -> new SQLSyntaxErrorException("DELETE 不支持外键条件"));
+            Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), SQLSyntaxErrorException::new, "DELETE 不支持外键条件");
 
             // 处理过滤条件
             applyConditions(executor, meta, whereSql, args, conditions);
@@ -191,10 +195,11 @@ public class OracleBuilder extends StandardSqlBuilder {
     @Override
     @SneakyThrows({IllegalAccessException.class, InvocationTargetException.class})
     protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions conditions, boolean includeNull) throws SQLSyntaxErrorException {
+        conditions = Conditions.where(conditions);
         // UPDATE ${TABLE} a set a.col = ? where id = ? and condition1 = ?
-        Assertx.mustInstanceOf(meta.getType(), entity, () -> new SQLSyntaxErrorException("entity 必须是 {} 类型", meta.getType().getName()));
+        Assertx.mustInstanceOf(meta.getType(), entity, SQLSyntaxErrorException::new, "entity 必须是 {} 类型", meta.getType().getName());
 
-        var sql = new StringBuilder(Stringx.format("UPDATE {} a\n", this.processTable(meta.getTableName(executor.getConversion()))));
+        var sql = new StringBuilder(Stringx.format("UPDATE {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
         var whereSql = new StringBuilder();
         var whereArgs = Listx.newArrayList();
@@ -205,7 +210,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         if (Collectionx.isNullOrEmpty(conditions)) {
             // 如果更新条件为 null，则要求必须使用 id 进行更新
             var id = meta.getId().getDescriptor().getReadMethod().invoke(entity);
-            Assertx.mustNotNull(id, () -> new SQLSyntaxErrorException("entity#{} 必须不为空", meta.getId().getName()));
+            Assertx.mustNotNull(id, SQLSyntaxErrorException::new, "entity#{} 必须不为空", meta.getId().getName());
             conditions = Conditions.where().eq(meta.getId().getName(), id);
         }
 
@@ -232,14 +237,14 @@ public class OracleBuilder extends StandardSqlBuilder {
             }
 
             if (value == null) {
-                setSql.append("  a.").append(this.processColumn(property.getColumnName(executor.getConversion()))).append(" = NULL");
+                setSql.append("  a.").append(this.processColumn(property.getColumnName(executor.getSource().getConversion()))).append(" = NULL");
             } else {
-                setSql.append("  a.").append(this.processColumn(property.getColumnName(executor.getConversion()))).append(" = ?");
+                setSql.append("  a.").append(this.processColumn(property.getColumnName(executor.getSource().getConversion()))).append(" = ?");
                 setArgs.add(this.convertValue(executor, meta, property, value));
             }
         }
 
-        Assertx.mustTrue(!setSql.isEmpty(), () -> new SQLSyntaxErrorException("找不到待更新字段"));
+        Assertx.mustTrue(!setSql.isEmpty(), SQLSyntaxErrorException::new, "找不到待更新字段");
 
         sql.append("SET\n").append(setSql).append("\n");
         args.addAll(setArgs);
@@ -248,7 +253,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         // 查找此次查询，会使用哪些关联查询
         var aliases = getAliases(conditions);
 
-        Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), () -> new SQLSyntaxErrorException("UPDATE 不支持外键条件"));
+        Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), SQLSyntaxErrorException::new, "UPDATE 不支持外键条件");
 
         // 处理条件
         applyConditions(executor, meta, whereSql, whereArgs, conditions);
@@ -281,11 +286,11 @@ public class OracleBuilder extends StandardSqlBuilder {
         EntityMeta target = foreign.getTarget();
 
         sql.append(Stringx.format("  LEFT JOIN {} {} ON a.{} = {}.{} \n",
-                this.processTable(target.getTableName(executor.getConversion())),
+                this.processTable(target.getTableName(executor.getSource().getConversion())),
                 foreign.getAlias(),
-                this.processColumn(foreign.getProperty().getColumnName(executor.getConversion())),
+                this.processColumn(foreign.getProperty().getColumnName(executor.getSource().getConversion())),
                 foreign.getAlias(),
-                this.processColumn(foreign.getReferencedProperty().getColumnName(executor.getConversion()))));
+                this.processColumn(foreign.getReferencedProperty().getColumnName(executor.getSource().getConversion()))));
     }
 
     /**
@@ -297,18 +302,18 @@ public class OracleBuilder extends StandardSqlBuilder {
         EntityMeta target = foreign.getTarget();
 
         sql.append(Stringx.format("  LEFT JOIN {} {}_rel ON a.{} = {}_rel.{}\n",
-                this.processTable(rel.getTableName(executor.getConversion())),
+                this.processTable(rel.getTableName(executor.getSource().getConversion())),
                 foreign.getAlias(),
-                this.processColumn(foreign.getProperty().getColumnName(executor.getConversion())),
+                this.processColumn(foreign.getProperty().getColumnName(executor.getSource().getConversion())),
                 foreign.getAlias(),
-                this.processColumn(foreign.getRelationProperty().getColumnName(executor.getConversion()))));
+                this.processColumn(foreign.getRelationProperty().getColumnName(executor.getSource().getConversion()))));
 
         sql.append(Stringx.format("  LEFT JOIN {} {} ON {}_rel.{} = {}.{}\n",
-                this.processTable(target.getTableName(executor.getConversion())),
+                this.processTable(target.getTableName(executor.getSource().getConversion())),
                 foreign.getAlias(),
                 foreign.getAlias(),
-                this.processColumn(foreign.getTargetRelationProperty().getColumnName(executor.getConversion())),
+                this.processColumn(foreign.getTargetRelationProperty().getColumnName(executor.getSource().getConversion())),
                 foreign.getAlias(),
-                this.processColumn(foreign.getTargetProperty().getColumnName(executor.getConversion()))));
+                this.processColumn(foreign.getTargetProperty().getColumnName(executor.getSource().getConversion()))));
     }
 }

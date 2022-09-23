@@ -25,6 +25,7 @@
 package central.util.concurrent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Delayed;
@@ -104,6 +105,7 @@ public class DelayedQueue<E extends Delayed> extends AbstractQueue<E> implements
     }
 
     @Override
+    @SuppressWarnings("ConstantConditions")
     public E take() throws InterruptedException {
         final ReentrantLock lock = this.lock;
         lock.lockInterruptibly();
@@ -125,7 +127,7 @@ public class DelayedQueue<E extends Delayed> extends AbstractQueue<E> implements
                         Thread thisThread = Thread.currentThread();
                         leader = thisThread;
                         try {
-                            available.awaitNanos(delay);
+                            long ignored = available.awaitNanos(delay);
                         } finally {
                             if (leader == thisThread) {
                                 leader = null;
@@ -364,6 +366,7 @@ public class DelayedQueue<E extends Delayed> extends AbstractQueue<E> implements
     }
 
     @Override
+    @SuppressWarnings("SuspiciousToArrayCall")
     public <T> T[] toArray(@Nonnull T[] a) {
         final ReentrantLock lock = this.lock;
         lock.lock();

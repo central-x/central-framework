@@ -26,7 +26,7 @@ package central.starter.graphql.core.resolver;
 
 import central.starter.graphql.GraphQLParameterResolver;
 import central.starter.graphql.GraphQLRequest;
-import central.starter.graphql.core.ExecuteContext;
+import central.util.Context;
 import graphql.schema.DataFetchingEnvironment;
 import org.dataloader.BatchLoaderEnvironment;
 import org.dataloader.DataLoader;
@@ -61,7 +61,7 @@ public class GraphQLBeanParameterResolver implements GraphQLParameterResolver {
         return this.resolves(parameter, environment.getContext(), null, environment);
     }
 
-    public Object resolves(Parameter parameter, ExecuteContext context, DataFetchingEnvironment fetchingEnvironment, BatchLoaderEnvironment loaderEnvironment) {
+    public Object resolves(Parameter parameter, Context context, DataFetchingEnvironment fetchingEnvironment, BatchLoaderEnvironment loaderEnvironment) {
         if (GraphQLRequest.class == parameter.getType() && context != null) {
             return context.get(GraphQLRequest.class);
         }

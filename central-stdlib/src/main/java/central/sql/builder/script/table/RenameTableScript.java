@@ -26,7 +26,9 @@ package central.sql.builder.script.table;
 
 import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 重命名表
@@ -35,6 +37,8 @@ import lombok.Data;
  * @since 2022/08/09
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RenameTableScript {
 
     @NotBlank

@@ -24,14 +24,15 @@
 
 package central.sql.builder;
 
-import central.sql.SqlScript;
-import central.sql.SqlType;
+import central.lang.Assertx;
+import central.lang.Stringx;
+import central.sql.*;
 import central.sql.builder.script.column.AddColumnScript;
 import central.sql.builder.script.column.RenameColumnScript;
 import central.sql.builder.script.table.AddTableScript;
 import central.sql.builder.script.table.RenameTableScript;
-import central.util.Objectx;
-import central.util.Stringx;
+import central.sql.meta.entity.EntityMeta;
+import central.util.*;
 
 import java.sql.SQLSyntaxErrorException;
 import java.util.Collections;
@@ -64,14 +65,44 @@ public class MySqlBuilder extends StandardSqlBuilder {
     public String handleSqlType(SqlType type, Integer length) {
         return switch (type) {
             case STRING -> "VARCHAR(" + Objectx.get(length, 32) + ")";
-            case BLOB -> "LONGTEXT";
+            case BLOB -> "BLOB";
             case INTEGER -> "INT";
             case LONG -> "BIGINT";
             case BOOLEAN -> "TINYINT";
             case DATETIME -> "DATETIME(3)"; // 保留 3 个精度
-            case BIGDECIMAL -> "VARCHAR(" + Objectx.get(length, 128) + ")";
+            case BIG_DECIMAL -> "VARCHAR(" + Objectx.get(length, 128) + ")";
             default -> throw new RuntimeException("不支持的数据类型: " + type);
         };
+    }
+
+    @Override
+    public SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException {
+        conditions = Conditions.where(conditions);
+        // DELETE a FROM ${TABLE} AS a
+
+        var sql = new StringBuilder(Stringx.format("DELETE a FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+        var args = Listx.newArrayList();
+
+        if (Collectionx.isNotEmpty(conditions)) {
+            var whereSql = new StringBuilder();
+
+            preprocessingConditions(conditions);
+
+            // 看看会使用哪些关联查询
+            var aliases = this.getAliases(conditions);
+
+            Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), SQLSyntaxErrorException::new, "DELETE 不支持外键条件");
+
+            // 处理条件
+            applyConditions(executor, meta, whereSql, args, conditions);
+
+            if (whereSql.length() > 0) {
+                sql.append("WHERE\n  ")
+                        .append(whereSql);
+            }
+        }
+
+        return new SqlScript(sql.toString(), args);
     }
 
     @Override

@@ -44,7 +44,7 @@ public class DropColumnMigration implements MigrateAction {
 
     @Override
     public void migrate(SqlExecutor executor) throws SQLException {
-        var scripts = executor.getBuilder().forDropColumn(this.script);
+        var scripts = executor.getSource().getDialect().getBuilder().forDropColumn(this.script);
         for (var script : scripts) {
             executor.execute(script);
         }

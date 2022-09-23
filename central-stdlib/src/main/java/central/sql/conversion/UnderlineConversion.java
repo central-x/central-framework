@@ -26,9 +26,7 @@ package central.sql.conversion;
 
 import central.sql.SqlConversion;
 import central.sql.data.Entity;
-import central.util.Stringx;
-
-import java.lang.reflect.Field;
+import central.lang.Stringx;
 
 /**
  * 下划线命名
@@ -80,6 +78,7 @@ public class UnderlineConversion implements SqlConversion {
             }
             if (nextUpperCase) {
                 result.append(Character.toUpperCase(c));
+                nextUpperCase = false;
             } else {
                 result.append(Character.toLowerCase(c));
             }

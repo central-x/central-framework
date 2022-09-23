@@ -24,7 +24,8 @@
 
 package central.sql.datasource.dynamic.lookup;
 
-import central.util.Stringx;
+import central.lang.Stringx;
+import central.util.Context;
 
 /**
  * 持有数据源 Key
@@ -38,6 +39,8 @@ public class LookupKeyHolder {
      */
     private static final ThreadLocal<String> lookupKey = new ThreadLocal<>();
 
+    private static final ThreadLocal<Context> context = ThreadLocal.withInitial(Context::new);
+
     public static String getLookupKey() {
         return lookupKey.get();
     }
@@ -50,7 +53,12 @@ public class LookupKeyHolder {
         }
     }
 
+    public static Context getContext() {
+        return context.get();
+    }
+
     public static void clear() {
         lookupKey.remove();
+        context.remove();
     }
 }

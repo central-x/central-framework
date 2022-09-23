@@ -25,12 +25,13 @@
 package central.sql.proxy.mapper;
 
 import central.sql.Conditions;
+import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.util.Listx;
 
 import java.lang.reflect.Method;
@@ -46,7 +47,7 @@ import java.util.List;
  */
 public class DeleteByIdsHandler implements MapperHandler {
     @Override
-    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, EntityMeta meta, Method method, Object[] args) throws SQLException {
+    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
         if (Arrayx.isNullOrEmpty(args)) {
             return 0L;
         }
@@ -63,7 +64,7 @@ public class DeleteByIdsHandler implements MapperHandler {
             conditions = Conditions.where().in(meta.getId().getName(), ids);
         }
 
-        var script = executor.getBuilder().forDeleteBy(executor, meta, conditions);
+        var script = builder.forDeleteBy(executor, meta, conditions);
         return executor.execute(script);
     }
 }

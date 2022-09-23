@@ -72,14 +72,17 @@ public enum SqlDialect {
     /**
      * 海量数据
      */
-    Vastbase("Vastbase", new VastbaseBuilder());
-
+    Vastbase("Vastbase", new VastbaseBuilder()),
+    /**
+     * 未知的数据
+     */
+    Unknown("Unknown", new UnknownBuilder());
 
     private final String name;
 
     private final SqlBuilder builder;
 
-    public static SqlDialect fromUrl(String jdbcUrl) {
+    public static SqlDialect resolve(String jdbcUrl) {
         if (jdbcUrl == null) {
             return null;
         }
@@ -102,7 +105,7 @@ public enum SqlDialect {
         } else if (jdbcUrl.startsWith("jdbc:vastbase:")) {
             return Vastbase;
         } else {
-            throw new IllegalArgumentException("不支持的数据库类型: " + jdbcUrl);
+            return Unknown;
         }
     }
 }

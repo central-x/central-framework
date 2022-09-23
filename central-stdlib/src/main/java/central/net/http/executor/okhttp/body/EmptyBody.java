@@ -24,13 +24,13 @@
 
 package central.net.http.executor.okhttp.body;
 
-import central.util.Stringx;
+import central.lang.Stringx;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 /**
@@ -61,14 +61,13 @@ public class EmptyBody extends RequestBody {
         return 0;
     }
 
-    @Nullable
     @Override
-    public MediaType contentType() {
+    public @Nullable MediaType contentType() {
         return this.contentType;
     }
 
     @Override
-    public void writeTo(@NotNull BufferedSink bufferedSink) throws IOException {
+    public void writeTo(@Nonnull BufferedSink bufferedSink) throws IOException {
 
     }
 }

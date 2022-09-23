@@ -31,8 +31,8 @@ import central.sql.builder.script.table.AddTableScript;
 import central.sql.builder.script.table.DropTableScript;
 import central.sql.builder.script.table.RenameTableScript;
 import central.util.Objectx;
-import central.util.Stringx;
-import central.validation.Validatorx;
+import central.lang.Stringx;
+import central.validation.Validatex;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -113,7 +113,7 @@ class TableScriptParser {
                 List<AddTableScript.Column> columns = getTableColumn(node);
                 script.setColumns(columns);
 
-                Validatorx.Default().validate(script);
+                Validatex.Default().validate(script);
                 scripts.add(script);
             }
         }
@@ -145,7 +145,7 @@ class TableScriptParser {
                     }
                 }
 
-                Validatorx.Default().validate(script);
+                Validatex.Default().validate(script);
                 scripts.add(script);
             }
         }
@@ -169,7 +169,7 @@ class TableScriptParser {
                 DropTableScript script = new DropTableScript();
                 script.setName(getAttributeValue(node, "name", null));
 
-                Validatorx.Default().validate(script);
+                Validatex.Default().validate(script);
                 scripts.add(script);
             }
         }
@@ -195,7 +195,7 @@ class TableScriptParser {
                 script.setName(getAttributeValue(node, "name", null));
                 script.setNewName(getAttributeValue(node, "new-name", null));
 
-                Validatorx.Default().validate(script);
+                Validatex.Default().validate(script);
                 scripts.add(script);
             }
         }

@@ -24,10 +24,12 @@
 
 package central.starter.graphql.core.resolver;
 
+import central.lang.Arrayx;
+import central.lang.Stringx;
 import central.lang.reflect.TypeReference;
 import central.util.*;
 import central.validation.Validatable;
-import central.validation.Validatorx;
+import central.validation.Validatex;
 import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
@@ -98,7 +100,7 @@ public class RequestParamParameterResolver extends AnnotatedParameterResolver {
                 // 如果是 Input 类型，就使用 Json 序列化来绑定参数
                 try {
                     String json = Jsonx.Default().serialize(Mapx.newHashMap("input", value));
-                    Map<String, Object> map = Jsonx.Default().deserialize(json, TypeReference.forMapType(String.class, TypeReference.of(parameter.getAnnotatedType().getType())));
+                    Map<String, Object> map = Jsonx.Default().deserialize(json, TypeReference.ofMap(String.class, TypeReference.of(parameter.getAnnotatedType().getType())));
 
                     value = map.get("input");
                 } catch (Exception ex) {
@@ -130,7 +132,7 @@ public class RequestParamParameterResolver extends AnnotatedParameterResolver {
                                 }
                             } else {
                                 try {
-                                    Validatorx.Default().validate(it, groups);
+                                    Validatex.Default().validate(it, groups);
                                 } catch (Exception ex) {
                                     throw new GraphQLException(Stringx.format("执行方法[{}.{}]错误: 参数[{}]验证异常", method.getDeclaringClass().getSimpleName(), method.getName(), name), ex);
                                 }

@@ -24,6 +24,7 @@
 
 package central.util.concurrent;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.concurrent.Delayed;
@@ -35,6 +36,7 @@ import java.util.concurrent.TimeUnit;
  * @author Alan Yeh
  * @since 2022/07/14
  */
+@EqualsAndHashCode
 public class DelayedElement<E> implements Delayed {
     /**
      * 创建时间

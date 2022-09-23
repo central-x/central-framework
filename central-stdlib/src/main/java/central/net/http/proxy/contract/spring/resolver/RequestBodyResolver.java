@@ -30,7 +30,7 @@ import central.net.http.body.InputStreamBody;
 import central.net.http.body.request.*;
 import central.net.http.proxy.contract.spring.SpringResolver;
 import central.lang.Assertx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -58,7 +58,7 @@ public class RequestBodyResolver implements SpringResolver {
         var annotation = parameter.getAnnotation(RequestBody.class);
 
         // 如果 request.getBody() 不为空，说明已经处理过 Body，因此 Body 发生冲突
-        Assertx.mustNull(request.getBody(), () -> new IllegalStateException("Conflict body"));
+        Assertx.mustNull(request.getBody(), IllegalStateException::new, "Conflict body");
 
         // 必填校验
         Assertx.mustTrue(!annotation.required() || arg != null, "Required parameter '{}' is missing", parameter.getName());

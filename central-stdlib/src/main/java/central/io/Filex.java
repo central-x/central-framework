@@ -25,7 +25,7 @@
 package central.io;
 
 import central.lang.PublicApi;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.lang.Assertx;
 import lombok.experimental.UtilityClass;
 
@@ -103,7 +103,7 @@ public class Filex {
         if (file.exists()) {
             Filex.delete(file);
         }
-        file.createNewFile();
+        Assertx.mustTrue(file.createNewFile(), IOException::new, "Cannot create a new file on path '{}'", file.getAbsolutePath());
 
         try (var output = new FileOutputStream(file)) {
             IOStreamx.transfer(new ByteArrayInputStream(bytes), output);
@@ -180,7 +180,8 @@ public class Filex {
         if (!file.exists()) {
             // 如果是 Linux 或 Unit 的软链接，file.exists() 判断的是软链接的目标文件是否存在，而不是软件接文件是否存在。
             // 因此，如果软链接的目标文件已删除，那么 file.exists() 的判断可能就会错误，因此就算文件不存在，也要调用 file.delete() 方法。
-            file.delete();
+            // 由于无法知道结果是否真的删除了，所以返回的结果忽略
+            var ignored = file.delete();
             return;
         }
 
@@ -191,9 +192,7 @@ public class Filex {
             }
         }
 
-        if (!file.delete()) {
-            throw new IOException("Can not delete file: " + file.getAbsolutePath());
-        }
+        Assertx.mustTrue(file.delete(), IOException::new, "Can not delete file: " + file.getAbsolutePath());
     }
 
     /**
@@ -266,14 +265,14 @@ public class Filex {
     /**
      * 压缩文件
      *
-     * @param srcs 源文件，可以是文件夹或文件
-     * @param dist 目标文件
+     * @param sources 源文件，可以是文件夹或文件
+     * @param dist    目标文件
      */
-    public static void compress(List<File> srcs, File dist) throws IOException {
-        dist.delete();
+    public static void compress(List<File> sources, File dist) throws IOException {
+        Filex.delete(dist);
 
         try (var zip = new ZipOutputStream(new CheckedOutputStream(new FileOutputStream(dist), new CRC32()))) {
-            for (var src : srcs) {
+            for (var src : sources) {
                 compress(zip, src, src.getName());
             }
         }

@@ -24,16 +24,20 @@
 
 package central.sql;
 
-import central.sql.conversion.UnderlineConversion;
 import central.sql.datasource.factory.hikari.HikariDataSourceFactory;
-import central.sql.datasource.migration.*;
-import central.sql.impl.standard.StandardSqlExecutor;
-import central.sql.migration.v1;
-import central.sql.migration.v2;
+import central.sql.impl.standard.StandardDataSourceMigrator;
+import central.sql.impl.standard.StandardSource;
+import central.sql.impl.standard.StandardExecutor;
+import central.sql.impl.standard.StandardMetaManager;
+import central.sql.migration.*;
 import central.util.Version;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * 测试数据库版本迁移
@@ -43,23 +47,190 @@ import java.sql.SQLException;
  */
 public class TestDataSourceMigrator {
 
+    private SqlExecutor executor;
+
+    @BeforeEach
+    public void before() {
+        var dataSource = new HikariDataSourceFactory().build("org.h2.Driver", "jdbc:h2:mem:centralx", "centralx", "central.x");
+        var source = StandardSource.builder()
+                .dataSource(dataSource)
+                .dialect(SqlDialect.resolve("jdbc:h2:mem:centralx"))
+                .build();
+
+        this.executor = StandardExecutor.builder()
+                .source(source)
+                .metaManager(new StandardMetaManager(name -> name.startsWith("XT_")))
+                .build();
+    }
+
+    @AfterEach
+    public void after() throws SQLException {
+        // 测试完了之后降级到初始状态
+        var migrator = StandardDataSourceMigrator.builder().name("test").target(Version.of("0")).add(new V1()).add(new V2()).add(new V3()).add(new V4()).add(new V5()).add(new V1_V3()).build();
+        migrator.downgrade(executor);
+    }
+
     /**
      * 测试添加表
      */
     @Test
     public void case1() throws SQLException {
-//        var dataSource = new HikariDataSourceFactory()
-//                .build("com.mysql.cj.jdbc.Driver", "jdbc:mysql://127.0.0.1:3306/centralx?useUnicode=true&characterEncoding=utf8&useSSL=false", "root", "root");
+        // 升级数据库
+        var migrator = StandardDataSourceMigrator.builder().name("test").target(Version.of("1.0.0")).add(new V1()).add(new V2()).add(new V3()).add(new V4()).add(new V5()).add(new V1_V3()).build();
+        migrator.upgrade(executor);
 
-        var dataSource = new HikariDataSourceFactory().build("org.h2.Driver", "jdbc:h2:mem:centralx", "centralx", "central.x");
+        var meta = executor.getMetaManager().getMeta(executor, name -> name.startsWith("XT_"));
+        assertNotNull(meta);
+        assertFalse(meta.getTables().isEmpty());
+        assertNotNull(meta.getUrl());
+        assertNotNull(meta.getName());
+        assertNotNull(meta.getVersion());
+        assertNotNull(meta.getDriverName());
+        assertNotNull(meta.getDriverVersion());
+        assertFalse(meta.getTables().isEmpty());
 
-        var executor = StandardSqlExecutor.builder()
-                .dataSource(dataSource)
-                .dialect(SqlDialect.H2)
-                .conversion(new UnderlineConversion())
-                .migrator(new DataSourceMigrator("test", new Version("1.1.0")).add(new v1()))
-                .build();
+        // 用户表
+        var account = meta.getTable("XT_ACCOUNT");
+        assertNotNull(account);
+        assertEquals(13, account.getColumns().size());
+        assertEquals(2, account.getIndies().size());
 
-        executor.initialize();
+        // 部门表
+        var dept = meta.getTable("XT_DEPT");
+        assertNotNull(dept);
+        assertEquals(7, dept.getColumns().size());
+        assertEquals(2, dept.getIndies().size());
+
+        // 角色表
+        var role = meta.getTable("XT_ROLE");
+        assertNotNull(role);
+        assertEquals(7, role.getColumns().size());
+        assertEquals(2, role.getIndies().size());
+
+        // 角色帐户关联表
+        var rel = meta.getTable("XT_REL_ROLE_ACCOUNT");
+        assertNotNull(rel);
+        assertEquals(5, rel.getColumns().size());
+        assertEquals(1, rel.getIndies().size());
+    }
+
+    @Test
+    public void case2() throws SQLException {
+        // 升级数据库
+        var migrator = StandardDataSourceMigrator.builder().name("test").target(Version.of("1.0.1")).add(new V1()).add(new V2()).add(new V3()).add(new V4()).add(new V5()).add(new V1_V3()).build();
+        migrator.upgrade(executor);
+
+        var meta = executor.getMetaManager().getMeta(executor, name -> name.startsWith("XT_"));
+        assertNotNull(meta);
+
+        // 测试表
+        var origin = meta.getTable("XT_ORIGIN");
+        assertNotNull(origin);
+        assertEquals(8, origin.getColumns().size());
+        assertEquals(3, origin.getIndies().size());
+
+        var codeIndex = origin.getIndex("XT_ORIGIN_CODE");
+        assertTrue(codeIndex.isUnique());
+        assertEquals(codeIndex.getColumn(), "CODE");
+
+        var categoryIndex = origin.getIndex("XT_ORIGIN_CATEGORY");
+        assertFalse(categoryIndex.isUnique());
+        assertEquals(categoryIndex.getColumn(), "CATEGORY");
+    }
+
+    @Test
+    public void case3() throws SQLException {
+        // 升级数据库
+        var migrator = StandardDataSourceMigrator.builder().name("test").target(Version.of("1.0.2")).add(new V1()).add(new V2()).add(new V3()).add(new V4()).add(new V5()).build();
+        migrator.upgrade(executor);
+
+        var meta = executor.getMetaManager().getMeta(executor, name -> name.startsWith("XT_"));
+        assertNotNull(meta);
+
+        // 测试表结构
+        var origin = meta.getTable("XT_ORIGIN");
+        assertNotNull(origin);
+        assertEquals(9, origin.getColumns().size());
+        assertEquals(3, origin.getIndies().size());
+
+        // 测试添加字段
+        var testColumn = origin.getColumn("TEST_COL");
+        assertNotNull(testColumn);
+        assertEquals(SqlType.LONG, SqlType.resolve(testColumn.getType()));
+        assertEquals("测试字段", testColumn.getRemarks());
+
+        // 测试重命名字段
+        var categoryColumn = origin.getColumn("CATEGORY");
+        assertNull(categoryColumn);
+
+        var typeColumn = origin.getColumn("TYPE");
+        assertNotNull(typeColumn);
+        assertEquals(SqlType.STRING, SqlType.resolve(typeColumn.getType()));
+        assertEquals("类型", typeColumn.getRemarks());
+
+        // 测试添加索引
+        var codeIndex = origin.getIndex("XT_ORIGIN_CODE");
+        assertTrue(codeIndex.isUnique());
+        assertEquals(codeIndex.getColumn(), "CODE");
+
+        // 测试删除索引
+        var categoryIndex = origin.getIndex("XT_ORIGIN_CATEGORY");
+        assertNull(categoryIndex);
+    }
+
+    @Test
+    public void case4() throws SQLException {
+        // 升级数据库
+        var migrator = StandardDataSourceMigrator.builder().name("test").target(Version.of("1.0.3")).add(new V1()).add(new V2()).add(new V3()).add(new V4()).add(new V5()).build();
+        migrator.upgrade(executor);
+
+        var meta = executor.getMetaManager().getMeta(executor, name -> name.startsWith("XT_"));
+        assertNotNull(meta);
+
+        // 测试重命名
+        // 测试表结构
+        var origin = meta.getTable("XT_NEW");
+        assertNotNull(origin);
+        assertEquals(8, origin.getColumns().size());
+        assertEquals(3, origin.getIndies().size());
+
+        // 测试删除字段
+        var testColumn = origin.getColumn("TEST_COL");
+        assertNull(testColumn);
+    }
+
+    @Test
+    public void case5() throws SQLException {
+        // 升级数据库
+        var migrator = StandardDataSourceMigrator.builder().name("test").target(Version.of("1.0.4")).add(new V1()).add(new V2()).add(new V3()).add(new V4()).add(new V5()).build();
+        migrator.upgrade(executor);
+
+        var meta = executor.getMetaManager().getMeta(executor, name -> name.startsWith("XT_"));
+        assertNotNull(meta);
+
+        // 测试删除表
+        var origin = meta.getTable("XT_NEW");
+        assertNull(origin);
+    }
+
+    @Test
+    public void case6() throws SQLException {
+        // 升级数据库
+        var migrator = StandardDataSourceMigrator.builder().name("test").target(Version.of("1.0.3")).add(new V1()).add(new V2()).add(new V3()).add(new V4()).add(new V5()).add(new V1_V3()).build();
+        migrator.upgrade(executor);
+
+        var meta = executor.getMetaManager().getMeta(executor, name -> name.startsWith("XT_"));
+        assertNotNull(meta);
+
+        // 测试重命名
+        // 测试表结构
+        var origin = meta.getTable("XT_NEW");
+        assertNotNull(origin);
+        assertEquals(8, origin.getColumns().size());
+        assertEquals(3, origin.getIndies().size());
+
+        // 测试删除字段
+        var testColumn = origin.getColumn("TEST_COL");
+        assertNull(testColumn);
     }
 }

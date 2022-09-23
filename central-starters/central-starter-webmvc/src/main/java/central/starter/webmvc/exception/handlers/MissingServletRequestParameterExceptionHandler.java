@@ -26,7 +26,7 @@ package central.starter.webmvc.exception.handlers;
 
 import central.starter.webmvc.exception.ExceptionHandler;
 import central.util.Mapx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;

@@ -26,6 +26,7 @@ package central.security;
 
 import central.security.cipher.CipherImpl;
 import central.security.cipher.impl.*;
+import lombok.experimental.UtilityClass;
 
 /**
  * 加解密工具
@@ -33,7 +34,8 @@ import central.security.cipher.impl.*;
  * @author Alan Yeh
  * @since 2022/07/10
  */
-public abstract class Cipherx {
+@UtilityClass
+public class Cipherx {
     /**
      * 不加密
      */

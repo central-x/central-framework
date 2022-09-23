@@ -69,11 +69,11 @@ public class DruidDataSourceFactory implements DataSourceFactory {
         dataSource.setPoolPreparedStatements(properties.getPoolPreparedStatements());
         dataSource.setMaxPoolPreparedStatementPerConnectionSize(properties.getMaxPoolPreparedStatementPerConnectionSize());
         dataSource.setMaxOpenPreparedStatements(properties.getMaxOpenPreparedStatements());
-        switch (SqlDialect.fromUrl(url)) {
-            case MySql -> {
+        switch (SqlDialect.resolve(url)) {
+            case MySql, PostgreSql -> {
                 dataSource.setValidationQuery(Objectx.get(properties.getValidationQuery(), "SELECT 1"));
             }
-            case Oracle, Kingbase, Oscar, H2, Vastbase, PostgreSql, Dameng -> {
+            case Oracle, Kingbase, Oscar, H2, Vastbase, Dameng -> {
                 dataSource.setValidationQuery(Objectx.get(properties.getValidationQuery(), "SELECT 1 FROM DUAL"));
             }
             case HighGo -> {

@@ -28,12 +28,13 @@ import central.bean.Page;
 import central.lang.Assertx;
 import central.sql.Conditions;
 import central.sql.Orders;
+import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -47,7 +48,7 @@ import java.sql.SQLException;
  */
 public class FindPageByHandler implements MapperHandler {
     @Override
-    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, EntityMeta meta, Method method, Object[] args) throws SQLException {
+    public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
         long pageIndex = (long) Arrayx.get(args, 0);
         long pageSize = (long) Arrayx.get(args, 1);
         Assertx.mustTrue(pageIndex > 0, "分页下标[pageIndex]必须大于等于 1");
@@ -58,13 +59,13 @@ public class FindPageByHandler implements MapperHandler {
         var orders = (Orders) Arrayx.get(args, 3);
 
         // 计算总数
-        var countScript = executor.getBuilder().forCountBy(executor, meta, conditions);
+        var countScript = builder.forCountBy(executor, meta, conditions);
         Long count = executor.selectSingle(countScript, Long.class);
 
         if (count == null || count.equals(0L)) {
             return Page.emptyPage();
         } else {
-            var selectScript = executor.getBuilder().forFindBy(executor, meta, pageSize, (pageIndex - 1) * pageSize, conditions, orders);
+            var selectScript = builder.forFindBy(executor, meta, pageSize, (pageIndex - 1) * pageSize, conditions, orders);
             var data = executor.select(selectScript, meta.getType());
             return Page.of(data, pageIndex, pageSize, (long) Math.ceil(count * 1.0d / pageSize), count);
         }

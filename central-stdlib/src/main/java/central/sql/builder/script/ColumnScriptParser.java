@@ -31,8 +31,8 @@ import central.sql.builder.script.column.AddColumnScript;
 import central.sql.builder.script.column.DropColumnScript;
 import central.sql.builder.script.column.RenameColumnScript;
 import central.util.Objectx;
-import central.util.Stringx;
-import central.validation.Validatorx;
+import central.lang.Stringx;
+import central.validation.Validatex;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -124,7 +124,7 @@ class ColumnScriptParser {
                     }
                 }
 
-                Validatorx.Default().validate(script);
+                Validatex.Default().validate(script);
                 scripts.add(script);
             }
         }
@@ -150,7 +150,7 @@ class ColumnScriptParser {
                 script.setTable(getAttributeValue(node, "table", null));
                 script.setName(getAttributeValue(node, "name", null));
 
-                Validatorx.Default().validate(script);
+                Validatex.Default().validate(script);
                 scripts.add(script);
             }
         }
@@ -180,7 +180,7 @@ class ColumnScriptParser {
                 script.setNullable(Boolean.parseBoolean(getAttributeValue(node, "nullable", "true")));
                 script.setRemarks(getAttributeValue(node, "comment", null));
 
-                Validatorx.Default().validate(script);
+                Validatex.Default().validate(script);
                 scripts.add(script);
             }
         }

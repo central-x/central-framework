@@ -24,11 +24,11 @@
 
 package central.starter.graphql.core;
 
-import central.util.Stringx;
+import central.lang.Stringx;
 import graphql.language.StringValue;
 import graphql.schema.*;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
@@ -45,7 +45,7 @@ public class Scalars {
             .description("Scalar for java.sql.Timestamp.")
             .coercing(new Coercing<Timestamp, Long>() {
                 @Override
-                public Long serialize(@NotNull Object dataFetcherResult) throws CoercingSerializeException {
+                public Long serialize(@Nonnull Object dataFetcherResult) throws CoercingSerializeException {
                     if (dataFetcherResult instanceof Timestamp timestamp) {
                         return timestamp.getTime();
                     } else {
@@ -54,7 +54,7 @@ public class Scalars {
                 }
 
                 @Override
-                public @NotNull Timestamp parseValue(@NotNull Object input) throws CoercingParseValueException {
+                public @Nonnull Timestamp parseValue(@Nonnull Object input) throws CoercingParseValueException {
                     long value;
                     try {
                         value = Long.parseLong(input.toString());
@@ -65,7 +65,7 @@ public class Scalars {
                 }
 
                 @Override
-                public @NotNull Timestamp parseLiteral(@NotNull Object input) throws CoercingParseLiteralException {
+                public @Nonnull Timestamp parseLiteral(@Nonnull Object input) throws CoercingParseLiteralException {
                     if (input instanceof StringValue string) {
                         return parseValue(string.getValue());
                     } else {
@@ -80,17 +80,17 @@ public class Scalars {
             .description("Scalar for Any type")
             .coercing(new Coercing<Object, Object>() {
                 @Override
-                public Object serialize(@NotNull Object dataFetcherResult) throws CoercingSerializeException {
+                public Object serialize(@Nonnull Object dataFetcherResult) throws CoercingSerializeException {
                     return dataFetcherResult;
                 }
 
                 @Override
-                public @NotNull Object parseValue(@NotNull Object input) throws CoercingParseValueException {
+                public @Nonnull Object parseValue(@Nonnull Object input) throws CoercingParseValueException {
                     return input;
                 }
 
                 @Override
-                public @NotNull Object parseLiteral(@NotNull Object input) throws CoercingParseLiteralException {
+                public @Nonnull Object parseLiteral(@Nonnull Object input) throws CoercingParseLiteralException {
                     return input;
                 }
             })
@@ -101,7 +101,7 @@ public class Scalars {
             .description("Scalar for Long type")
             .coercing(new Coercing<Long, Long>() {
                 @Override
-                public Long serialize(@NotNull Object dataFetcherResult) throws CoercingSerializeException {
+                public Long serialize(@Nonnull Object dataFetcherResult) throws CoercingSerializeException {
                     if (dataFetcherResult instanceof Number number) {
                         return number.longValue();
                     } else if (dataFetcherResult instanceof String string) {
@@ -123,7 +123,7 @@ public class Scalars {
                 }
 
                 @Override
-                public @NotNull Long parseValue(@NotNull Object input) throws CoercingParseValueException {
+                public @Nonnull Long parseValue(@Nonnull Object input) throws CoercingParseValueException {
                     if (input instanceof Number number) {
                         return number.longValue();
                     } else if (input instanceof String string) {
@@ -145,7 +145,7 @@ public class Scalars {
                 }
 
                 @Override
-                public @NotNull Long parseLiteral(@NotNull Object input) throws CoercingParseLiteralException {
+                public @Nonnull Long parseLiteral(@Nonnull Object input) throws CoercingParseLiteralException {
                     return parseValue(input);
                 }
             })

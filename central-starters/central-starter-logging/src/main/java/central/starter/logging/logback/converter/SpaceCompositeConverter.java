@@ -24,7 +24,7 @@
 
 package central.starter.logging.logback.converter;
 
-import central.util.Stringx;
+import central.lang.Stringx;
 import ch.qos.logback.core.pattern.CompositeConverter;
 
 /**

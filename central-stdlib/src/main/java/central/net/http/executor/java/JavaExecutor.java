@@ -28,7 +28,7 @@ import central.net.http.HttpException;
 import central.net.http.HttpExecutor;
 import central.net.http.body.Body;
 import central.net.http.ssl.X509TrustManagerImpl;
-import central.util.Stringx;
+import central.lang.Stringx;
 import central.util.function.ThrowableSupplier;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

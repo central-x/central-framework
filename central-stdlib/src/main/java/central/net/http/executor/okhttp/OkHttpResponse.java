@@ -30,7 +30,6 @@ import central.net.http.body.Body;
 import central.util.LazyValue;
 import lombok.Getter;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -67,6 +66,7 @@ public class OkHttpResponse extends HttpResponse<OkHttpResponse.ResponseBody> {
         getResponse().headers().forEach(pair -> result.add(pair.getFirst(), pair.getSecond()));
         return result;
     });
+
     @Override
     public HttpHeaders getHeaders() {
         return this.headers.get();
@@ -76,15 +76,15 @@ public class OkHttpResponse extends HttpResponse<OkHttpResponse.ResponseBody> {
 
         private final okhttp3.ResponseBody body;
 
-        private ResponseBody(okhttp3.ResponseBody body){
+        private ResponseBody(okhttp3.ResponseBody body) {
             this.body = body;
         }
 
-
         @Override
         public MediaType getContentType() {
-            if (this.body.contentType() != null){
-                return MediaType.parseMediaType(this.body.contentType().toString());
+            var contentType = this.body.contentType();
+            if (contentType != null) {
+                return MediaType.parseMediaType(contentType.toString());
             } else {
                 return null;
             }

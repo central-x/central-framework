@@ -29,7 +29,7 @@ import central.net.http.processor.HttpProcessor;
 import central.pattern.chain.ProcessChain;
 import central.lang.Assertx;
 import central.util.Listx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.Getter;
 
 import java.net.URI;

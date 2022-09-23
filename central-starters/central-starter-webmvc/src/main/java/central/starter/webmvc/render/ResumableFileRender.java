@@ -26,7 +26,7 @@ package central.starter.webmvc.render;
 
 import central.io.IOStreamx;
 import central.util.Range;
-import central.util.Stringx;
+import central.lang.Stringx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
@@ -216,14 +216,14 @@ public class ResumableFileRender extends Render<ResumableFileRender> {
             // 如果 Range 请求头为空，则说明是全部下载。全部下载的状态码是 200
             this.getResponse().setStatus(HttpStatus.OK.value());
             // 设置 Content-Length 为整个文件的大小
-            this.getResponse().setHeader(HttpHeaders.CONTENT_LENGTH, file.length() + "");
+            this.getResponse().setHeader(HttpHeaders.CONTENT_LENGTH, Long.toString(file.length()));
         } else {
             // 如果 Range 请求头不为空，则说明是断点下载，断点下载的状态码是 206
             this.getResponse().setStatus(HttpStatus.PARTIAL_CONTENT.value());
             // 设置 Range 头部
-            this.getResponse().setHeader(HttpHeaders.CONTENT_RANGE, Stringx.format("bytes {}-{}/{}", rangeHeader.getMinimum(), rangeHeader.getMaximum(), file.length() + ""));
+            this.getResponse().setHeader(HttpHeaders.CONTENT_RANGE, Stringx.format("bytes {}-{}/{}", rangeHeader.getMinimum(), rangeHeader.getMaximum(), Long.toString(file.length())));
             // 设置 Content-Length 头部
-            this.getResponse().setHeader(HttpHeaders.CONTENT_LENGTH, (rangeHeader.getMaximum() - rangeHeader.getMinimum() + 1) + "");
+            this.getResponse().setHeader(HttpHeaders.CONTENT_LENGTH, Long.toString(rangeHeader.getMaximum() - rangeHeader.getMinimum() + 1L));
         }
     }
 

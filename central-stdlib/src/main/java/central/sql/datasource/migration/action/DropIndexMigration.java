@@ -44,7 +44,7 @@ public class DropIndexMigration implements MigrateAction {
 
     @Override
     public void migrate(SqlExecutor executor) throws SQLException {
-        var scripts = executor.getBuilder().forDropIndex(this.script);
+        var scripts = executor.getSource().getDialect().getBuilder().forDropIndex(this.script);
         for (var script : scripts) {
             executor.execute(script);
         }

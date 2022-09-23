@@ -44,7 +44,7 @@ public class RenameTableMigration implements MigrateAction {
 
     @Override
     public void migrate(SqlExecutor executor) throws SQLException {
-        var scripts = executor.getBuilder().forRenameTable(this.script);
+        var scripts = executor.getSource().getDialect().getBuilder().forRenameTable(this.script);
         for (var script : scripts) {
             executor.execute(script);
         }

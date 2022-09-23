@@ -73,7 +73,7 @@ public class StringTypeResolver implements SqlTypeResolver {
     }
 
     private String read(Reader reader) throws SQLException {
-        try {
+        try (reader) {
             var result = new StringBuilder();
             int length;
             char[] buffer = new char[IOStreamx.BUFFER_SIZE];
@@ -83,12 +83,6 @@ public class StringTypeResolver implements SqlTypeResolver {
             return result.toString();
         } catch (IOException ex) {
             throw new SQLException(ex);
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException ex) {
-                throw new SQLException(ex);
-            }
         }
     }
 }

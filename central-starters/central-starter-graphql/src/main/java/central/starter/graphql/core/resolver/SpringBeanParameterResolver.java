@@ -25,8 +25,8 @@
 package central.starter.graphql.core.resolver;
 
 import central.starter.graphql.GraphQLParameterResolver;
-import central.starter.graphql.core.ExecuteContext;
-import central.util.Stringx;
+import central.lang.Stringx;
+import central.util.Context;
 import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
 import org.dataloader.BatchLoaderEnvironment;
@@ -67,7 +67,7 @@ public class SpringBeanParameterResolver implements GraphQLParameterResolver {
         return this.resolves(method, parameter, environment.getContext());
     }
 
-    private Object resolves(Method method, Parameter parameter, ExecuteContext context) {
+    private Object resolves(Method method, Parameter parameter, Context context) {
         ApplicationContext applicationContext = null;
         if (context != null) {
             applicationContext = context.get(ApplicationContext.class);

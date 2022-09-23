@@ -25,7 +25,7 @@
 package central.sql.meta.database;
 
 import central.util.Mapx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.Data;
 import lombok.experimental.ExtensionMethod;
 

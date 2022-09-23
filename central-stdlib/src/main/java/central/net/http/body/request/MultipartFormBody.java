@@ -26,10 +26,10 @@ package central.net.http.body.request;
 
 import central.net.http.body.Body;
 import central.net.http.body.HttpConverters;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.util.Guidx;
 import central.util.Mapx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
@@ -39,10 +39,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Multipart Form Body
@@ -71,13 +68,11 @@ public class MultipartFormBody implements Body {
 
     @SneakyThrows
     public MultipartFormBody(Object instance) {
-        if (instance == null) {
-
-        } else if (instance instanceof Map<?, ?>) {
+        if (instance instanceof Map<?, ?>) {
             this.initMap((Map<?, ?>) instance);
         } else if (instance instanceof List<?>) {
             throw new IllegalArgumentException(Stringx.format("Unsupported value type '{}'", List.class.getName()));
-        } else {
+        } else if (instance != null) {
             BeanInfo info = Introspector.getBeanInfo(instance.getClass());
             PropertyDescriptor[] properties = info.getPropertyDescriptors();
 
@@ -128,7 +123,7 @@ public class MultipartFormBody implements Body {
 
     @Override
     public InputStream getInputStream() throws IOException {
-        Vector<InputStream> streams = new Vector<>();
+        var streams = new ArrayList<InputStream>();
 
         for (MultipartFormPart part : this.body) {
             // --{boundary}
@@ -147,7 +142,7 @@ public class MultipartFormBody implements Body {
         streams.add(new ByteArrayInputStream(DASHDASH));
         streams.add(new ByteArrayInputStream(CRLF));
 
-        return new SequenceInputStream(streams.elements());
+        return new SequenceInputStream(Collections.enumeration(streams));
     }
 
     @Override

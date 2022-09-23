@@ -25,11 +25,12 @@
 package central.sql.proxy;
 
 import central.io.Resourcex;
+import central.sql.SqlDialect;
 import central.sql.SqlExecutor;
 import central.util.MarkdownResources;
-import central.util.Stringx;
+import central.lang.Stringx;
 import central.validation.Label;
-import central.validation.Validatorx;
+import central.validation.Validatex;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Setter;
@@ -55,7 +56,7 @@ public class MapperFactory<T extends Mapper<?>> {
 
     public MapperFactory(Class<T> target) {
         this.target = target;
-        this.resourcePath = Stringx.format("classpath:///central/orm/sql/{}.md", Stringx.lowerCaseFirstLetter(target.getSimpleName()));
+        this.resourcePath = Stringx.format("classpath:///central/orm/{}.md", Stringx.lowerCaseFirstLetter(target.getSimpleName()));
     }
 
     @NotBlank
@@ -86,13 +87,21 @@ public class MapperFactory<T extends Mapper<?>> {
 
     @SneakyThrows(IOException.class)
     public T build() {
-        Validatorx.Default().validateBean(this);
+        Validatex.Default().validateBean(this);
 
         var is = Resourcex.getInputStream(URI.create(this.resourcePath));
 
         MarkdownResources resources = new MarkdownResources();
         if (is != null) {
             resources = new MarkdownResources(is);
+        }
+
+        for (var dialect : SqlDialect.values()) {
+            // 加载方言
+            is = Resourcex.getInputStream(URI.create(Stringx.format("classpath:///central/orm/{}/{}.md", dialect.getName().toLowerCase(), Stringx.lowerCaseFirstLetter(target.getSimpleName()))));
+            if (is != null) {
+                resources.load(dialect.getName().toLowerCase(), is);
+            }
         }
 
         return (T) Proxy.newProxyInstance(this.target.getClassLoader(), new Class[]{target}, new MapperProxy<>(this.target, this.executor, handlers, resources));

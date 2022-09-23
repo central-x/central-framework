@@ -34,7 +34,7 @@ import central.sql.datasource.dynamic.lookup.LookupKeyHolder;
 import central.sql.proxy.mapper.*;
 import central.util.Mapx;
 import central.util.MarkdownResources;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.Getter;
 
 import java.lang.reflect.InvocationHandler;
@@ -96,6 +96,7 @@ public class MapperProxy<T extends Mapper<?>> implements InvocationHandler {
         this.handlers.put("getMapper", new GetMapperHandler());
         this.handlers.put("insert", new InsertHandler());
         this.handlers.put("insertBatch", new InsertBatchHandler());
+        this.handlers.put("deleteById", new DeleteByIdHandler());
         this.handlers.put("deleteByIds", new DeleteByIdsHandler());
         this.handlers.put("deleteBy", new DeleteByHandler());
         this.handlers.put("deleteAll", new DeleteAllHandler());
@@ -111,7 +112,7 @@ public class MapperProxy<T extends Mapper<?>> implements InvocationHandler {
         this.handlers.put("countBy", new CountByHandler());
         this.handlers.put("existsBy", new ExistsByHandler());
         this.handlers.put("toString", new ToStringHandler());
-        if (Mapx.isNotEmpty(handlers)){
+        if (Mapx.isNotEmpty(handlers)) {
             this.handlers.putAll(handlers);
         }
         this.resources = resources;
@@ -149,7 +150,7 @@ public class MapperProxy<T extends Mapper<?>> implements InvocationHandler {
                 // 查看是否已经注册了方法处理器
                 var handler = this.handlers.get(method.getName());
                 if (handler != null) {
-                    return handler.handle(this, this.executor, this.executor.getMeta(this.entityType), method, args);
+                    return handler.handle(this, this.executor, this.executor.getSource().getDialect().getBuilder(), this.executor.getMetaManager().getMeta(this.entityType), method, args);
                 }
 
                 // 如果没有注册方法处理器，那么就查找 Sql 资源

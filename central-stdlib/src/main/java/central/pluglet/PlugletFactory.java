@@ -29,9 +29,9 @@ import central.lang.reflect.TypeReference;
 import central.pluglet.binder.ControlBinder;
 import central.pluglet.control.ControlResolver;
 import central.pluglet.control.PlugletControl;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.lang.Assertx;
-import central.util.Stringx;
+import central.lang.Stringx;
 
 import java.util.*;
 
@@ -71,7 +71,7 @@ public class PlugletFactory {
         var properties = new Properties();
         try {
             var resources = Thread.currentThread().getContextClassLoader().getResources("MATA-INF/pluglet.properties");
-            while (resources.hasMoreElements()){
+            while (resources.hasMoreElements()) {
                 var resource = resources.nextElement();
                 properties.load(resource.openStream());
             }
@@ -82,7 +82,7 @@ public class PlugletFactory {
         // 注册控件解析
         Arrayx.asStream(properties.getProperty("resolvers").split("[,]"))
                 // 将 properties 里面指定的 ControlResolver 类加载出来
-                .map(TypeReference::forName)
+                .map(TypeReference::of)
                 // 判断这些类是否都继承了 ControlResolver
                 .peek(type -> Assertx.mustAssignableFrom(ControlResolver.class, type.getRawClass(), () -> new InitializeException(PlugletFactory.class, Stringx.format("'{}' must assignable to {}", type.getName(), ControlResolver.class.getName()))))
                 // 实例化这些 ControlResolver
@@ -93,7 +93,7 @@ public class PlugletFactory {
         // 注册字段绑定
         Arrayx.asStream(properties.getProperty("binders").split("[,]"))
                 // 将 properties 里面指定的 FieldBinder 类加载出来
-                .map(TypeReference::forName)
+                .map(TypeReference::of)
                 // 判断这些类是否都继承了 FieldBinder
                 .peek(type -> Assertx.mustAssignableFrom(FieldBinder.class, type.getRawClass(), () -> new InitializeException(PlugletFactory.class, Stringx.format("'{}' must assignable to {}", type.getName(), ControlBinder.class.getName()))))
                 // 实例化这些 FieldBinder
@@ -104,7 +104,7 @@ public class PlugletFactory {
         // 生命周期处理
         Arrayx.asStream(properties.getProperty("processes").split("[,]"))
                 // 将 properties 里面指定的 LifeCycleProcessor 类加载出来
-                .map(TypeReference::forName)
+                .map(TypeReference::of)
                 // 判断这些类是否都继承了 LifeCycleProcessor
                 .peek(type -> Assertx.mustAssignableFrom(LifeCycleProcessor.class, type.getRawClass(), () -> new InitializeException(PlugletFactory.class, Stringx.format("'{}' must assignable to {}", type.getName(), LifeCycleProcessor.class.getName()))))
                 // 实例化这些 LifeCycleProcessor
@@ -150,7 +150,7 @@ public class PlugletFactory {
         var instance = reference.newInstance();
 
         // 处理生命周期
-        for (var processor : this.processors){
+        for (var processor : this.processors) {
             processor.afterCreated(instance);
         }
 

@@ -24,7 +24,7 @@
 
 package central.security.signer.impl;
 
-import central.util.Stringx;
+import central.lang.Stringx;
 import central.security.signer.KeyPair;
 import central.security.signer.SignerImpl;
 import lombok.Getter;
@@ -48,6 +48,7 @@ import org.bouncycastle.math.ec.ECPoint;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serial;
 import java.math.BigInteger;
 import java.security.Key;
 import java.security.SecureRandom;
@@ -91,6 +92,7 @@ public class SM2Impl implements SignerImpl {
 
     @RequiredArgsConstructor
     private static class SM2SignKey implements Key {
+        @Serial
         private static final long serialVersionUID = 7138366658809908375L;
 
         @Getter
@@ -121,6 +123,7 @@ public class SM2Impl implements SignerImpl {
     }
 
     private static class SM2VerifyKey implements Key {
+        @Serial
         private static final long serialVersionUID = 644493133111452334L;
         private static final int PRIVKEY_SIZE = 32;
 

@@ -25,19 +25,24 @@
 package central.sql.datasource.migration.migrator;
 
 import central.sql.SqlExecutor;
+import central.sql.builder.script.index.AddIndexScript;
 import central.sql.builder.script.table.AddTableScript;
 import central.sql.datasource.migration.MigrateAction;
-import central.sql.datasource.migration.Migrator;
+import central.sql.datasource.migration.Database;
 import central.sql.datasource.migration.Table;
+import central.sql.datasource.migration.action.AddIndexMigration;
 import central.sql.datasource.migration.action.AddTableMigration;
 import central.sql.datasource.migration.data.DatabaseData;
 import central.sql.meta.database.DatabaseMeta;
+import central.util.Listx;
 import lombok.Getter;
+import lombok.experimental.Delegate;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 迁移程序实现
@@ -45,9 +50,41 @@ import java.util.List;
  * @author Alan Yeh
  * @since 2022/08/30
  */
-public class DatabaseMigrator implements Migrator {
+public class DatabaseMigrator implements Database {
 
     private final DatabaseData database;
+
+    @Override
+    public String getUrl() {
+        return this.database.getUrl();
+    }
+
+    @Override
+    public String getName() {
+        return this.database.getName();
+    }
+
+    @Override
+    public String getVersion() {
+        return this.database.getVersion();
+    }
+
+    @Override
+    public String getDriverName() {
+        return this.database.getDriverName();
+    }
+
+    @Override
+    public String getDriverVersion() {
+        return this.database.getDriverVersion();
+    }
+
+    @Override
+    public List<Table> getTables() {
+        return Listx.asStream(this.database.getTables())
+                .map(it -> new TableMigrator(this, this.database, it))
+                .collect(Collectors.toList());
+    }
 
     /**
      * 迁移动作
@@ -87,6 +124,12 @@ public class DatabaseMigrator implements Migrator {
         }).toList());
 
         this.actions.add(new AddTableMigration(script));
+
+        if (Listx.isNotEmpty(table.getIndices())) {
+            for (var index : table.getIndices()) {
+                this.actions.add(new AddIndexMigration(new AddIndexScript(index.getName(), script.getName(), index.getColumn(), index.isUnique())));
+            }
+        }
     }
 
     @Override
@@ -98,15 +141,20 @@ public class DatabaseMigrator implements Migrator {
                 .orElse(null);
     }
 
+    @Override
+    public void drop() {
+
+    }
+
     public void migrate(SqlExecutor executor) throws SQLException {
-        Connection connection = executor.getConnection();
+        Connection connection = executor.getSource().getConnection();
 
         try {
             for (var action : this.actions) {
                 action.migrate(executor);
             }
         } finally {
-            executor.returnConnection(connection);
+            executor.getSource().returnConnection(connection);
         }
     }
 }

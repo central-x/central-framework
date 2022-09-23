@@ -24,8 +24,8 @@
 
 package central.pattern.proxy;
 
-import central.util.Arrayx;
-import central.util.Stringx;
+import central.lang.Arrayx;
+import central.lang.Stringx;
 import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.InvocationHandler;

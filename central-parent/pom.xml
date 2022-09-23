@@ -80,6 +80,11 @@
             </dependency>
             <dependency>
                 <groupId>com.central-x</groupId>
+                <artifactId>central-starter-graphql</artifactId>
+                <version>1.0.x-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.central-x</groupId>
                 <artifactId>central-starter-logging</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
@@ -111,7 +116,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
-                <version>1.2.11</version>
+                <version>1.2.12</version>
             </dependency>
 
             <!-- BeetlSql -->

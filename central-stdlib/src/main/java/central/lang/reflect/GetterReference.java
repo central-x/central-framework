@@ -24,7 +24,7 @@
 
 package central.lang.reflect;
 
-import central.util.Stringx;
+import central.lang.Stringx;
 
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;

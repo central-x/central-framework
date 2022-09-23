@@ -26,7 +26,7 @@ package central.sql.meta.entity;
 
 import central.sql.SqlConversion;
 import central.util.Objectx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.Data;
 
 import javax.annotation.Nullable;

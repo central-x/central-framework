@@ -27,10 +27,10 @@ package central.net.http.proxy.contract.spring.resolver;
 import central.net.http.HttpRequest;
 import central.net.http.body.HttpConverters;
 import central.net.http.proxy.contract.spring.SpringResolver;
-import central.util.Arrayx;
+import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.util.Objectx;
-import central.util.Stringx;
+import central.lang.Stringx;
 import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ValueConstants;
@@ -102,7 +102,9 @@ public class RequestParamResolver implements SpringResolver {
         // 处理必填
         Assertx.mustTrue(!annotation.required() || (value != null && Stringx.isNotBlank(value.toString())), "Required parameter '{}' is missing", parameter.getName());
 
-        if (HttpConverters.Default().support(value)) {
+        if (value == null) {
+            request.getUrl().addQuery(name, "");
+        } else if (HttpConverters.Default().support(value)) {
             request.getUrl().addQuery(name, HttpConverters.Default().convert(value));
         } else {
             // 如果不支持的数据类型，那么这个参数应该是个对象

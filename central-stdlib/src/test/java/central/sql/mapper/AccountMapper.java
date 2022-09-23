@@ -24,7 +24,7 @@
 
 package central.sql.mapper;
 
-import central.sql.data.Account;
+import central.sql.data.AccountEntity;
 import central.sql.proxy.Mapper;
 
 /**
@@ -33,5 +33,5 @@ import central.sql.proxy.Mapper;
  * @author Alan Yeh
  * @since 2022/09/09
  */
-public interface AccountMapper extends Mapper<Account> {
+public interface AccountMapper extends Mapper<AccountEntity> {
 }

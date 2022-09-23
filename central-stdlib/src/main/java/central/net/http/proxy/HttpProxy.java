@@ -25,6 +25,7 @@
 package central.net.http.proxy;
 
 import central.io.IOStreamx;
+import central.lang.Stringx;
 import central.lang.reflect.TypeReference;
 import central.net.http.*;
 import central.net.http.body.extractor.JsonExtractor;

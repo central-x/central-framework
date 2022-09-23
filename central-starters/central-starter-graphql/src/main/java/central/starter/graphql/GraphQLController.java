@@ -24,8 +24,8 @@
 
 package central.starter.graphql;
 
-import central.starter.graphql.core.ExecuteContext;
 import central.starter.graphql.core.GraphQLExecutor;
+import central.util.Context;
 import central.util.Jsonx;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -59,7 +59,7 @@ public class GraphQLController implements ApplicationContextAware {
                         HttpServletRequest servletRequest,
                         HttpServletResponse servletResponse) {
 
-        var context = new ExecuteContext();
+        var context = new Context();
         context.set(GraphQLRequest.class, request);
         context.set(HttpServletRequest.class, servletRequest);
         context.set(ServletRequest.class, servletRequest);
