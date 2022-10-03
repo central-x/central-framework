@@ -152,6 +152,9 @@ public class StandardTransformer implements SqlTransformer {
     }
 
     private Object getPrimitiveDefaultValue(Class<?> type) {
+        if (!type.isPrimitive()) {
+            return null;
+        }
         return switch (type.getName()) {
             case "long" -> 0L;
             case "int", "short" -> 0;
@@ -160,7 +163,8 @@ public class StandardTransformer implements SqlTransformer {
             case "double" -> 0.0d;
             case "byte" -> (byte) 0;
             case "char" -> (char) 0;
-            default -> 0L;
+            default ->
+                    throw new IllegalArgumentException(Stringx.format("Type '{}' is not primitive type", type.getName()));
         };
     }
 }

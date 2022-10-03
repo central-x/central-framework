@@ -34,6 +34,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -109,6 +110,16 @@ public interface Table {
         impl.setRemarks(remarks);
         impl.setColumns(columns);
         impl.setIndices(indices);
+        impl.validate();
+        return impl;
+    }
+
+    static Table of(String name, String remarks, List<Column> columns) {
+        var impl = new Impl();
+        impl.setName(name);
+        impl.setRemarks(remarks);
+        impl.setColumns(columns);
+        impl.setIndices(Collections.emptyList());
         impl.validate();
         return impl;
     }

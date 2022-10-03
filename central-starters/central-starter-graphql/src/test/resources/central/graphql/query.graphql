@@ -1,0 +1,4 @@
+extend type Query {
+    pets: PetQuery
+    persons: PersonQuery
+}

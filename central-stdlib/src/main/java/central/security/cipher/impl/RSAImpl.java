@@ -26,7 +26,6 @@ package central.security.cipher.impl;
 
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
-import lombok.Getter;
 import lombok.SneakyThrows;
 
 import javax.crypto.Cipher;
@@ -51,8 +50,10 @@ public class RSAImpl implements CipherImpl {
 
     private static final int KEY_SIZE = 2048;
 
-    @Getter
-    private final String name = "RSA";
+    @Override
+    public String getName() {
+        return ALGORITHM;
+    }
 
     @Override
     @SneakyThrows

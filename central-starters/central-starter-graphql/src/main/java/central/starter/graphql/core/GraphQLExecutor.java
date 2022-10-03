@@ -26,6 +26,7 @@ package central.starter.graphql.core;
 
 import central.starter.graphql.GraphQLRequest;
 import central.util.Context;
+import central.util.Listx;
 import graphql.*;
 import graphql.execution.AbortExecutionException;
 import graphql.execution.NonNullableFieldWasNullError;
@@ -48,11 +49,11 @@ public class GraphQLExecutor {
     private GraphQL graphQL;
 
     @Setter
-    private LoaderCommandRegistry registry;
+    private LoaderRegistry registry;
 
     public Object execute(GraphQLRequest request, Context context) {
         // 构建输入
-        ExecutionInput.Builder builder = new ExecutionInput.Builder()
+        var builder = new ExecutionInput.Builder()
                 // 每次执行的时候，都需要重新构建 DataLoaderRegistry
                 // 这是因为每次执行 Loader 的时候，上下文都是不一样的
                 .dataLoaderRegistry(this.registry.buildRegistry(context))
@@ -61,11 +62,11 @@ public class GraphQLExecutor {
                 .variables(request.getVariables());
 
         // 执行
-        ExecutionResult result = this.graphQL.execute(builder);
+        var result = this.graphQL.execute(builder);
 
         // 判断执行过程中是否有异常
-        if (!result.getErrors().isEmpty()) {
-            GraphQLError error = result.getErrors().get(0);
+        if (Listx.isNotEmpty(result.getErrors())) {
+            var error = result.getErrors().get(0);
 
             if (ErrorType.InvalidSyntax.equals(error.getErrorType())) {
                 // 语法错误
@@ -74,8 +75,7 @@ public class GraphQLExecutor {
                 // 校验错误
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "[参数校验错误] " + error.getMessage());
             } else if (ErrorType.DataFetchingException.equals(error.getErrorType())) {
-                if (error instanceof ExceptionWhileDataFetching) {
-                    ExceptionWhileDataFetching ex = (ExceptionWhileDataFetching) error;
+                if (error instanceof ExceptionWhileDataFetching ex) {
                     if (ex.getException() instanceof ResponseStatusException exception) {
                         throw exception;
                     } else {

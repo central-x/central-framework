@@ -24,13 +24,11 @@
 
 package central.starter.graphql.test;
 
-import central.starter.graphql.test.data.Account;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestPart;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,5 +37,5 @@ import java.util.Map;
  */
 public interface GraphQLClient {
     @PostMapping(value = "/api/graphql", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    GraphqlResult<List<Account>> query(@RequestPart String query, @RequestPart Map<String, Object> variables, @RequestHeader("TEST_HEADER") String header);
+    String graphql(@RequestPart String query, @RequestPart Map<String, Object> variables, @RequestHeader("TEST_HEADER") String header);
 }

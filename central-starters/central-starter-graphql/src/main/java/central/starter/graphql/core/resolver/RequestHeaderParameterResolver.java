@@ -28,16 +28,15 @@ import central.util.Context;
 import central.util.Objectx;
 import central.lang.Stringx;
 import graphql.GraphQLException;
-import graphql.schema.DataFetchingEnvironment;
 import jakarta.servlet.http.HttpServletRequest;
-import org.dataloader.BatchLoaderEnvironment;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ValueConstants;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.List;
 
 /**
  * 处理请求头参数注入
@@ -46,33 +45,18 @@ import java.util.List;
  * @see RequestHeader
  * @since 2022/09/09
  */
-public class RequestHeaderParameterResolver extends AnnotatedParameterResolver {
+public class RequestHeaderParameterResolver extends SpringAnnotatedParameterResolver {
     public RequestHeaderParameterResolver() {
         super(RequestHeader.class);
     }
 
+    @Nullable
     @Override
-    public Object resolve(Method method, Parameter parameter, DataFetchingEnvironment environment) {
-        return this.resolves(method, parameter, environment.getLocalContext());
-    }
-
-    @Override
-    public Object resolve(Method method, Parameter parameter, List<String> keys, BatchLoaderEnvironment environment) {
-        return this.resolves(method, parameter, environment.getContext());
-    }
-
-    private Object resolves(Method method, Parameter parameter, Context context) {
+    public Object resolve(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter, @NotNull Context context) {
         RequestHeader header = parameter.getAnnotation(RequestHeader.class);
         String name = parameter.getName();
         if (header.value().length() > 0 || header.name().length() > 0) {
             name = Objectx.get(header.value(), header.name());
-        }
-
-        if (context == null) {
-            if (header.required()) {
-                throw new GraphQLException(Stringx.format("执行方法[{}.{}]错误: 无法找到参数[{}]指定的请求头(name = {})", parameter.getName(), name));
-            }
-            return null;
         }
 
         HttpServletRequest request = context.get(HttpServletRequest.class);
@@ -92,7 +76,7 @@ public class RequestHeaderParameterResolver extends AnnotatedParameterResolver {
 
         // 判断
         if (value == null && header.required()) {
-            throw new GraphQLException(Stringx.format("执行方法[{}.{}]错误: 无法找到参数[{}]指定的请求头(name = {})", parameter.getName(), name));
+            throw new GraphQLException(Stringx.format("执行方法[{}.{}]错误: 无法找到参数[{}]指定的请求头(name = {})", method.getDeclaringClass().getSimpleName(), method.getName(), parameter.getName(), name));
         }
 
         // 判断类型是否可转换

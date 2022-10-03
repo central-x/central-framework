@@ -39,5 +39,5 @@ public @interface GraphQLType {
     /**
      * Java 实体对应的 GraphQL 实体名称
      */
-    String value();
+    String value() default "";
 }

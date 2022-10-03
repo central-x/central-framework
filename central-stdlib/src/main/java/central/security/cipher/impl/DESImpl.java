@@ -27,7 +27,6 @@ package central.security.cipher.impl;
 import central.lang.Assertx;
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
-import lombok.Getter;
 import lombok.SneakyThrows;
 
 import javax.crypto.Cipher;
@@ -42,14 +41,17 @@ import java.util.Base64;
 
 /**
  * DES 加解密算法
+ *
  * @author Alan Yeh
  * @since 2022/07/10
  */
 public class DESImpl implements CipherImpl {
     private static final String ALGORITHM = "DES";
 
-    @Getter
-    private final String name = "DES";
+    @Override
+    public String getName() {
+        return ALGORITHM;
+    }
 
     @Override
     @SneakyThrows

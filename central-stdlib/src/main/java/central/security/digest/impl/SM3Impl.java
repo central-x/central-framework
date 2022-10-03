@@ -26,7 +26,6 @@ package central.security.digest.impl;
 
 import central.lang.Stringx;
 import central.security.digest.DigestImpl;
-import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bouncycastle.crypto.digests.SM3Digest;
 
@@ -42,8 +41,10 @@ import java.nio.charset.Charset;
  * @since 2022/07/05
  */
 public class SM3Impl implements DigestImpl {
-    @Getter
-    private final String name = "SM3";
+
+    public String getName() {
+        return "SM3";
+    }
 
     @Override
     public String digest(byte[] bytes) {

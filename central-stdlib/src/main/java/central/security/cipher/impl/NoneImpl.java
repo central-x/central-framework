@@ -26,7 +26,6 @@ package central.security.cipher.impl;
 
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
-import lombok.Getter;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -42,8 +41,9 @@ import java.util.Arrays;
  */
 public class NoneImpl implements CipherImpl {
 
-    @Getter
-    private final String name = "NONE";
+    public String getName() {
+        return "NONE";
+    }
 
     @Override
     public KeyPair generateKeyPair() {

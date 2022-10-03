@@ -31,23 +31,19 @@ import central.util.*;
 import central.validation.Validatable;
 import central.validation.Validatex;
 import graphql.GraphQLException;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLList;
+import graphql.schema.*;
+import jakarta.validation.groups.Default;
 import org.dataloader.BatchLoaderEnvironment;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ValueConstants;
 
-import javax.validation.groups.Default;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -57,20 +53,34 @@ import java.util.stream.Collectors;
  * @see RequestParam
  * @since 2022/09/09
  */
-public class RequestParamParameterResolver extends AnnotatedParameterResolver {
+public class RequestParamParameterResolver extends SpringAnnotatedParameterResolver {
     public RequestParamParameterResolver() {
         super(RequestParam.class);
     }
 
+    @Nullable
     @Override
+    public Object resolve(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter, @NotNull Context context) {
+        if (context.contains(DataFetchingEnvironment.class)) {
+            return resolve(method, parameter, context.require(DataFetchingEnvironment.class));
+        }
+
+        if (context.contains(BatchLoaderEnvironment.class)) {
+            return resolve(method, parameter, context);
+        }
+
+        return null;
+    }
+
     public Object resolve(Method method, Parameter parameter, DataFetchingEnvironment environment) {
         RequestParam param = parameter.getAnnotation(RequestParam.class);
+        String name = parameter.getName();
+        if (Stringx.isNotBlank(param.name()) || Stringx.isNotBlank(param.value())) {
+            name = Objectx.get(param.name(), param.value());
+        }
+
         Map<String, Object> arguments = environment.getArguments();
 
-        String name = parameter.getName();
-        if (param.value().length() > 0 || param.name().length() > 0) {
-            name = Objectx.get(param.value(), param.name());
-        }
         GraphQLArgument argument = environment.getFieldDefinition().getArgument(name);
         if (argument == null) {
             throw new GraphQLException(Stringx.format("执行方法[{}.{}]错误: 参数[{}]在 GraphQL 中没有定义", method.getDeclaringClass().getSimpleName(), method.getName(), name));
@@ -156,24 +166,24 @@ public class RequestParamParameterResolver extends AnnotatedParameterResolver {
         return value;
     }
 
-    @Override
-    public Object resolve(Method method, Parameter parameter, List<String> keys, BatchLoaderEnvironment environment) {
+    public Object resolve(Method method, Parameter parameter, Context context) {
         RequestParam param = parameter.getAnnotation(RequestParam.class);
-
         String name = parameter.getName();
-        if (Stringx.isNotBlank(param.value())) {
-            name = param.value();
+        if (Stringx.isNotBlank(param.name()) || Stringx.isNotBlank(param.value())) {
+            name = Objectx.get(param.name(), param.value());
         }
+
+        List<String> keys = context.get("keys");
 
         // BatchLoader 只有一个参数
         // BatchLoader 只可以接收 Set<String> 或 List<String> 类型的参数
         if ("ids".equals(name) || "keys".equals(name)) {
             if (List.class.isAssignableFrom(parameter.getType())) {
                 // 对 keys 进行排序去重，可以增大缓存击中概率
-                return keys.stream().distinct().sorted().collect(Collectors.toList());
+                return Listx.asStream(keys).distinct().sorted().collect(Collectors.toList());
             } else if (Set.class.isAssignableFrom(parameter.getType())) {
                 // 直接返回 Set
-                return new HashSet<>(keys);
+                return new HashSet<>(Objectx.get(keys, Collections.emptyList()));
             } else {
                 throw new GraphQLException(Stringx.format("执行 {}.{} 方法异常：BatchLoader 只接收 Set<String> 或 List<String> 类型的参数", method.getDeclaringClass().getSimpleName(), method.getName()));
             }

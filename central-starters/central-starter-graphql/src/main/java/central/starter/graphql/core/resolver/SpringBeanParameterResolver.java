@@ -24,12 +24,12 @@
 
 package central.starter.graphql.core.resolver;
 
-import central.starter.graphql.GraphQLParameterResolver;
+import central.lang.reflect.invoke.ParameterResolver;
 import central.lang.Stringx;
 import central.util.Context;
 import graphql.GraphQLException;
-import graphql.schema.DataFetchingEnvironment;
-import org.dataloader.BatchLoaderEnvironment;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -37,7 +37,6 @@ import org.springframework.core.env.Environment;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.List;
 
 /**
  * 处理 Spring Bean 参数注入
@@ -47,9 +46,9 @@ import java.util.List;
  * @see Qualifier
  * @since 2022/09/09
  */
-public class SpringBeanParameterResolver implements GraphQLParameterResolver {
+public class SpringBeanParameterResolver implements ParameterResolver {
     @Override
-    public boolean support(Parameter parameter) {
+    public boolean support(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter) {
         if (ApplicationContext.class == parameter.getType() ||
                 Environment.class == parameter.getType()) {
             return true;
@@ -57,21 +56,10 @@ public class SpringBeanParameterResolver implements GraphQLParameterResolver {
         return parameter.isAnnotationPresent(Autowired.class) || parameter.isAnnotationPresent(Qualifier.class);
     }
 
+    @Nullable
     @Override
-    public Object resolve(Method method, Parameter parameter, DataFetchingEnvironment environment) {
-        return this.resolves(method, parameter, environment.getLocalContext());
-    }
-
-    @Override
-    public Object resolve(Method method, Parameter parameter, List<String> keys, BatchLoaderEnvironment environment) {
-        return this.resolves(method, parameter, environment.getContext());
-    }
-
-    private Object resolves(Method method, Parameter parameter, Context context) {
-        ApplicationContext applicationContext = null;
-        if (context != null) {
-            applicationContext = context.get(ApplicationContext.class);
-        }
+    public Object resolve(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter, @NotNull Context context) {
+        ApplicationContext applicationContext = context.get(ApplicationContext.class);
 
         // 如果该注解不存在，或该注解的 required = true 时，bean 必须有值
         Autowired autowired = parameter.getAnnotation(Autowired.class);

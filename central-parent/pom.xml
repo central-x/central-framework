@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>3.0.0-M4</version>
+        <version>3.0.0-M5</version>
         <relativePath/>
     </parent>
 
@@ -42,7 +42,6 @@
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
         <bcpkix-jdk15on.version>1.70</bcpkix-jdk15on.version>
         <bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
-        <beetlsql.version>3.17.1-RELEASE</beetlsql.version>
         <graphql.version>19.2</graphql.version>
         <transmittable-thread-local.version>2.14.0</transmittable-thread-local.version>
     </properties>
@@ -117,13 +116,6 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
                 <version>1.2.12</version>
-            </dependency>
-
-            <!-- BeetlSql -->
-            <dependency>
-                <groupId>com.ibeetl</groupId>
-                <artifactId>beetlsql</artifactId>
-                <version>${beetlsql.version}</version>
             </dependency>
 
             <!-- GraphQL -->

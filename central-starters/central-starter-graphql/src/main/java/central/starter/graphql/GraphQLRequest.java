@@ -28,6 +28,8 @@ import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -37,7 +39,10 @@ import java.util.Map;
  * @since 2022/09/09
  */
 @Data
-public class GraphQLRequest {
+public class GraphQLRequest implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 6933505315278413552L;
+
     @NotBlank
     @Label("查询")
     private String query;

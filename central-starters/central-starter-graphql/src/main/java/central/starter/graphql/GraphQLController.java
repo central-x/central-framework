@@ -35,6 +35,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +55,7 @@ public class GraphQLController implements ApplicationContextAware {
     @Setter(onMethod_ = @Autowired)
     private GraphQLExecutor executor;
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String query(@RequestBody @Validated GraphQLRequest request,
                         HttpServletRequest servletRequest,
                         HttpServletResponse servletResponse) {

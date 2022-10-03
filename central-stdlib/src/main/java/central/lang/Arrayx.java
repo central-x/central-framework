@@ -50,6 +50,15 @@ public class Arrayx {
     }
 
     /**
+     * 判断数组是否为空
+     *
+     * @param array 数组
+     */
+    public static boolean isNullOrEmpty(@Nullable byte[] array){
+        return array == null || array.length == 0;
+    }
+
+    /**
      * 判断数组是否不为空
      *
      * @param array 数组

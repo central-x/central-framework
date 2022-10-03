@@ -1,0 +1,10 @@
+extend type Mutation {
+    """
+    项目组
+    """
+    groups:                 GroupMutation!
+    """
+    项目
+    """
+    projects:               ProjectMutation!
+}

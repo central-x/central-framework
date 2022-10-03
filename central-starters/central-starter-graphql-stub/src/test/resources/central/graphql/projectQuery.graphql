@@ -1,0 +1,59 @@
+"""
+项目
+"""
+type Project implements Entity & Modifiable {
+    """
+    主键
+    """
+    id:                     ID!
+    """
+    项目组主键
+    """
+    groupId:                String!
+    """
+    项目组
+    """
+    group:                  Group!
+    """
+    名称
+    """
+    name:                   String!
+
+    creatorId:              String!
+    createDate:             Timestamp!
+    modifierId:             String!
+    modifyDate:             Timestamp!
+}
+
+type ProjectQuery {
+    # 查询数据
+    # @param id 主键
+    # @return   数据
+    findById(id: String): Project
+
+    # 查询数据
+    # @param ids 主键
+    # @return    数据
+    findByIds(ids: [String]): [Project]
+
+    # 查询数据
+    # @param limit      数据量（不传的话，就返回所有数据）
+    # @param offset     偏移量（跳过前 N 条数据）
+    # @param conditions 筛选条件
+    # @param orders     排序条件
+    # @return           数据列表
+    findBy(limit: Long, offset: Long, conditions: [ConditionInput] = [], orders: [OrderInput] = []): [Project]
+
+    # 分页查询数据
+    # @param limit      数据量（不传的话，就返回所有数据）
+    # @param offset     偏移量（跳过前 N 条数据）
+    # @param conditions 筛选条件
+    # @param orders     排序条件
+    # @return           数据列表
+    pageBy(pageIndex: Long, pageSize: Long, conditions: [ConditionInput] = [], orders: [OrderInput] = []): [Project]
+
+    # 查询符合条件的数据数量
+    # @param conditions 筛选条件
+    # @return           数据数量
+    countBy(conditions: [ConditionInput] = []): Long
+}

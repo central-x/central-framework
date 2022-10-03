@@ -1,0 +1,10 @@
+server:
+  port: 18081
+
+spring:
+  datasource:
+    name: master
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:./central-provider
+    username: centralx
+    password: central.x

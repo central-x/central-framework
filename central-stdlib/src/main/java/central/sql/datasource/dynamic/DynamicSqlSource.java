@@ -42,17 +42,12 @@ import java.util.List;
  * @author Alan Yeh
  * @since 2022/09/23
  */
-public class DynamicSqlSource implements SqlSource {
+public abstract class DynamicSqlSource implements SqlSource {
 
     /**
      * 主数据源
      */
-    @Getter
-    private final SqlSource master;
-
-    public DynamicSqlSource(SqlSource master) {
-        this.master = master;
-    }
+    public abstract SqlSource getMaster();
 
     @Delegate
     @SneakyThrows(SQLException.class)
@@ -86,7 +81,7 @@ public class DynamicSqlSource implements SqlSource {
      */
     protected SqlSource getDataSourceByName(String name) throws SQLException {
         if ("master".equals(name)) {
-            return this.master;
+            return this.getMaster();
         }
 
         throw new DataSourceNotFoundException(Stringx.format("数据源[{}]不存在", name));

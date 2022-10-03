@@ -24,6 +24,10 @@
 
 package central.util;
 
+import central.lang.Assertx;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,14 +40,34 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Context {
     private final Map<String, Object> context = new ConcurrentHashMap<>();
 
+
+    /**
+     * 判断是否存在上下文
+     *
+     * @param key 键
+     */
+    public boolean contains(@Nonnull String key) {
+        return this.context.containsKey(key);
+    }
+
     /**
      * 获取上下文
      *
      * @param key 键
      * @return 值
      */
-    public <T> T get(String key) {
+    public <T> @Nullable T get(@Nonnull String key) {
         return (T) context.get(key);
+    }
+
+    /**
+     * 获取上下文
+     *
+     * @param key 键
+     * @return 值
+     */
+    public <T> @Nonnull T require(@Nonnull String key) {
+        return (T) Assertx.requireNotNull(context.get(key), NullPointerException::new, "找不到 {} 指定的 Key", key);
     }
 
     /**
@@ -52,8 +76,32 @@ public class Context {
      * @param key   键
      * @param value 值
      */
-    public void set(String key, Object value) {
-        this.context.put(key, value);
+    public void set(@Nonnull String key, Object value) {
+        if (value == null) {
+            this.context.remove(key);
+        } else {
+            this.context.put(key, value);
+        }
+    }
+
+    /**
+     * 移除上下文键值对
+     *
+     * @param key 键
+     */
+    public void remove(@Nonnull String key) {
+        this.context.remove(key);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 判断是否存在上下文
+     *
+     * @param key 键
+     */
+    public <T> boolean contains(@Nonnull Class<T> key) {
+        return this.context.containsKey(key.getCanonicalName());
     }
 
     /**
@@ -62,8 +110,21 @@ public class Context {
      * @param key   类型
      * @param value 值
      */
-    public <T> void set(Class<T> key, T value) {
-        this.context.put(key.getCanonicalName(), value);
+    public <T> void set(@Nonnull Class<T> key, T value) {
+        if (value == null) {
+            this.context.remove(key.getCanonicalName());
+        } else {
+            this.context.put(key.getCanonicalName(), value);
+        }
+    }
+
+    /**
+     * 保存值
+     *
+     * @param value 值
+     */
+    public void set(@Nonnull Object value) {
+        this.context.put(value.getClass().getCanonicalName(), value);
     }
 
     /**
@@ -72,16 +133,26 @@ public class Context {
      * @param key 类型
      * @return 值
      */
-    public <T> T get(Class<T> key) {
+    public <T> @Nullable T get(@Nonnull Class<T> key) {
         return (T) context.get(key.getCanonicalName());
     }
 
     /**
-     * 保存值
+     * 根据类型获取上下文
      *
-     * @param value 值
+     * @param key 类型
+     * @return 值
      */
-    public void set(Object value) {
-        this.context.put(value.getClass().getCanonicalName(), value);
+    public <T> @Nonnull T require(@Nonnull Class<T> key) {
+        return (T) Assertx.requireNotNull(context.get(key.getCanonicalName()), NullPointerException::new, "找不到 {} 指定的 Key", key.getName());
+    }
+
+    /**
+     * 移除上下文键值对
+     *
+     * @param key 类型
+     */
+    public <T> void remove(@Nonnull Class<T> key) {
+        this.context.remove(key.getCanonicalName());
     }
 }

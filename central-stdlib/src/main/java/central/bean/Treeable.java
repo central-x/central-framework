@@ -45,7 +45,6 @@ public interface Treeable<T extends Treeable<T>> extends Identifiable {
      * 节点唯一标识
      */
     @Override
-    @Nonnull
     String getId();
 
     /**
