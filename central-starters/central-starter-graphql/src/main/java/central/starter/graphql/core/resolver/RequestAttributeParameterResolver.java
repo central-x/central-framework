@@ -28,15 +28,14 @@ import central.util.Context;
 import central.util.Objectx;
 import central.lang.Stringx;
 import graphql.GraphQLException;
-import graphql.schema.DataFetchingEnvironment;
 import jakarta.servlet.http.HttpServletRequest;
-import org.dataloader.BatchLoaderEnvironment;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.web.bind.annotation.RequestAttribute;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.List;
 
 /**
  * 解析请求属性
@@ -45,38 +44,26 @@ import java.util.List;
  * @see RequestAttribute
  * @since 2022/09/09
  */
-public class RequestAttributeParameterResolver extends AnnotatedParameterResolver {
+public class RequestAttributeParameterResolver extends SpringAnnotatedParameterResolver {
     public RequestAttributeParameterResolver() {
         super(RequestAttribute.class);
     }
 
+    @Nullable
     @Override
-    public Object resolve(Method method, Parameter parameter, DataFetchingEnvironment environment) {
-        return this.resolves(method, parameter, environment.getLocalContext());
-    }
-
-    @Override
-    public Object resolve(Method method, Parameter parameter, List<String> keys, BatchLoaderEnvironment environment) {
-        return this.resolves(method, parameter, environment.getContext());
-    }
-
-    private Object resolves(Method method, Parameter parameter, Context context) {
+    public Object resolve(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter, @NotNull Context context) {
         RequestAttribute attr = parameter.getAnnotation(RequestAttribute.class);
         String name = parameter.getName();
         if (attr.value().length() > 0 || attr.name().length() > 0) {
             name = Objectx.get(attr.value(), attr.name());
         }
 
-        if (context == null) {
-            if (attr.required()) {
-                throw new GraphQLException(Stringx.format("执行方法[{}.{}]错误: 无法找到参数[{}]指定的请求属性[{}]", method.getDeclaringClass().getSimpleName(), method.getName(), parameter.getName(), name));
-            }
-
-            return null;
-        }
-
         HttpServletRequest request = context.get(HttpServletRequest.class);
-        Object value = request.getAttribute(name);
+        Object value = null;
+        if (request != null) {
+            value = request.getAttribute(name);
+            ;
+        }
 
         // 判断
         if (value == null && attr.required()) {

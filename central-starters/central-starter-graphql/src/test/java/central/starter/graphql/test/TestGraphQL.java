@@ -29,16 +29,16 @@ import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
 import central.sql.Conditions;
 import central.starter.graphql.TestApplication;
-import central.starter.graphql.test.data.Account;
+import central.starter.graphql.test.data.Person;
+import central.starter.graphql.test.data.Pet;
+import central.starter.graphql.test.input.PersonInput;
 import central.util.Mapx;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,6 +60,7 @@ public class TestGraphQL {
         this.client = HttpProxyFactory.builder(JavaExecutor.Default())
                 .baseUrl("http://127.0.0.1:" + port)
                 .contact(new SpringContract())
+                .log()
                 .target(GraphQLClient.class);
     }
 
@@ -70,59 +71,76 @@ public class TestGraphQL {
     @Test
     public void test1() {
         String graphql = """
-                query AccountProvider($ids: [String]) {
-                    result: Account_findByIds(ids: $ids) {
-                        id
-                        name
-                        deptId
-                        dept {
+                query PersonQuery($conditions: [ConditionInput]) {
+                    result: persons {
+                        findBy(conditions: $conditions){
                             id
                             name
-                            accounts {
+                            pets {
                                 id
+                                masterId
                                 name
-                                deptId
                             }
                         }
                     }
                 }""";
 
-        List<String> ids = Arrays.asList("1", "2", "3");
+//        List<String> ids = Arrays.asList("1", "2", "3");
+        var conditions = Conditions.where().eq(Person::getName, "alan");
 
-        GraphqlResult<List<Account>> result = this.client.query(graphql, Mapx.newHashMap("ids", ids), "test");
+        String result = this.client.graphql(graphql, Mapx.newHashMap("conditions", conditions), "test");
 
-        System.out.println(result.getResult());
+        System.out.println(result);
+    }
+
+    /**
+     * 测试 DataLoader 注入等
+     */
+    @Test
+    public void test2() {
+        String graphql = """
+                query PetQuery($conditions: [ConditionInput]) {
+                    result: pets {
+                        findBy(conditions: $conditions){
+                            id
+                            name
+                            master {
+                                id
+                                name
+                            }
+                        }
+                    }
+                }""";
+
+//        List<String> ids = Arrays.asList("1", "2", "3");
+        var conditions = Conditions.where().eq(Pet::getName, "贝贝");
+
+        String result = this.client.graphql(graphql, Mapx.newHashMap("conditions", conditions), "test");
+
+        System.out.println(result);
     }
 
     /**
      * 测试请求头、默认值、参数转换、SpringBean 注入
      */
     @Test
-    public void test2() {
+    public void test3() {
         String graphql = """
-                query AccountProvider($first: Int, $offset: Int, $conditions: [ConditionInput], $orders: [OrderInput]) {
-                    result: Account_findBy(first: $first, offset: $offset, conditions: $conditions, orders: $orders) {
-                        id
-                        name
-                        deptId
-                        dept {
+                mutation PersonMutation($input: PersonInput, $operator: String) {
+                    result: persons {
+                        insert(input: $input, operator: $operator){
                             id
                             name
-                            accounts {
-                                id
-                                name
-                                deptId
-                            }
                         }
                     }
                 }""";
 
         Map<String, Object> variables = new HashMap<>();
-        variables.put("first", 1);
-        variables.put("conditions", Conditions.where().eq("name", "张三"));
+        variables.put("input", PersonInput.builder().name("张三").build());
+        variables.put("operator", "syssa");
 
-        GraphqlResult<List<Account>> result = this.client.query(graphql, variables, "test");
+        String result = this.client.graphql(graphql, variables, "test");
 
-        System.out.println(result.getResult());
+        System.out.println(result);
     }
 }

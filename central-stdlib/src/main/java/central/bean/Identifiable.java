@@ -24,7 +24,6 @@
 
 package central.bean;
 
-import javax.annotation.Nonnull;
 
 /**
  * Identifiable Entity
@@ -38,12 +37,12 @@ public interface Identifiable {
     /**
      * 获取唯一标识
      */
-    @Nonnull String getId();
+    String getId();
 
     /**
      * 设置唯一标识
      *
      * @param id 唯一标识
      */
-    void setId(@Nonnull String id);
+    void setId(String id);
 }

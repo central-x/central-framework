@@ -67,8 +67,9 @@ public class SM2Impl implements CipherImpl {
     // The length of sm3 output is 32 bytes
     public static final int SM3DIGEST_LENGTH = 32;
 
-    @Getter
-    private final String name = "SM2";
+    public String getName() {
+        return "SM2";
+    }
 
     @Override
     public KeyPair generateKeyPair() {

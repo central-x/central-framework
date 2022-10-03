@@ -1,12 +1,9 @@
-
-
 spring:
+  application:
+    name: central-starter-orm
   datasource:
     name: master
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:centralx
     username: centralx
     password: central.x
-    type: com.zaxxer.hikari.HikariDataSource
-  application:
-    name: central-starter-orm

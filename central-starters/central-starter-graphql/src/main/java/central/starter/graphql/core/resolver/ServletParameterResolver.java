@@ -24,21 +24,20 @@
 
 package central.starter.graphql.core.resolver;
 
-import central.starter.graphql.GraphQLParameterResolver;
+import central.lang.reflect.invoke.ParameterResolver;
 import central.util.Context;
-import graphql.schema.DataFetchingEnvironment;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.dataloader.BatchLoaderEnvironment;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -48,9 +47,9 @@ import java.util.TimeZone;
  * @author Alan Yeh
  * @since 2022/09/09
  */
-public class ServletParameterResolver implements GraphQLParameterResolver {
+public class ServletParameterResolver implements ParameterResolver {
     @Override
-    public boolean support(Parameter parameter) {
+    public boolean support(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter) {
         return ServletRequest.class == parameter.getType() ||
                 HttpServletRequest.class == parameter.getType() ||
                 ServletResponse.class == parameter.getType() ||
@@ -61,21 +60,9 @@ public class ServletParameterResolver implements GraphQLParameterResolver {
                 ZoneId.class == parameter.getType();
     }
 
+    @Nullable
     @Override
-    public Object resolve(Method method, Parameter parameter, DataFetchingEnvironment environment) {
-        return this.resolves(parameter, environment.getLocalContext());
-    }
-
-    @Override
-    public Object resolve(Method method, Parameter parameter, List<String> keys, BatchLoaderEnvironment environment) {
-        return this.resolves(parameter, environment.getContext());
-    }
-
-    private Object resolves(Parameter parameter, Context context) {
-        if (context == null) {
-            return null;
-        }
-
+    public Object resolve(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter, @NotNull Context context) {
         if (ServletResponse.class == parameter.getType()) {
             return context.get(ServletResponse.class);
         }

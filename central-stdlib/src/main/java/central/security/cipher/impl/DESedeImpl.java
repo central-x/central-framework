@@ -27,13 +27,15 @@ package central.security.cipher.impl;
 import central.lang.Assertx;
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
-import lombok.Getter;
 import lombok.SneakyThrows;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
-import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESedeKeySpec;
+import javax.crypto.spec.IvParameterSpec;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.util.Base64;
@@ -45,19 +47,20 @@ import java.util.Base64;
  * @since 2022/07/10
  */
 public class DESedeImpl implements CipherImpl {
-    private static final String ALGORITHM = "AES";
+    private static final String ALGORITHM = "DESede";
+    private static final String IV = "01234567";
+    private static final String CIPHER_ALGORITHM = "DESede/CBC/PKCS5Padding";
 
-    // 支持 128 位、192 位、256 位
-    private static final int KEY_LENGTH = 256;
-
-    @Getter
-    private final String name = "AES";
+    @Override
+    public String getName() {
+        return ALGORITHM;
+    }
 
     @Override
     @SneakyThrows
     public KeyPair generateKeyPair() {
         KeyGenerator generator = KeyGenerator.getInstance(ALGORITHM);
-        generator.init(KEY_LENGTH);
+        generator.init(168);
 
         Key key = generator.generateKey();
         return new KeyPair(key, key);
@@ -85,11 +88,15 @@ public class DESedeImpl implements CipherImpl {
         return this.getKey(keySpec);
     }
 
-    private Key getKey(String keySpec) {
-        Assertx.mustNotBlank(keySpec, "Argument 'keySpec' must not blank");
-        Assertx.mustTrue((keySpec.length() - 16) % 8 == 0, "密钥必须是 16 + N * 8 位");
+    private Key getKey(String keySpec) throws GeneralSecurityException {
+        Assertx.mustNotBlank(keySpec, "Argument 'keySpec' must not null");
+        byte[] keyData = Base64.getDecoder().decode(keySpec);
+        Assertx.mustTrue(keyData.length >= 8, "不是有效的 DESede 密钥: " + keySpec);
 
-        return new SecretKeySpec(Base64.getDecoder().decode(keySpec), ALGORITHM);
+        // 从原始密钥数据创建 DESedeKeySpec 对象
+        DESedeKeySpec spec = new DESedeKeySpec(Base64.getDecoder().decode(keySpec));
+        // 创建一个密钥工厂，然后用它把 DESKeySpec 转换成 SecretKey 对象
+        return SecretKeyFactory.getInstance(ALGORITHM).generateSecret(spec);
     }
 
     @Override
@@ -104,9 +111,9 @@ public class DESedeImpl implements CipherImpl {
 
     private byte[] cipher(int mode, byte[] data, Key key) throws GeneralSecurityException {
         // Cipher 对象完成加密操作
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-
-        cipher.init(mode, key);
+        Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
+        IvParameterSpec ips = new IvParameterSpec(IV.getBytes(StandardCharsets.UTF_8));
+        cipher.init(mode, key, ips);
 
         return cipher.doFinal(data);
     }

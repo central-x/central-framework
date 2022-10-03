@@ -27,14 +27,19 @@ package central.starter.graphql.annotation;
 import java.lang.annotation.*;
 
 /**
- * 用于标记 DTO 的关联查询方法
+ * Graphql Getter Fetcher
  *
  * @author Alan Yeh
- * @since 2022/09/09
+ * @since 2022/10/01
  */
 @Inherited
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GraphQLGetter {
+    /**
+     * 方法名
+     * 如果为空，则直接取方法名
+     */
+    String name() default "";
 }

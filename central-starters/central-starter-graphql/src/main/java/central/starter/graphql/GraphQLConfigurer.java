@@ -24,8 +24,10 @@
 
 package central.starter.graphql;
 
+import central.lang.reflect.invoke.ParameterResolver;
 import graphql.schema.GraphQLScalarType;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,12 +40,24 @@ public interface GraphQLConfigurer {
     /**
      * 添加标量
      */
-    default void addScalars(List<GraphQLScalarType> scalars) {
+    default List<GraphQLScalarType> getScalars() {
+        return Collections.emptyList();
     }
 
     /**
      * 添加参数解析器
      */
-    default void addParameterResolvers(List<GraphQLParameterResolver> resolvers) {
+    default List<ParameterResolver> getParameterResolvers() {
+        return Collections.emptyList();
     }
+
+    /**
+     * 获取 Query 对象
+     */
+    Object getQuery();
+
+    /**
+     * 获取 Mutation 对象
+     */
+    Object getMutation();
 }

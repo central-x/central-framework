@@ -40,10 +40,10 @@ public class HttpException extends RuntimeException{
     private static final long serialVersionUID = 8580026645615849189L;
 
     @Getter
-    private final HttpRequest request;
+    private transient final HttpRequest request;
 
     @Getter
-    private final HttpResponse<?> response;
+    private transient final HttpResponse<?> response;
 
     public HttpException(HttpRequest request, HttpResponse<?> response){
         super(Stringx.format("Request failed: {}({}) {} {}", response.getStatus().value(), response.getStatus().getReasonPhrase(), request.getMethod().name(), request.getUrl()));

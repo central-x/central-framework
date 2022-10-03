@@ -26,7 +26,6 @@ package central.security.cipher.impl;
 
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
-import lombok.Getter;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -40,8 +39,9 @@ import java.security.Key;
  */
 public class NotImpl implements CipherImpl {
 
-    @Getter
-    private final String name = "NOT_IMPL";
+    public String getName() {
+        return "NOT_IMPL";
+    }
 
     @Override
     public byte[] encrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {

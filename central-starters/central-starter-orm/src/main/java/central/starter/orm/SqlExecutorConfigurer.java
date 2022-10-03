@@ -26,11 +26,8 @@ package central.starter.orm;
 
 import central.security.Cipherx;
 import central.sql.*;
-import central.sql.conversion.UnderlineConversion;
-import central.sql.datasource.migration.DataSourceMigrator;
 import central.sql.impl.standard.*;
 
-import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,8 +40,9 @@ import java.util.List;
 public interface SqlExecutorConfigurer {
     /**
      * 自定义数据源
+     * 如果返回空的话则 SqlExecutor 会自动通过 DataSource 构建 SqlSource
      */
-    default DataSource getDataSource() {
+    default SqlSource getSource() {
         return null;
     }
 
@@ -63,13 +61,6 @@ public interface SqlExecutorConfigurer {
     }
 
     /**
-     * 命名规则
-     */
-    default SqlConversion getConversion() {
-        return new UnderlineConversion();
-    }
-
-    /**
      * 类型转换器
      */
     default SqlConverter getConverter() {
@@ -81,13 +72,6 @@ public interface SqlExecutorConfigurer {
      */
     default SqlTransformer getTransformer() {
         return new StandardTransformer();
-    }
-
-    /**
-     * 数据库迁移
-     */
-    default DataSourceMigrator getMigrator() {
-        return null;
     }
 
     /**

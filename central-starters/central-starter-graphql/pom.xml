@@ -42,6 +42,17 @@
             <artifactId>spring-tx</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.central-x</groupId>
+            <artifactId>central-starter-orm</artifactId>
+            <version>1.0.x-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

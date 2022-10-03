@@ -27,7 +27,6 @@ package central.security.cipher.impl;
 import central.lang.Assertx;
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
-import lombok.Getter;
 import lombok.SneakyThrows;
 
 import javax.crypto.KeyGenerator;
@@ -49,8 +48,10 @@ public class AESImpl implements CipherImpl {
     // 支持 128 位、192 位、256 位
     private static final int KEY_LENGTH = 256;
 
-    @Getter
-    private final String name = "AES";
+    @Override
+    public String getName() {
+        return ALGORITHM;
+    }
 
     @Override
     @SneakyThrows

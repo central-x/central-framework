@@ -25,7 +25,7 @@
 package central.sql;
 
 import central.sql.data.Entity;
-import central.bean.Sortable;
+import central.bean.Orderable;
 import central.bean.Treeable;
 import central.validation.Validatable;
 import central.lang.Assertx;
@@ -584,8 +584,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @NoArgsConstructor
-    public static class Condition implements Treeable<Condition>, Sortable<Condition>, Cloneable, Validatable {
-        public final static Comparator<Condition> DEFAULT_COMPARATOR = Comparator.comparing(Condition::getSortNo);
+    public static class Condition implements Treeable<Condition>, Orderable<Condition>, Cloneable, Validatable {
+        public final static Comparator<Condition> DEFAULT_COMPARATOR = Comparator.comparing(Condition::getOrder);
 
         /**
          * 条件标识
@@ -621,7 +621,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
          */
         @Getter
         @Setter
-        private Integer sortNo;
+        private Integer order;
 
         /**
          * 与上一个条件的连接符（AND/OR）
@@ -678,10 +678,10 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
         /**
          * 条件分组
          */
-        public Condition(String id, String parentId, Integer sortNo, Connectors connector, List<Condition> children) {
+        public Condition(String id, String parentId, Integer order, Connectors connector, List<Condition> children) {
             this.id = id;
             this.parentId = parentId;
-            this.sortNo = sortNo;
+            this.order = order;
             this.connector = connector;
             this.type = Types.GROUP;
             this.children = children;
@@ -696,10 +696,10 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
         /**
          * 使用属性构造条件
          */
-        public Condition(String id, String parentId, Integer sortNo, Connectors connector, String property, Operators operator, Object... values) {
+        public Condition(String id, String parentId, Integer order, Connectors connector, String property, Operators operator, Object... values) {
             this.id = id;
             this.parentId = parentId;
-            this.sortNo = sortNo;
+            this.order = order;
             this.connector = connector;
             this.property = property;
             this.operator = operator;
@@ -717,10 +717,10 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
         /**
          * 使用方法引用构造条件
          */
-        public Condition(String id, String parentId, Integer sortNo, Connectors connector, PropertyReference<?, ?> property, Operators operator, Object... values) {
+        public Condition(String id, String parentId, Integer order, Connectors connector, PropertyReference<?, ?> property, Operators operator, Object... values) {
             this.id = id;
             this.parentId = parentId;
-            this.sortNo = sortNo;
+            this.order = order;
             this.connector = connector;
             this.type = Types.CONDITION;
 
@@ -741,7 +741,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
         public Condition(Map<String, Object> map) throws IllegalArgumentException {
             this.id = (String) map.get("id");
             this.parentId = (String) map.get("parentId");
-            this.sortNo = (Integer) map.get("sortNo");
+            this.order = (Integer) map.get("order");
             this.property = (String) map.get("property");
 
             Object type = map.get("type");
@@ -823,7 +823,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
                     ", type=" + type +
                     ", parentId='" + parentId + '\'' +
                     ", children=" + children +
-                    ", sortNo=" + sortNo +
+                    ", order=" + order +
                     ", connector=" + connector +
                     ", property='" + property + '\'' +
                     ", alias='" + alias + '\'' +
@@ -886,7 +886,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
             clone.setId(this.getId());
             clone.setParentId(this.getParentId());
             clone.setType(this.getType());
-            clone.setSortNo(this.getSortNo());
+            clone.setOrder(this.getOrder());
             clone.setConnector(this.getConnector());
             clone.setProperty(this.getProperty());
             clone.setOperator(this.getOperator());
@@ -909,8 +909,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
             if (this.operator == null) {
                 this.operator = Operators.EQ;
             }
-            if (this.sortNo == null) {
-                this.sortNo = 0;
+            if (this.order == null) {
+                this.order = 0;
             }
             Assertx.mustNotBlank(this.id, "id 不能为空");
 
@@ -984,10 +984,10 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
             int id = Integer.parseInt(condition.getId());
             this.idGenerator.set(Math.max(this.idGenerator.get(), id) + 1);
         }
-        if (condition.getSortNo() == null) {
-            condition.setSortNo(this.index.getAndIncrement());
+        if (condition.getOrder() == null) {
+            condition.setOrder(this.index.getAndIncrement());
         } else {
-            this.index.set(Math.max(this.index.get(), condition.getSortNo()) + 1);
+            this.index.set(Math.max(this.index.get(), condition.getOrder()) + 1);
         }
         return this.conditions.add(condition);
     }

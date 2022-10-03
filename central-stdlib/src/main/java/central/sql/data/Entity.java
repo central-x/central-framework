@@ -26,7 +26,10 @@ package central.sql.data;
 
 import central.bean.Identifiable;
 import central.validation.Label;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -39,6 +42,9 @@ import java.sql.Timestamp;
  * @since 2022/07/10
  */
 @Data
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class Entity implements Identifiable, Serializable {
     @Serial
     private static final long serialVersionUID = 3246576373725082312L;

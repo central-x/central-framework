@@ -26,7 +26,6 @@ package central.security.digest.impl;
 
 import central.lang.Stringx;
 import central.security.digest.DigestImpl;
-import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.io.BufferedInputStream;
@@ -44,12 +43,13 @@ public class StandardImpl implements DigestImpl {
 
     private final String algorithm;
 
-    @Getter
-    private final String name;
+    @Override
+    public String getName() {
+        return this.algorithm;
+    }
 
     public StandardImpl(String algorithm) {
         this.algorithm = algorithm;
-        this.name = this.algorithm;
     }
 
     @Override

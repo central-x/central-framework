@@ -24,17 +24,19 @@
 
 package central.starter.graphql.core.resolver;
 
-import central.starter.graphql.GraphQLParameterResolver;
+import central.lang.reflect.invoke.ParameterResolver;
 import central.starter.graphql.GraphQLRequest;
 import central.util.Context;
 import graphql.schema.DataFetchingEnvironment;
 import org.dataloader.BatchLoaderEnvironment;
 import org.dataloader.DataLoader;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
-import java.util.List;
 
 /**
  * GraphQL 原生参数注入
@@ -42,41 +44,36 @@ import java.util.List;
  * @author Alan Yeh
  * @since 2022/09/09
  */
-public class GraphQLBeanParameterResolver implements GraphQLParameterResolver {
+public class GraphQLBeanParameterResolver implements ParameterResolver {
     @Override
-    public boolean support(Parameter parameter) {
+    public boolean support(@Nonnull Class<?> clazz, @Nonnull Method method, @Nonnull Parameter parameter) {
         return GraphQLRequest.class == parameter.getType() ||
                 DataFetchingEnvironment.class == parameter.getType() ||
                 BatchLoaderEnvironment.class == parameter.getType() ||
                 DataLoader.class == parameter.getType();
     }
 
+    @Nullable
     @Override
-    public Object resolve(Method method, Parameter parameter, DataFetchingEnvironment environment) {
-        return this.resolves(parameter, environment.getLocalContext(), environment, null);
-    }
-
-    @Override
-    public Object resolve(Method method, Parameter parameter, List<String> keys, BatchLoaderEnvironment environment) {
-        return this.resolves(parameter, environment.getContext(), null, environment);
-    }
-
-    public Object resolves(Parameter parameter, Context context, DataFetchingEnvironment fetchingEnvironment, BatchLoaderEnvironment loaderEnvironment) {
-        if (GraphQLRequest.class == parameter.getType() && context != null) {
+    public Object resolve(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter, @NotNull Context context) {
+        if (GraphQLRequest.class == parameter.getType()) {
             return context.get(GraphQLRequest.class);
         }
 
         if (DataFetchingEnvironment.class == parameter.getType()) {
-            return fetchingEnvironment;
+            return context.get(DataFetchingEnvironment.class);
         }
 
         if (BatchLoaderEnvironment.class == parameter.getType()) {
-            return loaderEnvironment;
+            return context.get(BatchLoaderEnvironment.class);
         }
 
-        if (DataLoader.class == parameter.getType() && fetchingEnvironment != null) {
-            ParameterizedType type = (ParameterizedType) parameter.getParameterizedType();
-            return fetchingEnvironment.getDataLoader(type.getActualTypeArguments()[1].getTypeName());
+        if (DataLoader.class == parameter.getType()) {
+            var fetchingEnvironment = context.get(DataFetchingEnvironment.class);
+            if (fetchingEnvironment != null) {
+                ParameterizedType type = (ParameterizedType) parameter.getParameterizedType();
+                return fetchingEnvironment.getDataLoader(type.getActualTypeArguments()[1].getTypeName());
+            }
         }
 
         return null;

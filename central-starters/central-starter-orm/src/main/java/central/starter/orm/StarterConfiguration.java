@@ -24,16 +24,18 @@
 
 package central.starter.orm;
 
-import central.sql.SqlSource;
+import central.sql.SqlDialect;
 import central.sql.SqlExecutor;
+import central.sql.SqlSource;
 import central.sql.datasource.factory.DataSourceFactory;
 import central.sql.datasource.factory.druid.DruidDataSourceFactory;
 import central.sql.datasource.factory.hikari.HikariDataSourceFactory;
 import central.sql.impl.standard.StandardExecutor;
-import central.sql.interceptor.LogInterceptor;
+import central.sql.impl.standard.StandardSource;
 import central.starter.orm.properties.MigrationProperties;
 import central.starter.orm.properties.OrmProperties;
 import central.util.Objectx;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -42,7 +44,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
-
 
 /**
  * 配置
@@ -76,13 +77,37 @@ public class StarterConfiguration {
     }
 
     /**
+     * 创建 Sql 执行器默认配置
+     */
+    @Bean
+    @ConditionalOnMissingBean(SqlExecutorConfigurer.class)
+    public SqlExecutorConfigurer getExecutorConfigurer(Environment environment, DataSource dataSource) {
+        return new SqlExecutorConfigurer() {
+            @Override
+            public SqlSource getSource() {
+                return StandardSource.builder().dataSource(dataSource).dialect(SqlDialect.resolve(environment.getProperty("spring.datasource.url"))).build();
+            }
+        };
+    }
+
+    /**
      * 创建 Sql 执行器
      */
     @Bean(initMethod = "init")
-    public StandardExecutor getExecutor(SqlSource source) {
+    @ConditionalOnMissingBean(SqlExecutor.class)
+    public StandardExecutor getExecutor(Environment environment, DataSource dataSource, @Autowired SqlExecutorConfigurer configurer) {
+        var source = configurer.getSource();
+        if (source == null) {
+            source = StandardSource.builder().dataSource(dataSource).dialect(SqlDialect.resolve(environment.getProperty("spring.datasource.url"))).build();
+        }
+
         return StandardExecutor.builder()
                 .source(source)
-                .addInterceptor(new LogInterceptor())
+                .metaManager(configurer.getMetaManager())
+                .cipher(configurer.getCipher())
+                .converter(configurer.getConverter())
+                .transformer(configurer.getTransformer())
+                .interceptors(configurer.getInterceptors())
                 .build();
     }
 }

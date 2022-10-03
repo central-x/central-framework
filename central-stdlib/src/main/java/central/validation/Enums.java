@@ -24,6 +24,10 @@
 
 package central.validation;
 
+import jakarta.validation.Payload;
+
+import java.lang.annotation.*;
+
 /**
  * 枚举类型校验
  *
@@ -31,4 +35,28 @@ package central.validation;
  * @since 2022/07/18
  */
 public @interface Enums {
+
+    /**
+     * 默认的错误消息
+     */
+    String message() default "";
+
+    /**
+     * 枚举类
+     */
+    Class<? extends Enum<?>> value();
+
+    /**
+     * 校验分组
+     */
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
+    @interface List {
+        Enums[] value();
+    }
 }

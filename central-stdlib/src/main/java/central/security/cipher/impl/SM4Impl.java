@@ -60,8 +60,9 @@ public class SM4Impl implements CipherImpl {
     // Initial vector's size is 16 bytes
     public static final int IV_SIZE = 16;
 
-    @Getter
-    private final String name = "SM4";
+    public String getName() {
+        return "SM4";
+    }
 
     @Override
     public KeyPair generateKeyPair() {

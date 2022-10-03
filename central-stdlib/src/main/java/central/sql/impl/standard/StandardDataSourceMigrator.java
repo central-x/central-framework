@@ -87,8 +87,8 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
     private final SqlMetaManager manager = new StandardMetaManager(name -> name.equals("X_DS_MIGRATION"));
 
     public StandardDataSourceMigrator(@Nonnull String name, @Nonnull Version target, @Nullable Version baseline) {
-        this.name = Objects.requireNonNull(name);
-        this.target = Objects.requireNonNull(target);
+        this.name = Assertx.requireNotBlank(name, "应用名[name]必须不为空");
+        this.target = Assertx.requireNotNull(target, "目标版本[target]必须不为空");
         this.baseline = baseline;
     }
 

@@ -1,0 +1,4 @@
+extend type Mutation {
+    pets: PetMutation
+    persons: PersonMutation
+}

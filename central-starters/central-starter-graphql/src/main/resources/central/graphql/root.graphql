@@ -1,4 +1,6 @@
-# 标量
+"""
+标量
+"""
 scalar Any
 scalar Timestamp
 scalar Long
@@ -46,6 +48,10 @@ input CodeValueInput {
     value:        String      # 值
 }
 
+interface Codeable {
+    code:         String!     # 可设置标识
+}
+
 # 可修改属性
 interface Modifiable {
     modifierId:   String!     # 数据修改人
@@ -68,16 +74,16 @@ interface Available {
 }
 
 # 可排序的
-interface Sortable {
-    sortNo:       Int!        # 排序号，排序号越大排序越前
+interface Orderable {
+    order:        Int!        # 排序号，排序号越大排序越前
 }
 
 # 分页信息
 type Pager {
-    pageIndex:    Int!        # 当前分页下标
-    pageSize:     Int!        # 分页大小
-    pageCount:    Int!        # 分页数量
-    itemCount:    Int!        # 数据数量
+    pageIndex:    Long!       # 当前分页下标
+    pageSize:     Long!       # 分页大小
+    pageCount:    Long!       # 分页数量
+    itemCount:    Long!       # 数据数量
 }
 
 # 分页实体
@@ -90,7 +96,7 @@ type Page {
 input ConditionInput {
     id:           String      # 条件标识
     parentId:     String      # 父条件标识
-    sortNo:       Int         # 排序号
+    order:        Int         # 排序号
     connector:    String      # 与上一个条件的连接符 AND/OR
     type:         String      # 类型 GROUP/CONDITION
     property:     String      # 属性名

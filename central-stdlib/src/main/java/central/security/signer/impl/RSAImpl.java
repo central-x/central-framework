@@ -26,7 +26,6 @@ package central.security.signer.impl;
 
 import central.lang.Stringx;
 import central.security.signer.SignerImpl;
-import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.io.BufferedInputStream;
@@ -48,8 +47,10 @@ public class RSAImpl implements SignerImpl {
     private static final int BUFFER_SIZE = 8 * 1024;
     private static final int KEY_SIZE = 2048;
 
-    @Getter
-    private final String name = "RSA";
+    @Override
+    public String getName() {
+        return "RSA";
+    }
 
     @Override
     @SneakyThrows

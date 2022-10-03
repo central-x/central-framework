@@ -70,8 +70,10 @@ public class SM2Impl implements SignerImpl {
     private static final int R_SIZE = 32;
     private static final int S_SIZE = 32;
 
-    @Getter
-    private final String name = "SM2";
+    @Override
+    public String getName() {
+        return "SM2";
+    }
 
     @Override
     public KeyPair generateKeyPair() {
