@@ -56,8 +56,8 @@ public class OracleBuilder extends StandardSqlBuilder {
      * 和 StandardSqlBuilder，主要去掉了 AS
      */
     @Override
-    public SqlScript forCountBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException {
-        conditions = Conditions.where(conditions);
+    public SqlScript forCountBy(SqlExecutor executor, EntityMeta meta, Conditions<?> conditions) throws SQLSyntaxErrorException {
+        conditions = Conditions.of(conditions);
         // SELECT COUNT( DISTINCT a.ID ) FROM ${TABLE} a
 
         var sql = new StringBuilder(Stringx.format("SELECT COUNT( DISTINCT a.{} ) FROM {} a\n", processColumn(meta.getId().getColumnName(executor.getSource().getConversion()))));
@@ -102,9 +102,9 @@ public class OracleBuilder extends StandardSqlBuilder {
      * 和 StandardSqlBuilder，主要去掉了 AS
      */
     @Override
-    public SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Conditions conditions, Orders orders) throws SQLSyntaxErrorException {
-        conditions = Conditions.where(conditions);
-        orders = Orders.order(orders);
+    public SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Conditions<?> conditions, Orders<?> orders) throws SQLSyntaxErrorException {
+        conditions = Conditions.of(conditions);
+        orders = Orders.of(orders);
         // SELECT DISTINCT a.* FROM ${TABLE} a
         var sql = new StringBuilder(Stringx.format("SELECT a.* FROM {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
@@ -162,15 +162,15 @@ public class OracleBuilder extends StandardSqlBuilder {
      * 和 StandardSqlBuilder，主要去掉了 AS
      */
     @Override
-    public SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException {
-        conditions = Conditions.where(conditions);
+    public SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions<?> conditions) throws SQLSyntaxErrorException {
+        conditions = Conditions.of(conditions);
         // DELETE FROM ${TABLE} a WHERE
 
         var sql = new StringBuilder(Stringx.format("DELETE FROM {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = new LinkedList<>();
 
         if (Collectionx.isNotEmpty(conditions)) {
-            StringBuilder whereSql = new StringBuilder();
+            var whereSql = new StringBuilder();
 
             preprocessingConditions(conditions);
             // 查找此次查询，会使用哪些关联查询
@@ -194,8 +194,8 @@ public class OracleBuilder extends StandardSqlBuilder {
      */
     @Override
     @SneakyThrows({IllegalAccessException.class, InvocationTargetException.class})
-    protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions conditions, boolean includeNull) throws SQLSyntaxErrorException {
-        conditions = Conditions.where(conditions);
+    protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions, boolean includeNull) throws SQLSyntaxErrorException {
+        conditions = Conditions.of(conditions);
         // UPDATE ${TABLE} a set a.col = ? where id = ? and condition1 = ?
         Assertx.mustInstanceOf(meta.getType(), entity, SQLSyntaxErrorException::new, "entity 必须是 {} 类型", meta.getType().getName());
 
@@ -211,7 +211,7 @@ public class OracleBuilder extends StandardSqlBuilder {
             // 如果更新条件为 null，则要求必须使用 id 进行更新
             var id = meta.getId().getDescriptor().getReadMethod().invoke(entity);
             Assertx.mustNotNull(id, SQLSyntaxErrorException::new, "entity#{} 必须不为空", meta.getId().getName());
-            conditions = Conditions.where().eq(meta.getId().getName(), id);
+            conditions = Conditions.of(conditions).eq(meta.getId().getName(), id);
         }
 
         // 处理 SET 语句
@@ -283,7 +283,7 @@ public class OracleBuilder extends StandardSqlBuilder {
      */
     @Override
     protected void applyJoin(SqlExecutor executor, EntityMeta main, ForeignMeta foreign, StringBuilder sql) {
-        EntityMeta target = foreign.getTarget();
+        var target = foreign.getTarget();
 
         sql.append(Stringx.format("  LEFT JOIN {} {} ON a.{} = {}.{} \n",
                 this.processTable(target.getTableName(executor.getSource().getConversion())),
@@ -298,8 +298,8 @@ public class OracleBuilder extends StandardSqlBuilder {
      */
     @Override
     protected void applyJoin(SqlExecutor executor, EntityMeta main, ForeignTableMeta foreign, StringBuilder sql) {
-        EntityMeta rel = foreign.getEntity();
-        EntityMeta target = foreign.getTarget();
+        var rel = foreign.getEntity();
+        var target = foreign.getTarget();
 
         sql.append(Stringx.format("  LEFT JOIN {} {}_rel ON a.{} = {}_rel.{}\n",
                 this.processTable(rel.getTableName(executor.getSource().getConversion())),

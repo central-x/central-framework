@@ -38,16 +38,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestOrders {
     @Test
     public void case1(){
-        var orders = Orders.order().asc(AccountEntity::getAge);
+        var orders = Orders.of(AccountEntity.class).asc(AccountEntity::getAge);
         assertEquals(orders.toSql(), "age");
 
-        orders = Orders.order().desc(AccountEntity::getAge);
+        orders = Orders.of(AccountEntity.class).desc(AccountEntity::getAge);
         assertEquals(orders.toSql(), "age DESC");
     }
 
     @Test
     public void case2(){
-        var orders = Orders.order().asc(AccountEntity::getAge).desc(AccountEntity::getName);
+        var orders = Orders.of(AccountEntity.class).asc(AccountEntity::getAge).desc(AccountEntity::getName);
         assertEquals(orders.toSql(), "age, name DESC");
     }
 }

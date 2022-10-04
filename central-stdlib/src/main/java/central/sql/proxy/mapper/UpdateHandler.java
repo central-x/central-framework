@@ -51,7 +51,7 @@ public class UpdateHandler implements MapperHandler {
         Assertx.mustNotNull(entity, "参数[entity]必须不为空");
 
         // 获取更新条件
-        var conditions = (Conditions) Arrayx.get(args, 1);
+        var conditions = (Conditions<?>) Arrayx.get(args, 1);
         var script = builder.forUpdate(executor, meta, entity, conditions);
         return executor.execute(script) > 0;
     }

@@ -32,6 +32,7 @@ import central.starter.graphql.annotation.GraphQLFetcher;
 import central.starter.graphql.annotation.GraphQLSchema;
 import central.starter.graphql.graphql.dto.DTO;
 import central.starter.graphql.graphql.dto.PersonDTO;
+import central.starter.graphql.graphql.entity.PersonEntity;
 import central.starter.graphql.graphql.mapper.PersonMapper;
 import graphql.schema.DataFetchingEnvironment;
 import jakarta.servlet.ServletRequest;
@@ -107,8 +108,8 @@ public class PersonQuery {
     @GraphQLFetcher
     public List<PersonDTO> findBy(@RequestParam(required = false) Long limit,
                                   @RequestParam(required = false) Long offset,
-                                  @RequestParam Conditions conditions,
-                                  @RequestParam Orders orders,
+                                  @RequestParam Conditions<PersonEntity> conditions,
+                                  @RequestParam Orders<PersonEntity> orders,
                                   @Autowired PetQuery petQuery,
                                   @Autowired ApplicationContext context,
                                   @Autowired Environment environment,
@@ -133,8 +134,8 @@ public class PersonQuery {
     @GraphQLFetcher
     public Page<PersonDTO> pageBy(@RequestParam long pageIndex,
                                   @RequestParam long pageSize,
-                                  @RequestParam Conditions conditions,
-                                  @RequestParam Orders orders) {
+                                  @RequestParam Conditions<PersonEntity> conditions,
+                                  @RequestParam Orders<PersonEntity> orders) {
         var page = this.mapper.findPageBy(pageIndex, pageSize, conditions, orders);
         return DTO.wrap(page, PersonDTO.class);
     }
@@ -145,7 +146,7 @@ public class PersonQuery {
      * @param conditions 筛选条件
      */
     @GraphQLFetcher
-    public Long countBy(@RequestParam Conditions conditions) {
+    public Long countBy(@RequestParam Conditions<PersonEntity> conditions) {
         return this.mapper.countBy(conditions);
     }
 }

@@ -27,6 +27,7 @@ package central.sql.proxy.mapper;
 import central.sql.Conditions;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
+import central.sql.data.Entity;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
@@ -53,7 +54,7 @@ public class FindByIdsHandler implements MapperHandler {
         }
 
         var ids = (List<String>) Arrayx.getFirst(args);
-        var script = builder.forFindBy(executor, meta, null, null, Conditions.where().in(meta.getId().getName(), ids), null);
+        var script = builder.forFindBy(executor, meta, null, null, Conditions.of(Entity.class).in(meta.getId().getName(), ids), null);
         return executor.select(script, meta.getType());
     }
 }

@@ -50,7 +50,7 @@ public class TestGroupRepository {
 
     @Test
     public void case1() {
-        var result = this.repository.findBy(null, null, Conditions.where().eq(Group::getName, "spring"), null);
+        var result = this.repository.findBy(null, null, Conditions.of(Group.class).eq(Group::getName, "spring"), null);
 
         assertNotNull(result);
         assertTrue(Listx.isNotEmpty(result));

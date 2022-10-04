@@ -75,8 +75,8 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public SqlScript forCountBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException {
-        conditions = Conditions.where(conditions);
+    public SqlScript forCountBy(SqlExecutor executor, EntityMeta meta, Conditions<?> conditions) throws SQLSyntaxErrorException {
+        conditions = Conditions.of(conditions);
         // SELECT COUNT( DISTINCT a.ID ) FROM ${TABLE} AS a
 
         var sql = new StringBuilder(Stringx.format("SELECT COUNT( DISTINCT a.{} ) FROM {} AS a\n", processColumn(meta.getId().getColumnName(executor.getSource().getConversion())), processTable(meta.getTableName(executor.getSource().getConversion()))));
@@ -118,9 +118,9 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Conditions conditions, Orders orders) throws SQLSyntaxErrorException {
-        conditions = Conditions.where(conditions);
-        orders = Orders.order(orders);
+    public SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Conditions<?> conditions, Orders<?> orders) throws SQLSyntaxErrorException {
+        conditions = Conditions.of(conditions);
+        orders = Orders.of(orders);
         // SELECT DISTINCT a.* FROM ${TABLE} AS a
         var sql = new StringBuilder(Stringx.format("SELECT a.* FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
@@ -198,7 +198,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
         sql.delete(sql.length() - 2, sql.length()).append(valueSql.delete(valueSql.length() - 2, valueSql.length())).append(")");
 
-        SqlBatchScript script = new SqlBatchScript(sql.toString());
+        var script = new SqlBatchScript(sql.toString());
 
         // 构建参数
         for (var entity : entities) {
@@ -220,8 +220,8 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException {
-        conditions = Conditions.where(conditions);
+    public SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions<?> conditions) throws SQLSyntaxErrorException {
+        conditions = Conditions.of(conditions);
         // DELETE FROM ${TABLE} AS a
 
         var sql = new StringBuilder(Stringx.format("DELETE FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
@@ -250,12 +250,12 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public SqlScript forUpdateBy(SqlExecutor executor, EntityMeta meta, Object entity, Conditions conditions) throws SQLSyntaxErrorException {
+    public SqlScript forUpdateBy(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions) throws SQLSyntaxErrorException {
         return forUpdate(executor, meta, entity, conditions, false);
     }
 
     @Override
-    public SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions conditions) throws SQLSyntaxErrorException {
+    public SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions) throws SQLSyntaxErrorException {
         return forUpdate(executor, meta, entity, conditions, true);
     }
 
@@ -265,8 +265,8 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
      * @param includeNull 是否更新值为 NULL 的属性
      */
     @SneakyThrows({IllegalAccessException.class, InvocationTargetException.class})
-    protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions conditions, boolean includeNull) throws SQLSyntaxErrorException {
-        conditions = Conditions.where(conditions);
+    protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions, boolean includeNull) throws SQLSyntaxErrorException {
+        conditions = Conditions.of(conditions);
         // UPDATE ${TABLE} AS a set a.col = ? where id = ? and condition1 = ?
         Assertx.mustInstanceOf(meta.getType(), entity, SQLSyntaxErrorException::new, "entity 必须是 {} 类型", meta.getType().getName());
 
@@ -282,7 +282,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
             // 如果更新条件为 null，则要求必须使用 id 进行更新
             var id = meta.getId().getDescriptor().getReadMethod().invoke(entity);
             Assertx.mustNotNull(id, SQLSyntaxErrorException::new, "entity#{} 必须不为空", meta.getId().getName());
-            conditions = Conditions.where().eq(meta.getId().getName(), id);
+            conditions = Conditions.of(conditions).eq(meta.getId().getName(), id);
         }
 
         // 处理 SET 语句
@@ -338,7 +338,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     // 预处理条件，将 alias 为空的，设为 a
-    protected void preprocessingConditions(Conditions conditions) {
+    protected void preprocessingConditions(Conditions<?> conditions) {
         for (var condition : conditions) {
             if (Collectionx.isNullOrEmpty(condition.getChildren())) {
                 if (Stringx.isNullOrBlank(condition.getAlias())) {
@@ -348,10 +348,10 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         }
     }
 
-    protected Set<String> getAliases(Conditions conditions) {
-        Set<String> alias = new HashSet<>();
+    protected Set<String> getAliases(Conditions<?> conditions) {
+        var alias = new HashSet<String>();
 
-        for (Conditions.Condition condition : conditions) {
+        for (var condition : conditions) {
             // 如果在条件里包含了 .，则说明要外键查询
             if (Stringx.isNotEmpty(condition.getAlias())) {
                 alias.add(condition.getAlias());
@@ -364,7 +364,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     protected void applyJoin(SqlExecutor executor, EntityMeta main, ForeignMeta foreign, StringBuilder sql) {
-        EntityMeta target = foreign.getTarget();
+        var target = foreign.getTarget();
 
         sql.append(Stringx.format("  LEFT JOIN {} AS {} ON a.{} = {}.{} \n",
                 this.processTable(target.getTableName(executor.getSource().getConversion())),
@@ -375,8 +375,8 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     protected void applyJoin(SqlExecutor executor, EntityMeta main, ForeignTableMeta foreign, StringBuilder sql) {
-        EntityMeta rel = foreign.getEntity();
-        EntityMeta target = foreign.getTarget();
+        var rel = foreign.getEntity();
+        var target = foreign.getTarget();
 
         sql.append(Stringx.format("  LEFT JOIN {} AS {}_rel ON a.{} = {}_rel.{}\n",
                 this.processTable(rel.getTableName(executor.getSource().getConversion())),
@@ -394,16 +394,16 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
                 this.processColumn(foreign.getTargetProperty().getColumnName(executor.getSource().getConversion()))));
     }
 
-    protected void applyOrders(SqlExecutor executor, EntityMeta main, Orders orders, StringBuilder sql) throws SQLSyntaxErrorException {
+    protected void applyOrders(SqlExecutor executor, EntityMeta main, Orders<?> orders, StringBuilder sql) throws SQLSyntaxErrorException {
         if (Collectionx.isNullOrEmpty(orders)) {
             return;
         }
 
-        StringBuilder orderBy = new StringBuilder();
+        var orderBy = new StringBuilder();
 
-        for (Orders.Order order : orders) {
+        for (var order : orders) {
             // 主表排序
-            PropertyMeta property = main.getProperty(order.getProperty());
+            var property = main.getProperty(order.getProperty());
             Assertx.mustNotNull(property, SQLSyntaxErrorException::new, "在 {} 没有找到属性 {}，请改正后再试", main.getType().getSimpleName(), order.getProperty());
 
             // 构建主表查询条件
@@ -415,7 +415,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         }
     }
 
-    protected void applyOrder(SqlExecutor executor, String alias, StringBuilder orderBy, Orders.Order order, PropertyMeta property) throws SQLSyntaxErrorException {
+    protected void applyOrder(SqlExecutor executor, String alias, StringBuilder orderBy, Orders.Order<?> order, PropertyMeta property) throws SQLSyntaxErrorException {
         if (orderBy.length() > 0) {
             orderBy.append(",\n");
         }
@@ -433,12 +433,12 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         }
     }
 
-    protected void applyConditions(SqlExecutor executor, EntityMeta meta, StringBuilder where, List<Object> args, Conditions conditions) {
+    protected void applyConditions(SqlExecutor executor, EntityMeta meta, StringBuilder where, List<Object> args, Conditions<?> conditions) {
         // 构建条件树
-        List<Conditions.Condition> expression = Treeable.build(conditions.clone(), Conditions.Condition.DEFAULT_COMPARATOR);
+        var expression = Treeable.build(conditions.clone(), Conditions.Condition.defaultComparator());
 
         for (int i = 0, length = expression.size(); i < length; i++) {
-            Conditions.Condition condition = expression.get(i);
+            var condition = expression.get(i);
             if (i != 0) {
                 where.append(" ").append(condition.getConnector()).append(" ");
             }
@@ -446,12 +446,12 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         }
     }
 
-    protected void applyCondition(SqlExecutor executor, @Nonnull EntityMeta meta, StringBuilder where, List<Object> args, Conditions.Condition condition) {
+    protected void applyCondition(SqlExecutor executor, @Nonnull EntityMeta meta, StringBuilder where, List<Object> args, Conditions.Condition<?> condition) {
         if (Collectionx.isNotEmpty(condition.getChildren())) {
             // 这是一个用于嵌套的分组条件
             where.append("(");
             for (int i = 0, length = condition.getChildren().size(); i < length; i++) {
-                Conditions.Condition child = condition.getChildren().get(i);
+                var child = condition.getChildren().get(i);
                 if (i != 0) {
                     where.append(" ").append(child.getConnector()).append(" ");
                 }
@@ -460,16 +460,16 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
             where.append(")");
         } else {
             final EntityMeta target;
-            String alias = condition.getAlias();
+            var alias = condition.getAlias();
 
             if (Stringx.isNullOrEmpty(alias) || "a".equals(alias)) {
                 target = meta;
             } else {
-                ForeignMeta foreign = meta.getForeign(alias);
+                var foreign = meta.getForeign(alias);
                 if (foreign != null) {
                     target = foreign.getTarget();
                 } else {
-                    ForeignTableMeta foreignTable = meta.getForeignTable(alias);
+                    var foreignTable = meta.getForeignTable(alias);
                     if (foreignTable != null) {
                         target = foreignTable.getTarget();
                     } else {
@@ -533,7 +533,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         Assertx.mustTrue(executor.getConverter().support(source.getClass(), property.getDescriptor().getPropertyType()),
                 IllegalArgumentException::new, "{}.{} 是 {} 类型，无法转换 {}", meta.getType().getSimpleName(), property.getDescriptor().getName(), property.getDescriptor().getPropertyType().getSimpleName(), source);
 
-        Object value = executor.getConverter().convert(source, property.getDescriptor().getPropertyType());
+        var value = executor.getConverter().convert(source, property.getDescriptor().getPropertyType());
 
         if (value != null && property.isEncrypted()) {
             return executor.getCipher().encrypt(value.toString());

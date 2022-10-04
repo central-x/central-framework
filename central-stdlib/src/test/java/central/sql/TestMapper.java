@@ -276,7 +276,7 @@ public class TestMapper {
         assertEquals(0, count);
 
         this.accountMapper.insertBatch(entities);
-        effected = this.accountMapper.deleteBy(Conditions.where().in(Entity::getId, entities.stream().map(Entity::getId).toList()));
+        effected = this.accountMapper.deleteBy(Conditions.of(AccountEntity.class).in(Entity::getId, entities.stream().map(Entity::getId).toList()));
         assertEquals(2, effected);
         count = this.accountMapper.count();
         assertEquals(0, count);
@@ -291,7 +291,7 @@ public class TestMapper {
         this.accountMapper.insertBatch(entities);
         count = this.accountMapper.count();
         assertEquals(2, count);
-        count = this.accountMapper.countBy(Conditions.where().eq(AccountEntity::getAge, 19));
+        count = this.accountMapper.countBy(Conditions.of(AccountEntity.class).eq(AccountEntity::getAge, 19));
         assertEquals(1, count);
     }
 
@@ -377,15 +377,15 @@ public class TestMapper {
 
         this.accountMapper.insertBatch(entities);
 
-        var record = this.accountMapper.findFirstBy(Conditions.where().like(AccountEntity::getName, "%三"), Orders.order().asc(AccountEntity::getAge));
+        var record = this.accountMapper.findFirstBy(Conditions.of(AccountEntity.class).like(AccountEntity::getName, "%三"), Orders.of(AccountEntity.class).asc(AccountEntity::getAge));
         assertNotNull(record);
         assertEquals(zhangs.getId(), record.getId());
 
-        var records = this.accountMapper.findBy(Conditions.where().like(AccountEntity::getName, "%三"), Orders.order().asc(AccountEntity::getAge));
+        var records = this.accountMapper.findBy(Conditions.of(AccountEntity.class).like(AccountEntity::getName, "%三"), Orders.of(AccountEntity.class).asc(AccountEntity::getAge));
         assertFalse(records.isEmpty());
         assertEquals(2, records.size());
 
-        records = this.accountMapper.findBy(1L, 0L, Conditions.where().like(AccountEntity::getName, "%三"), Orders.order().asc(AccountEntity::getAge));
+        records = this.accountMapper.findBy(1L, 0L, Conditions.of(AccountEntity.class).like(AccountEntity::getName, "%三"), Orders.of(AccountEntity.class).asc(AccountEntity::getAge));
         assertFalse(records.isEmpty());
         assertEquals(1, records.size());
 
@@ -393,11 +393,11 @@ public class TestMapper {
         assertFalse(records.isEmpty());
         assertEquals(2, records.size());
 
-        records = this.accountMapper.findAll(Orders.order().desc(AccountEntity::getAge));
+        records = this.accountMapper.findAll(Orders.of(AccountEntity.class).desc(AccountEntity::getAge));
         assertFalse(records.isEmpty());
         assertEquals(2, records.size());
 
-        var exists = this.accountMapper.existsBy(Conditions.where().like(AccountEntity::getName, "%三"));
+        var exists = this.accountMapper.existsBy(Conditions.of(AccountEntity.class).like(AccountEntity::getName, "%三"));
         assertTrue(exists);
     }
 
@@ -422,7 +422,7 @@ public class TestMapper {
         }
         this.accountMapper.insertBatch(entities);
 
-        var page = this.accountMapper.findPageBy(1L, 20L, Conditions.where().like(AccountEntity::getName, "张%"), Orders.order().asc(AccountEntity::getAge));
+        var page = this.accountMapper.findPageBy(1L, 20L, Conditions.of(AccountEntity.class).like(AccountEntity::getName, "张%"), Orders.of(AccountEntity.class).asc(AccountEntity::getAge));
         assertNotNull(page);
         assertEquals(1L, page.getPager().getPageIndex());
         assertEquals(20L, page.getPager().getPageSize());
@@ -432,7 +432,7 @@ public class TestMapper {
         assertEquals(20, page.getData().size());
         assertEquals(page.getData().get(0).getName(), "张1");
 
-        page = this.accountMapper.findPageBy(2L, 15L, Conditions.where().like(AccountEntity::getName, "张%"), Orders.order().asc(AccountEntity::getAge));
+        page = this.accountMapper.findPageBy(2L, 15L, Conditions.of(AccountEntity.class).like(AccountEntity::getName, "张%"), Orders.of(AccountEntity.class).asc(AccountEntity::getAge));
         assertNotNull(page);
         assertEquals(2L, page.getPager().getPageIndex());
         assertEquals(15L, page.getPager().getPageSize());
@@ -529,17 +529,17 @@ public class TestMapper {
         this.relMapper.insertBatch(rels);
 
         // 测试一对一、一对多关联查询
-        var hrs = this.accountMapper.findBy(Conditions.where().eq("dept.code", "hr"));
+        var hrs = this.accountMapper.findBy(Conditions.of(AccountEntity.class).eq("dept.code", "hr"));
         assertEquals(2, hrs.size());
         assertTrue(hrs.stream().anyMatch(it -> it.getId().equals(zhangs.getId())));
         assertTrue(hrs.stream().anyMatch(it -> it.getId().equals(lis.getId())));
 
-        var sales = this.accountMapper.findBy(Conditions.where().eq("dept.code", "sale"));
+        var sales = this.accountMapper.findBy(Conditions.of(AccountEntity.class).eq("dept.code", "sale"));
         assertEquals(1, sales.size());
         assertTrue(sales.stream().anyMatch(it -> it.getId().equals(wangw.getId())));
 
         // 测试一对多关联查询
-        var receives = this.accountMapper.findBy(Conditions.where().eq("role.code", "receiver"));
+        var receives = this.accountMapper.findBy(Conditions.of(AccountEntity.class).eq("role.code", "receiver"));
         assertEquals(2, receives.size());
         assertTrue(receives.stream().anyMatch(it -> it.getId().equals(lis.getId())));
         assertTrue(receives.stream().anyMatch(it -> it.getId().equals(wangw.getId())));

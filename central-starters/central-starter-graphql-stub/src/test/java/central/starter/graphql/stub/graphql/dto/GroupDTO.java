@@ -29,8 +29,8 @@ import central.sql.Orders;
 import central.starter.graphql.annotation.GraphQLGetter;
 import central.starter.graphql.annotation.GraphQLType;
 import central.starter.graphql.stub.graphql.entity.GroupEntity;
+import central.starter.graphql.stub.graphql.entity.ProjectEntity;
 import central.starter.graphql.stub.graphql.query.ProjectQuery;
-import central.starter.graphql.stub.test.data.Project;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +54,6 @@ public class GroupDTO extends GroupEntity implements DTO {
 
     @GraphQLGetter
     public List<ProjectDTO> getProjects(@Autowired ProjectQuery query) {
-        return query.findBy(null, null, Conditions.where().eq(Project::getGroupId, this.getId()), Orders.order().desc(Project::getName));
+        return query.findBy(null, null, Conditions.of(ProjectEntity.class).eq(ProjectEntity::getGroupId, this.getId()), Orders.of(ProjectEntity.class).desc(ProjectEntity::getName));
     }
 }

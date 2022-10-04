@@ -27,6 +27,7 @@ package central.sql.proxy.mapper;
 import central.sql.Conditions;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
+import central.sql.data.Entity;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
@@ -45,7 +46,7 @@ import java.sql.SQLException;
 public class CountHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var script = builder.forCountBy(executor, meta, Conditions.where());
+        var script = builder.forCountBy(executor, meta, Conditions.of(Entity.class));
         return executor.selectSingle(script, Long.class);
     }
 }

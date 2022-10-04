@@ -63,6 +63,7 @@ public interface SqlBuilder {
 
     /**
      * 处理索引名
+     *
      * @param index 索引名
      * @return 处理后的索引名
      */
@@ -76,7 +77,7 @@ public interface SqlBuilder {
      * @param conditions 筛选条件
      * @return 构建好的 Sql
      */
-    SqlScript forCountBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException;
+    SqlScript forCountBy(SqlExecutor executor, EntityMeta meta, Conditions<?> conditions) throws SQLSyntaxErrorException;
 
     /**
      * Select Sql
@@ -89,7 +90,7 @@ public interface SqlBuilder {
      * @param orders     排序条件
      * @return 构建好的 Sql
      */
-    SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Conditions conditions, Orders orders) throws SQLSyntaxErrorException;
+    SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Conditions<?> conditions, Orders<?> orders) throws SQLSyntaxErrorException;
 
     /**
      * Insert Sql
@@ -119,7 +120,7 @@ public interface SqlBuilder {
      * @param conditions 筛选条件
      * @return 构建好的 Sql
      */
-    SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException;
+    SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions<?> conditions) throws SQLSyntaxErrorException;
 
     /**
      * Insert Sql
@@ -130,7 +131,7 @@ public interface SqlBuilder {
      * @param conditions 更新条件
      * @return 构建好的 Sql
      */
-    SqlScript forUpdateBy(SqlExecutor executor, EntityMeta meta, Object entity, Conditions conditions) throws SQLSyntaxErrorException;
+    SqlScript forUpdateBy(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions) throws SQLSyntaxErrorException;
 
     /**
      * Insert Sql
@@ -141,7 +142,7 @@ public interface SqlBuilder {
      * @param conditions 更新条件
      * @return 构建好的 Sql
      */
-    SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions conditions) throws SQLSyntaxErrorException;
+    SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions) throws SQLSyntaxErrorException;
 
     /**
      * 处理数据类型

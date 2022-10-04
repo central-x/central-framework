@@ -28,8 +28,8 @@ import central.sql.Conditions;
 import central.starter.graphql.annotation.GraphQLGetter;
 import central.starter.graphql.annotation.GraphQLType;
 import central.starter.graphql.graphql.entity.PersonEntity;
+import central.starter.graphql.graphql.entity.PetEntity;
 import central.starter.graphql.graphql.query.PetQuery;
-import central.starter.graphql.test.data.Pet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +52,6 @@ public class PersonDTO extends PersonEntity implements DTO {
 
     @GraphQLGetter
     public List<PetDTO> getPets(@Autowired PetQuery query) {
-        return query.findBy(null, null, Conditions.where().eq(Pet::getMasterId, this.getId()), null);
+        return query.findBy(null, null, Conditions.of(PetEntity.class).eq(PetEntity::getMasterId, this.getId()), null);
     }
 }

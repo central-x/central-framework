@@ -46,7 +46,7 @@ import java.sql.SQLException;
 public class DeleteByHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var conditions = (Conditions) Arrayx.getFirst(args);
+        var conditions = (Conditions<?>) Arrayx.getFirst(args);
         var script = builder.forDeleteBy(executor, meta, conditions);
         return executor.execute(script);
     }

@@ -30,7 +30,7 @@ import central.sql.datasource.dynamic.DynamicSqlSource;
 import central.sql.datasource.dynamic.lookup.LookupKeyHolder;
 import central.sql.impl.standard.StandardDataSourceMigrator;
 import central.sql.impl.standard.StandardSource;
-import central.test.orm.data.migration.V1;
+import central.test.orm.database.migration.V1;
 import central.util.Version;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
