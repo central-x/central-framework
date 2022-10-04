@@ -32,6 +32,7 @@ import central.starter.graphql.annotation.GraphQLFetcher;
 import central.starter.graphql.annotation.GraphQLSchema;
 import central.starter.graphql.stub.graphql.dto.DTO;
 import central.starter.graphql.stub.graphql.dto.ProjectDTO;
+import central.starter.graphql.stub.graphql.entity.ProjectEntity;
 import central.starter.graphql.stub.graphql.mapper.ProjectMapper;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,8 +101,8 @@ public class ProjectQuery {
     @GraphQLFetcher
     public List<ProjectDTO> findBy(@RequestParam(required = false) Long limit,
                                    @RequestParam(required = false) Long offset,
-                                   @RequestParam Conditions conditions,
-                                   @RequestParam Orders orders) {
+                                   @RequestParam Conditions<ProjectEntity> conditions,
+                                   @RequestParam Orders<ProjectEntity> orders) {
         // 懒得去过滤了
         var entities = this.mapper.findBy(limit, offset, conditions, orders);
         return DTO.wrap(entities, ProjectDTO.class);
@@ -118,8 +119,8 @@ public class ProjectQuery {
     @GraphQLFetcher
     public Page<ProjectDTO> pageBy(@RequestParam long pageIndex,
                                    @RequestParam long pageSize,
-                                   @RequestParam Conditions conditions,
-                                   @RequestParam Orders orders) {
+                                   @RequestParam Conditions<ProjectEntity> conditions,
+                                   @RequestParam Orders<ProjectEntity> orders) {
         var page = this.mapper.findPageBy(pageIndex, pageSize, conditions, orders);
         return DTO.wrap(page, ProjectDTO.class);
     }
@@ -130,7 +131,7 @@ public class ProjectQuery {
      * @param conditions 筛选条件
      */
     @GraphQLFetcher
-    public Long countBy(@RequestParam Conditions conditions) {
+    public Long countBy(@RequestParam Conditions<ProjectEntity> conditions) {
         return this.mapper.countBy(conditions);
     }
 }

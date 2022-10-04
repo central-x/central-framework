@@ -43,7 +43,7 @@ import java.util.List;
  * @since 2022/09/26
  */
 @Component
-public class ApplicationExecutorConfigurer implements SqlExecutorConfigurer {
+public class ExecutorConfigurer implements SqlExecutorConfigurer {
     @Setter(onMethod_ = @Autowired)
     private ApplicationSource source;
 

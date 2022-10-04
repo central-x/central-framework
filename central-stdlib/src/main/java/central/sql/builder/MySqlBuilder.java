@@ -76,8 +76,8 @@ public class MySqlBuilder extends StandardSqlBuilder {
     }
 
     @Override
-    public SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions conditions) throws SQLSyntaxErrorException {
-        conditions = Conditions.where(conditions);
+    public SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions<?> conditions) throws SQLSyntaxErrorException {
+        conditions = Conditions.of(conditions);
         // DELETE a FROM ${TABLE} AS a
 
         var sql = new StringBuilder(Stringx.format("DELETE a FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
@@ -121,7 +121,7 @@ public class MySqlBuilder extends StandardSqlBuilder {
         //  PRIMARY KEY (`ID`)
         // ) COMMENT='第三方应用登录授权';
 
-        StringBuilder result = new StringBuilder("CREATE TABLE ").append(this.processTable(script.getName())).append(" (\n");
+        var result = new StringBuilder("CREATE TABLE ").append(this.processTable(script.getName())).append(" (\n");
         AddTableScript.Column primaryKey = null;
         for (AddTableScript.Column column : script.getColumns()) {
             result.append("    ").append(Stringx.padding(this.processColumn(column.getName()), 30, ' ')).append(Stringx.padding(this.handleSqlType(column.getType(), column.getSize()), 20, ' '));
@@ -158,7 +158,7 @@ public class MySqlBuilder extends StandardSqlBuilder {
     @Override
     public List<SqlScript> forAddColumn(AddColumnScript script) throws SQLSyntaxErrorException {
         // ALTER TABLE `MC_ORG_DEPT` ADD COLUMN `LEADER_ID` VARCHAR(36) DEFAULT NULL COMMENT '负责人主键' AFTER `SORT_NO`;
-        StringBuilder sql = new StringBuilder(Stringx.format("ALTER TABLE {} ADD COLUMN {} {} NOT NULL", this.processTable(script.getTable()), this.processColumn(script.getName()), this.handleSqlType(script.getType(), script.getLength())));
+        var sql = new StringBuilder(Stringx.format("ALTER TABLE {} ADD COLUMN {} {} NOT NULL", this.processTable(script.getTable()), this.processColumn(script.getName()), this.handleSqlType(script.getType(), script.getLength())));
 
         sql.append(Stringx.format(" COMMENT '{}'", script.getComment()));
 

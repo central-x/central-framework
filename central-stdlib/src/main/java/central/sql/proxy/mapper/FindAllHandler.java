@@ -47,8 +47,8 @@ import java.sql.SQLException;
 public class FindAllHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var orders = (Orders) Arrayx.getFirst(args);
-        var script = builder.forFindBy(executor, meta, null, null, Conditions.where(), orders);
+        var orders = (Orders<?>) Arrayx.getFirst(args);
+        var script = builder.forFindBy(executor, meta, null, null, null, orders);
         return executor.select(script, meta.getType());
     }
 }

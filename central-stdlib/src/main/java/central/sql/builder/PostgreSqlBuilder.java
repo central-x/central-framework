@@ -64,8 +64,8 @@ public class PostgreSqlBuilder extends StandardSqlBuilder {
      * @param includeNull 是否更新值为 NULL 的属性
      */
     @SneakyThrows({IllegalAccessException.class, InvocationTargetException.class})
-    protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions conditions, boolean includeNull) throws SQLSyntaxErrorException {
-        conditions = Conditions.where(conditions);
+    protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions, boolean includeNull) throws SQLSyntaxErrorException {
+        conditions = Conditions.of(conditions);
         // UPDATE ${TABLE} AS a set a.col = ? where id = ? and condition1 = ?
         Assertx.mustInstanceOf(meta.getType(), entity, SQLSyntaxErrorException::new, "entity 必须是 {} 类型", meta.getType().getName());
 
@@ -81,7 +81,7 @@ public class PostgreSqlBuilder extends StandardSqlBuilder {
             // 如果更新条件为 null，则要求必须使用 id 进行更新
             var id = meta.getId().getDescriptor().getReadMethod().invoke(entity);
             Assertx.mustNotNull(id, SQLSyntaxErrorException::new, "entity#{} 必须不为空", meta.getId().getName());
-            conditions = Conditions.where().eq(meta.getId().getName(), id);
+            conditions = Conditions.of(conditions).eq(meta.getId().getName(), id);
         }
 
         // 处理 SET 语句

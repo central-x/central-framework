@@ -49,17 +49,17 @@ public class FindByHandler implements MapperHandler {
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
         Long first = null;
         Long offset = null;
-        Conditions conditions;
-        Orders orders;
+        Conditions<?> conditions;
+        Orders<?> orders;
 
         if (args.length == 4) {
             first = (Long) Arrayx.get(args, 0);
             offset = (Long) Arrayx.get(args, 1);
-            conditions = (Conditions) Arrayx.get(args, 2);
-            orders = (Orders) Arrayx.get(args, 3);
+            conditions = (Conditions<?>) Arrayx.get(args, 2);
+            orders = (Orders<?>) Arrayx.get(args, 3);
         } else {
-            conditions = (Conditions) Arrayx.get(args, 0);
-            orders = (Orders) Arrayx.get(args, 1);
+            conditions = (Conditions<?>) Arrayx.get(args, 0);
+            orders = (Orders<?>) Arrayx.get(args, 1);
         }
 
         var script = builder.forFindBy(executor, meta, first, offset, conditions, orders);

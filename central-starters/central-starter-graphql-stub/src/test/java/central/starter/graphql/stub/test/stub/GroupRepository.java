@@ -53,5 +53,5 @@ public interface GroupRepository extends ProviderStub {
      * @return 数据列表
      */
     @BodyPath("groups")
-    List<Group> findBy(Long limit, Long offset, Conditions conditions, Orders orders);
+    List<Group> findBy(Long limit, Long offset, Conditions<Group> conditions, Orders<Group> orders);
 }

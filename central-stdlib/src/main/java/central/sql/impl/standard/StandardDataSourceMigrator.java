@@ -120,7 +120,7 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
 
         // 查询当前的版本信息
         var mapper = executor.getMapper(MigrationMapper.class);
-        var migration = mapper.findFirstBy(Conditions.where().eq(MigrationEntity::getCode, this.getName()));
+        var migration = mapper.findFirstBy(Conditions.of(MigrationEntity.class).eq(MigrationEntity::getCode, this.getName()));
 
         var versions = this.migrations;
         if (migration != null) {
@@ -181,7 +181,7 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
         this.init(executor);
         // 查询当前的版本信息
         var mapper = executor.getMapper(MigrationMapper.class);
-        var migration = mapper.findFirstBy(Conditions.where().eq(MigrationEntity::getCode, this.getName()));
+        var migration = mapper.findFirstBy(Conditions.of(MigrationEntity.class).eq(MigrationEntity::getCode, this.getName()));
 
         var versions = this.migrations;
         if (migration == null || CompareResultEnum.LE.matches(Version.of(migration.getVersion()), Version.of("0"))) {
@@ -220,7 +220,7 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
         // 保存版本信息
         if (CompareResultEnum.EQUALS.matches(Version.of("0"), this.getTarget())) {
             // 如果降级到 0，则表示初始化为空
-            mapper.deleteBy(Conditions.where().eq(MigrationEntity::getCode, this.name));
+            mapper.deleteBy(Conditions.of(MigrationEntity.class).eq(MigrationEntity::getCode, this.name));
         } else {
             migration.setVersion(this.getTarget().toString());
             migration.updateModifier("x.orm");

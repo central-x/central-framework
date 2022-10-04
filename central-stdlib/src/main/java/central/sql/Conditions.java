@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
  * @author Alan Yeh
  * @since 2022/07/20
  */
-public class Conditions implements Collection<Conditions.Condition>, Cloneable, Validatable {
+public class Conditions<T extends Entity> implements Collection<Conditions.Condition<T>>, Cloneable, Validatable {
     @Getter
     @Setter
     private String id;
@@ -75,7 +75,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
         this(null, new AtomicInteger(1));
     }
 
-    private List<Condition> conditions = new ArrayList<>();
+    private List<Condition<T>> conditions = new ArrayList<>();
     private Set<String> properties = new HashSet<>();
 
     @Override
@@ -86,7 +86,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Conditions that = (Conditions) o;
+        var that = (Conditions<?>) o;
         return conditions.equals(that.conditions);
     }
 
@@ -102,8 +102,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
 
     @Override
     @SneakyThrows(CloneNotSupportedException.class)
-    public Conditions clone() {
-        Conditions conditions = (Conditions) super.clone();
+    public Conditions<T> clone() {
+        var conditions = (Conditions<T>) super.clone();
 
         conditions.setId(this.getId());
         conditions.idGenerator.set(this.idGenerator.get());
@@ -116,13 +116,13 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
     /**
      * 快速构造器
      */
-    public static Conditions where() {
-        return new Conditions();
+    public static <T extends Entity> Conditions<T> of(Class<T> type) {
+        return new Conditions<>();
     }
 
-    public static Conditions where(Conditions conditions) {
+    public static <T extends Entity> Conditions<T> of(Conditions<T> conditions) {
         if (conditions == null) {
-            conditions = Conditions.where();
+            return new Conditions<>();
         }
         return conditions;
     }
@@ -130,8 +130,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
     /**
      * 将条件使用 () 封装起来
      */
-    public static Conditions group(Conditions conditions) {
-        return Conditions.where().nested(conditions);
+    public static <T extends Entity> Conditions<T> group(Conditions<T> conditions) {
+        return new Conditions<T>().nested(conditions);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,11 +144,11 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public <T extends Entity> Conditions eq(PropertyReference<T, ?> property, Object value) {
+    public Conditions<T> eq(PropertyReference<T, ?> property, Object value) {
         if (value == null) {
-            return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
+            return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
         } else {
-            return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.EQ, value));
+            return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.EQ, value));
         }
     }
 
@@ -158,11 +158,11 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性名
      * @param value    值
      */
-    public Conditions eq(String property, Object value) {
+    public Conditions<T> eq(String property, Object value) {
         if (value == null) {
-            return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
+            return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
         } else {
-            return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.EQ, value));
+            return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.EQ, value));
         }
     }
 
@@ -172,11 +172,11 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public <T extends Entity> Conditions ne(PropertyReference<T, ?> property, Object value) {
+    public Conditions<T> ne(PropertyReference<T, ?> property, Object value) {
         if (value == null) {
-            return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
+            return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
         } else {
-            return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NE, value));
+            return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NE, value));
         }
     }
 
@@ -186,11 +186,11 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性名
      * @param value    值
      */
-    public Conditions ne(String property, Object value) {
+    public Conditions<T> ne(String property, Object value) {
         if (value == null) {
-            return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
+            return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
         } else {
-            return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NE, value));
+            return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NE, value));
         }
     }
 
@@ -200,8 +200,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public <T extends Entity> Conditions gt(PropertyReference<T, ?> property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GT, value));
+    public Conditions<T> gt(PropertyReference<T, ?> property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GT, value));
     }
 
     /**
@@ -210,8 +210,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性名
      * @param value    值
      */
-    public Conditions gt(String property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GT, value));
+    public Conditions<T> gt(String property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GT, value));
     }
 
     /**
@@ -220,8 +220,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public <T extends Entity> Conditions ge(PropertyReference<T, ?> property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GE, value));
+    public Conditions<T> ge(PropertyReference<T, ?> property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GE, value));
     }
 
     /**
@@ -230,8 +230,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性名
      * @param value    值
      */
-    public Conditions ge(String property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GE, value));
+    public Conditions<T> ge(String property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GE, value));
     }
 
     /**
@@ -240,8 +240,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public <T extends Entity> Conditions lt(PropertyReference<T, ?> property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LT, value));
+    public Conditions<T> lt(PropertyReference<T, ?> property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LT, value));
     }
 
     /**
@@ -250,8 +250,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性名
      * @param value    值
      */
-    public Conditions lt(String property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LT, value));
+    public Conditions<T> lt(String property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LT, value));
     }
 
     /**
@@ -260,8 +260,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public <T extends Entity> Conditions le(PropertyReference<T, ?> property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LE, value));
+    public Conditions<T> le(PropertyReference<T, ?> property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LE, value));
     }
 
     /**
@@ -270,8 +270,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性名
      * @param value    值
      */
-    public Conditions le(String property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LE, value));
+    public Conditions<T> le(String property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LE, value));
     }
 
     /**
@@ -280,8 +280,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public <T extends Entity> Conditions like(PropertyReference<T, ?> property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LIKE, value));
+    public Conditions<T> like(PropertyReference<T, ?> property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LIKE, value));
     }
 
     /**
@@ -290,8 +290,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性名
      * @param value    值
      */
-    public Conditions like(String property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LIKE, value));
+    public Conditions<T> like(String property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LIKE, value));
     }
 
     /**
@@ -300,8 +300,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public <T extends Entity> Conditions notLike(PropertyReference<T, ?> property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_LIKE, value));
+    public Conditions<T> notLike(PropertyReference<T, ?> property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_LIKE, value));
     }
 
     /**
@@ -310,8 +310,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性名
      * @param value    值
      */
-    public Conditions notLike(String property, Object value) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_LIKE, value));
+    public Conditions<T> notLike(String property, Object value) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_LIKE, value));
     }
 
     /**
@@ -321,8 +321,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param start    开始值
      * @param end      结束值
      */
-    public <T extends Entity> Conditions between(PropertyReference<T, ?> property, Object start, Object end) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.BETWEEN, start, end));
+    public Conditions<T> between(PropertyReference<T, ?> property, Object start, Object end) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.BETWEEN, start, end));
     }
 
     /**
@@ -332,8 +332,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param start    开始值
      * @param end      结束值
      */
-    public Conditions between(String property, Object start, Object end) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.BETWEEN, start, end));
+    public Conditions<T> between(String property, Object start, Object end) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.BETWEEN, start, end));
     }
 
     /**
@@ -343,8 +343,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param start    开始值
      * @param end      结束值
      */
-    public <T extends Entity> Conditions notBetween(PropertyReference<T, ?> property, Object start, Object end) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_BETWEEN, start, end));
+    public Conditions<T> notBetween(PropertyReference<T, ?> property, Object start, Object end) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_BETWEEN, start, end));
     }
 
     /**
@@ -354,8 +354,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param start    开始值
      * @param end      结束值
      */
-    public Conditions notBetween(String property, Object start, Object end) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_BETWEEN, start, end));
+    public Conditions<T> notBetween(String property, Object start, Object end) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_BETWEEN, start, end));
     }
 
     /**
@@ -363,8 +363,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      *
      * @param property 实体属性的Getter方法引用，Entity::Getter
      */
-    public <T extends Entity> Conditions isNull(PropertyReference<T, ?> property) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
+    public Conditions<T> isNull(PropertyReference<T, ?> property) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
     }
 
     /**
@@ -372,8 +372,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      *
      * @param property 实体属性名
      */
-    public Conditions isNull(String property) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
+    public Conditions<T> isNull(String property) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
     }
 
     /**
@@ -381,8 +381,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      *
      * @param property 实体属性的Getter方法引用，Entity::Getter
      */
-    public <T extends Entity> Conditions isNotNull(PropertyReference<T, ?> property) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
+    public Conditions<T> isNotNull(PropertyReference<T, ?> property) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
     }
 
     /**
@@ -390,8 +390,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      *
      * @param property 实体属性名
      */
-    public Conditions isNotNull(String property) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
+    public Conditions<T> isNotNull(String property) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
     }
 
     /**
@@ -400,8 +400,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param args     数据项
      */
-    public <T extends Entity> Conditions in(PropertyReference<T, ?> property, Object... args) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IN, args));
+    public Conditions<T> in(PropertyReference<T, ?> property, Object... args) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IN, args));
     }
 
     /**
@@ -410,8 +410,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性名
      * @param args     数据项
      */
-    public Conditions in(String property, Object... args) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IN, args));
+    public Conditions<T> in(String property, Object... args) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IN, args));
     }
 
     /**
@@ -420,8 +420,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param args     数据项
      */
-    public <T extends Entity> Conditions notIn(PropertyReference<T, ?> property, Object... args) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_IN, args));
+    public Conditions<T> notIn(PropertyReference<T, ?> property, Object... args) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_IN, args));
     }
 
     /**
@@ -430,14 +430,14 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      * @param property 实体属性名
      * @param args     数据项
      */
-    public Conditions notIn(String property, Object... args) {
-        return this.addCondition(new Condition(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_IN, args));
+    public Conditions<T> notIn(String property, Object... args) {
+        return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_IN, args));
     }
 
     /**
      * 下一个条件使用 OR 连接
      */
-    public Conditions or() {
+    public Conditions<T> or() {
         this.nextConnector = Connectors.OR;
         return this;
     }
@@ -447,8 +447,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      *
      * @param consumer 嵌套查询条件
      */
-    public Conditions or(Consumer<Conditions> consumer) {
-        Conditions conditions = new Conditions();
+    public Conditions<T> or(Consumer<Conditions<T>> consumer) {
+        var conditions = new Conditions<T>();
         consumer.accept(conditions);
 
         this.nextConnector = Connectors.OR;
@@ -460,7 +460,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      *
      * @param conditions 嵌套查询条件
      */
-    public Conditions or(Conditions conditions) {
+    public Conditions<T> or(Conditions<T> conditions) {
         this.nextConnector = Connectors.OR;
         return this.nested(conditions);
     }
@@ -468,7 +468,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
     /**
      * 下一个条件使用 AND 连接
      */
-    public Conditions and() {
+    public Conditions<T> and() {
         this.nextConnector = Connectors.AND;
         return this;
     }
@@ -478,8 +478,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      *
      * @param consumer 嵌套查询条件
      */
-    public Conditions and(Consumer<Conditions> consumer) {
-        Conditions conditions = new Conditions();
+    public Conditions<T> and(Consumer<Conditions<T>> consumer) {
+        var conditions = new Conditions<T>();
         consumer.accept(conditions);
         this.nextConnector = Connectors.AND;
         return this.nested(conditions);
@@ -490,7 +490,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      *
      * @param conditions 嵌套查询条件
      */
-    public Conditions and(Conditions conditions) {
+    public Conditions<T> and(Conditions<T> conditions) {
         this.nextConnector = Connectors.AND;
         return this.nested(conditions);
     }
@@ -500,8 +500,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      *
      * @param consumer 嵌套查询条件
      */
-    public Conditions nested(Consumer<Conditions> consumer) {
-        Conditions conditions = new Conditions();
+    public Conditions<T> nested(Consumer<Conditions<T>> consumer) {
+        var conditions = new Conditions<T>();
         consumer.accept(conditions);
         return this.nested(conditions);
     }
@@ -511,14 +511,14 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
      *
      * @param conditions 被嵌套的条件
      */
-    public Conditions nested(Conditions conditions) {
+    public Conditions<T> nested(Conditions<T> conditions) {
         if (Collectionx.isNotEmpty(conditions)) {
             // 处理当前集合的关系
-            Conditions clone = conditions.clone();
+            var clone = conditions.clone();
 
-            List<String> ids = clone.stream().map(Condition::getId).mapToInt(Integer::parseInt).sorted().mapToObj(String::valueOf).toList();
-            Map<String, String> idMap = new HashMap<>();
-            for (String id : ids) {
+            var ids = clone.stream().map(Condition::getId).mapToInt(Integer::parseInt).sorted().mapToObj(String::valueOf).toList();
+            var idMap = new HashMap<String, String>();
+            for (var id : ids) {
                 idMap.put(id, String.valueOf(this.idGenerator.getAndIncrement()));
             }
 
@@ -538,13 +538,13 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
             }
 
             // 添加条件
-            return this.addCondition(new Condition(clone.getId(), this.getId(), this.index.getAndIncrement(), this.nextConnector, clone.conditions));
+            return this.addCondition(new Condition<>(clone.getId(), this.getId(), this.index.getAndIncrement(), this.nextConnector, clone.conditions));
         } else {
             return this;
         }
     }
 
-    private Conditions addCondition(Condition condition) {
+    private Conditions<T> addCondition(Condition<T> condition) {
         if (Listx.isNotEmpty(condition.getChildren())) {
             this.conditions.addAll(condition.getChildren());
             condition.setChildren(null);
@@ -557,7 +557,8 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
         // 根据表达式构建
         var sql = new StringBuilder();
 
-        var expression = Treeable.build(this.clone(), Condition.DEFAULT_COMPARATOR);
+        var clone = this.clone();
+        var expression = Treeable.build(clone.conditions, Condition.defaultComparator());
 
         for (int i = 0, length = expression.size(); i < length; i++) {
             var condition = expression.get(i);
@@ -584,8 +585,10 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @NoArgsConstructor
-    public static class Condition implements Treeable<Condition>, Orderable<Condition>, Cloneable, Validatable {
-        public final static Comparator<Condition> DEFAULT_COMPARATOR = Comparator.comparing(Condition::getOrder);
+    public static class Condition<T extends Entity> implements Treeable<Condition<T>>, Orderable<Condition<T>>, Cloneable, Validatable {
+        public static <T extends Entity> Comparator<Condition<T>> defaultComparator() {
+            return Comparator.comparing(Condition::getOrder);
+        }
 
         /**
          * 条件标识
@@ -614,7 +617,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
         @Getter
         @Setter
         @JsonIgnore
-        private transient List<Condition> children;
+        private transient List<Condition<T>> children;
 
         /**
          * 排序号
@@ -678,7 +681,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
         /**
          * 条件分组
          */
-        public Condition(String id, String parentId, Integer order, Connectors connector, List<Condition> children) {
+        public Condition(String id, String parentId, Integer order, Connectors connector, List<Condition<T>> children) {
             this.id = id;
             this.parentId = parentId;
             this.order = order;
@@ -717,7 +720,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
         /**
          * 使用方法引用构造条件
          */
-        public Condition(String id, String parentId, Integer order, Connectors connector, PropertyReference<?, ?> property, Operators operator, Object... values) {
+        public Condition(String id, String parentId, Integer order, Connectors connector, PropertyReference<T, ?> property, Operators operator, Object... values) {
             this.id = id;
             this.parentId = parentId;
             this.order = order;
@@ -803,7 +806,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            Condition condition = (Condition) o;
+            Condition<T> condition = (Condition<T>) o;
             return property.equals(condition.property) &&
                     operator == condition.operator &&
                     Arrays.equals(values, condition.values);
@@ -838,7 +841,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
                 if (Listx.isNotEmpty(this.getChildren())) {
                     sql.append("(");
                     for (int i = 0, length = this.getChildren().size(); i < length; i++) {
-                        Condition condition = this.getChildren().get(i);
+                        var condition = this.getChildren().get(i);
                         if (i != 0) {
                             sql.append(" ").append(condition.getConnector()).append(" ");
                         }
@@ -848,41 +851,29 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
                 }
             } else {
                 switch (this.operator) {
-                    case EQ:
-                    case NE:
-                    case GT:
-                    case GE:
-                    case LT:
-                    case LE:
-                    case LIKE:
-                    case NOT_LIKE: {
+                    case EQ, NE, GT, GE, LT, LE, LIKE, NOT_LIKE -> {
                         sql.append(Stringx.format(this.operator.getValue(), this.property, this.values[0]));
-                        break;
                     }
-                    case BETWEEN:
-                    case NOT_BETWEEN: {
+                    case BETWEEN, NOT_BETWEEN -> {
                         sql.append(Stringx.format(this.operator.getValue(), this.property, this.values[0], this.values[1]));
-                        break;
                     }
-                    case IS_NULL:
-                    case IS_NOT_NULL: {
+                    case IS_NULL, IS_NOT_NULL -> {
                         sql.append(Stringx.format(this.operator.getValue(), this.property));
-                        break;
                     }
-                    case IN:
-                    case NOT_IN: {
+                    case IN, NOT_IN -> {
                         sql.append(Stringx.format(this.operator.getValue(), this.property, Stringx.join(this.values, ", ")));
-                        break;
                     }
-                    default:
+                    default -> {
+                        throw new IllegalArgumentException(Stringx.format("Not supported operator '{}'", this.operator.getValue()));
+                    }
                 }
             }
         }
 
         @Override
         @SneakyThrows(CloneNotSupportedException.class)
-        protected Condition clone() {
-            var clone = (Condition) super.clone();
+        protected Condition<T> clone() {
+            var clone = (Condition<T>) super.clone();
             clone.setId(this.getId());
             clone.setParentId(this.getParentId());
             clone.setType(this.getType());
@@ -963,7 +954,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
     }
 
     @Override
-    public Iterator<Condition> iterator() {
+    public Iterator<Condition<T>> iterator() {
         return this.conditions.iterator();
     }
 
@@ -974,12 +965,12 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
 
     @Override
     @SuppressWarnings("SuspiciousToArrayCall")
-    public <T> T[] toArray(@Nonnull T[] a) {
+    public <A> A[] toArray(@Nonnull A[] a) {
         return this.conditions.toArray(a);
     }
 
     @Override
-    public boolean add(Condition condition) {
+    public boolean add(Condition<T> condition) {
         if (Stringx.isNotBlank(condition.getId())) {
             int id = Integer.parseInt(condition.getId());
             this.idGenerator.set(Math.max(this.idGenerator.get(), id) + 1);
@@ -1004,7 +995,7 @@ public class Conditions implements Collection<Conditions.Condition>, Cloneable, 
     }
 
     @Override
-    public boolean addAll(@Nonnull Collection<? extends Condition> collection) {
+    public boolean addAll(@Nonnull Collection<? extends Condition<T>> collection) {
         return this.conditions.addAll(collection);
     }
 

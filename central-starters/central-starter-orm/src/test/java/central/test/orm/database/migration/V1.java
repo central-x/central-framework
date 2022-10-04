@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package central.test.orm.data.migration;
+package central.test.orm.database.migration;
 
 import central.sql.SqlType;
 import central.sql.datasource.migration.*;

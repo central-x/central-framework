@@ -27,6 +27,7 @@ package central.sql.proxy.mapper;
 import central.sql.Conditions;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
+import central.sql.data.Entity;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
@@ -57,11 +58,11 @@ public class DeleteByIdsHandler implements MapperHandler {
             return 0L;
         }
 
-        Conditions conditions;
+        Conditions<?> conditions;
         if (ids.size() == 1) {
-            conditions = Conditions.where().eq(meta.getId().getName(), ids.get(0));
+            conditions = Conditions.of(Entity.class).eq(meta.getId().getName(), ids.get(0));
         } else {
-            conditions = Conditions.where().in(meta.getId().getName(), ids);
+            conditions = Conditions.of(Entity.class).in(meta.getId().getName(), ids);
         }
 
         var script = builder.forDeleteBy(executor, meta, conditions);

@@ -44,11 +44,11 @@ import java.util.stream.Collectors;
  * @author Alan Yeh
  * @since 2022/07/20
  */
-public class Orders implements Collection<Orders.Order>, Validatable {
-    private List<Order> orders = new ArrayList<>();
+public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Validatable {
+    private final List<Order<T>> orders = new ArrayList<>();
 
     @Delegate
-    private Collection<Orders.Order> getDelegate() {
+    private Collection<Order<T>> getDelegate() {
         return this.orders;
     }
 
@@ -60,8 +60,8 @@ public class Orders implements Collection<Orders.Order>, Validatable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Orders orders1 = (Orders) o;
-        return orders.equals(orders1.orders);
+        var that = (Orders<?>) o;
+        return orders.equals(that.orders);
     }
 
     @Override
@@ -72,13 +72,13 @@ public class Orders implements Collection<Orders.Order>, Validatable {
     /**
      * 快速构造器
      */
-    public static Orders order() {
-        return new Orders();
+    public static <T extends Entity> Orders<T> of(Class<T> type) {
+        return new Orders<>();
     }
 
-    public static Orders order(Orders orders) {
+    public static <T extends Entity> Orders<T> of(Orders<T> orders) {
         if (orders == null) {
-            orders = Orders.order();
+            return new Orders<>();
         }
         return orders;
     }
@@ -86,9 +86,9 @@ public class Orders implements Collection<Orders.Order>, Validatable {
     /**
      * 从 Json 反序列化
      */
-    public static Orders from(List<Map<String, Object>> orders) {
-        var result = new Orders();
-        result.orders = orders.stream().map(Order::new).collect(Collectors.toList());
+    public static <T extends Entity> Orders<T> from(List<Map<String, Object>> orders) {
+        var result = new Orders<T>();
+        orders.forEach(it -> result.add(new Order<>(it)));
         return result;
     }
 
@@ -116,8 +116,8 @@ public class Orders implements Collection<Orders.Order>, Validatable {
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param desc     是否倒序
      */
-    public <T extends Entity> Orders and(PropertyReference<T, ?> property, boolean desc) {
-        this.orders.add(new Order(property, desc));
+    public Orders<T> and(PropertyReference<T, ?> property, boolean desc) {
+        this.orders.add(new Order<>(property, desc));
         return this;
     }
 
@@ -127,8 +127,8 @@ public class Orders implements Collection<Orders.Order>, Validatable {
      * @param property 实体属性名
      * @param desc     是否倒序
      */
-    public Orders and(String property, boolean desc) {
-        this.orders.add(new Order(property, desc));
+    public Orders<T> and(String property, boolean desc) {
+        this.orders.add(new Order<>(property, desc));
         return this;
     }
 
@@ -137,8 +137,8 @@ public class Orders implements Collection<Orders.Order>, Validatable {
      *
      * @param property 实体属性的Getter方法引用，Entity::Getter
      */
-    public <T extends Entity> Orders asc(PropertyReference<T, ?> property) {
-        this.orders.add(new Order(property, false));
+    public Orders<T> asc(PropertyReference<T, ?> property) {
+        this.orders.add(new Order<>(property, false));
         return this;
     }
 
@@ -147,8 +147,8 @@ public class Orders implements Collection<Orders.Order>, Validatable {
      *
      * @param property 实体属性名
      */
-    public Orders asc(String property) {
-        this.orders.add(new Order(property, false));
+    public Orders<T> asc(String property) {
+        this.orders.add(new Order<>(property, false));
         return this;
     }
 
@@ -157,8 +157,8 @@ public class Orders implements Collection<Orders.Order>, Validatable {
      *
      * @param property 实体属性的Getter方法引用，Entity::Getter
      */
-    public <T extends Entity> Orders desc(PropertyReference<T, ?> property) {
-        this.orders.add(new Order(property, true));
+    public Orders<T> desc(PropertyReference<T, ?> property) {
+        this.orders.add(new Order<>(property, true));
         return this;
     }
 
@@ -167,8 +167,8 @@ public class Orders implements Collection<Orders.Order>, Validatable {
      *
      * @param property 实体属性名
      */
-    public Orders desc(String property) {
-        this.orders.add(new Order(property, true));
+    public Orders<T> desc(String property) {
+        this.orders.add(new Order<>(property, true));
         return this;
     }
 
@@ -176,7 +176,7 @@ public class Orders implements Collection<Orders.Order>, Validatable {
     // 内部排序条件存放类
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @NoArgsConstructor
-    public static class Order implements Validatable {
+    public static class Order<T extends Entity> implements Validatable {
 
         /**
          * 实体属性Getter对应的属性
@@ -193,7 +193,7 @@ public class Orders implements Collection<Orders.Order>, Validatable {
         @Setter
         private boolean desc;
 
-        Order(PropertyReference<?, ?> property, boolean desc) {
+        Order(PropertyReference<T, ?> property, boolean desc) {
             this.property = property.getPropertyName();
             this.desc = desc;
 
@@ -245,7 +245,7 @@ public class Orders implements Collection<Orders.Order>, Validatable {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            Order order = (Order) o;
+            var order = (Order<?>) o;
             return desc == order.desc &&
                     property.equals(order.property);
         }

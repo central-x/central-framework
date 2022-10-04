@@ -86,7 +86,7 @@ public class TestGraphQL {
                 }""";
 
 //        List<String> ids = Arrays.asList("1", "2", "3");
-        var conditions = Conditions.where().eq(Person::getName, "alan");
+        var conditions = Conditions.of(Person.class).eq(Person::getName, "alan");
 
         String result = this.client.graphql(graphql, Mapx.newHashMap("conditions", conditions), "test");
 
@@ -113,7 +113,7 @@ public class TestGraphQL {
                 }""";
 
 //        List<String> ids = Arrays.asList("1", "2", "3");
-        var conditions = Conditions.where().eq(Pet::getName, "贝贝");
+        var conditions = Conditions.of(Pet.class).eq(Pet::getName, "贝贝");
 
         String result = this.client.graphql(graphql, Mapx.newHashMap("conditions", conditions), "test");
 

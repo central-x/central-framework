@@ -28,6 +28,7 @@ import central.lang.Assertx;
 import central.sql.Conditions;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
+import central.sql.data.Entity;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
@@ -49,7 +50,7 @@ public class FindByIdHandler implements MapperHandler {
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
         var id = Arrayx.getFirst(args);
         Assertx.mustNotNull(id, "主键[id]必须不为空");
-        var script = builder.forFindBy(executor, meta, 1L, 0L, Conditions.where().eq(meta.getId().getName(), id), null);
+        var script = builder.forFindBy(executor, meta, 1L, 0L, Conditions.of(Entity.class).eq(meta.getId().getName(), id), null);
         return executor.selectSingle(script, meta.getType());
     }
 }

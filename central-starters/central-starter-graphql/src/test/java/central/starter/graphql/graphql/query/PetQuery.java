@@ -33,6 +33,7 @@ import central.starter.graphql.annotation.GraphQLSchema;
 import central.starter.graphql.graphql.dto.DTO;
 import central.starter.graphql.graphql.dto.PersonDTO;
 import central.starter.graphql.graphql.dto.PetDTO;
+import central.starter.graphql.graphql.entity.PetEntity;
 import central.starter.graphql.graphql.mapper.PetMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -108,8 +109,8 @@ public class PetQuery {
     @GraphQLFetcher
     public List<PetDTO> findBy(@RequestParam(required = false) Long limit,
                                @RequestParam(required = false) Long offset,
-                               @RequestParam Conditions conditions,
-                               @RequestParam Orders orders) {
+                               @RequestParam Conditions<PetEntity> conditions,
+                               @RequestParam Orders<PetEntity> orders) {
         var entities = this.mapper.findBy(limit, offset, conditions, orders);
         return DTO.wrap(entities, PetDTO.class);
     }
@@ -125,8 +126,8 @@ public class PetQuery {
     @GraphQLFetcher
     public Page<PersonDTO> pageBy(@RequestParam long pageIndex,
                                   @RequestParam long pageSize,
-                                  @RequestParam Conditions conditions,
-                                  @RequestParam Orders orders) {
+                                  @RequestParam Conditions<PetEntity> conditions,
+                                  @RequestParam Orders<PetEntity> orders) {
         var page = this.mapper.findPageBy(pageIndex, pageSize, conditions, orders);
         return DTO.wrap(page, PersonDTO.class);
     }
@@ -137,7 +138,7 @@ public class PetQuery {
      * @param conditions 筛选条件
      */
     @GraphQLFetcher
-    public Long countBy(@RequestParam Conditions conditions) {
+    public Long countBy(@RequestParam Conditions<PetEntity> conditions) {
         return this.mapper.countBy(conditions);
     }
 }
