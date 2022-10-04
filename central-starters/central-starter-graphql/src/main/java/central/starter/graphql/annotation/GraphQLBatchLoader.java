@@ -29,7 +29,7 @@ import java.lang.annotation.*;
 /**
  * 标记该方法为 BatchLoader 方法
  * <p>
- * BatchLoader 主要用于解决 N + 1 的查询性能部碮同
+ * BatchLoader 主要用于解决 N + 1 的查询性能问题
  *
  * @author Alan Yeh
  * @since 2022/09/09

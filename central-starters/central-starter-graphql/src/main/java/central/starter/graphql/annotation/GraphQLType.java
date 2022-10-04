@@ -27,7 +27,7 @@ package central.starter.graphql.annotation;
 import java.lang.annotation.*;
 
 /**
- * 标注在 DTO 上，用于关联 GraphQL 类型
+ * 用于关联 GraphQL 类型
  *
  * @author Alan Yeh
  * @since 2022/09/09
