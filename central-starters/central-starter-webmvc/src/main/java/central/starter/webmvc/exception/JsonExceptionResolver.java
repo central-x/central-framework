@@ -24,6 +24,7 @@
 
 package central.starter.webmvc.exception;
 
+import central.starter.webmvc.exception.handlers.FallbackHandler;
 import central.util.Listx;
 import central.util.Mapx;
 import central.lang.Stringx;
@@ -61,6 +62,8 @@ public class JsonExceptionResolver extends ExceptionHandlerExceptionResolver {
     @Value("${spring.application.name:}")
     private String applicationName;
 
+    private final ExceptionHandler fallbackHandler = new FallbackHandler();
+
     @Override
     protected ModelAndView doResolveHandlerMethodException(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Exception exception) {
         ModelAndView result = null;
@@ -83,29 +86,4 @@ public class JsonExceptionResolver extends ExceptionHandlerExceptionResolver {
         }
         return result;
     }
-
-    private ExceptionHandler fallbackHandler = new ExceptionHandler() {
-        @Override
-        public boolean support(Throwable throwable) {
-            return true;
-        }
-
-        @Override
-        public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
-            // 输出异常日志
-            log.error(throwable.getLocalizedMessage(), throwable);
-
-            Map<String, Object> map = Mapx.newHashMap("message", throwable.getMessage());
-
-            // 如果是在 debug 模式下，输出完整的错误信息到前端
-            StringWriter writer = new StringWriter();
-            throwable.printStackTrace(new PrintWriter(writer));
-            Object[] reason = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toArray();
-            map.put("stack", reason);
-
-            ModelAndView mv = new ModelAndView(new MappingJackson2JsonView(), map);
-            mv.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            return mv;
-        }
-    };
 }

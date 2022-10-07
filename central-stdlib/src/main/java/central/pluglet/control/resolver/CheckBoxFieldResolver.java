@@ -67,7 +67,7 @@ public class CheckBoxFieldResolver extends FieldResolver {
 
         return PlugletControl.builder()
                 .label(annotation.label())
-                .name(Objectx.get(annotation.name(), field.getName()))
+                .name(Objectx.getOrDefault(annotation.name(), field.getName()))
                 .type(annotation.type().name())
                 .comment(annotation.comment())
                 .defaultValue(List.of(annotation.defaultValue()))

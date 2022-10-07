@@ -1,4 +1,6 @@
 extend type Query {
+    "宠物查询"
     pets: PetQuery
+    "人查询"
     persons: PersonQuery
 }

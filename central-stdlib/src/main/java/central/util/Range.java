@@ -67,7 +67,7 @@ public class Range<T extends Number> implements Serializable {
     public Range(T element1, T element2, Comparator<T> comparator) {
         Assertx.mustTrue(element1 != null && element2 != null, "参数不参为空");
 
-        this.comparator = Objectx.get(comparator, ElementComparator.INSTANCE);
+        this.comparator = Objectx.getOrDefault(comparator, ElementComparator.INSTANCE);
 
         if (this.comparator.compare(element1, element2) < 1) {
             this.minimum = element1;

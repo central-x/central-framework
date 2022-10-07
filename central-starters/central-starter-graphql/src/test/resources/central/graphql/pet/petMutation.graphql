@@ -1,13 +1,73 @@
+"""
+宠物
+"""
 input PetInput {
-    id:                     ID                      # 主键
-    masterId:               String                  # 主人主键
-    name:                   String                  # 名称
+    "主键"
+    id:                     ID
+    "主人主键"
+    masterId:               String
+    "名称"
+    name:                   String
 }
 
+"""
+宠物修改
+"""
 type PetMutation {
-    # 保存数据
-    # @param input    数据输入
-    # @param operator 操作人
-    # @return         保存后的实体数据
-    insert(input: PetInput, operator: String): Pet
+
+    """
+    保存数据
+    """
+    insert(
+        "数据输入"
+        input: PetInput,
+        "操作人"
+        operator: String
+    ): Pet
+
+    """
+    批量保存数据
+    """
+    insertBatch(
+        "数据输入"
+        inputs: [PetInput],
+        "操作人"
+        operator: String
+    ): [Pet]
+
+    """
+    更新数据
+    """
+    update(
+        "数据输入"
+        input: PetInput,
+        "操作人"
+        operator: String
+    ): Pet
+
+    """
+    批量更新数据
+    """
+    updateBatch(
+        "数据输入"
+        inputs: [PetInput],
+        "操作人"
+        operator: String
+    ): [Pet]
+
+    """
+    删除数据
+    """
+    deleteByIds(
+        "主键"
+        ids: [String]
+    ): Long
+
+    """
+    删除数据
+    """
+    deleteBy(
+        "筛选条件"
+        conditions: [ConditionInput] = []
+    ): Long
 }

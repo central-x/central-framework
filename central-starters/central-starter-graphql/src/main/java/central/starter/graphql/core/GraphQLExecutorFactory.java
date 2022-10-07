@@ -138,7 +138,7 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
         this.resolvers.add(new RequestAttributeParameterResolver());
 
         // 添加开发者指定的参数解析器
-        this.resolvers.addAll(Objectx.get(configurer.getParameterResolvers(), Collections.emptyList()));
+        this.resolvers.addAll(Objectx.getOrDefault(configurer.getParameterResolvers(), Collections.emptyList()));
     }
 
     /**
@@ -177,7 +177,7 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
             String name = source.getSimpleName();
             var annotation = source.getAnnotation(GraphQLType.class);
             if (annotation != null) {
-                name = Objectx.get(annotation.value(), source.getSimpleName());
+                name = Objectx.getOrDefault(annotation.value(), source.getSimpleName());
             }
 
             var type = types.get(name);
@@ -192,7 +192,7 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
             // 注册 graphql schema
             var schema = source.getAnnotation(GraphQLSchema.class);
             if (schema != null) {
-                var graphql = Path.of("central", "graphql", schema.path(), Objectx.get(schema.name(), Stringx.lowerCaseFirstLetter(source.getSimpleName())) + ".graphql");
+                var graphql = Path.of("central", "graphql", schema.path(), Objectx.getOrDefault(schema.name(), Stringx.lowerCaseFirstLetter(source.getSimpleName())) + ".graphql");
                 schemas.add(graphql.toString());
                 // 如果有声明类，则递归注册
                 if (Arrayx.isNotEmpty(schema.types())) {
@@ -234,6 +234,8 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
             this.scanTypes(mutationType, types, schemas);
         }
 
+
+        log.info("GraphQL Types Registered(" + types.size() + "): " + types.entrySet().stream().map(it -> it.getKey() + " -> " + it.getValue().getName()).sorted().collect(Collectors.joining("\n")));
         for (var it : types.entrySet()) {
             var name = it.getKey();
             var clazz = it.getValue();
@@ -305,6 +307,7 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
 
 
         // 注册 schema
+        log.info("GraphQL Schemas Registered(" + schemas.size() + "): \n" + schemas.stream().sorted().collect(Collectors.joining("\n")));
         for (var schema : schemas) {
             var resources = Thread.currentThread().getContextClassLoader().getResources(schema);
             if (!resources.hasMoreElements()) {

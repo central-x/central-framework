@@ -39,6 +39,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,34 +53,36 @@ import java.util.stream.Collectors;
  * @since 2022/10/04
  */
 @Component
-@GraphQLSchema(types = GroupDTO.class)
+@GraphQLSchema(path = "query", types = GroupDTO.class)
 public class GroupQuery {
 
     @Setter(onMethod_ = @Autowired)
     private GroupMapper mapper;
 
     /**
-     * 批量查询
+     * 批量数据加载器
      *
      * @param ids 主键
      */
     @GraphQLBatchLoader
-    public Map<String, GroupDTO> batchLoader(@RequestParam List<String> ids) {
-        return this.mapper.findByIds(ids).stream()
+    public @Nonnull Map<String, GroupDTO> batchLoader(@RequestParam List<String> ids) {
+        return this.mapper.findBy(Conditions.of(GroupEntity.class).in(GroupEntity::getId, ids))
+                .stream()
                 .map(it -> DTO.wrap(it, GroupDTO.class))
                 .collect(Collectors.toMap(GroupDTO::getId, it -> it));
     }
 
     /**
-     * 查询数据
+     * 根据主键查询数据
      *
      * @param id 主键
      */
     @GraphQLFetcher
-    public GroupDTO findById(@RequestParam String id) {
-        var entity = this.mapper.findById(id);
+    public @Nullable GroupDTO findById(@RequestParam String id) {
+        var entity = this.mapper.findFirstBy(Conditions.of(GroupEntity.class).eq(GroupEntity::getId, id));
         return DTO.wrap(entity, GroupDTO.class);
     }
+
 
     /**
      * 查询数据
@@ -86,8 +90,9 @@ public class GroupQuery {
      * @param ids 主键
      */
     @GraphQLFetcher
-    public List<GroupDTO> findByIds(@RequestParam List<String> ids) {
-        var entities = this.mapper.findByIds(ids);
+    public @Nonnull List<GroupDTO> findByIds(@RequestParam List<String> ids) {
+        var entities = this.mapper.findBy(Conditions.of(GroupEntity.class).in(GroupEntity::getId, ids));
+
         return DTO.wrap(entities, GroupDTO.class);
     }
 
@@ -100,13 +105,12 @@ public class GroupQuery {
      * @param orders     排序条件
      */
     @GraphQLFetcher
-    public List<GroupDTO> findBy(@RequestParam(required = false) Long limit,
-                                 @RequestParam(required = false) Long offset,
-                                 @RequestParam Conditions<GroupEntity> conditions,
-                                 @RequestParam Orders<GroupEntity> orders) {
-        // 懒得去过滤了
-        var entities = this.mapper.findBy(limit, offset, conditions, orders);
-        return DTO.wrap(entities, GroupDTO.class);
+    public @Nonnull List<GroupDTO> findBy(@RequestParam(required = false) Long limit,
+                                           @RequestParam(required = false) Long offset,
+                                           @RequestParam Conditions<GroupEntity> conditions,
+                                           @RequestParam Orders<GroupEntity> orders) {
+        var list = this.mapper.findBy(limit, offset, conditions, orders);
+        return DTO.wrap(list, GroupDTO.class);
     }
 
     /**
@@ -118,10 +122,10 @@ public class GroupQuery {
      * @param orders     排序条件
      */
     @GraphQLFetcher
-    public Page<GroupDTO> pageBy(@RequestParam long pageIndex,
-                                 @RequestParam long pageSize,
-                                 @RequestParam Conditions<GroupEntity> conditions,
-                                 @RequestParam Orders<GroupEntity> orders) {
+    public @Nonnull Page<GroupDTO> pageBy(@RequestParam long pageIndex,
+                                           @RequestParam long pageSize,
+                                           @RequestParam Conditions<GroupEntity> conditions,
+                                           @RequestParam Orders<GroupEntity> orders) {
         var page = this.mapper.findPageBy(pageIndex, pageSize, conditions, orders);
         return DTO.wrap(page, GroupDTO.class);
     }

@@ -1,57 +1,59 @@
 """
-人
+项目
 """
-input PersonInput {
+input ProjectInput {
     "主键"
     id:                     ID
-    "姓名"
+    "项目组主键"
+    groupId:                String
+    "名称"
     name:                   String
 }
 
 """
-人修改
+项目修改
 """
-type PersonMutation {
+type ProjectMutation {
 
     """
     保存数据
     """
     insert(
         "数据输入"
-        input: PersonInput,
+        input: ProjectInput,
         "操作人"
         operator: String
-    ): Person
+    ): Project
 
     """
     批量保存数据
     """
     insertBatch(
         "数据输入"
-        inputs: [PersonInput],
+        inputs: [ProjectInput],
         "操作人"
         operator: String
-    ): [Person]
+    ): [Project]
 
     """
     更新数据
     """
     update(
         "数据输入"
-        input: PersonInput,
+        input: ProjectInput,
         "操作人"
         operator: String
-    ): Person
+    ): Project
 
     """
     批量更新数据
     """
     updateBatch(
         "数据输入"
-        inputs: [PersonInput],
+        inputs: [ProjectInput],
         "操作人"
         operator: String
-    ): [Person]
+    ): [Project]
 
     """
     删除数据

@@ -77,7 +77,7 @@ public class Objectx {
      * @param fallback 取值失败时的储备
      * @param <T>      类型
      */
-    public static @Nonnull <T> T get(@Nullable T value, @Nonnull T fallback) {
+    public static @Nonnull <T> T getOrDefault(@Nullable T value, @Nonnull T fallback) {
         if (value instanceof String string) {
             if (Stringx.isNullOrEmpty(string)) {
                 return fallback;
@@ -102,7 +102,7 @@ public class Objectx {
      * @param supplier 如果值为空时，通过 supplier 获取
      * @param <T>      类型
      */
-    public static @Nonnull <T> T get(@Nullable T value, @Nonnull Supplier<T> supplier) {
+    public static @Nonnull <T> T getOrDefault(@Nullable T value, @Nonnull Supplier<T> supplier) {
         Assertx.mustNotNull(supplier, "Argument 'supplier' must not null");
         if (value instanceof String string) {
             if (Stringx.isNullOrEmpty(string)) {

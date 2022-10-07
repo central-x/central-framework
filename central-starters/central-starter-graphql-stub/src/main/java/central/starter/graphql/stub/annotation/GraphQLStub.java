@@ -37,6 +37,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GraphQLStub {
     /**
+     * GraphQL 查询声明文件位置
+     */
+    String path() default "";
+    /**
      * 指定通信的 Bean 名称
      */
     String client() default "";

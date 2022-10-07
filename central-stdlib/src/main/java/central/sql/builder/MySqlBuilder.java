@@ -64,13 +64,13 @@ public class MySqlBuilder extends StandardSqlBuilder {
     @Override
     public String handleSqlType(SqlType type, Integer length) {
         return switch (type) {
-            case STRING -> "VARCHAR(" + Objectx.get(length, 32) + ")";
+            case STRING -> "VARCHAR(" + Objectx.getOrDefault(length, 32) + ")";
             case BLOB -> "BLOB";
             case INTEGER -> "INT";
             case LONG -> "BIGINT";
             case BOOLEAN -> "TINYINT";
             case DATETIME -> "DATETIME(3)"; // 保留 3 个精度
-            case BIG_DECIMAL -> "VARCHAR(" + Objectx.get(length, 128) + ")";
+            case BIG_DECIMAL -> "VARCHAR(" + Objectx.getOrDefault(length, 128) + ")";
             default -> throw new RuntimeException("不支持的数据类型: " + type);
         };
     }

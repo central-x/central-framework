@@ -47,12 +47,12 @@ public class PostgreSqlBuilder extends StandardSqlBuilder {
     @Override
     public String handleSqlType(SqlType type, Integer length) {
         return switch (type) {
-            case STRING -> "VARCHAR(" + Objectx.get(length, 32) + ")";
+            case STRING -> "VARCHAR(" + Objectx.getOrDefault(length, 32) + ")";
             case BLOB -> "BYTEA";
             case INTEGER -> "INTEGER";
             case LONG -> "BIGINT";
             case BOOLEAN -> "BOOLEAN";
-            case BIG_DECIMAL -> "VARCHAR(" + Objectx.get(length, 256) + ")";
+            case BIG_DECIMAL -> "VARCHAR(" + Objectx.getOrDefault(length, 256) + ")";
             case DATETIME -> "TIMESTAMP";
             default -> throw new RuntimeException("不支持的数据类型: " + type);
         };

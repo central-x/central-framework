@@ -61,12 +61,12 @@ public class RequestParamParameterResolver extends SpringAnnotatedParameterResol
     @Nullable
     @Override
     public Object resolve(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter, @NotNull Context context) {
-        if (context.contains(DataFetchingEnvironment.class)) {
-            return resolve(method, parameter, context.require(DataFetchingEnvironment.class));
-        }
-
         if (context.contains(BatchLoaderEnvironment.class)) {
             return resolve(method, parameter, context);
+        }
+
+        if (context.contains(DataFetchingEnvironment.class)) {
+            return resolve(method, parameter, context.require(DataFetchingEnvironment.class));
         }
 
         return null;
@@ -76,7 +76,7 @@ public class RequestParamParameterResolver extends SpringAnnotatedParameterResol
         RequestParam param = parameter.getAnnotation(RequestParam.class);
         String name = parameter.getName();
         if (Stringx.isNotBlank(param.name()) || Stringx.isNotBlank(param.value())) {
-            name = Objectx.get(param.name(), param.value());
+            name = Objectx.getOrDefault(param.name(), param.value());
         }
 
         Map<String, Object> arguments = environment.getArguments();
@@ -170,7 +170,7 @@ public class RequestParamParameterResolver extends SpringAnnotatedParameterResol
         RequestParam param = parameter.getAnnotation(RequestParam.class);
         String name = parameter.getName();
         if (Stringx.isNotBlank(param.name()) || Stringx.isNotBlank(param.value())) {
-            name = Objectx.get(param.name(), param.value());
+            name = Objectx.getOrDefault(param.name(), param.value());
         }
 
         List<String> keys = context.get("keys");
@@ -183,7 +183,7 @@ public class RequestParamParameterResolver extends SpringAnnotatedParameterResol
                 return Listx.asStream(keys).distinct().sorted().collect(Collectors.toList());
             } else if (Set.class.isAssignableFrom(parameter.getType())) {
                 // 直接返回 Set
-                return new HashSet<>(Objectx.get(keys, Collections.emptyList()));
+                return new HashSet<>(Objectx.getOrDefault(keys, Collections.emptyList()));
             } else {
                 throw new GraphQLException(Stringx.format("执行 {}.{} 方法异常：BatchLoader 只接收 Set<String> 或 List<String> 类型的参数", method.getDeclaringClass().getSimpleName(), method.getName()));
             }

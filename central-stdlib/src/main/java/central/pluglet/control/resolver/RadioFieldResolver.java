@@ -63,7 +63,7 @@ public class RadioFieldResolver extends FieldResolver {
 
         return PlugletControl.builder()
                 .label(annotation.label())
-                .name(Objectx.get(annotation.name(), field.getName()))
+                .name(Objectx.getOrDefault(annotation.name(), field.getName()))
                 .type(annotation.type().name())
                 .comment(annotation.comment())
                 .defaultValue(Arrayx.getFirst(annotation.defaultValue()))

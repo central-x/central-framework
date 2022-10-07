@@ -70,7 +70,7 @@ public class CookieValueResolver implements SpringResolver {
 
         if (Stringx.isNotBlank(annotation.name()) || Stringx.isNotBlank(annotation.value())) {
             // 修改为指定的 Cookie 名
-            name = Objectx.get(annotation.name(), annotation.value());
+            name = Objectx.getOrDefault(annotation.name(), annotation.value());
         }
 
         if (arg == null && Stringx.isNotBlank(annotation.defaultValue()) && Objects.equals(ValueConstants.DEFAULT_NONE, annotation.defaultValue())) {

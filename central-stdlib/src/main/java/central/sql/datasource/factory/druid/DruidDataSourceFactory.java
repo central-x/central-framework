@@ -71,13 +71,13 @@ public class DruidDataSourceFactory implements DataSourceFactory {
         dataSource.setMaxOpenPreparedStatements(properties.getMaxOpenPreparedStatements());
         switch (SqlDialect.resolve(url)) {
             case MySql, PostgreSql -> {
-                dataSource.setValidationQuery(Objectx.get(properties.getValidationQuery(), "SELECT 1"));
+                dataSource.setValidationQuery(Objectx.getOrDefault(properties.getValidationQuery(), "SELECT 1"));
             }
             case Oracle, Kingbase, Oscar, H2, Vastbase, Dameng -> {
-                dataSource.setValidationQuery(Objectx.get(properties.getValidationQuery(), "SELECT 1 FROM DUAL"));
+                dataSource.setValidationQuery(Objectx.getOrDefault(properties.getValidationQuery(), "SELECT 1 FROM DUAL"));
             }
             case HighGo -> {
-                dataSource.setValidationQuery(Objectx.get(properties.getValidationQuery(), "select version()"));
+                dataSource.setValidationQuery(Objectx.getOrDefault(properties.getValidationQuery(), "select version()"));
             }
             default -> {
                 throw new IllegalArgumentException("不支持的数据库类型");

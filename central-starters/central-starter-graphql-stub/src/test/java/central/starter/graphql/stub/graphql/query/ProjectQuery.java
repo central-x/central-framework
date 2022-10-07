@@ -39,6 +39,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,33 +53,35 @@ import java.util.stream.Collectors;
  * @since 2022/10/04
  */
 @Component
-@GraphQLSchema(types = ProjectDTO.class)
+@GraphQLSchema(path = "query", types = ProjectDTO.class)
 public class ProjectQuery {
     @Setter(onMethod_ = @Autowired)
     private ProjectMapper mapper;
 
     /**
-     * 批量查询
+     * 批量数据加载器
      *
      * @param ids 主键
      */
     @GraphQLBatchLoader
-    public Map<String, ProjectDTO> batchLoader(@RequestParam List<String> ids) {
-        return this.mapper.findByIds(ids).stream()
+    public @Nonnull Map<String, ProjectDTO> batchLoader(@RequestParam List<String> ids) {
+        return this.mapper.findBy(Conditions.of(ProjectEntity.class).in(ProjectEntity::getId, ids))
+                .stream()
                 .map(it -> DTO.wrap(it, ProjectDTO.class))
                 .collect(Collectors.toMap(ProjectDTO::getId, it -> it));
     }
 
     /**
-     * 查询数据
+     * 根据主键查询数据
      *
      * @param id 主键
      */
     @GraphQLFetcher
-    public ProjectDTO findById(@RequestParam String id) {
-        var entity = this.mapper.findById(id);
+    public @Nullable ProjectDTO findById(@RequestParam String id) {
+        var entity = this.mapper.findFirstBy(Conditions.of(ProjectEntity.class).eq(ProjectEntity::getId, id));
         return DTO.wrap(entity, ProjectDTO.class);
     }
+
 
     /**
      * 查询数据
@@ -85,8 +89,9 @@ public class ProjectQuery {
      * @param ids 主键
      */
     @GraphQLFetcher
-    public List<ProjectDTO> findByIds(@RequestParam List<String> ids) {
-        var entities = this.mapper.findByIds(ids);
+    public @Nonnull List<ProjectDTO> findByIds(@RequestParam List<String> ids) {
+        var entities = this.mapper.findBy(Conditions.of(ProjectEntity.class).in(ProjectEntity::getId, ids));
+
         return DTO.wrap(entities, ProjectDTO.class);
     }
 
@@ -99,13 +104,12 @@ public class ProjectQuery {
      * @param orders     排序条件
      */
     @GraphQLFetcher
-    public List<ProjectDTO> findBy(@RequestParam(required = false) Long limit,
-                                   @RequestParam(required = false) Long offset,
-                                   @RequestParam Conditions<ProjectEntity> conditions,
-                                   @RequestParam Orders<ProjectEntity> orders) {
-        // 懒得去过滤了
-        var entities = this.mapper.findBy(limit, offset, conditions, orders);
-        return DTO.wrap(entities, ProjectDTO.class);
+    public @Nonnull List<ProjectDTO> findBy(@RequestParam(required = false) Long limit,
+                                            @RequestParam(required = false) Long offset,
+                                            @RequestParam Conditions<ProjectEntity> conditions,
+                                            @RequestParam Orders<ProjectEntity> orders) {
+        var list = this.mapper.findBy(limit, offset, conditions, orders);
+        return DTO.wrap(list, ProjectDTO.class);
     }
 
     /**
@@ -117,10 +121,10 @@ public class ProjectQuery {
      * @param orders     排序条件
      */
     @GraphQLFetcher
-    public Page<ProjectDTO> pageBy(@RequestParam long pageIndex,
-                                   @RequestParam long pageSize,
-                                   @RequestParam Conditions<ProjectEntity> conditions,
-                                   @RequestParam Orders<ProjectEntity> orders) {
+    public @Nonnull Page<ProjectDTO> pageBy(@RequestParam long pageIndex,
+                                            @RequestParam long pageSize,
+                                            @RequestParam Conditions<ProjectEntity> conditions,
+                                            @RequestParam Orders<ProjectEntity> orders) {
         var page = this.mapper.findPageBy(pageIndex, pageSize, conditions, orders);
         return DTO.wrap(page, ProjectDTO.class);
     }

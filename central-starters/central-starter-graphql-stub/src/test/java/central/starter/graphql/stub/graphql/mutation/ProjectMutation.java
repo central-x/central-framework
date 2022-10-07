@@ -25,6 +25,7 @@
 package central.starter.graphql.stub.graphql.mutation;
 
 import central.lang.Stringx;
+import central.sql.Conditions;
 import central.starter.graphql.annotation.GraphQLFetcher;
 import central.starter.graphql.annotation.GraphQLSchema;
 import central.starter.graphql.stub.graphql.dto.DTO;
@@ -33,6 +34,7 @@ import central.starter.graphql.stub.graphql.entity.ProjectEntity;
 import central.starter.graphql.stub.graphql.mapper.ProjectMapper;
 import central.starter.graphql.stub.test.input.ProjectInput;
 import central.util.Listx;
+import central.validation.group.Insert;
 import central.validation.group.Update;
 import jakarta.validation.groups.Default;
 import lombok.Setter;
@@ -43,6 +45,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -53,7 +56,7 @@ import java.util.List;
  * @since 2022/10/04
  */
 @Component
-@GraphQLSchema(types = ProjectDTO.class)
+@GraphQLSchema(path = "mutation", types = ProjectDTO.class)
 public class ProjectMutation {
     @Setter(onMethod_ = @Autowired)
     private ProjectMapper mapper;
@@ -65,13 +68,26 @@ public class ProjectMutation {
      * @param operator 操作人
      */
     @GraphQLFetcher
-    public ProjectDTO insert(@RequestParam @Validated ProjectInput input,
-                             @RequestParam String operator) {
+    public @Nonnull ProjectDTO insert(@RequestParam @Validated({Insert.class, Default.class}) ProjectInput input,
+                                      @RequestParam String operator) {
         var entity = new ProjectEntity();
         entity.fromInput(input);
         entity.updateCreator(operator);
         this.mapper.insert(entity);
+
         return DTO.wrap(entity, ProjectDTO.class);
+    }
+
+    /**
+     * 批量保存数据
+     *
+     * @param inputs   数据输入
+     * @param operator 操作人
+     */
+    @GraphQLFetcher
+    public @Nonnull List<ProjectDTO> insertBatch(@RequestParam @Validated({Insert.class, Default.class}) List<ProjectInput> inputs,
+                                                 @RequestParam String operator) {
+        return Listx.asStream(inputs).map(it -> this.insert(it, operator)).toList();
     }
 
     /**
@@ -81,18 +97,31 @@ public class ProjectMutation {
      * @param operator 操作人
      */
     @GraphQLFetcher
-    public ProjectDTO update(@RequestParam @Validated({Update.class, Default.class}) ProjectInput input,
-                             @RequestParam String operator) {
-        var entity = this.mapper.findById(input.getId());
+    public @Nonnull ProjectDTO update(@RequestParam @Validated({Update.class, Default.class}) ProjectInput input,
+                                      @RequestParam String operator) {
+        var entity = this.mapper.findFirstBy(Conditions.of(ProjectEntity.class).eq(ProjectEntity::getId, input.getId()));
         if (entity == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Stringx.format("数据[id={}]不存在", input.getId()));
         }
+
         entity.fromInput(input);
         entity.updateModifier(operator);
         this.mapper.update(entity);
+
         return DTO.wrap(entity, ProjectDTO.class);
     }
 
+    /**
+     * 批量更新数据
+     *
+     * @param inputs   数据输入
+     * @param operator 操作人
+     */
+    @GraphQLFetcher
+    public @Nonnull List<ProjectDTO> updateBatch(@RequestParam @Validated({Update.class, Default.class}) List<ProjectInput> inputs,
+                                                 @RequestParam String operator) {
+        return Listx.asStream(inputs).map(it -> this.update(it, operator)).toList();
+    }
 
     /**
      * 根据主键删除数据
@@ -105,6 +134,16 @@ public class ProjectMutation {
             return 0;
         }
 
-        return this.mapper.deleteByIds(ids);
+        return this.mapper.deleteBy(Conditions.of(ProjectEntity.class).in(ProjectEntity::getId, ids));
+    }
+
+    /**
+     * 根据条件删除数据
+     *
+     * @param conditions 条件
+     */
+    @GraphQLFetcher
+    public long deleteBy(@RequestParam Conditions<ProjectEntity> conditions) {
+        return this.mapper.deleteBy(conditions);
     }
 }

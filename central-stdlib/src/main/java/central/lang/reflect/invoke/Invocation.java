@@ -83,7 +83,7 @@ public class Invocation {
      * @param resolvers 参数解析器
      */
     public Invocation resolvers(List<ParameterResolver> resolvers) {
-        this.resolvers.addAll(Objectx.get(resolvers, Collections.emptyList()));
+        this.resolvers.addAll(Objectx.getOrDefault(resolvers, Collections.emptyList()));
         this.resolvers.sort(Comparator.comparing(ParameterResolver::getOrder));
         return this;
     }

@@ -30,6 +30,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -48,5 +49,5 @@ public class GraphQLRequest implements Serializable {
     private String query;
 
     @Label("变量")
-    private Map<String, Object> variables;
+    private Map<String, Object> variables = new HashMap<>();
 }

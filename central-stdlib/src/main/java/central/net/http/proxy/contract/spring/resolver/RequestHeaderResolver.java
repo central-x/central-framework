@@ -82,7 +82,7 @@ public class RequestHeaderResolver implements SpringResolver {
 
         // 自定义 Header 名
         if (Stringx.isNotBlank(annotation.name()) || Stringx.isNotBlank(annotation.value())) {
-            name = Objectx.get(annotation.name(), annotation.value());
+            name = Objectx.getOrDefault(annotation.name(), annotation.value());
         }
 
         if (value instanceof List<?> headers) {

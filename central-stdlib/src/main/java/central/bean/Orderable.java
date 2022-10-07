@@ -59,8 +59,8 @@ public interface Orderable<T extends Orderable<T>> extends Comparable<T> {
         // 相同对象才能排序
         Assertx.mustInstanceOf(this.getClass(), target, "Argument 'argument' must instance of " + this.getClass().getName());
 
-        Integer thisSortNo = Objectx.get(this.getOrder(), -1);
-        Integer targetSortNo = Objectx.get(target.getOrder(), -1);
+        Integer thisSortNo = Objectx.getOrDefault(this.getOrder(), -1);
+        Integer targetSortNo = Objectx.getOrDefault(target.getOrder(), -1);
         return thisSortNo.compareTo(targetSortNo);
     }
 

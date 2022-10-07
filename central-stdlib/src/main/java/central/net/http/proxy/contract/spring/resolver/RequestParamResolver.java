@@ -82,7 +82,7 @@ public class RequestParamResolver implements SpringResolver {
 
         // 自定义参数名
         if (Stringx.isNotBlank(annotation.name()) || Stringx.isNotBlank(annotation.value())) {
-            name = Objectx.get(annotation.name(), annotation.value());
+            name = Objectx.getOrDefault(annotation.name(), annotation.value());
         }
 
         if (value instanceof List<?> list) {

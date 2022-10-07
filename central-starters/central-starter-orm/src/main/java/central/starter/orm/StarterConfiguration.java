@@ -60,7 +60,7 @@ public class StarterConfiguration {
     @Bean
     @ConditionalOnMissingBean(DataSourceFactory.class)
     public DataSourceFactory getDataSourceFactory(Environment environment) {
-        return switch (Objectx.get(environment.getProperty("spring.datasource.type"), "com.zaxxer.hikari.HikariDataSource")) {
+        return switch (Objectx.getOrDefault(environment.getProperty("spring.datasource.type"), "com.zaxxer.hikari.HikariDataSource")) {
             case "com.alibaba.druid.pool" -> new DruidDataSourceFactory();
             default -> new HikariDataSourceFactory();
         };

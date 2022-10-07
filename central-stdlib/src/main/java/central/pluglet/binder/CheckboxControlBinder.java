@@ -66,7 +66,7 @@ public class CheckboxControlBinder implements FieldBinder {
                 .map(it -> (OptionalEnum<String>)Assertx.requireInstanceOf(OptionalEnum.class, it, "Enum '{}' MUST implements Optional<String>"))
                 .toList();
 
-        var name = Objectx.get(annotation.name(), field.getName());
+        var name = Objectx.getOrDefault(annotation.name(), field.getName());
         var param = params.get(name);
         var paramValues = new ArrayList<String>();
         if (param instanceof List<?> l) {

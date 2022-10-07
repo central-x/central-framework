@@ -344,15 +344,15 @@ public class StandardMetaManager implements SqlMetaManager {
         var foreign = new ForeignMeta();
         foreign.setAlias(relation.alias());
 
-        var property = entity.getProperty(Objectx.get(relation.property(), entity.getId().getName()));
-        Assertx.mustNotNull(property, "创建实体[{}]的关联关系[{}]失败: 在实体[{}]中没有找到关联属性[{}]", entity.getType().getName(), relation.alias(), entity.getType().getName(), Objectx.get(relation.property(), entity.getId().getName()));
+        var property = entity.getProperty(Objectx.getOrDefault(relation.property(), entity.getId().getName()));
+        Assertx.mustNotNull(property, "创建实体[{}]的关联关系[{}]失败: 在实体[{}]中没有找到关联属性[{}]", entity.getType().getName(), relation.alias(), entity.getType().getName(), Objectx.getOrDefault(relation.property(), entity.getId().getName()));
         foreign.setProperty(property);
 
         var target = this.getMeta(relation.target());
         foreign.setTarget(target);
 
-        var referencedProperty = target.getProperty(Objectx.get(relation.referencedProperty(), target.getId().getName()));
-        Assertx.mustNotNull(referencedProperty, "创建实体[{}]的关联关系[{}]失败: 在实体[{}]中没有找到关联属性[{}]", entity.getType().getName(), relation.alias(), target.getType().getName(), Objectx.get(relation.referencedProperty(), target.getId().getName()));
+        var referencedProperty = target.getProperty(Objectx.getOrDefault(relation.referencedProperty(), target.getId().getName()));
+        Assertx.mustNotNull(referencedProperty, "创建实体[{}]的关联关系[{}]失败: 在实体[{}]中没有找到关联属性[{}]", entity.getType().getName(), relation.alias(), target.getType().getName(), Objectx.getOrDefault(relation.referencedProperty(), target.getId().getName()));
         foreign.setReferencedProperty(referencedProperty);
 
         entity.getForeigns().add(foreign);
@@ -368,16 +368,16 @@ public class StandardMetaManager implements SqlMetaManager {
         var target = this.getMeta(relation.target());
         foreign.setTarget(target);
 
-        var property = entity.getProperty(Objectx.get(relation.property(), entity.getId().getName()));
-        Assertx.mustNotNull(property, "创建实体[{}]的关联关系[{}]失败: 在实体[{}]中没有找到关联属性[{}]", entity.getType().getName(), relation.alias(), entity.getType().getName(), Objectx.get(relation.property(), entity.getId().getName()));
+        var property = entity.getProperty(Objectx.getOrDefault(relation.property(), entity.getId().getName()));
+        Assertx.mustNotNull(property, "创建实体[{}]的关联关系[{}]失败: 在实体[{}]中没有找到关联属性[{}]", entity.getType().getName(), relation.alias(), entity.getType().getName(), Objectx.getOrDefault(relation.property(), entity.getId().getName()));
         foreign.setProperty(property);
 
         var relationProperty = relationTable.getProperty(relation.relationProperty());
         Assertx.mustNotNull(relationProperty, "创建实体[{}]的关联关系[{}]失败: 在关联实体[{}]中没有找到关联属性[{}]", entity.getType().getName(), relation.alias(), relationTable.getType().getName(), relation.relationProperty());
         foreign.setRelationProperty(relationProperty);
 
-        var targetProperty = target.getProperty(Objectx.get(relation.targetProperty(), target.getId().getName()));
-        Assertx.mustNotNull(targetProperty, "创建实体[{}]的关联关系[{}]失败: 在实体[{}]中没有找到关联属性[{}]", entity.getType().getName(), relation.alias(), target.getType().getName(), Objectx.get(relation.targetProperty(), target.getId().getName()));
+        var targetProperty = target.getProperty(Objectx.getOrDefault(relation.targetProperty(), target.getId().getName()));
+        Assertx.mustNotNull(targetProperty, "创建实体[{}]的关联关系[{}]失败: 在实体[{}]中没有找到关联属性[{}]", entity.getType().getName(), relation.alias(), target.getType().getName(), Objectx.getOrDefault(relation.targetProperty(), target.getId().getName()));
         foreign.setTargetProperty(targetProperty);
 
         var targetRelationProperty = relationTable.getProperty(relation.targetRelationProperty());
