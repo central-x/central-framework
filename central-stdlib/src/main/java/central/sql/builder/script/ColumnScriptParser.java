@@ -88,7 +88,7 @@ class ColumnScriptParser {
         if (item == null) {
             return defaultValue;
         }
-        return Objectx.get(item.getNodeValue(), defaultValue);
+        return Objectx.getOrDefault(item.getNodeValue(), defaultValue);
     }
 
     /**

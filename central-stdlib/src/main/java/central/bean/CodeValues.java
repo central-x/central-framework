@@ -153,7 +153,7 @@ public class CodeValues<V extends Serializable> implements Collection<CodeValue<
      * @param defaultValue 默认值
      */
     public V getOrDefault(String key, V defaultValue) {
-        return Objectx.get(this.get(key), defaultValue);
+        return Objectx.getOrDefault(this.get(key), defaultValue);
     }
 
     /**

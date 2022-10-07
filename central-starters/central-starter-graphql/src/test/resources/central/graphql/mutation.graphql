@@ -1,4 +1,6 @@
 extend type Mutation {
+    "宠物修改"
     pets: PetMutation
+    "人修改"
     persons: PersonMutation
 }

@@ -28,7 +28,7 @@ import central.lang.Arrayx;
 import central.lang.Stringx;
 import central.starter.graphql.stub.EnableGraphQLStub;
 import central.starter.graphql.stub.ProviderClient;
-import central.starter.graphql.stub.ProviderStub;
+import central.starter.graphql.stub.Provider;
 import central.starter.graphql.stub.annotation.GraphQLStub;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +65,7 @@ public class ProviderStubRegistrar implements ImportBeanDefinitionRegistrar, Res
     @Override
     public void registerBeanDefinitions(@Nonnull AnnotationMetadata importingClassMetadata, @Nonnull BeanDefinitionRegistry registry) {
         ClassPathBeanDefinitionScanner scanner = getScanner(registry);
-        scanner.addIncludeFilter(new AssignableTypeFilter(ProviderStub.class));
+        scanner.addIncludeFilter(new AssignableTypeFilter(Provider.class));
         scanner.addExcludeFilter((reader, factory) -> {
             // 如果不包含 Repository 注解的话，排除
             return !reader.getAnnotationMetadata().hasAnnotation(Repository.class.getName());

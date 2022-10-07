@@ -1,31 +1,79 @@
+"""
+宠物
+"""
 type Pet implements Entity & Modifiable {
-    id:                     ID!                     # 主键
-    masterId:               String!                 # 主人主键
-    master:                 Person!                 # 主人
-    name:                   String!                 # 名称
+    "主键"
+    id:                     ID!
+    "主人主键"
+    masterId:               String!
+    "主人"
+    master:                 Person!
+    "名称"
+    name:                   String!
 
+    "创建人主键"
     creatorId:              String!
+    "创建时间"
     createDate:             Timestamp!
+    "修改人主键"
     modifierId:             String!
+    "修改人时间"
     modifyDate:             Timestamp!
 }
 
+"""
+宠物查询
+"""
 type PetQuery {
-    # 查询数据
-    # @param ids 主键
-    # @return    数据
-    findByIds(ids: [String]): [Pet]
+    """
+    查询数据
+    """
+    findById(
+        "主键"
+        id: String
+    ): Pet
 
-    # 查询数据
-    # @param id 主键
-    # @return   数据
-    findById(id: String): Pet
+    """
+    查询数据
+    """
+    findByIds(
+        "主键"
+        ids: [String]
+    ): [Pet]
 
-    # 查询数据
-    # @param limit      数据量（不传的话，就返回所有数据）
-    # @param offset     偏移量（跳过前 N 条数据）
-    # @param conditions 筛选条件
-    # @param orders     排序条件
-    # @return           数据列表
-    findBy(limit: Long, offset: Long, conditions: [ConditionInput] = [], orders: [OrderInput] = []): [Pet]
+    """
+    查询数据
+    """
+    findBy(
+        "数据量（不传的话，就返回所有数据）"
+        limit: Long,
+        "偏移量（跳过前 N 条数据）"
+        offset: Long,
+        "筛选条件"
+        conditions: [ConditionInput] = [],
+        "数据列表"
+        orders: [OrderInput] = []
+    ): [Pet]
+
+    """
+    查询数据
+    """
+    pageBy(
+        "分页下标，从 1 开始"
+        pageIndex: Long,
+        "分页大小，最小值为 1，最大值为 100"
+        pageSize: Long,
+        "筛选条件"
+        conditions: [ConditionInput] = [],
+        "排序条件"
+        orders: [OrderInput] = []
+    ): Page
+
+    """
+    查询符合条件的数据数量
+    """
+    countBy(
+        "筛选条件"
+        conditions: [ConditionInput] = []
+    ): Long
 }

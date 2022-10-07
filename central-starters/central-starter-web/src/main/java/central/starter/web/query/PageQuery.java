@@ -49,7 +49,7 @@ public class PageQuery extends KeywordQuery {
     private Long pageIndex;
 
     public Long getPageIndex() {
-        return Objectx.get(this.pageIndex, 1L);
+        return Objectx.getOrDefault(this.pageIndex, 1L);
     }
 
     @Min(value = 1)
@@ -57,6 +57,6 @@ public class PageQuery extends KeywordQuery {
     private Long pageSize;
 
     public Long getPageSize(){
-        return Objectx.get(this.pageSize, 20L);
+        return Objectx.getOrDefault(this.pageSize, 20L);
     }
 }

@@ -56,7 +56,7 @@ public class ControlBinder implements FieldBinder {
     @Override
     public void bind(InstanceReference<?> target, FieldReference field, Map<String, Object> params) {
         var annotation = field.getAnnotation(Control.class);
-        var name = Objectx.get(annotation.name(), field.getName());
+        var name = Objectx.getOrDefault(annotation.name(), field.getName());
         var value = params.get(name);
         if (value == null){
             value = Arrayx.getFirst(annotation.defaultValue());

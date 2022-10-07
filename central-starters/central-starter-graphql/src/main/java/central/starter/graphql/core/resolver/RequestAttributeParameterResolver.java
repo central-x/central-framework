@@ -55,7 +55,7 @@ public class RequestAttributeParameterResolver extends SpringAnnotatedParameterR
         RequestAttribute attr = parameter.getAnnotation(RequestAttribute.class);
         String name = parameter.getName();
         if (attr.value().length() > 0 || attr.name().length() > 0) {
-            name = Objectx.get(attr.value(), attr.name());
+            name = Objectx.getOrDefault(attr.value(), attr.name());
         }
 
         HttpServletRequest request = context.get(HttpServletRequest.class);

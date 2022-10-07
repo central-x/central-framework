@@ -59,7 +59,7 @@ public class PropertyMeta {
      * @param conversion 命名规则
      */
     public String getColumnName(SqlConversion conversion) {
-        return Objectx.get(this.columnName, conversion.getColumnName(this.name));
+        return Objectx.getOrDefault(this.columnName, conversion.getColumnName(this.name));
     }
 
     /**

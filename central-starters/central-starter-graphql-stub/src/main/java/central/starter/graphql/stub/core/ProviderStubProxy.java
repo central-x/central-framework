@@ -24,16 +24,15 @@
 
 package central.starter.graphql.stub.core;
 
+import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.Stringx;
 import central.lang.reflect.TypeReference;
 import central.starter.graphql.stub.GraphQLRequest;
 import central.starter.graphql.stub.ProviderClient;
-import central.starter.graphql.stub.ProviderStub;
+import central.starter.graphql.stub.Provider;
 import central.starter.graphql.stub.annotation.BodyPath;
-import central.util.Convertx;
-import central.util.Jsonx;
-import central.util.MarkdownResources;
+import central.util.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -53,13 +52,13 @@ import java.util.Map;
  */
 public class ProviderStubProxy implements InvocationHandler {
 
-    private final Class<? extends ProviderStub> stub;
+    private final Class<? extends Provider> stub;
 
     private final ProviderClient client;
 
     private final MarkdownResources resources;
 
-    public ProviderStubProxy(Class<? extends ProviderStub> stub, ProviderClient client, MarkdownResources resources) {
+    public ProviderStubProxy(Class<? extends Provider> stub, ProviderClient client, MarkdownResources resources) {
         this.stub = stub;
         this.client = client;
         this.resources = resources;
@@ -94,20 +93,28 @@ public class ProviderStubProxy implements InvocationHandler {
         }
 
         // 解析 Json
-        var path = method.getAnnotation(BodyPath.class);
-        if (path == null || Stringx.isNullOrEmpty(path.value())) {
+        String path = "";
+        var classPath = stub.getAnnotation(BodyPath.class);
+        if (classPath != null && Stringx.isNotBlank(classPath.value())) {
+            path = classPath.value();
+        }
+        var methodPath = method.getAnnotation(BodyPath.class);
+        if (methodPath != null && Stringx.isNotBlank(methodPath.value())) {
+            path += ("." + methodPath.value());
+        }
+        if (Stringx.isNullOrEmpty(path)) {
             var result = Jsonx.Default().deserialize(response, TypeReference.ofMap(String.class, TypeReference.ofMap(String.class, TypeReference.of(method.getAnnotatedReturnType().getType()))));
-            return result.get(method.getName()).get(method.getName());
+            return result.getOrDefault(method.getName(), Mapx.newHashMap()).get(method.getName());
         } else {
-            var paths = path.value().trim().split("[.]");
+            var paths = Arrayx.asStream(path.trim().split("[.]")).map(String::trim).filter(Stringx::isNotEmpty).toList();
             TypeReference<?> returnType = TypeReference.ofMap(String.class, TypeReference.of(method.getAnnotatedReturnType().getType()));
-            for (int i = 0; i < paths.length; i++) {
+            for (int i = 0; i < paths.size(); i++) {
                 returnType = TypeReference.ofMap(String.class, returnType);
             }
             var result = Jsonx.Default().deserialize(response, returnType);
-            for (int i = 0; i < paths.length; i++) {
+            for (int i = 0; i < paths.size(); i++) {
                 if (result instanceof Map<?, ?> map) {
-                    result = map.get(paths[i]);
+                    result = Objectx.getOrDefault(map.get(paths.get(i)), Mapx.newHashMap());
                 }
             }
             return ((Map<?, ?>) result).get(method.getName());

@@ -91,7 +91,7 @@ public class ErrorRender extends Render<ErrorRender> {
             // 需要返回 JSON 格式的数据
             new JsonRender(this.getRequest(), this.getResponse()).render(Mapx.newHashMap("message", this.message));
         } else {
-            String body = Stringx.format("<html><body><h2>{} ({})</h2><p>{}</p><div id='created'>{}</div></body></html>", Objectx.get(HttpStatus.resolve(this.getStatus().value()), HttpStatus.INTERNAL_SERVER_ERROR).getReasonPhrase(), this.getStatus().value(), this.message, OffsetDateTime.now().toString());
+            String body = Stringx.format("<html><body><h2>{} ({})</h2><p>{}</p><div id='created'>{}</div></body></html>", Objectx.getOrDefault(HttpStatus.resolve(this.getStatus().value()), HttpStatus.INTERNAL_SERVER_ERROR).getReasonPhrase(), this.getStatus().value(), this.message, OffsetDateTime.now().toString());
 
             response.setHeader(HttpHeaders.PRAGMA, "no-cache");
             response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");

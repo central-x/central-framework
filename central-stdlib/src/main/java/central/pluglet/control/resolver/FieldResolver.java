@@ -56,7 +56,7 @@ public class FieldResolver implements ControlResolver {
         var annotation = field.getAnnotation(Control.class);
         return PlugletControl.builder()
                 .label(annotation.label())
-                .name(Objectx.get(annotation.name(), field.getName()))
+                .name(Objectx.getOrDefault(annotation.name(), field.getName()))
                 .type(annotation.type().name())
                 .comment(annotation.comment())
                 .defaultValue(Convertx.Default().convert(Arrayx.getFirst(annotation.defaultValue()), field.getType().getRawClass()))

@@ -34,18 +34,13 @@ import central.starter.graphql.graphql.dto.DTO;
 import central.starter.graphql.graphql.dto.PersonDTO;
 import central.starter.graphql.graphql.entity.PersonEntity;
 import central.starter.graphql.graphql.mapper.PersonMapper;
-import graphql.schema.DataFetchingEnvironment;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -64,27 +59,29 @@ public class PersonQuery {
     private PersonMapper mapper;
 
     /**
-     * 批量查询
+     * 批量数据加载器
      *
      * @param ids 主键
      */
     @GraphQLBatchLoader
-    public Map<String, PersonDTO> batchLoader(@RequestParam List<String> ids) {
-        return this.mapper.findByIds(ids).stream()
+    public @Nonnull Map<String, PersonDTO> batchLoader(@RequestParam List<String> ids) {
+        return this.mapper.findBy(Conditions.of(PersonEntity.class).in(PersonEntity::getId, ids))
+                .stream()
                 .map(it -> DTO.wrap(it, PersonDTO.class))
                 .collect(Collectors.toMap(PersonDTO::getId, it -> it));
     }
 
     /**
-     * 查询数据
+     * 根据主键查询数据
      *
      * @param id 主键
      */
     @GraphQLFetcher
-    public PersonDTO findById(@RequestParam String id, DataFetchingEnvironment environment) {
-        var entity = this.mapper.findById(id);
+    public @Nullable PersonDTO findById(@RequestParam String id) {
+        var entity = this.mapper.findFirstBy(Conditions.of(PersonEntity.class).eq(PersonEntity::getId, id));
         return DTO.wrap(entity, PersonDTO.class);
     }
+
 
     /**
      * 查询数据
@@ -92,8 +89,9 @@ public class PersonQuery {
      * @param ids 主键
      */
     @GraphQLFetcher
-    public List<PersonDTO> findByIds(@RequestParam List<String> ids, DataFetchingEnvironment environment) {
-        var entities = this.mapper.findByIds(ids);
+    public @Nonnull List<PersonDTO> findByIds(@RequestParam List<String> ids) {
+        var entities = this.mapper.findBy(Conditions.of(PersonEntity.class).in(PersonEntity::getId, ids));
+
         return DTO.wrap(entities, PersonDTO.class);
     }
 
@@ -106,21 +104,12 @@ public class PersonQuery {
      * @param orders     排序条件
      */
     @GraphQLFetcher
-    public List<PersonDTO> findBy(@RequestParam(required = false) Long limit,
-                                  @RequestParam(required = false) Long offset,
-                                  @RequestParam Conditions<PersonEntity> conditions,
-                                  @RequestParam Orders<PersonEntity> orders,
-                                  @Autowired PetQuery petQuery,
-                                  @Autowired ApplicationContext context,
-                                  @Autowired Environment environment,
-                                  DataFetchingEnvironment loaderEnvironment,
-                                  HttpServletRequest request,
-                                  ServletRequest servletRequest,
-                                  HttpServletResponse response,
-                                  ServletResponse servletResponse) {
-        // 懒得去过滤了
-        var entities = this.mapper.findBy(limit, offset, conditions, orders);
-        return DTO.wrap(entities, PersonDTO.class);
+    public @Nonnull List<PersonDTO> findBy(@RequestParam(required = false) Long limit,
+                                           @RequestParam(required = false) Long offset,
+                                           @RequestParam Conditions<PersonEntity> conditions,
+                                           @RequestParam Orders<PersonEntity> orders) {
+        var list = this.mapper.findBy(limit, offset, conditions, orders);
+        return DTO.wrap(list, PersonDTO.class);
     }
 
     /**
@@ -132,10 +121,10 @@ public class PersonQuery {
      * @param orders     排序条件
      */
     @GraphQLFetcher
-    public Page<PersonDTO> pageBy(@RequestParam long pageIndex,
-                                  @RequestParam long pageSize,
-                                  @RequestParam Conditions<PersonEntity> conditions,
-                                  @RequestParam Orders<PersonEntity> orders) {
+    public @Nonnull Page<PersonDTO> pageBy(@RequestParam long pageIndex,
+                                           @RequestParam long pageSize,
+                                           @RequestParam Conditions<PersonEntity> conditions,
+                                           @RequestParam Orders<PersonEntity> orders) {
         var page = this.mapper.findPageBy(pageIndex, pageSize, conditions, orders);
         return DTO.wrap(page, PersonDTO.class);
     }

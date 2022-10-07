@@ -25,8 +25,10 @@
 package central.starter.graphql.stub.core;
 
 import central.lang.Assertx;
+import central.lang.Stringx;
 import central.starter.graphql.stub.ProviderClient;
-import central.starter.graphql.stub.ProviderStub;
+import central.starter.graphql.stub.Provider;
+import central.starter.graphql.stub.annotation.GraphQLStub;
 import central.util.MarkdownResources;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +36,7 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.lang.reflect.Proxy;
+import java.nio.file.Path;
 
 /**
  * Provider Factory
@@ -41,7 +44,7 @@ import java.lang.reflect.Proxy;
  * @author Alan Yeh
  * @since 2022/09/25
  */
-public class ProviderFactoryBean<T extends ProviderStub> implements FactoryBean<T>, InitializingBean {
+public class ProviderFactoryBean<T extends Provider> implements FactoryBean<T>, InitializingBean {
 
     /**
      * 类型
@@ -69,8 +72,11 @@ public class ProviderFactoryBean<T extends ProviderStub> implements FactoryBean<
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        var resources = Thread.currentThread().getContextClassLoader().getResources("central/graphql/stub/" + this.name + ".md");
-        Assertx.mustTrue(resources.hasMoreElements(), IllegalStateException::new, "找不到资源文件[central/graphql/stub/" + this.name + ".md]");
+        var stub = objectType.getAnnotation(GraphQLStub.class);
+        var path = Path.of("central", "graphql", "stub", stub.path().trim(), this.name + ".md");
+
+        var resources = Thread.currentThread().getContextClassLoader().getResources(path.toString());
+        Assertx.mustTrue(resources.hasMoreElements(), IllegalStateException::new, "找不到资源文件[{}]", path.toString());
 
         while (resources.hasMoreElements()) {
             var resource = resources.nextElement();

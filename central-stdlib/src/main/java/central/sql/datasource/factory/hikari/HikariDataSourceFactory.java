@@ -63,13 +63,13 @@ public class HikariDataSourceFactory extends HikariProperties implements DataSou
         dataSource.setMaxLifetime(this.getMaxLifetime());
         switch (SqlDialect.resolve(url)) {
             case MySql, PostgreSql -> {
-                dataSource.setConnectionTestQuery(Objectx.get(this.getConnectionTestQuery(), "SELECT 1"));
+                dataSource.setConnectionTestQuery(Objectx.getOrDefault(this.getConnectionTestQuery(), "SELECT 1"));
             }
             case Oracle, Kingbase, Oscar, H2, Vastbase, Dameng -> {
-                dataSource.setConnectionTestQuery(Objectx.get(this.getConnectionTestQuery(), "SELECT 1 FROM DUAL"));
+                dataSource.setConnectionTestQuery(Objectx.getOrDefault(this.getConnectionTestQuery(), "SELECT 1 FROM DUAL"));
             }
             case HighGo -> {
-                dataSource.setConnectionTestQuery(Objectx.get(this.getConnectionTestQuery(), "select version()"));
+                dataSource.setConnectionTestQuery(Objectx.getOrDefault(this.getConnectionTestQuery(), "select version()"));
             }
             default -> {
                 throw new IllegalArgumentException("不支持的数据库类型");

@@ -1,45 +1,41 @@
 """
-人
+项目
 """
-type Person implements Entity & Modifiable {
-    "主键"
+type Project implements Entity & Modifiable {
+    """
+    主键
+    """
     id:                     ID!
-    "姓名"
+    """
+    项目组主键
+    """
+    groupId:                String!
+    """
+    项目组
+    """
+    group:                  Group!
+    """
+    名称
+    """
     name:                   String!
 
-    "创建人主键"
     creatorId:              String!
-    "创建时间"
     createDate:             Timestamp!
-    "修改人主键"
     modifierId:             String!
-    "修改时间"
     modifyDate:             Timestamp!
-
-    "宠物"
-    pets(
-        "数据量（不传的话，就返回所有数据）"
-        limit: Long,
-        "偏移量（跳过前 N 条数据）"
-        offset: Long,
-        "筛选条件"
-        conditions: [ConditionInput] = [],
-        "排序条件"
-        orders: [OrderInput] = []
-    ): [Pet]!
 }
 
 """
-人查询
+项目查询
 """
-type PersonQuery {
+type ProjectQuery {
     """
     查询数据
     """
     findById(
         "主键"
         id: String
-    ): Person
+    ): Project
 
     """
     查询数据
@@ -47,7 +43,7 @@ type PersonQuery {
     findByIds(
         "主键"
         ids: [String]
-    ): [Person]
+    ): [Project]
 
     """
     查询数据
@@ -61,7 +57,7 @@ type PersonQuery {
         conditions: [ConditionInput] = [],
         "数据列表"
         orders: [OrderInput] = []
-    ): [Person]
+    ): [Project]
 
     """
     查询数据

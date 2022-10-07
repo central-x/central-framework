@@ -127,7 +127,7 @@ public class HttpRequest implements AutoCloseable {
         // 如果 Cookie 有值，需要加上 Cookie 的请求头之后再发送请求
         String cookie = "";
         if (this.headers.containsKey(HttpHeaders.COOKIE)) {
-            cookie = Objectx.get(this.headers.getFirst(HttpHeaders.COOKIE), "").trim();
+            cookie = Objectx.getOrDefault(this.headers.getFirst(HttpHeaders.COOKIE), "").trim();
         }
         if (cookie.endsWith(";")) {
             cookie = cookie.substring(0, cookie.length() - 1);

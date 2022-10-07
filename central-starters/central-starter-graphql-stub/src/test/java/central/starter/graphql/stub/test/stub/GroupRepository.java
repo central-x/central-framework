@@ -26,7 +26,7 @@ package central.starter.graphql.stub.test.stub;
 
 import central.sql.Conditions;
 import central.sql.Orders;
-import central.starter.graphql.stub.ProviderStub;
+import central.starter.graphql.stub.Provider;
 import central.starter.graphql.stub.annotation.BodyPath;
 import central.starter.graphql.stub.annotation.GraphQLStub;
 import central.starter.graphql.stub.test.data.Group;
@@ -42,7 +42,7 @@ import java.util.List;
  */
 @Repository
 @GraphQLStub(client = "httpClient")
-public interface GroupRepository extends ProviderStub {
+public interface GroupRepository extends Provider {
     /**
      * 查询数据
      *

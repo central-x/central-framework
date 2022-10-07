@@ -30,5 +30,5 @@ package central.starter.graphql.stub;
  * @author Alan Yeh
  * @since 2022/09/25
  */
-public interface ProviderStub {
+public interface Provider {
 }

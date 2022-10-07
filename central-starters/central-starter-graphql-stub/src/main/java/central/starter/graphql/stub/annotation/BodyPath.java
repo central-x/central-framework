@@ -33,7 +33,7 @@ import java.lang.annotation.*;
  * @since 2022/10/04
  */
 @Documented
-@Target(ElementType.METHOD)
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BodyPath {
     String value();

@@ -28,7 +28,6 @@ import central.bean.TypeCheckException;
 import central.bean.OptionalEnum;
 import central.lang.reflect.FieldReference;
 import central.lang.reflect.InstanceReference;
-import central.lang.reflect.TypeReference;
 import central.pluglet.FieldBinder;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
@@ -63,7 +62,7 @@ public class RadioControlBinder implements FieldBinder {
                 .map(it -> (OptionalEnum<String>) Assertx.requireInstanceOf(OptionalEnum.class, it, TypeCheckException::new, "Enum '{}' MUST implements Optional<String>"))
                 .toList();
 
-        var name = Objectx.get(annotation.name(), field.getName());
+        var name = Objectx.getOrDefault(annotation.name(), field.getName());
         var value = params.get(name);
         if (value == null) {
             value = Arrayx.getFirst(annotation.defaultValue());

@@ -56,7 +56,7 @@ public class RequestHeaderParameterResolver extends SpringAnnotatedParameterReso
         RequestHeader header = parameter.getAnnotation(RequestHeader.class);
         String name = parameter.getName();
         if (header.value().length() > 0 || header.name().length() > 0) {
-            name = Objectx.get(header.value(), header.name());
+            name = Objectx.getOrDefault(header.value(), header.name());
         }
 
         HttpServletRequest request = context.get(HttpServletRequest.class);

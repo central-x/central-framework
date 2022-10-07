@@ -5,107 +5,175 @@ scalar Any
 scalar Timestamp
 scalar Long
 
-# 其他的 Service 注入的 Query 会合并到这里
+"""
+范围
+"""
+type Range {
+    "包括指定范围"
+    includes:     [String]
+    "排除指定范围"
+    excludes:     [String]
+}
+
+"""
+范围输入
+"""
+input RangeInput {
+    "包括指定范围"
+    includes:     [String]
+    "排除指定范围"
+    excludes:     [String]
+}
+
+"""
+键值对
+"""
+type CodeValue {
+    "键"
+    code:         String!
+    "值"
+    value:        String
+}
+
+"""
+键值对输入
+"""
+input CodeValueInput {
+    "键"
+    code:         String
+    "值"
+    value:        String
+}
+
+"""
+根查询
+"""
 type Query { }
 
-# 其他的 Service 注入的 Mutation 会合并到这里
+"""
+根修改
+"""
 type Mutation { }
 
-# GraphQL 入口
 schema {
-    query:        Query
-    mutation:     Mutation
+    query:                  Query
+    mutation:               Mutation
 }
 
-# 实体基本属性
+"""
+基本属性
+"""
 interface Entity {
-    id:           ID!         # 主键
-    creatorId:    String!     # 数据创建人
-    createDate:   Timestamp!  # 数据创建时间
+    "主键"
+    id:                     ID!
+    "数据创建者主键"
+    creatorId:              String!
+    "数据创建时间"
+    createDate:             Timestamp!
 }
 
-# 范围
-type Range {
-    includes:     [String]    # 包括指定范围
-    excludes:     [String]    # 排除指定范围
-}
-
-# 范围输入
-input RangeInput {
-    includes:     [String]    # 包括指定范围
-    excludes:     [String]    # 排除指定范围
-}
-
-# 键值对
-type CodeValue {
-    code:         String!     # 键
-    value:        String      # 值
-}
-
-# 键值对输入
-input CodeValueInput {
-    code:         String      # 键
-    value:        String      # 值
-}
-
-interface Codeable {
-    code:         String!     # 可设置标识
-}
-
-# 可修改属性
+"""
+可修改属性
+"""
 interface Modifiable {
-    modifierId:   String!     # 数据修改人
-    modifyDate:   Timestamp!  # 数据修改时间
+    "数据修改帐户主键"
+    modifierId:   String!
+    "数据修改时间"
+    modifyDate:   Timestamp!
 }
 
-# 可版本化的
+"""
+可设置标识
+"""
+interface Codeable {
+    "标识"
+    code:         String!
+}
+
+"""
+可版本化的
+"""
 interface Versional {
-    version:      Int!        # 数据版本
+    "数据版本"
+    version:      Int!
 }
 
-# 可软删除的
+"""
+可软删除的
+"""
 interface Deletable {
-    deleted:      Boolean!    # 是否已删除
+    "是否已删除"
+    deleted:      Boolean!
 }
 
-# 可禁用的
+"""
+可禁用的
+"""
 interface Available {
-    enabled:      Boolean!    # 是否已启用
+    "是否启用"
+    enabled:      Boolean!
 }
 
-# 可排序的
+"""
+可排序的
+"""
 interface Orderable {
-    order:        Int!        # 排序号，排序号越大排序越前
+    "排序号，排序号越大排序越前"
+    order:        Int!
 }
 
-# 分页信息
+"""
+分页信息
+"""
 type Pager {
-    pageIndex:    Long!       # 当前分页下标
-    pageSize:     Long!       # 分页大小
-    pageCount:    Long!       # 分页数量
-    itemCount:    Long!       # 数据数量
+    "当前分页下标"
+    pageIndex:    Long!
+    "分页大小"
+    pageSize:     Long!
+    "分页数量"
+    pageCount:    Long!
+    "数据数量"
+    itemCount:    Long!
 }
 
-# 分页实体
+"""
+分页实体
+"""
 type Page {
-    data:        [Entity]!    # 数据列表
-    pager:        Pager!      # 分页信息
+    "数据列表"
+    data:        [Entity]!
+    "分页信息"
+    pager:        Pager!
 }
 
-# 筛选条件输入
+"""
+筛选条件输入
+"""
 input ConditionInput {
-    id:           String      # 条件标识
-    parentId:     String      # 父条件标识
-    order:        Int         # 排序号
-    connector:    String      # 与上一个条件的连接符 AND/OR
-    type:         String      # 类型 GROUP/CONDITION
-    property:     String      # 属性名
-    operator:     String      # 操作符
-    values:      [Any]        # 值
+    "条件标识"
+    id:           String
+    "父条件标识"
+    parentId:     String
+    "排序号"
+    order:        Int
+    "与上一个条件的连接符 AND/OR"
+    connector:    String
+    "类型 GROUP/CONDITION"
+    type:         String
+    "属性名"
+    property:     String
+    "操作符"
+    operator:     String
+    "值"
+    values:      [Any]
 }
 
-# 排序条件输入
+"""
+排序条件输入
+"""
 input OrderInput {
-    property:     String!     # 属性名
-    desc:         Boolean     # 是否倒序
+    "属性名"
+    property:     String!
+    "是否倒序"
+    desc:         Boolean
 }

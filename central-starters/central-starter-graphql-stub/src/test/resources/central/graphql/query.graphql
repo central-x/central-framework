@@ -1,10 +1,7 @@
 extend type Query {
-    """
-    项目组
-    """
+    "项目组"
     groups:                 GroupQuery!
-    """
-    项目
-    """
+
+    "项目"
     projects:               ProjectQuery!
 }

@@ -120,7 +120,7 @@ public class HttpProxy implements InvocationHandler {
                     // 解析文件名
                     var filename = response.getHeaders().getContentDisposition().getFilename();
 
-                    var tmp = new File("tmp", Objectx.get(filename, Guidx.nextID() + ".tmp"));
+                    var tmp = new File("tmp", Objectx.getOrDefault(filename, Guidx.nextID() + ".tmp"));
 
                     IOStreamx.copy(response.getBody().getInputStream(), Files.newOutputStream(tmp.toPath(), StandardOpenOption.WRITE));
                     return tmp;

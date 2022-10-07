@@ -69,7 +69,7 @@ public class EntityMeta {
      * @param conversion 命名规则
      */
     public String getTableName(SqlConversion conversion) {
-        return Objectx.get(this.tableName, conversion.getTableName(this.type));
+        return Objectx.getOrDefault(this.tableName, conversion.getTableName(this.type));
     }
 
     /**

@@ -57,7 +57,7 @@ public class PathVariableResolver implements SpringResolver {
 
         if (Stringx.isNotBlank(annotation.name()) || Stringx.isNotBlank(annotation.value())) {
             // 修改为自定义参数名
-            name = Objectx.get(annotation.name(), annotation.value());
+            name = Objectx.getOrDefault(annotation.name(), annotation.value());
         }
 
         // 判断是否必填
