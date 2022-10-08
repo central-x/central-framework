@@ -26,41 +26,37 @@ package central.starter.webmvc.exception.handlers;
 
 import central.starter.webmvc.exception.ExceptionHandler;
 import central.util.Mapx;
-import central.lang.Stringx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.InvalidPropertyException;
-import org.springframework.http.HttpStatus;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import javax.annotation.Nullable;
-
 /**
- * InvalidPropertyException Handler
+ * ResponseStatusException Handler
  *
  * @author Alan Yeh
- * @see InvalidPropertyException
- * @since 2022/07/17
+ * @see ResponseStatusException
+ * @since 2022/10/07
  */
 @Component
-public class InvalidPropertyExceptionHandler implements ExceptionHandler {
-
+public class ResponseStatusExceptionHandler implements ExceptionHandler {
     @Override
     public boolean support(Throwable throwable) {
-        return throwable instanceof InvalidPropertyException;
+        return throwable instanceof ResponseStatusException;
     }
 
     @Nullable
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
-        var ex = (InvalidPropertyException) throwable;
+        var ex = (ResponseStatusException) throwable;
 
-        var body = Mapx.newHashMap("message", Stringx.format("参数[{}]类型不匹配", ex.getPropertyName()));
+        var body = Mapx.newHashMap("message", ex.getReason());
         var mv = new ModelAndView(new MappingJackson2JsonView(), body);
-        mv.setStatus(HttpStatus.BAD_REQUEST);
+        mv.setStatus(ex.getStatusCode());
         return mv;
     }
 }

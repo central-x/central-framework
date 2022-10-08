@@ -38,6 +38,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +93,11 @@ public class SourceFetcher implements DataFetcher<Object> {
             try {
                 return Invocation.of(this.method).resolvers(this.resolvers).invoke(this.source.getSource(context), context);
             } catch (InvocationTargetException | IllegalAccessException ex) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + ex.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), ex.getCause());
+                if (ex.getCause() instanceof UndeclaredThrowableException throwable){
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + throwable.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), throwable.getCause());
+                } else {
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + ex.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), ex.getCause());
+                }
             }
         } finally {
             context.set(DataFetchingEnvironment.class, origin);

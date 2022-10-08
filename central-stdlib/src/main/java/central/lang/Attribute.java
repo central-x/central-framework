@@ -55,6 +55,18 @@ public class Attribute<T> {
         this.supplier = null;
     }
 
+    public static <T> Attribute<T> of(String code, T value) {
+        return new Attribute<>(code, () -> value);
+    }
+
+    public static <T> Attribute<T> of(String code, Supplier<T> value) {
+        return new Attribute<>(code, value);
+    }
+
+    public static <T> Attribute<T> of(String code) {
+        return new Attribute<>(code);
+    }
+
     /**
      * Get value from supplier
      */

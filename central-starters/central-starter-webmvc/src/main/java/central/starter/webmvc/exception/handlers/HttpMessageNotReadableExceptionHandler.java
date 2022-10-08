@@ -45,6 +45,7 @@ import java.util.stream.Collectors;
  * 消息序列化异常
  *
  * @author Alan Yeh
+ * @see HttpMessageNotReadableException
  * @since 2022/07/17
  */
 @Component

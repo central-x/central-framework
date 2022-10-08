@@ -41,6 +41,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import javax.annotation.Nonnull;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
@@ -65,7 +66,7 @@ public class JsonExceptionResolver extends ExceptionHandlerExceptionResolver {
     private final ExceptionHandler fallbackHandler = new FallbackHandler();
 
     @Override
-    protected ModelAndView doResolveHandlerMethodException(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Exception exception) {
+    protected ModelAndView doResolveHandlerMethodException(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, HandlerMethod handlerMethod, @Nonnull Exception exception) {
         ModelAndView result = null;
 
         if (Listx.isNotEmpty(handlers)) {

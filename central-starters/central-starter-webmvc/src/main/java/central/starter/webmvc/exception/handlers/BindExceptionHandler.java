@@ -45,6 +45,7 @@ import java.util.Map;
  * 参数校验错误异常处理
  *
  * @author Alan Yeh
+ * @see BindException
  * @since 2022/07/16
  */
 @Component
@@ -64,8 +65,8 @@ public class BindExceptionHandler implements ExceptionHandler {
 
         Map<String, String> body = new HashMap<>(1);
 
-        if (error instanceof FieldError fieldError){
-            if (Stringx.isNullOrBlank(fieldError.getDefaultMessage())){
+        if (error instanceof FieldError fieldError) {
+            if (Stringx.isNullOrBlank(fieldError.getDefaultMessage())) {
                 body.put("message", Stringx.format("参数[{}]类型不匹配", fieldError.getField()));
             } else {
                 body.put("message", fieldError.getDefaultMessage());

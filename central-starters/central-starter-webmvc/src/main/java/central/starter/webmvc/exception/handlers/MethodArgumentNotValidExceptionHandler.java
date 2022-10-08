@@ -38,7 +38,10 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import javax.annotation.Nullable;
 
 /**
+ * MethodArgumentNotValidException Handler
+ *
  * @author Alan Yeh
+ * @see MethodArgumentNotValidException
  * @since 2022/07/17
  */
 @Component
