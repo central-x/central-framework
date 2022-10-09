@@ -94,6 +94,11 @@
             </dependency>
             <dependency>
                 <groupId>com.central-x</groupId>
+                <artifactId>central-starter-webflux</artifactId>
+                <version>1.0.x-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.central-x</groupId>
                 <artifactId>central-starter-webmvc</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
