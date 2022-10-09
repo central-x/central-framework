@@ -40,6 +40,16 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Context {
     private final Map<String, Object> context = new ConcurrentHashMap<>();
 
+    /**
+     * 克隆上下文
+     *
+     * @param context 待克隆上下文
+     */
+    public static Context clone(Context context) {
+        var clone = new Context();
+        clone.context.putAll(context.context);
+        return clone;
+    }
 
     /**
      * 判断是否存在上下文

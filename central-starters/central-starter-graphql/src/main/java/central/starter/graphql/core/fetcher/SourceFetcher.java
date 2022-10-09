@@ -85,22 +85,16 @@ public class SourceFetcher implements DataFetcher<Object> {
 
     @Override
     public Object get(DataFetchingEnvironment environment) throws Exception {
-        Context context = environment.getLocalContext();
-        var origin = context.get(DataFetchingEnvironment.class);
+        var context = Context.clone(environment.getLocalContext());
+        context.set(DataFetchingEnvironment.class, environment);
         try {
-            context.set(DataFetchingEnvironment.class, environment);
-
-            try {
-                return Invocation.of(this.method).resolvers(this.resolvers).invoke(this.source.getSource(context), context);
-            } catch (InvocationTargetException | IllegalAccessException ex) {
-                if (ex.getCause() instanceof UndeclaredThrowableException throwable){
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + throwable.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), throwable.getCause());
-                } else {
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + ex.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), ex.getCause());
-                }
+            return Invocation.of(this.method).resolvers(this.resolvers).invoke(this.source.getSource(context), context);
+        } catch (InvocationTargetException | IllegalAccessException ex) {
+            if (ex.getCause() instanceof UndeclaredThrowableException throwable) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + throwable.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), throwable.getCause());
+            } else {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + ex.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), ex.getCause());
             }
-        } finally {
-            context.set(DataFetchingEnvironment.class, origin);
         }
     }
 }

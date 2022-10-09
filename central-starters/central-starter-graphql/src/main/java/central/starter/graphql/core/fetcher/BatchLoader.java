@@ -97,28 +97,21 @@ public class BatchLoader implements BatchLoaderWithContext<String, Object> {
     @Override
     public CompletionStage<List<Object>> load(List<String> keys, BatchLoaderEnvironment environment) {
         return CompletableFuture.supplyAsync(() -> {
-            Context context = environment.getContext();
-            var origin = context.get(BatchLoaderEnvironment.class);
-            try {
-                context.set(BatchLoaderEnvironment.class, environment);
-                context.set("keys", keys);
-                context.set("ids", keys);
+            var context = Context.clone(environment.getContext());
+            context.set(BatchLoaderEnvironment.class, environment);
+            context.set("keys", keys);
+            context.set("ids", keys);
 
-                try {
-                    var data = (Map<String, Object>) Invocation.of(method).resolvers(this.resolvers).invoke(this.source.getSource(context), context);
-                    // 根据 keys 的顺序返回结果
-                    return keys.stream().map(data::get).toList();
-                } catch (InvocationTargetException | IllegalAccessException ex) {
-                    if (ex.getCause() instanceof UndeclaredThrowableException throwable) {
-                        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + throwable.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), throwable.getCause());
-                    } else {
-                        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + ex.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), ex.getCause());
-                    }
+            try {
+                var data = (Map<String, Object>) Invocation.of(method).resolvers(this.resolvers).invoke(this.source.getSource(context), context);
+                // 根据 keys 的顺序返回结果
+                return keys.stream().map(data::get).toList();
+            } catch (InvocationTargetException | IllegalAccessException ex) {
+                if (ex.getCause() instanceof UndeclaredThrowableException throwable) {
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + throwable.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), throwable.getCause());
+                } else {
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + ex.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), ex.getCause());
                 }
-            } finally {
-                context.set(BatchLoaderEnvironment.class, origin);
-                context.remove("keys");
-                context.remove("ids");
             }
         }, executor);
     }
