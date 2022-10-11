@@ -27,7 +27,6 @@ package central.bean;
 import central.util.Collectionx;
 import central.lang.Stringx;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -100,7 +99,7 @@ public interface Treeable<T extends Treeable<T>> extends Identifiable {
 
         // 如果只有一个元素，无法构建成树
         if (data.size() == 1) {
-            return Collections.singletonList(Collectionx.getFirst(data));
+            return Collections.singletonList(Collectionx.getFirstOrNull(data));
         }
 
         // 所有节点的主键

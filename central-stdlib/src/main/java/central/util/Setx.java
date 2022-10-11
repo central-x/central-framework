@@ -26,9 +26,11 @@ package central.util;
 
 import lombok.experimental.UtilityClass;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -46,7 +48,16 @@ public class Setx {
      *
      * @param set 集合
      */
-    public static <T> T getAny(@Nullable Set<T> set) {
+    public static <T> @Nonnull Optional<T> getAny(@Nullable Set<T> set) {
+        return Optional.ofNullable(getAnyOrNull(set));
+    }
+
+    /**
+     * 获取 Set 中的任一元素
+     *
+     * @param set 集合
+     */
+    public static <T> @Nullable T getAnyOrNull(@Nullable Set<T> set) {
         if (set == null || set.isEmpty()) {
             return null;
         } else {

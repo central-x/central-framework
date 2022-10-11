@@ -26,6 +26,7 @@ package central.util;
 
 import lombok.experimental.UtilityClass;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
@@ -85,7 +86,17 @@ public class Listx {
      * @param list 集合
      * @param <T>  集合类型
      */
-    public static <T> T getFirst(@Nullable List<T> list) {
+    public static <T> @Nonnull Optional<T> getFirst(@Nullable List<T> list) {
+        return Optional.ofNullable(getFirstOrNull(list));
+    }
+
+    /**
+     * 获取第一个元素
+     *
+     * @param list 集合
+     * @param <T>  集合类型
+     */
+    public static <T> @Nullable T getFirstOrNull(@Nullable List<T> list) {
         return isNullOrEmpty(list) ? null : list.get(0);
     }
 
@@ -95,7 +106,17 @@ public class Listx {
      * @param list 集合
      * @param <T>  集合类型
      */
-    public static <T> T getLast(@Nullable List<T> list) {
+    public static <T> @Nonnull Optional<T> getLast(@Nullable List<T> list) {
+        return Optional.ofNullable(getLastOrNull(list));
+    }
+
+    /**
+     * 获取最后一个元素
+     *
+     * @param list 集合
+     * @param <T>  集合类型
+     */
+    public static <T> @Nullable T getLastOrNull(@Nullable List<T> list) {
         return isNullOrEmpty(list) ? null : list.get(list.size() - 1);
     }
 
@@ -106,7 +127,18 @@ public class Listx {
      * @param index 下标
      * @param <T>   集合类型
      */
-    public static <T> T get(@Nullable List<T> list, int index) {
+    public static <T> @Nonnull Optional<T> get(@Nullable List<T> list, int index) {
+        return Optional.ofNullable(getOrNull(list, index));
+    }
+
+    /**
+     * 获取指定下标的元素
+     *
+     * @param list  集合
+     * @param index 下标
+     * @param <T>   集合类型
+     */
+    public static <T> T getOrNull(@Nullable List<T> list, int index) {
         if (list == null || list.size() <= index) {
             return null;
         } else {

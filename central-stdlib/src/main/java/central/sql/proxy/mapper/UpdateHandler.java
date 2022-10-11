@@ -47,11 +47,11 @@ import java.sql.SQLException;
 public class UpdateHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var entity = Arrayx.getFirst(args);
+        var entity = Arrayx.getFirstOrNull(args);
         Assertx.mustNotNull(entity, "参数[entity]必须不为空");
 
         // 获取更新条件
-        var conditions = (Conditions<?>) Arrayx.get(args, 1);
+        var conditions = (Conditions<?>) Arrayx.getOrNull(args, 1);
         var script = builder.forUpdate(executor, meta, entity, conditions);
         return executor.execute(script) > 0;
     }

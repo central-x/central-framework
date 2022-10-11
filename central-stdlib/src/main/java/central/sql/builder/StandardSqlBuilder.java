@@ -131,7 +131,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         var aliases = getAliases(conditions);
 
         if (aliases.size() >= 1) {
-            if (aliases.size() > 1 || !"a".equals(Setx.getAny(aliases))) {
+            if (aliases.size() > 1 || !"a".equals(Setx.getAnyOrNull(aliases))) {
                 // 存在关联查询，会有重复数据，需要去重
                 sql = new StringBuilder(Stringx.format("SELECT DISTINCT a.* FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
             }
@@ -178,7 +178,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     @Override
     public SqlScript forInsert(SqlExecutor executor, EntityMeta meta, Object entity) throws SQLSyntaxErrorException {
         var batchScript = this.forInsertBatch(executor, meta, Listx.of(entity));
-        return new SqlScript(batchScript.getSql(), Listx.getFirst(batchScript.getArgs()));
+        return new SqlScript(batchScript.getSql(), Listx.getFirstOrNull(batchScript.getArgs()));
     }
 
     @Override
@@ -235,7 +235,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
             // 看看会使用哪些关联查询
             var aliases = this.getAliases(conditions);
 
-            Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), SQLSyntaxErrorException::new, "DELETE 不支持外键条件");
+            Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAnyOrNull(aliases))), SQLSyntaxErrorException::new, "DELETE 不支持外键条件");
 
             // 处理条件
             applyConditions(executor, meta, whereSql, args, conditions);
@@ -324,7 +324,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         // 查找此次查询，会使用哪些关联查询
         var aliases = getAliases(conditions);
 
-        Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), SQLSyntaxErrorException::new, "UPDATE 不支持外键条件");
+        Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAnyOrNull(aliases))), SQLSyntaxErrorException::new, "UPDATE 不支持外键条件");
 
         // 处理条件
         applyConditions(executor, meta, whereSql, whereArgs, conditions);

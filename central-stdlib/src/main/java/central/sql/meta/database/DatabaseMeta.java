@@ -72,7 +72,7 @@ public class DatabaseMeta {
      * @param name 表名
      */
     public TableMeta getTable(String name) {
-        return this.tables.get(name);
+        return this.tables.getOrNull(name);
     }
 
     @Override

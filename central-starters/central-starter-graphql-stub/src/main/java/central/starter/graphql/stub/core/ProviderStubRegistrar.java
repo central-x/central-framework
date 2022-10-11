@@ -127,7 +127,7 @@ public class ProviderStubRegistrar implements ImportBeanDefinitionRegistrar, Res
             protected @Nonnull Set<BeanDefinitionHolder> doScan(@Nonnull String... basePackages) {
                 Set<BeanDefinitionHolder> beanDefinitions = super.doScan(basePackages);
                 if (beanDefinitions.isEmpty()) {
-                    log.warn("[central-starter-graphql-stub] 在 '{}' 包下没有找到 ProviderStub", Arrayx.getFirst(basePackages));
+                    log.warn("[central-starter-graphql-stub] 在 '{}' 包下没有找到 ProviderStub", Arrayx.getFirstOrNull(basePackages));
                 }
                 return beanDefinitions;
             }

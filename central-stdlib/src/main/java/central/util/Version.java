@@ -78,9 +78,9 @@ public class Version implements Comparable<Version> {
 
             String[] splits = version.split("[.]");
             major = Integer.parseInt(splits[0]);
-            minor = Integer.parseInt(Objectx.getOrDefault(Arrayx.get(splits, 1), "0"));
-            revision = Integer.parseInt(Objectx.getOrDefault(Arrayx.get(splits, 2), "0"));
-            build = Integer.parseInt(Objectx.getOrDefault(Arrayx.get(splits, 3), "0"));
+            minor = Integer.parseInt(Objectx.getOrDefault(Arrayx.getOrNull(splits, 1), "0"));
+            revision = Integer.parseInt(Objectx.getOrDefault(Arrayx.getOrNull(splits, 2), "0"));
+            build = Integer.parseInt(Objectx.getOrDefault(Arrayx.getOrNull(splits, 3), "0"));
         }
     }
 

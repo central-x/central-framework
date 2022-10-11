@@ -72,7 +72,7 @@ public class TableMeta {
      * @param name 字段名
      */
     public ColumnMeta getColumn(String name) {
-        return this.columns.get(name);
+        return this.columns.getOrNull(name);
     }
 
     /**
@@ -81,7 +81,7 @@ public class TableMeta {
      * @param name 索引名
      */
     public IndexMeta getIndex(String name) {
-        return this.indies.get(name);
+        return this.indies.getOrNull(name);
     }
 
     @Override

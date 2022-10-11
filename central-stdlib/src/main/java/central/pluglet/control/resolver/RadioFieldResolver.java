@@ -66,7 +66,7 @@ public class RadioFieldResolver extends FieldResolver {
                 .name(Objectx.getOrDefault(annotation.name(), field.getName()))
                 .type(annotation.type().name())
                 .comment(annotation.comment())
-                .defaultValue(Arrayx.getFirst(annotation.defaultValue()))
+                .defaultValue(Arrayx.getFirstOrNull(annotation.defaultValue()))
                 .required(annotation.required())
                 .options(options)
                 .build();

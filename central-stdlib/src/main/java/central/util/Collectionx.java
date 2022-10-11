@@ -26,8 +26,10 @@ package central.util;
 
 import lombok.experimental.UtilityClass;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Collection 工具
@@ -63,7 +65,17 @@ public class Collectionx {
      * @param collection 集合
      * @param <T>        元素类型
      */
-    public static <T> T getFirst(@Nullable Collection<T> collection) {
+    public static <T> @Nonnull Optional<T> getFirst(@Nullable Collection<T> collection) {
+        return Optional.ofNullable(getFirstOrNull(collection));
+    }
+
+    /**
+     * 获取第一个元素
+     *
+     * @param collection 集合
+     * @param <T>        元素类型
+     */
+    public static <T> @Nullable T getFirstOrNull(@Nullable Collection<T> collection) {
         return isNullOrEmpty(collection) ? null : collection.iterator().next();
     }
 }

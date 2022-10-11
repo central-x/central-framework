@@ -111,7 +111,7 @@ public class MapperRegistrar implements ImportBeanDefinitionRegistrar, ResourceL
             protected @Nonnull Set<BeanDefinitionHolder> doScan(@Nonnull String... basePackages) {
                 Set<BeanDefinitionHolder> beanDefinitions = super.doScan(basePackages);
                 if (beanDefinitions.isEmpty()) {
-                    log.warn("[central-starter-orm] 在 '{}' 包下没有找到 Mapper", Arrayx.getFirst(basePackages));
+                    log.warn("[central-starter-orm] 在 '{}' 包下没有找到 Mapper", Arrayx.getFirstOrNull(basePackages));
                 }
                 return beanDefinitions;
             }

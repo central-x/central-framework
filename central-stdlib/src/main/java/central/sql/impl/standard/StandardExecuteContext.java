@@ -27,7 +27,6 @@ package central.sql.impl.standard;
 import central.sql.SqlExecuteContext;
 import central.sql.SqlExecutor;
 import central.util.Listx;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -59,7 +58,7 @@ public class StandardExecuteContext implements SqlExecuteContext {
         this.sql = sql;
         if (Listx.isNullOrEmpty(args)) {
             this.args = Collections.emptyList();
-        } else if (Listx.getFirst(args) instanceof List<?>) {
+        } else if (Listx.getFirstOrNull(args) instanceof List<?>) {
             this.args = args.stream().map(it -> Collections.unmodifiableList((List<Object>) it)).toList();
         } else {
             this.args = List.of(Collections.unmodifiableList(args));

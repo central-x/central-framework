@@ -226,7 +226,7 @@ public class StandardMetaManager implements SqlMetaManager {
     @Override
     public EntityMeta getMeta(Class<? extends Entity> entity) {
         synchronized (this.lock) {
-            var meta = metas.get(entity.getName());
+            var meta = metas.getOrNull(entity.getName());
             if (meta == null) {
                 meta = new EntityMeta();
                 // 提前放到 Map 里，不然会出现死锁

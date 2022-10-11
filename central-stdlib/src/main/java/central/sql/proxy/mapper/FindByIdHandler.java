@@ -48,7 +48,7 @@ import java.sql.SQLException;
 public class FindByIdHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var id = Arrayx.getFirst(args);
+        var id = Arrayx.getFirstOrNull(args);
         Assertx.mustNotNull(id, "主键[id]必须不为空");
         var script = builder.forFindBy(executor, meta, 1L, 0L, Conditions.of(Entity.class).eq(meta.getId().getName(), id), null);
         return executor.selectSingle(script, meta.getType());

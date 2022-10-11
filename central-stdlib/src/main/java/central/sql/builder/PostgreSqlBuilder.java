@@ -123,7 +123,7 @@ public class PostgreSqlBuilder extends StandardSqlBuilder {
         // 查找此次查询，会使用哪些关联查询
         var aliases = getAliases(conditions);
 
-        Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), SQLSyntaxErrorException::new, "UPDATE 不支持外键条件");
+        Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAnyOrNull(aliases))), SQLSyntaxErrorException::new, "UPDATE 不支持外键条件");
 
         // 处理条件
         applyConditions(executor, meta, whereSql, whereArgs, conditions);

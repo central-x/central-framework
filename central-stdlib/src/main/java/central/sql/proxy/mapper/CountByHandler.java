@@ -46,7 +46,7 @@ import java.sql.SQLException;
 public class CountByHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var conditions = (Conditions<?>) Arrayx.getFirst(args);
+        var conditions = (Conditions<?>) Arrayx.getFirstOrNull(args);
         var script = builder.forCountBy(executor, meta, conditions);
         return executor.selectSingle(script, Long.class);
     }

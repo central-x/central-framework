@@ -53,13 +53,13 @@ public class FindByHandler implements MapperHandler {
         Orders<?> orders;
 
         if (args.length == 4) {
-            first = (Long) Arrayx.get(args, 0);
-            offset = (Long) Arrayx.get(args, 1);
-            conditions = (Conditions<?>) Arrayx.get(args, 2);
-            orders = (Orders<?>) Arrayx.get(args, 3);
+            first = (Long) Arrayx.getOrNull(args, 0);
+            offset = (Long) Arrayx.getOrNull(args, 1);
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 2);
+            orders = (Orders<?>) Arrayx.getOrNull(args, 3);
         } else {
-            conditions = (Conditions<?>) Arrayx.get(args, 0);
-            orders = (Orders<?>) Arrayx.get(args, 1);
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 0);
+            orders = (Orders<?>) Arrayx.getOrNull(args, 1);
         }
 
         var script = builder.forFindBy(executor, meta, first, offset, conditions, orders);

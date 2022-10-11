@@ -88,14 +88,26 @@ public class Mapx {
     }
 
     /**
-     * 获取指定
+     * 获取指定键的值
      *
      * @param map 集合
      * @param key 键
      * @param <K> 键类型
      * @param <V> 值类型
      */
-    public static <K, V> V get(@Nullable Map<K, V> map, K key) {
+    public static <K, V> @Nonnull Optional<V> get(@Nullable Map<K, V> map, K key) {
+        return Optional.ofNullable(getOrNull(map, key));
+    }
+
+    /**
+     * 获取指定键的值
+     *
+     * @param map 集合
+     * @param key 键
+     * @param <K> 键类型
+     * @param <V> 值类型
+     */
+    public static <K, V> V getOrNull(@Nullable Map<K, V> map, K key) {
         return isNullOrEmpty(map) ? null : map.get(key);
     }
 

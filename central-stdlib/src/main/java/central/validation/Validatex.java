@@ -61,8 +61,9 @@ public class Validatex {
             groups = new Class[]{Default.class};
         }
         var violations = this.factory.getValidator().validate(object, groups);
-        if (Setx.isNotEmpty(violations)) {
-            throw error.apply(Setx.getAny(violations).getMessage());
+        var violation = Setx.getAny(violations);
+        if (violation.isPresent()) {
+            throw error.apply(violation.get().getMessage());
         }
     }
 

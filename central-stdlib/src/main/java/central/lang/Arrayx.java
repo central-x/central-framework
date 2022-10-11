@@ -26,8 +26,10 @@ package central.lang;
 
 import lombok.experimental.UtilityClass;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -54,7 +56,7 @@ public class Arrayx {
      *
      * @param array 数组
      */
-    public static boolean isNullOrEmpty(@Nullable byte[] array){
+    public static boolean isNullOrEmpty(@Nullable byte[] array) {
         return array == null || array.length == 0;
     }
 
@@ -84,7 +86,17 @@ public class Arrayx {
      * @param array 数组
      * @param <T>   数组类型
      */
-    public static <T> T getFirst(@Nullable T[] array) {
+    public static <T> @Nonnull Optional<T> getFirst(@Nonnull T[] array) {
+        return Optional.ofNullable(getFirstOrNull(array));
+    }
+
+    /**
+     * 获取第一个元素
+     *
+     * @param array 数组
+     * @param <T>   数组类型
+     */
+    public static <T> @Nullable T getFirstOrNull(@Nullable T[] array) {
         return isNullOrEmpty(array) ? null : array[0];
     }
 
@@ -94,7 +106,17 @@ public class Arrayx {
      * @param array 数组
      * @param <T>   数组类型
      */
-    public static <T> T getLast(@Nullable T[] array) {
+    public static <T> @Nonnull Optional<T> getLast(@Nonnull T[] array) {
+        return Optional.ofNullable(getLastOrNull(array));
+    }
+
+    /**
+     * 获取最后一个元素
+     *
+     * @param array 数组
+     * @param <T>   数组类型
+     */
+    public static <T> @Nullable T getLastOrNull(@Nullable T[] array) {
         return isNullOrEmpty(array) ? null : array[array.length - 1];
     }
 
@@ -104,7 +126,17 @@ public class Arrayx {
      * @param array 数组
      * @param <T>   数组类型
      */
-    public static <T> T get(@Nullable T[] array, int index) {
+    public static <T> @Nonnull Optional<T> get(@Nullable T[] array, int index) {
+        return Optional.ofNullable(getOrNull(array, index));
+    }
+
+    /**
+     * 获取指定下标的元素
+     *
+     * @param array 数组
+     * @param <T>   数组类型
+     */
+    public static <T> T getOrNull(@Nullable T[] array, int index) {
         if (array == null || array.length <= index) {
             return null;
         } else {

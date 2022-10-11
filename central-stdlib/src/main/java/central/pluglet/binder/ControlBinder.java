@@ -59,7 +59,7 @@ public class ControlBinder implements FieldBinder {
         var name = Objectx.getOrDefault(annotation.name(), field.getName());
         var value = params.get(name);
         if (value == null){
-            value = Arrayx.getFirst(annotation.defaultValue());
+            value = Arrayx.getFirstOrNull(annotation.defaultValue());
         }
         if (value != null) {
             if (!Convertx.Default().support(value.getClass(), field.getType().getRawClass())) {

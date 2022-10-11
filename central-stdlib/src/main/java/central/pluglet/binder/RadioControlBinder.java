@@ -65,7 +65,7 @@ public class RadioControlBinder implements FieldBinder {
         var name = Objectx.getOrDefault(annotation.name(), field.getName());
         var value = params.get(name);
         if (value == null) {
-            value = Arrayx.getFirst(annotation.defaultValue());
+            value = Arrayx.getFirstOrNull(annotation.defaultValue());
         }
 
         if (value != null) {

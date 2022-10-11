@@ -59,7 +59,7 @@ public class FieldResolver implements ControlResolver {
                 .name(Objectx.getOrDefault(annotation.name(), field.getName()))
                 .type(annotation.type().name())
                 .comment(annotation.comment())
-                .defaultValue(Convertx.Default().convert(Arrayx.getFirst(annotation.defaultValue()), field.getType().getRawClass()))
+                .defaultValue(Convertx.Default().convert(Arrayx.getFirstOrNull(annotation.defaultValue()), field.getType().getRawClass()))
                 .required(annotation.required())
                 .build();
     }

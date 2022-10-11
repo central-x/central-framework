@@ -49,14 +49,14 @@ import java.sql.SQLException;
 public class FindPageByHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        long pageIndex = (long) Arrayx.get(args, 0);
-        long pageSize = (long) Arrayx.get(args, 1);
+        long pageIndex = (long) Arrayx.getOrNull(args, 0);
+        long pageSize = (long) Arrayx.getOrNull(args, 1);
         Assertx.mustTrue(pageIndex > 0, "分页下标[pageIndex]必须大于等于 1");
         Assertx.mustTrue(pageSize > 0, "分页大小[pageSize]必须大于等于 1");
         Assertx.mustTrue(pageIndex * pageSize < 1_000_000, "分页查询时不允许查询超过 100W 的数据");
 
-        var conditions = (Conditions<?>) Arrayx.get(args, 2);
-        var orders = (Orders<?>) Arrayx.get(args, 3);
+        var conditions = (Conditions<?>) Arrayx.getOrNull(args, 2);
+        var orders = (Orders<?>) Arrayx.getOrNull(args, 3);
 
         // 计算总数
         var countScript = builder.forCountBy(executor, meta, conditions);

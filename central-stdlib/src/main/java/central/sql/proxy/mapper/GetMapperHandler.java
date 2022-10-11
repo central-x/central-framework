@@ -46,7 +46,7 @@ public class GetMapperHandler implements MapperHandler {
     @Override
     @SuppressWarnings("rawtypes")
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var mapperType = (Class) Arrayx.getFirst(args);
+        var mapperType = (Class) Arrayx.getFirstOrNull(args);
         if (mapperType == null) {
             return null;
         }

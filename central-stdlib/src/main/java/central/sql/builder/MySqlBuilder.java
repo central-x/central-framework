@@ -91,7 +91,7 @@ public class MySqlBuilder extends StandardSqlBuilder {
             // 看看会使用哪些关联查询
             var aliases = this.getAliases(conditions);
 
-            Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAny(aliases))), SQLSyntaxErrorException::new, "DELETE 不支持外键条件");
+            Assertx.mustTrue(Setx.isNullOrEmpty(aliases) || (aliases.size() == 1 && "a".equals(Setx.getAnyOrNull(aliases))), SQLSyntaxErrorException::new, "DELETE 不支持外键条件");
 
             // 处理条件
             applyConditions(executor, meta, whereSql, args, conditions);

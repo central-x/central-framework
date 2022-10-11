@@ -53,7 +53,7 @@ public class FindByIdsHandler implements MapperHandler {
             return Collections.emptyList();
         }
 
-        var ids = (List<String>) Arrayx.getFirst(args);
+        var ids = (List<String>) Arrayx.getFirstOrNull(args);
         var script = builder.forFindBy(executor, meta, null, null, Conditions.of(Entity.class).in(meta.getId().getName(), ids), null);
         return executor.select(script, meta.getType());
     }

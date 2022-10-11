@@ -48,7 +48,7 @@ import java.util.List;
 public class InsertBatchHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var entities = (List<Object>) Arrayx.getFirst(args);
+        var entities = (List<Object>) Arrayx.getFirstOrNull(args);
         if (Listx.isNullOrEmpty(entities)) {
             return 0L;
         }

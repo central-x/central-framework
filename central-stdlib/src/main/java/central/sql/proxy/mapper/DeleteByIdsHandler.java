@@ -53,7 +53,7 @@ public class DeleteByIdsHandler implements MapperHandler {
             return 0L;
         }
 
-        var ids = (List<String>) Arrayx.getFirst(args);
+        var ids = (List<String>) Arrayx.getFirstOrNull(args);
         if (Listx.isNullOrEmpty(ids)) {
             return 0L;
         }

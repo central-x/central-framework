@@ -25,7 +25,6 @@
 package central.lang.reflect;
 
 import central.bean.InitializeException;
-import central.bean.OptionalEnum;
 import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.Stringx;
@@ -240,7 +239,7 @@ public abstract class TypeReference<T> {
                     throw new InitializeException(clazz, Stringx.format("Cannot determine constructor with specify argument types ({})", Arrayx.asStream(args).map(Objectx::getClass).map(it -> Objectx.isNull(it) ? "?" : it.getName()).collect(Collectors.joining(", "))));
                 }
 
-                Optional<Constructor<?>> constructor = Optional.ofNullable(Listx.getFirst(constructors));
+                Optional<Constructor<?>> constructor = Listx.getFirst(constructors);
                 if (constructor.isEmpty()) {
                     throw new InitializeException(clazz, Stringx.format("Cannot find constructor with specify argument types ({})", Arrayx.asStream(args).map(Objectx::getClass).map(it -> Objectx.isNull(it) ? "?" : it.getName()).collect(Collectors.joining(", "))));
                 }

@@ -112,28 +112,31 @@ public class StandardTransformer implements SqlTransformer {
     }
 
     public <T> T toBaseType(SqlExecutor executor, Map<String, Object> data, Class<T> type) throws SQLException {
-        if (data.isEmpty()) {
-            if (type.isPrimitive()) {
-                return (T) this.getPrimitiveDefaultValue(type);
-            } else {
-                return null;
-            }
-        } else if (data.size() > 1) {
+        if (data.size() > 1) {
             throw new SQLException(Stringx.format("期望返回 1 列，返回类型为 {}，但查询语句返回了 {} 列", type.getName(), data.size()));
         }
 
-        var value = Setx.getAny(data.entrySet()).getValue();
-        if (value == null) {
+        var entry = Setx.getAny(data.entrySet());
+        if (entry.isEmpty()) {
             if (type.isPrimitive()) {
                 return (T) this.getPrimitiveDefaultValue(type);
             } else {
                 return null;
             }
+        } else {
+            var value = entry.get().getValue();
+            if (value == null) {
+                if (type.isPrimitive()) {
+                    return (T) this.getPrimitiveDefaultValue(type);
+                } else {
+                    return null;
+                }
+            }
+            if (!executor.getConverter().support(value.getClass(), type)) {
+                throw new SQLException(Stringx.format("不支持将类型[{}]转换为[{}]类型", value.getClass().getName(), type.getName()));
+            }
+            return executor.getConverter().convert(value, type);
         }
-        if (!executor.getConverter().support(value.getClass(), type)) {
-            throw new SQLException(Stringx.format("不支持将类型[{}]转换为[{}]类型", value.getClass().getName(), type.getName()));
-        }
-        return executor.getConverter().convert(value, type);
     }
 
 
