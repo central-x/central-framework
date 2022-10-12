@@ -29,6 +29,7 @@ import central.sql.impl.standard.StandardDataSourceMigrator;
 import central.sql.impl.standard.StandardSource;
 import central.sql.impl.standard.StandardExecutor;
 import central.sql.impl.standard.StandardMetaManager;
+import central.sql.interceptor.LogInterceptor;
 import central.sql.migration.*;
 import central.util.Version;
 import org.junit.jupiter.api.AfterEach;
@@ -51,15 +52,39 @@ public class TestDataSourceMigrator {
 
     @BeforeEach
     public void before() {
-        var dataSource = new HikariDataSourceFactory().build("org.h2.Driver", "jdbc:h2:mem:centralx", "centralx", "central.x");
+        // H2
+        var driver = "org.h2.Driver";
+        var url = "jdbc:h2:mem:centralx";
+        var username = "centralx";
+        var password = "central.x";
+
+        // mysql
+//        var driver = "com.mysql.jdbc.Driver";
+//        var url = "jdbc:mysql://10.10.20.20:3306/centralx?useUnicode=true&characterEncoding=utf8&useSSL=false";
+//        var username = "root";
+//        var password = "root";
+
+        // oracle
+//        var driver = "oracle.jdbc.OracleDriver";
+//        var url = "jdbc:oracle:thin:@10.10.20.20:1521:xe";
+//        var username = "centralx";
+//        var password = "123456";
+
+        // PostgreSql
+//        var driver = "org.postgresql.Driver";
+//        var url = "jdbc:postgresql://10.10.20.20:5432/postgres";
+//        var username = "postgres";
+//        var password = "root";
+
         var source = StandardSource.builder()
-                .dataSource(dataSource)
-                .dialect(SqlDialect.resolve("jdbc:h2:mem:centralx"))
+                .dataSource(new HikariDataSourceFactory().build(driver, url, username, password))
+                .dialect(SqlDialect.resolve(url))
                 .build();
 
         this.executor = StandardExecutor.builder()
                 .source(source)
                 .metaManager(new StandardMetaManager(name -> name.startsWith("XT_")))
+                .addInterceptor(new LogInterceptor())
                 .build();
     }
 

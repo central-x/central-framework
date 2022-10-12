@@ -623,7 +623,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     public List<SqlScript> forRenameTable(RenameTableScript script) throws SQLSyntaxErrorException {
         // ALTER TABLE "MC_REL_DEPT_PARENT" RENAME TO "MC_REL_DEPT_FUNCTION";
 
-        var result = new SqlScript(Stringx.format("ALTER TABLE {} RENAME TO {}", script.getName(), script.getNewName()));
+        var result = new SqlScript(Stringx.format("ALTER TABLE {} RENAME TO {}", this.processTable(script.getName()), this.processColumn(script.getNewName())));
         return Collections.singletonList(result);
     }
 

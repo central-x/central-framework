@@ -135,7 +135,7 @@ public class Convertx {
      * 因为如果没找到转换器的话，需要依次调用各个 Converter::support 方法来判断是否支持的数据转换，相对来说比较低效
      * 因此将已知的已匹配的类型保存起来，这样下次就可以直接获取到指定的转换器了
      */
-    private final Map<MatchedKey, Converter<?>> cachedConverter = new HashMap<>();
+    private final Map<MatchedKey, Converter<?>> cachedConverter = new ConcurrentHashMap<>();
 
     /**
      * 查找转换器

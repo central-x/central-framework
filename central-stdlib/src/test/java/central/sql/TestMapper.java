@@ -73,17 +73,32 @@ public class TestMapper {
     @BeforeEach
     public void before() throws Exception {
         // H2
-        var dataSource = new HikariDataSourceFactory().build("org.h2.Driver", "jdbc:h2:mem:test-mapper", "centralx", "central.x");
-        // Mysql
-//        var dataSource = new HikariDataSourceFactory().buildDialect("com.mysql.jdbc.Driver", "jdbc:mysql://10.10.20.20:3306/centralx?useUnicode=true&characterEncoding=utf8&useSSL=false", "root", "root");
-        // Oracle
-//        var dataSource = new HikariDataSourceFactory().buildDialect("oracle.jdbc.OracleDriver", "jdbc:oracle:thin:@10.10.20.20:1521:orcl", "centralx", "123456");
-        // Postgresql
-//        var dataSource = new HikariDataSourceFactory().buildDialect("org.postgresql.Driver", "jdbc:postgresql://10.10.20.20:5432/postgres", "postgres", "root");
+        var driver = "org.h2.Driver";
+        var url = "jdbc:h2:mem:centralx";
+        var username = "centralx";
+        var password = "central.x";
+
+        // mysql
+//        var driver = "com.mysql.jdbc.Driver";
+//        var url = "jdbc:mysql://10.10.20.20:3306/centralx?useUnicode=true&characterEncoding=utf8&useSSL=false";
+//        var username = "root";
+//        var password = "root";
+
+        // oracle
+//        var driver = "oracle.jdbc.OracleDriver";
+//        var url = "jdbc:oracle:thin:@10.10.20.20:1521:orcl";
+//        var username = "centralx";
+//        var password = "123456";
+
+        // PostgreSql
+//        var driver = "org.postgresql.Driver";
+//        var url = "jdbc:postgresql://10.10.20.20:5432/postgres";
+//        var username = "postgres";
+//        var password = "root";
 
         this.source = StandardSource.builder()
-                .dataSource(dataSource)
-                .dialect(SqlDialect.H2)
+                .dataSource(new HikariDataSourceFactory().build(driver, url, username, password))
+                .dialect(SqlDialect.resolve(url))
                 .migrator(StandardDataSourceMigrator.builder().name("test").target(Version.of("1.0.1")).add(new V1()).build())
                 .build();
 

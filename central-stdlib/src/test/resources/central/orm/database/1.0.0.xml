@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scripts xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://central-x.org/schemas/orm/database.xsd">
+         xsi:noNamespaceSchemaLocation="https://central-x.com/schemas/orm/database.xsd">
     <tables>
         <add>
             <table name="C_TEST_ACCOUNT" comment="帐户信息">

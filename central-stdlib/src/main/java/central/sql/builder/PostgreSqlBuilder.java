@@ -30,12 +30,15 @@ import central.sql.Conditions;
 import central.sql.SqlExecutor;
 import central.sql.SqlScript;
 import central.sql.SqlType;
+import central.sql.builder.script.index.DropIndexScript;
 import central.sql.meta.entity.EntityMeta;
 import central.util.*;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLSyntaxErrorException;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * PostgreSql
@@ -139,5 +142,13 @@ public class PostgreSqlBuilder extends StandardSqlBuilder {
     protected StringBuilder applyPage(StringBuilder sql, Long offset, Long pageSize) {
         sql.append("LIMIT ").append(pageSize).append(" OFFSET ").append(offset);
         return sql;
+    }
+
+    @Override
+    public List<SqlScript> forDropIndex(DropIndexScript script) throws SQLSyntaxErrorException {
+        // DROP INDEX `IDX_MC_AUTH_CREDENTIAL_ACCOUNTID`;
+
+        var result = new SqlScript(Stringx.format("DROP INDEX {}", this.processIndex(script.getName())));
+        return Collections.singletonList(result);
     }
 }

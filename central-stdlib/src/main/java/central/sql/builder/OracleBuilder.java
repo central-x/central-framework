@@ -25,10 +25,7 @@
 package central.sql.builder;
 
 import central.lang.Assertx;
-import central.sql.Conditions;
-import central.sql.Orders;
-import central.sql.SqlExecutor;
-import central.sql.SqlScript;
+import central.sql.*;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.meta.entity.ForeignMeta;
 import central.sql.meta.entity.ForeignTableMeta;
@@ -51,6 +48,15 @@ import java.util.Set;
  * @since 2022/08/03
  */
 public class OracleBuilder extends StandardSqlBuilder {
+
+    @Override
+    public String handleSqlType(SqlType type, Integer length) {
+        if (SqlType.DATETIME.isCompatibleWith(type)) {
+            return "TIMESTAMP";
+        } else {
+            return super.handleSqlType(type, length);
+        }
+    }
 
     /**
      * 和 StandardSqlBuilder，主要去掉了 AS

@@ -171,7 +171,8 @@ public class StandardMetaManager implements SqlMetaManager {
         private final String column;
 
         public String getString(ResultSet cursor) throws SQLException {
-            return Optional.ofNullable(cursor.getString(this.column)).map(String::toUpperCase).orElse(null);
+            return cursor.getString(this.column);
+//            return Optional.ofNullable(cursor.getString(this.column)).map(String::toUpperCase).orElse(null);
         }
     }
 
@@ -187,7 +188,8 @@ public class StandardMetaManager implements SqlMetaManager {
         private final String column;
 
         public String getString(ResultSet cursor) throws SQLException {
-            return Optional.ofNullable(cursor.getString(this.column)).map(String::toUpperCase).orElse(null);
+            return cursor.getString(this.column);
+//            return Optional.ofNullable(cursor.getString(this.column)).map(String::toUpperCase).orElse(null);
         }
 
         public int getInt(ResultSet cursor) throws SQLException {
@@ -206,7 +208,8 @@ public class StandardMetaManager implements SqlMetaManager {
         private final String column;
 
         public String getString(ResultSet cursor) throws SQLException {
-            return Optional.ofNullable(cursor.getString(this.column)).map(String::toUpperCase).orElse(null);
+            return cursor.getString(this.column);
+//            return Optional.ofNullable(cursor.getString(this.column)).map(String::toUpperCase).orElse(null);
         }
 
         public boolean getBoolean(ResultSet cursor) throws SQLException {

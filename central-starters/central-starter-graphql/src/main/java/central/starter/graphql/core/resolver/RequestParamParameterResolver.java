@@ -138,13 +138,13 @@ public class RequestParamParameterResolver extends SpringAnnotatedParameterResol
                                 try {
                                     validatable.validate();
                                 } catch (Exception ex) {
-                                    throw new GraphQLException(Stringx.format("执行方法[{}.{}]错误: 参数[{}]验证异常", method.getDeclaringClass().getSimpleName(), method.getName(), name), ex);
+                                    throw new GraphQLException(Stringx.format("执行方法[{}.{}]错误: 参数[{}]验证异常: {}", method.getDeclaringClass().getSimpleName(), method.getName(), name, ex.getLocalizedMessage()), ex);
                                 }
                             } else {
                                 try {
                                     Validatex.Default().validate(it, groups);
                                 } catch (Exception ex) {
-                                    throw new GraphQLException(Stringx.format("执行方法[{}.{}]错误: 参数[{}]验证异常", method.getDeclaringClass().getSimpleName(), method.getName(), name), ex);
+                                    throw new GraphQLException(Stringx.format("执行方法[{}.{}]错误: 参数[{}]验证异常: {}", method.getDeclaringClass().getSimpleName(), method.getName(), name, ex.getLocalizedMessage()), ex);
                                 }
                             }
                         }
