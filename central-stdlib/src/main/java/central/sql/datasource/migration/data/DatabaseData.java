@@ -32,7 +32,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据库
@@ -60,7 +62,7 @@ public class DatabaseData {
     private String driverVersion;
 
     @Label("表信息")
-    private List<TableData> tables = new ArrayList<>();
+    private Map<String, TableData> tables = Mapx.caseInsensitive(new HashMap<>());
 
     public static DatabaseData fromMeta(DatabaseMeta meta) {
         var data = new DatabaseData();
@@ -69,7 +71,7 @@ public class DatabaseData {
         data.setVersion(meta.getVersion());
         data.setDriverName(meta.getDriverName());
         data.setDriverVersion(meta.getDriverVersion());
-        data.getTables().addAll(Mapx.asStream(meta.getTables()).map(it -> TableData.fromMeta(it.getValue())).toList());
+        meta.getTables().forEach((key, value) -> data.getTables().put(key, TableData.fromMeta(value)));
         return data;
     }
 }

@@ -71,22 +71,25 @@ public class TableMigrator implements Table {
 
     @Override
     public List<Column> getColumns() {
-        return this.table.getColumns().stream().map(it -> new ColumnMigrator(this.migrator, table, it)).collect(Collectors.toList());
+        return this.table.getColumns().values().stream()
+                .map(it -> new ColumnMigrator(this.migrator, table, it))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Column getColumn(String name) {
-        return this.table.getColumns().stream()
-                .filter(it -> it.getName().equals(name))
-                .map(it -> new ColumnMigrator(this.migrator, table, it))
-                .findFirst()
-                .orElse(null);
+        var column = this.table.getColumns().get(name);
+        if (column == null) {
+            return null;
+        } else {
+            return new ColumnMigrator(this.migrator, table, column);
+        }
     }
 
     @Override
     public Table addColumn(Column column) {
         Assertx.mustTrue(!column.isPrimary(), "不允许向表[{}]添加新主键", this.table.getName());
-        Assertx.mustTrue(this.table.getColumns().stream().noneMatch(it -> it.getName().equals(column.getName())), "表[{}]已存在同名字段[{}]", this.table.getName(), column.getName());
+        Assertx.mustTrue(!this.table.getColumns().containsKey(column.getName()), "表[{}]已存在同名字段[{}]", this.table.getName(), column.getName());
 
         var script = new AddColumnScript();
         script.setTable(this.table.getName());
@@ -96,27 +99,30 @@ public class TableMigrator implements Table {
         script.setComment(column.getRemarks());
         this.migrator.addAction(new AddColumnMigration(script));
 
-        this.table.getColumns().add(new ColumnData(column.getName(), column.isPrimary(), column.getType(), column.getSize(), column.getRemarks()));
+        this.table.getColumns().put(column.getName(), new ColumnData(column.getName(), column.isPrimary(), column.getType(), column.getSize(), column.getRemarks()));
         return this;
     }
 
     @Override
     public List<Index> getIndices() {
-        return this.table.getIndices().stream().map(it -> new IndexMigrator(this.migrator, this.table, it)).collect(Collectors.toList());
+        return this.table.getIndices().values().stream()
+                .map(it -> new IndexMigrator(this.migrator, this.table, it))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Index getIndex(String name) {
-        return this.table.getIndices().stream()
-                .filter(it -> it.getName().equals(name))
-                .map(it -> new IndexMigrator(this.migrator, this.table, it))
-                .findFirst()
-                .orElse(null);
+        var index = this.table.getIndices().get(name);
+        if (index == null) {
+            return null;
+        } else {
+            return new IndexMigrator(this.migrator, this.table, index);
+        }
     }
 
     @Override
     public Table addIndex(Index index) {
-        Assertx.mustTrue(this.table.getIndices().stream().noneMatch(it -> it.getName().equals(index.getName())), "表[{}]已存在同名索引[{}]", this.table.getName(), index.getName());
+        Assertx.mustTrue(!this.table.getIndices().containsKey(index.getName()), "表[{}]已存在同名索引[{}]", this.table.getName(), index.getName());
 
         var script = new AddIndexScript();
         script.setName(index.getName());
@@ -124,7 +130,7 @@ public class TableMigrator implements Table {
         script.setColumn(index.getColumn());
         this.migrator.addAction(new AddIndexMigration(script));
 
-        this.table.getIndices().add(new IndexData(index.getName(), index.isUnique(), index.getColumn()));
+        this.table.getIndices().put(index.getName(), new IndexData(index.getName(), index.isUnique(), index.getColumn()));
 
         return this;
     }
@@ -135,7 +141,7 @@ public class TableMigrator implements Table {
         script.setName(this.table.getName());
 
         this.migrator.addAction(new DropTableMigration(script));
-        this.database.getTables().remove(this.table);
+        this.database.getTables().remove(this.table.getName());
     }
 
     @Override
@@ -144,6 +150,8 @@ public class TableMigrator implements Table {
         script.setName(this.table.getName());
         script.setNewName(newName);
         this.migrator.addAction(new RenameTableMigration(script));
+        this.database.getTables().remove(this.table.getName());
         this.table.setName(newName);
+        this.database.getTables().put(this.table.getName(), this.table);
     }
 }

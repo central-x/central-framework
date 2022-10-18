@@ -67,9 +67,13 @@ public interface Orderable<T extends Orderable<T>> extends Comparable<T> {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    class Holder<T extends Orderable<T>> implements Orderable<Holder<T>> {
+    class Holder<T> implements Orderable<Holder<T>> {
         private T data;
 
         private Integer order;
+
+        public static <T> Holder<T> of(T data, Integer order) {
+            return new Holder<>(data, order);
+        }
     }
 }

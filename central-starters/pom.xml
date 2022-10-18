@@ -15,7 +15,7 @@
         <module>central-starter-logging</module>
         <module>central-starter-orm</module>
         <module>central-starter-web</module>
-        <module>central-starter-webflux</module>
+        <module>central-starter-web-reactive</module>
         <module>central-starter-webmvc</module>
     </modules>
 

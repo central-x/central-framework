@@ -56,7 +56,7 @@ public class ColumnMigrator implements Column {
         action.setTable(this.table.getName());
 
         migrator.addAction(new DropColumnMigration(action));
-        table.getColumns().remove(this.column);
+        table.getColumns().remove(this.column.getName());
     }
 
     @Override
@@ -70,6 +70,8 @@ public class ColumnMigrator implements Column {
         action.setRemarks(this.getRemarks());
         migrator.addAction(new RenameColumnMigration(action));
 
+        this.table.getColumns().remove(this.column.getName());
         this.column.setName(newName);
+        this.table.getColumns().put(this.column.getName(), this.column);
     }
 }

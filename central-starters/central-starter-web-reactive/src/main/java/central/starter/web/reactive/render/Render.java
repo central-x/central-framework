@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package central.starter.webflux.render;
+package central.starter.web.reactive.render;
 
 import central.io.IOStreamx;
 import lombok.Getter;

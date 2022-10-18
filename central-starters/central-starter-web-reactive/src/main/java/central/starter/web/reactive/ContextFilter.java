@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package central.starter.webflux;
+package central.starter.web.reactive;
 
-import central.starter.webflux.exception.ExceptionHandler;
-import central.starter.webflux.render.ErrorRender;
+import central.starter.web.reactive.exception.ExceptionHandler;
+import central.starter.web.reactive.render.ErrorRender;
 import central.util.Listx;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

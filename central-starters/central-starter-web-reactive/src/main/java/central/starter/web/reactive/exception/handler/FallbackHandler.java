@@ -22,30 +22,35 @@
  * SOFTWARE.
  */
 
-package central.starter.webflux.exception;
+package central.starter.web.reactive.exception.handler;
 
+import central.starter.web.reactive.exception.ExceptionHandler;
+import central.starter.web.reactive.render.ErrorRender;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * 异常处理器
+ * 应用处理
  *
  * @author Alan Yeh
  * @since 2022/10/09
  */
-public interface ExceptionHandler {
-    /**
-     * 是否支持处理该异常
-     *
-     * @param throwable 待处理的异常
-     */
-    boolean support(Throwable throwable);
+@Slf4j
+@Component
+@Order
+public class FallbackHandler implements ExceptionHandler {
+    @Override
+    public boolean support(Throwable throwable) {
+        return true;
+    }
 
-    /**
-     * 处理异常
-     *
-     * @param exchange  ServerWebExchange
-     * @param throwable 待处理的异常
-     */
-    Mono<Void> handle(ServerWebExchange exchange, Throwable throwable);
+    @Override
+    public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
+        // 输出异常日志
+        log.error(throwable.getLocalizedMessage(), throwable);
+        return ErrorRender.of(exchange).render(throwable);
+    }
 }

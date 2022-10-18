@@ -42,7 +42,7 @@ import java.nio.charset.Charset;
 @PublicApi
 @UtilityClass
 public class IOStreamx {
-    public static final int BUFFER_SIZE = 4096;
+    public static final int BUFFER_SIZE = 8 * 1204;
 
     /**
      * 将输入流复制到输出流

@@ -27,6 +27,7 @@ package central.lang;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
@@ -70,12 +71,27 @@ public class Attribute<T> {
     /**
      * Get value from supplier
      */
-    @Nullable
-    public T getValue() {
+    public @Nullable T getValue() {
         if (supplier != null) {
             return supplier.get();
         } else {
             return null;
         }
+    }
+
+    /**
+     * Get nonnull value from supplier
+     */
+    public @Nonnull T requireValue() {
+        var value = this.getValue();
+        if (value == null) {
+            throw new IllegalStateException("Cannot return null value form supplier");
+        }
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return Stringx.format("Attribute{code: {}}", this.getCode());
     }
 }

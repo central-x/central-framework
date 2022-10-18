@@ -81,7 +81,7 @@ public class DatabaseMigrator implements Database {
 
     @Override
     public List<Table> getTables() {
-        return Listx.asStream(this.database.getTables())
+        return this.database.getTables().values().stream()
                 .map(it -> new TableMigrator(this, this.database, it))
                 .collect(Collectors.toList());
     }
@@ -134,11 +134,12 @@ public class DatabaseMigrator implements Database {
 
     @Override
     public Table getTable(String name) {
-        return this.database.getTables().stream()
-                .filter(it -> it.getName().equals(name))
-                .map(it -> new TableMigrator(this, this.database, it))
-                .findFirst()
-                .orElse(null);
+        var table = this.database.getTables().get(name);
+        if (table == null) {
+            return null;
+        } else {
+            return new TableMigrator(this, this.database, table);
+        }
     }
 
     @Override

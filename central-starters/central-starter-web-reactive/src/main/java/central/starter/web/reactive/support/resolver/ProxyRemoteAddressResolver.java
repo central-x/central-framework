@@ -22,34 +22,41 @@
  * SOFTWARE.
  */
 
-package central.starter.webflux.exception.handler;
+package central.starter.web.reactive.support.resolver;
 
-import central.starter.webflux.exception.ExceptionHandler;
-import central.starter.webflux.render.ErrorRender;
+import central.util.Listx;
+import central.starter.web.reactive.support.RemoteAddressResolver;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
-import java.net.ConnectException;
+import java.net.InetSocketAddress;
 
 /**
- * 连接异常
+ * 解析代理远程地址
  *
  * @author Alan Yeh
- * @since 2022/10/09
+ * @since 2022/10/18
  */
 @Slf4j
-public class ConnectExceptionHandler implements ExceptionHandler {
-    @Override
-    public boolean support(Throwable throwable) {
-        return throwable.getCause() instanceof ConnectException;
+public class ProxyRemoteAddressResolver implements RemoteAddressResolver {
+
+    private final String header;
+
+    public ProxyRemoteAddressResolver(String header) {
+        this.header = header;
     }
 
     @Override
-    public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
-        // 连接异常
-        log.error("Bad Gateway (502): {}", throwable.getLocalizedMessage(), throwable);
-        return ErrorRender.of(exchange).render(HttpStatus.BAD_GATEWAY, throwable);
+    public InetSocketAddress resolve(ServerWebExchange exchange) {
+        var proxy = exchange.getRequest().getHeaders().get(header);
+        if (Listx.isNullOrEmpty(proxy)) {
+            return null;
+        }
+        if (proxy.size() > 1) {
+            log.warn("Multiple {} headers found, discarding all", this.header);
+            return null;
+        }
+        var value = proxy.get(0);
+        return new InetSocketAddress(value.trim(), 0);
     }
 }

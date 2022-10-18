@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package central.starter.webflux.render;
+package central.starter.web.reactive.render;
 
 import central.lang.Assertx;
 import central.lang.Stringx;
@@ -49,6 +49,14 @@ public class RedirectRender extends Render<RedirectRender> {
 
     public RedirectRender(ServerHttpRequest request, ServerHttpResponse response) {
         super(request, response);
+    }
+
+    public static RedirectRender of(ServerWebExchange exchange) {
+        return new RedirectRender(exchange);
+    }
+
+    public static RedirectRender of(ServerHttpRequest request, ServerHttpResponse response) {
+        return new RedirectRender(request, response);
     }
 
     private URI location;

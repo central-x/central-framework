@@ -54,6 +54,6 @@ public class IndexMigrator implements Index {
         script.setName(this.index.getName());
         this.migrator.addAction(new DropIndexMigration(script));
 
-        this.table.getIndices().remove(this.index);
+        this.table.getIndices().remove(this.index.getName());
     }
 }

@@ -22,45 +22,41 @@
  * SOFTWARE.
  */
 
-package central.starter.webflux.exception.handler;
+package central.starter.web.reactive.support.resolver;
 
+import central.lang.Arrayx;
 import central.lang.Stringx;
-import central.starter.webflux.exception.ExceptionHandler;
-import central.starter.webflux.render.ErrorRender;
 import central.util.Listx;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.support.WebExchangeBindException;
+import central.starter.web.reactive.support.RemoteAddressResolver;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
+
+import java.net.InetSocketAddress;
 
 /**
- * 参数绑定异常
+ * 通过 X-Forwarded-For 获取远端地址
  *
  * @author Alan Yeh
- * @since 2022/10/09
+ * @since 2022/10/18
  */
-public class WebExchangeBindExceptionHandler implements ExceptionHandler {
+@Slf4j
+public class XForwardedRemoteAddressResolver implements RemoteAddressResolver {
     @Override
-    public boolean support(Throwable throwable) {
-        return throwable instanceof WebExchangeBindException;
-    }
-
-    @Override
-    public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
-        var ex = (WebExchangeBindException) throwable;
-
-        var error = ex.getBindingResult().getAllErrors().get(0);
-        var message = error.getDefaultMessage();
-
-        if (error instanceof FieldError err) {
-            if ("typeMismatch".equals(err.getCode())) {
-                message = Stringx.format("参数[{}]类型不匹配", err.getField());
-            } else {
-                message = err.getDefaultMessage();
-            }
+    public InetSocketAddress resolve(ServerWebExchange exchange) {
+        var xForwarded = exchange.getRequest().getHeaders().get("X-Forwarded-For");
+        if (Listx.isNullOrEmpty(xForwarded)) {
+            return null;
         }
-
-        return ErrorRender.of(exchange).render(HttpStatus.BAD_REQUEST, message);
+        if (xForwarded.size() > 1) {
+            log.warn("Multiple X-Forwarded-For headers found, discarding all");
+            return null;
+        }
+        var values = Arrayx.asStream(xForwarded.get(0).split(",")).map(String::trim).filter(Stringx::isNotEmpty).toList();
+        // 最后一个是远端地址
+        var remoteAddress = Listx.getLast(values);
+        if (remoteAddress.isEmpty()) {
+            return null;
+        }
+        return new InetSocketAddress(remoteAddress.get(), 0);
     }
 }

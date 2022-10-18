@@ -32,7 +32,9 @@ import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 表信息
@@ -52,17 +54,17 @@ public class TableData implements Serializable {
     private String remarks;
 
     @Label("字段")
-    private List<ColumnData> columns = new ArrayList<>();
+    private Map<String, ColumnData> columns = Mapx.caseInsensitive(new HashMap<>());
 
     @Label("索引")
-    private List<IndexData> indices = new ArrayList<>();
+    private Map<String, IndexData> indices = Mapx.caseInsensitive(new HashMap<>());
 
     public static TableData fromMeta(TableMeta meta) {
         var data = new TableData();
         data.setName(meta.getName());
         data.setRemarks(meta.getRemarks());
-        data.getColumns().addAll(Mapx.asStream(meta.getColumns()).map(it -> ColumnData.fromMeta(it.getValue())).toList());
-        data.getIndices().addAll(Mapx.asStream(meta.getIndies()).map(it -> IndexData.fromMeta(it.getValue())).toList());
+        meta.getColumns().forEach((key, value) -> data.getColumns().put(key, ColumnData.fromMeta(value)));
+        meta.getIndies().forEach((key, value) -> data.getIndices().put(key, IndexData.fromMeta(value)));
         return data;
     }
 }

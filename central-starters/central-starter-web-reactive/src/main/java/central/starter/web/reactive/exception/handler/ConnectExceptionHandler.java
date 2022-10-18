@@ -22,51 +22,36 @@
  * SOFTWARE.
  */
 
-package central.starter.web.http;
+package central.starter.web.reactive.exception.handler;
+
+import central.starter.web.reactive.exception.ExceptionHandler;
+import central.starter.web.reactive.render.ErrorRender;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+import java.net.ConnectException;
 
 /**
- * X-Forwarded-*
- * 这些请求头用于在微服务端流转
+ * 连接异常
  *
  * @author Alan Yeh
- * @since 2022/07/16
+ * @since 2022/10/09
  */
-public interface XForwardedHeaders {
-    /**
-     * 被代理的主机信息
-     */
-    String HOST = "X-Forwarded-Host";
-    /**
-     * 被代理的端口信息
-     */
-    String PORT = "X-Forwarded-Port";
-    /**
-     * 被代理的协议信息
-     */
-    String SCHEMA = "X-Forwarded-Proto";
-    /**
-     * 代理客户端信息
-     */
-    String FOR = "X-Forwarded-For";
-    /**
-     * 租户标识
-     */
-    String TENANT = "X-Forwarded-Tenant";
-    /**
-     * 租户路径
-     */
-    String PATH = "X-Forwarded-Path";
-    /**
-     * 凭证信息
-     */
-    String TOKEN = "X-Forwarded-Token";
-    /**
-     * 原始请求信息
-     */
-    String ORIGIN_URI = "X-Forwarded-OriginUri";
-    /**
-     * 请求版本信息
-     * 用于控制后端微服务的灰度版本信息，让请求在指定版本的微服务中流转
-     */
-    String VERSION = "X-Forwarded-Version";
+@Slf4j
+@Component
+public class ConnectExceptionHandler implements ExceptionHandler {
+    @Override
+    public boolean support(Throwable throwable) {
+        return throwable.getCause() instanceof ConnectException;
+    }
+
+    @Override
+    public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
+        // 连接异常
+        log.error("Bad Gateway (502): {}", throwable.getLocalizedMessage(), throwable);
+        return ErrorRender.of(exchange).render(HttpStatus.BAD_GATEWAY, throwable);
+    }
 }

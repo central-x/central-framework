@@ -22,34 +22,22 @@
  * SOFTWARE.
  */
 
-package central.starter.webflux;
+package central.starter.web.reactive.support.resolver;
 
-import central.starter.web.converter.LongToTimestampConverter;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.http.codec.ServerCodecConfigurer;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
-import org.springframework.web.reactive.config.WebFluxConfigurer;
+import central.starter.web.reactive.support.RemoteAddressResolver;
+import org.springframework.web.server.ServerWebExchange;
+
+import java.net.InetSocketAddress;
 
 /**
- * WebFlux 配置
+ * 默认远程端口解析
  *
  * @author Alan Yeh
- * @since 2022/10/09
+ * @since 2022/10/18
  */
-public class StarterConfigurer implements WebFluxConfigurer {
+public class DefaultRemoteAddressResolver implements RemoteAddressResolver {
     @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new LongToTimestampConverter());
-    }
-
-    @Override
-    public void configureHttpMessageCodecs(ServerCodecConfigurer configurer) {
-        var objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        configurer.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper));
-        configurer.defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper));
+    public InetSocketAddress resolve(ServerWebExchange exchange) {
+        return exchange.getRequest().getRemoteAddress();
     }
 }

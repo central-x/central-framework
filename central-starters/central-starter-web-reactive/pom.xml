@@ -11,7 +11,7 @@
         <relativePath>../../central-parent</relativePath>
     </parent>
 
-    <artifactId>central-starter-webflux</artifactId>
+    <artifactId>central-starter-web-reactive</artifactId>
     <version>1.0.x-SNAPSHOT</version>
     <packaging>jar</packaging>
 

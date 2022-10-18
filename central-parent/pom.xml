@@ -37,13 +37,14 @@
         <central.version>1.0.x-SNAPSHOT</central.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <spring-cloud.version>2022.0.0-M4</spring-cloud.version>
+        <spring-cloud.version>2022.0.0-M5</spring-cloud.version>
         <jsr305.version>3.0.2</jsr305.version>
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
         <bcpkix-jdk15on.version>1.70</bcpkix-jdk15on.version>
         <bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
         <graphql.version>19.2</graphql.version>
         <transmittable-thread-local.version>2.14.0</transmittable-thread-local.version>
+        <jwt.version>4.0.0</jwt.version>
     </properties>
 
     <!-- 依赖版本管理 -->
@@ -94,7 +95,7 @@
             </dependency>
             <dependency>
                 <groupId>com.central-x</groupId>
-                <artifactId>central-starter-webflux</artifactId>
+                <artifactId>central-starter-web-reactive</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -134,6 +135,13 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>transmittable-thread-local</artifactId>
                 <version>${transmittable-thread-local.version}</version>
+            </dependency>
+
+            <!-- JWT -->
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${jwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

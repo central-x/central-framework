@@ -22,21 +22,33 @@
  * SOFTWARE.
  */
 
-package central.starter.webflux;
+package central.starter.web.reactive.exception.handler;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import central.starter.web.reactive.exception.ExceptionHandler;
+import central.starter.web.reactive.render.ErrorRender;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 /**
- * 配置
+ * ResponseStatusException Handler
  *
  * @author Alan Yeh
- * @since 2022/10/09
+ * @since 2022/10/14
  */
-@Configuration
-@ComponentScan("central.starter.webflux.exception")
-@Import(StarterConfigurer.class)
-public class StarterConfiguration {
+@Component("responseStatusExHandler")
+public class ResponseStatusExceptionHandler implements ExceptionHandler {
+    @Override
+    public boolean support(Throwable throwable) {
+        return throwable instanceof ResponseStatusException;
+    }
 
+    @Override
+    public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
+        var ex = (ResponseStatusException) throwable;
+
+        return ErrorRender.of(exchange).render(HttpStatus.resolve(ex.getStatusCode().value()), throwable);
+    }
 }

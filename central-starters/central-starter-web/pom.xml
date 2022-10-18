@@ -18,17 +18,12 @@
     <dependencies>
         <dependency>
             <groupId>com.central-x</groupId>
-            <artifactId>central-stdlib</artifactId>
+            <artifactId>central-starter</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
         </dependency>
     </dependencies>
 </project>

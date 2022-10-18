@@ -84,7 +84,7 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
     @Getter
     private final List<Migration> migrations = new ArrayList<>();
 
-    private final SqlMetaManager manager = new StandardMetaManager(name -> name.equals("X_DS_MIGRATION"));
+    private final SqlMetaManager manager = new StandardMetaManager(name -> name.equalsIgnoreCase("X_DS_MIGRATION"));
 
     public StandardDataSourceMigrator(@Nonnull String name, @Nonnull Version target, @Nullable Version baseline) {
         this.name = Assertx.requireNotBlank(name, "应用名[name]必须不为空");
