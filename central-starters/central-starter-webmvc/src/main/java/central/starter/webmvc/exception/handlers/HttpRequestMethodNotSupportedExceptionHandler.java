@@ -28,37 +28,32 @@ import central.starter.webmvc.exception.ExceptionHandler;
 import central.util.Mapx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import javax.annotation.Nullable;
-
 /**
- * MaxUploadSizeExceededException Handler
+ * 请求方法不支持异常
  *
  * @author Alan Yeh
- * @see MaxUploadSizeExceededException
- * @since 2022/07/17
+ * @since 2022/10/20
  */
 @Component
-public class MaxUploadSizeExceededExceptionHandler implements ExceptionHandler {
-
+public class HttpRequestMethodNotSupportedExceptionHandler implements ExceptionHandler {
     @Override
     public boolean support(Throwable throwable) {
-        return throwable instanceof MaxUploadSizeExceededException;
+        return throwable instanceof HttpRequestMethodNotSupportedException;
     }
 
     @Nullable
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
-        var body = Mapx.newHashMap("message", "超过最大文件长度限制");
-
-        var mv = new ModelAndView(new MappingJackson2JsonView(), body);
-        mv.setStatus(HttpStatus.BAD_REQUEST);
+        var mv = new ModelAndView(new MappingJackson2JsonView(), Mapx.newHashMap("message", throwable.getMessage()));
+        mv.setStatus(HttpStatus.METHOD_NOT_ALLOWED);
         return mv;
     }
 }

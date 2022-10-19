@@ -59,7 +59,7 @@ public class HttpMessageNotReadableExceptionHandler implements ExceptionHandler 
     @Nullable
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
-        HttpMessageNotReadableException ex = (HttpMessageNotReadableException) throwable;
+        var ex = (HttpMessageNotReadableException) throwable;
 
         String message;
         if (ex.getCause() != null) {
@@ -76,7 +76,7 @@ public class HttpMessageNotReadableExceptionHandler implements ExceptionHandler 
             message = "消息序列化异常: " + ex.getMessage();
         }
 
-        ModelAndView mv = new ModelAndView(new MappingJackson2JsonView(), Mapx.newHashMap("message", message));
+        var mv = new ModelAndView(new MappingJackson2JsonView(), Mapx.newHashMap("message", message));
         mv.setStatus(HttpStatus.BAD_REQUEST);
         return mv;
     }

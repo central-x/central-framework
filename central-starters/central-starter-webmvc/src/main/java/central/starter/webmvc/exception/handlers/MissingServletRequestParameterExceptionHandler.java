@@ -56,7 +56,7 @@ public class MissingServletRequestParameterExceptionHandler implements Exception
     @Nullable
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
-        MissingServletRequestParameterException ex = (MissingServletRequestParameterException) throwable;
+        var ex = (MissingServletRequestParameterException) throwable;
 
         var body = Mapx.newHashMap("message", Stringx.format("参数[{}]必须不为空", ex.getParameterName()));
         var mv = new ModelAndView(new MappingJackson2JsonView(), body);

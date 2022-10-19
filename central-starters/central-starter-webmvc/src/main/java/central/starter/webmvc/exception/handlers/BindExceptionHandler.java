@@ -59,11 +59,11 @@ public class BindExceptionHandler implements ExceptionHandler {
     @Nullable
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
-        BindException ex = (BindException) throwable;
+        var ex = (BindException) throwable;
 
-        ObjectError error = ex.getBindingResult().getAllErrors().get(0);
+        var error = ex.getBindingResult().getAllErrors().get(0);
 
-        Map<String, String> body = new HashMap<>(1);
+        var body = new HashMap<String, String>(1);
 
         if (error instanceof FieldError fieldError) {
             if (Stringx.isNullOrBlank(fieldError.getDefaultMessage())) {
@@ -75,7 +75,7 @@ public class BindExceptionHandler implements ExceptionHandler {
             body.put("message", error.getDefaultMessage());
         }
 
-        ModelAndView mv = new ModelAndView(new MappingJackson2JsonView(), body);
+        var mv = new ModelAndView(new MappingJackson2JsonView(), body);
         mv.setStatus(HttpStatus.BAD_REQUEST);
         return mv;
     }

@@ -55,7 +55,7 @@ public class MethodArgumentNotValidExceptionHandler implements ExceptionHandler 
     @Nullable
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
-        MethodArgumentNotValidException ex = (MethodArgumentNotValidException) throwable;
+        var ex = (MethodArgumentNotValidException) throwable;
 
         var body = Mapx.newHashMap("message", ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         var mv = new ModelAndView(new MappingJackson2JsonView(), body);

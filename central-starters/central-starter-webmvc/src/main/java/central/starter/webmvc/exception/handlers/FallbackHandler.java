@@ -63,12 +63,12 @@ public class FallbackHandler implements ExceptionHandler {
         Map<String, Object> map = Mapx.newHashMap("message", throwable.getMessage());
 
         // 如果是在 debug 模式下，输出完整的错误信息到前端
-        StringWriter writer = new StringWriter();
+        var writer = new StringWriter();
         throwable.printStackTrace(new PrintWriter(writer));
-        Object[] reason = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toArray();
+        var reason = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toArray();
         map.put("stack", reason);
 
-        ModelAndView mv = new ModelAndView(new MappingJackson2JsonView(), map);
+        var mv = new ModelAndView(new MappingJackson2JsonView(), map);
         mv.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         return mv;
     }

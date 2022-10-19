@@ -56,7 +56,7 @@ public class MethodArgumentTypeMismatchExceptionHandler implements ExceptionHand
     @Nullable
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
-        MethodArgumentTypeMismatchException ex = (MethodArgumentTypeMismatchException) throwable;
+        var ex = (MethodArgumentTypeMismatchException) throwable;
 
         var body = Mapx.newHashMap("message", Stringx.format("参数[{}]类型不匹配", ex.getParameter().getParameterName()));
         var mv = new ModelAndView(new MappingJackson2JsonView(), body);
