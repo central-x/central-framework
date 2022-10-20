@@ -44,9 +44,12 @@ public class Guidx {
     }
 
     public static String nextID() {
+        var timestamp = System.currentTimeMillis();
+
         var uuid = UUID.randomUUID();
 
-        return digits(uuid.getMostSignificantBits() >> 32, 8) +
+        return digits(timestamp, 8) + "." +
+                digits(uuid.getMostSignificantBits() >> 32, 8) +
                 digits(uuid.getMostSignificantBits() >> 16, 4) +
                 digits(uuid.getMostSignificantBits(), 4) +
                 digits(uuid.getLeastSignificantBits() >> 48, 4) +

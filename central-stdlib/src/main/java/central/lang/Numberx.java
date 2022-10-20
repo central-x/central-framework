@@ -113,7 +113,6 @@ public class Numberx {
      *
      * @param s     数字字符串
      * @param radix 进制数
-     * @return
      */
     public static long toNumber(String s, int radix) {
         if (s == null) {
