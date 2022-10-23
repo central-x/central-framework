@@ -110,9 +110,28 @@ public class HttpProxy implements InvocationHandler {
                     return null;
                 }
 
+                // 检查一些基础数据结构
                 if (String.class.isAssignableFrom(method.getReturnType())) {
                     // 直接返回字符串
                     return response.getBody().extract(new StringExtractor());
+                }
+                if (Boolean.class == method.getReturnType() || boolean.class == method.getReturnType()){
+                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Boolean.class);
+                }
+                if (Integer.class == method.getReturnType() || int.class == method.getReturnType()){
+                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Integer.class);
+                }
+                if (Long.class == method.getReturnType() || long.class == method.getReturnType()){
+                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Long.class);
+                }
+                if (Short.class == method.getReturnType() || short.class == method.getReturnType()){
+                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Long.class);
+                }
+                if (Double.class == method.getReturnType() || double.class == method.getReturnType()){
+                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Double.class);
+                }
+                if (Float.class == method.getReturnType() || float.class == method.getReturnType()){
+                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Float.class);
                 }
 
                 if (File.class.isAssignableFrom(method.getReturnType())) {

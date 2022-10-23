@@ -33,6 +33,7 @@ import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.ReactiveHttpProcessor;
 import central.lang.Arrayx;
 import central.util.Listx;
+import okhttp3.internal.http2.Header;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -41,6 +42,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -50,10 +52,14 @@ import java.util.stream.Collectors;
  * @since 2022/07/15
  */
 public class TransmitHeaderProcessor implements HttpProcessor, ReactiveHttpProcessor {
-    private final Set<String> headers;
+    private final Predicate<String> filter;
 
     public TransmitHeaderProcessor(String... headers) {
-        this.headers = Arrayx.asStream(headers).map(String::toLowerCase).collect(Collectors.toSet());
+        this(name -> Arrayx.asStream(headers).anyMatch(name::equalsIgnoreCase));
+    }
+
+    public TransmitHeaderProcessor(Predicate<String> filter) {
+        this.filter = filter;
     }
 
     @Override
@@ -66,10 +72,14 @@ public class TransmitHeaderProcessor implements HttpProcessor, ReactiveHttpProce
         var attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             var request = attributes.getRequest();
-            for (String header : this.headers) {
-                // 如果请求头上没有这个头部，才加上
-                if (!target.getHeaders().containsKey(header)) {
-                    target.getHeaders().add(header, request.getHeader(header));
+            var headers = request.getHeaderNames();
+            while (headers.hasMoreElements()) {
+                var header = headers.nextElement();
+                if (filter.test(header)) {
+                    // 如果请求头上没有这个头部，才加上
+                    if (!target.getHeaders().containsKey(header)) {
+                        target.getHeaders().add(header, request.getHeader(header));
+                    }
                 }
             }
         }
@@ -81,13 +91,10 @@ public class TransmitHeaderProcessor implements HttpProcessor, ReactiveHttpProce
         return Mono.deferContextual(context -> {
             Optional<ServerHttpRequest> serverRequest = context.getOrEmpty("webflux.request");
             if (serverRequest.isPresent()) {
-
-                for (String header : this.headers) {
-                    // 如果请求头上没有这个头部，才加上
-                    if (!target.getHeaders().containsKey(header)) {
-                        List<String> values = serverRequest.get().getHeaders().get(header);
-                        if (Listx.isNotEmpty(values)) {
-                            target.getHeaders().addAll(header, values);
+                for (var headers : serverRequest.get().getHeaders().entrySet()) {
+                    if (Listx.isNotEmpty(headers.getValue()) && filter.test(headers.getKey())) {
+                        if (!target.getHeaders().containsKey(headers.getKey())) {
+                            target.getHeaders().addAll(headers.getKey(), headers.getValue());
                         }
                     }
                 }
