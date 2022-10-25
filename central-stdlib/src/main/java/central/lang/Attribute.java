@@ -29,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.function.Supplier;
 
 /**
@@ -39,7 +41,10 @@ import java.util.function.Supplier;
  */
 @PublicApi
 @RequiredArgsConstructor
-public class Attribute<T> {
+public class Attribute<T> implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -821276198244689067L;
+
     /**
      * Code
      */

@@ -124,15 +124,15 @@ public class MySqlBuilder extends StandardSqlBuilder {
         var result = new StringBuilder("CREATE TABLE ").append(this.processTable(script.getName())).append(" (\n");
         AddTableScript.Column primaryKey = null;
         for (AddTableScript.Column column : script.getColumns()) {
-            result.append("    ").append(Stringx.padding(this.processColumn(column.getName()), 30, ' ')).append(Stringx.padding(this.handleSqlType(column.getType(), column.getSize()), 20, ' '));
+            result.append("    ").append(Stringx.paddingRight(this.processColumn(column.getName()), 30, ' ')).append(Stringx.paddingRight(this.handleSqlType(column.getType(), column.getSize()), 20, ' '));
             if (column.isPrimaryKey()) {
                 if (primaryKey != null) {
                     throw new IllegalArgumentException(Stringx.format("生成 {} 的建表语句出错: 不允许声明多个主键", script.getName()));
                 }
                 primaryKey = column;
-                result.append(Stringx.padding("NOT NULL", 15, ' '));
+                result.append(Stringx.paddingRight("NOT NULL", 15, ' '));
             } else {
-                result.append(Stringx.padding("NOT NULL", 15, ' '));
+                result.append(Stringx.paddingRight("NOT NULL", 15, ' '));
             }
 
             result.append(" COMMENT '").append(column.getRemarks()).append("',\n");

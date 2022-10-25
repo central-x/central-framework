@@ -1,0 +1,2 @@
+central.starter.logging.trace.servlet.TraceConfiguration
+central.starter.logging.trace.reactive.TraceConfiguration

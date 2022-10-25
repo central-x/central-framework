@@ -22,47 +22,43 @@
  * SOFTWARE.
  */
 
-package central.bean;
+package central.util;
 
-import central.lang.Arrayx;
-import central.lang.PublicApi;
+import lombok.Getter;
 
-import java.util.Objects;
+import java.lang.management.ManagementFactory;
+import java.net.InetAddress;
 
 /**
- * Optional Entity
+ * 本地工具
  *
  * @author Alan Yeh
- * @since 2022/07/11
+ * @since 2022/10/24
  */
-@PublicApi
-public interface OptionalEnum<V> {
-    /**
-     * 选项名
-     */
-    String getName();
+public class Localx {
 
     /**
-     * 选项值
+     * 本地地址
      */
-    V getValue();
+    @Getter
+    private static final String localHost;
 
     /**
-     * 判断当前选项与指定选项值是否匹配
-     *
-     * @param value 指定选项值
+     * 线程号
      */
-    default boolean isCompatibleWith(Object value) {
-        if (value == null) {
-            return false;
+    @Getter
+    private static final String pid;
+
+    static {
+        String host;
+        try {
+            var address = InetAddress.getLocalHost();
+            host = address.getHostAddress();
+        } catch (Exception ignored) {
+            host = "unknown";
         }
-        if (value.getClass().isAssignableFrom(this.getClass())) {
-            return Objects.equals(this, value);
-        }
-        return Objects.equals(this.getValue(), value);
-    }
+        localHost = host;
 
-    static <T extends OptionalEnum<?>> T resolve(Class<? extends OptionalEnum<?>> type, Object value) {
-        return (T) Arrayx.asStream(type.getEnumConstants()).filter(it -> Objects.equals(it.getValue(), value)).findFirst().orElse(null);
+        pid = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
     }
 }

@@ -593,7 +593,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
             if (!columnBuilder.isEmpty()) {
                 columnBuilder.append(",\n");
             }
-            columnBuilder.append("    ").append(Stringx.padding(this.processColumn(column.getName()), 30, ' ')).append(Stringx.padding(this.handleSqlType(column.getType(), column.getSize()), 20, ' '));
+            columnBuilder.append("    ").append(Stringx.paddingRight(this.processColumn(column.getName()), 30, ' ')).append(Stringx.paddingRight(this.handleSqlType(column.getType(), column.getSize()), 20, ' '));
             if (column.isPrimaryKey()) {
                 if (primaryKey != null) {
                     throw new SQLSyntaxErrorException("生成 {} 的建表语句出错: 不允许声明多个主键", script.getName());

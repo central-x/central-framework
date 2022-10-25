@@ -136,21 +136,39 @@ public class Stringx {
 
     /**
      * 生成固定长度的字符串
-     * 如果长度过长，则截取
-     * 如果长度过短，则填充
+     * <p>
+     * 如果长度过长，则截取；如果长度过短，则在后面填充指定字符
      *
      * @param text   字符串
      * @param length 目标长度
      * @param pad    填充字符
      */
-    public static String padding(String text, int length, char pad) {
-        Objects.requireNonNull(text);
+    public static String paddingRight(@Nonnull String text, int length, char pad) {
         if (text.length() > length) {
             return text.substring(0, length);
         } else {
             var padding = new char[length - text.length()];
             Arrays.fill(padding, pad);
             return text + new String(padding);
+        }
+    }
+
+    /**
+     * 生成固定长度的字符串
+     * <p>
+     * 如果长度过长，则截取；如果长度过短，则在前面填充指定字符
+     *
+     * @param text   字符串
+     * @param length 目标长度
+     * @param pad    填充字符
+     */
+    public static String paddingLeft(@Nonnull String text, int length, char pad) {
+        if (text.length() > length) {
+            return text.substring(0, length);
+        } else {
+            var padding = new char[length - text.length()];
+            Arrays.fill(padding, pad);
+            return new String(padding) + text;
         }
     }
 

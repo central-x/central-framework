@@ -33,7 +33,7 @@ import central.starter.graphql.graphql.dto.PetDTO;
 import central.starter.graphql.graphql.entity.PetEntity;
 import central.starter.graphql.graphql.mapper.PetMapper;
 import central.starter.graphql.test.input.PetInput;
-import central.starter.web.http.XForwardedHeaders;
+import central.web.XForwardedHeaders;
 import central.util.Listx;
 import central.validation.group.Insert;
 import central.validation.group.Update;

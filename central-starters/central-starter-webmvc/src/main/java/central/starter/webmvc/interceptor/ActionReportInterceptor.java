@@ -24,7 +24,7 @@
 
 package central.starter.webmvc.interceptor;
 
-import central.starter.web.http.XForwardedHeaders;
+import central.web.XForwardedHeaders;
 import central.lang.Stringx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

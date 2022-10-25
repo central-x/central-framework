@@ -22,47 +22,21 @@
  * SOFTWARE.
  */
 
-package central.bean;
+package central.starter.logging.trace.servlet;
 
-import central.lang.Arrayx;
-import central.lang.PublicApi;
-
-import java.util.Objects;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.web.servlet.DispatcherServlet;
 
 /**
- * Optional Entity
+ * Trace Configuration
  *
  * @author Alan Yeh
- * @since 2022/07/11
+ * @since 2022/10/25
  */
-@PublicApi
-public interface OptionalEnum<V> {
-    /**
-     * 选项名
-     */
-    String getName();
-
-    /**
-     * 选项值
-     */
-    V getValue();
-
-    /**
-     * 判断当前选项与指定选项值是否匹配
-     *
-     * @param value 指定选项值
-     */
-    default boolean isCompatibleWith(Object value) {
-        if (value == null) {
-            return false;
-        }
-        if (value.getClass().isAssignableFrom(this.getClass())) {
-            return Objects.equals(this, value);
-        }
-        return Objects.equals(this.getValue(), value);
-    }
-
-    static <T extends OptionalEnum<?>> T resolve(Class<? extends OptionalEnum<?>> type, Object value) {
-        return (T) Arrayx.asStream(type.getEnumConstants()).filter(it -> Objects.equals(it.getValue(), value)).findFirst().orElse(null);
-    }
+@Configuration
+@Import(TraceFilter.class)
+@ConditionalOnBean(DispatcherServlet.class)
+public class TraceConfiguration {
 }

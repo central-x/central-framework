@@ -22,47 +22,43 @@
  * SOFTWARE.
  */
 
-package central.bean;
+package central.starter.logging.trace.servlet;
 
-import central.lang.Arrayx;
-import central.lang.PublicApi;
+import central.lang.TraceLocal;
+import central.web.XForwardedHeaders;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.MDC;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
-import java.util.Objects;
+import java.io.IOException;
 
 /**
- * Optional Entity
+ * 会话跟踪过滤器
  *
  * @author Alan Yeh
- * @since 2022/07/11
+ * @since 2022/10/24
  */
-@PublicApi
-public interface OptionalEnum<V> {
-    /**
-     * 选项名
-     */
-    String getName();
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class TraceFilter implements Filter {
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        try {
+            // 从上一个微服务中获取 TraceId
+            if (request instanceof HttpServletRequest servletRequest) {
+                var traceId = servletRequest.getHeader(XForwardedHeaders.TRACE);
+                var tenant = servletRequest.getHeader(XForwardedHeaders.TENANT);
 
-    /**
-     * 选项值
-     */
-    V getValue();
+                MDC.put("traceId", traceId);
+                MDC.put("tenant", tenant);
+            }
 
-    /**
-     * 判断当前选项与指定选项值是否匹配
-     *
-     * @param value 指定选项值
-     */
-    default boolean isCompatibleWith(Object value) {
-        if (value == null) {
-            return false;
+            chain.doFilter(request, response);
+        } finally {
+            MDC.clear();
+            // 结束追踪
+            TraceLocal.end();
         }
-        if (value.getClass().isAssignableFrom(this.getClass())) {
-            return Objects.equals(this, value);
-        }
-        return Objects.equals(this.getValue(), value);
-    }
-
-    static <T extends OptionalEnum<?>> T resolve(Class<? extends OptionalEnum<?>> type, Object value) {
-        return (T) Arrayx.asStream(type.getEnumConstants()).filter(it -> Objects.equals(it.getValue(), value)).findFirst().orElse(null);
     }
 }

@@ -22,47 +22,55 @@
  * SOFTWARE.
  */
 
-package central.bean;
-
-import central.lang.Arrayx;
-import central.lang.PublicApi;
-
-import java.util.Objects;
+package central.web;
 
 /**
- * Optional Entity
+ * X-Forwarded-*
+ * 这些请求头用于在微服务端流转
  *
  * @author Alan Yeh
- * @since 2022/07/11
+ * @since 2022/07/16
  */
-@PublicApi
-public interface OptionalEnum<V> {
+public interface XForwardedHeaders {
     /**
-     * 选项名
+     * 被代理的主机信息
      */
-    String getName();
-
+    String HOST = "X-Forwarded-Host";
     /**
-     * 选项值
+     * 被代理的端口信息
      */
-    V getValue();
-
+    String PORT = "X-Forwarded-Port";
     /**
-     * 判断当前选项与指定选项值是否匹配
-     *
-     * @param value 指定选项值
+     * 被代理的协议信息
      */
-    default boolean isCompatibleWith(Object value) {
-        if (value == null) {
-            return false;
-        }
-        if (value.getClass().isAssignableFrom(this.getClass())) {
-            return Objects.equals(this, value);
-        }
-        return Objects.equals(this.getValue(), value);
-    }
-
-    static <T extends OptionalEnum<?>> T resolve(Class<? extends OptionalEnum<?>> type, Object value) {
-        return (T) Arrayx.asStream(type.getEnumConstants()).filter(it -> Objects.equals(it.getValue(), value)).findFirst().orElse(null);
-    }
+    String SCHEMA = "X-Forwarded-Proto";
+    /**
+     * 代理客户端信息
+     */
+    String FOR = "X-Forwarded-For";
+    /**
+     * 租户标识
+     */
+    String TENANT = "X-Forwarded-Tenant";
+    /**
+     * 租户路径
+     */
+    String PATH = "X-Forwarded-Path";
+    /**
+     * 凭证信息
+     */
+    String TOKEN = "X-Forwarded-Token";
+    /**
+     * 原始请求信息
+     */
+    String ORIGIN_URI = "X-Forwarded-OriginUri";
+    /**
+     * 请求版本信息
+     * 用于控制后端微服务的灰度版本信息，让请求在指定版本的微服务中流转
+     */
+    String VERSION = "X-Forwarded-Version";
+    /**
+     * 追踪信息
+     */
+    String TRACE = "X-Forwarded-Trace";
 }

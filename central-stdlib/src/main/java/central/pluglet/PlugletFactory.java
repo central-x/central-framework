@@ -25,6 +25,7 @@
 package central.pluglet;
 
 import central.bean.InitializeException;
+import central.lang.reflect.InstanceReference;
 import central.lang.reflect.TypeReference;
 import central.pluglet.binder.ControlBinder;
 import central.pluglet.control.ControlResolver;
@@ -171,5 +172,16 @@ public class PlugletFactory {
         }
 
         return instance.getInstance();
+    }
+
+    public void destroy(Object pluglet){
+        if (pluglet == null){
+            return;
+        }
+        var instance = InstanceReference.of(pluglet);
+        for (var processor : this.processors){
+            processor.beforeDestroy(instance);
+        }
+
     }
 }
