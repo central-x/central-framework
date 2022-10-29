@@ -133,7 +133,7 @@ public abstract class CentralAppender extends AppenderBase<ILoggingEvent> {
 
                     try {
                         if (!this.dir.exists()) {
-                            if (!this.dir.mkdir()) {
+                            if (!this.dir.mkdirs()) {
                                 throw new IOException("无法创建指定目录: " + this.dir.getAbsolutePath());
                             }
                         }

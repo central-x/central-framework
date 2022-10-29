@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- Http Appender 需要的属性 -->
-    <springProperty scope="context" name="HTTP_PATH" source="central.logging.http.path" defaultValue="mcube"/>
+    <springProperty scope="context" name="COLLECTOR_SERVER" source="central.logging.http.server" defaultValue="http://127.0.0.1:3400/logging"/>
+    <springProperty scope="context" name="COLLECTOR_PATH" source="central.logging.http.path" defaultValue="central"/>
 
     <!-- 日志需要的属性 -->
-    <springProperty scope="context" name="APP_CODE" source="central.logging.http.code" defaultValue=""/>
-    <springProperty scope="context" name="APP_KEY" source="central.logging.http.key" defaultValue=""/>
+    <springProperty scope="context" name="APPLICATION_CODE" source="central.logging.http.code" defaultValue=""/>
+    <springProperty scope="context" name="APPLICATION_SECRET" source="central.logging.http.secret" defaultValue=""/>
     <springProperty scope="context" name="SERVICE_NAME" source="spring.application.name" defaultValue=""/>
-    <springProperty scope="context" name="SERVICE_VERSION" source="spring.application.version" defaultValue=""/>
+    <springProperty scope="context" name="SERVICE_VERSION" source="spring.application.version" defaultValue="unknown"/>
     <springProperty scope="context" name="SERVER_PORT" source="server.port" defaultValue="8080"/>
 
     <springProperty scope="context" name="LOG_HOME" source="central.logging.path" defaultValue="./logs"/>
@@ -22,8 +23,8 @@
     <!-- 彩色日志依赖的渲染类 -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
     <!-- 去空格 -->
-    <conversionRule conversionWord="space" converterClass="com.minstone.mcube.starter.logger.logback.converter.SpaceCompositeConverter"/>
-
+    <conversionRule conversionWord="space"
+                    converterClass="central.starter.logging.logback.converter.SpaceCompositeConverter"/>
     <!-- 控制台日志 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -47,16 +48,20 @@
             <fileNamePattern>
                 ${LOG_HOME}/history/${SERVICE_NAME}.%d{yyyy-MM-dd_HH}.log.gz
             </fileNamePattern>
-            <maxHistory>720</maxHistory>
+            <!-- 日志都上传到日志中心了，因此本地只留 24 小时的日志 -->
+            <maxHistory>24</maxHistory>
         </rollingPolicy>
     </appender>
 
     <!-- Http 日志 -->
-    <appender name="HTTP" class="com.minstone.mcube.starter.logger.logback.appender.http.HttpAppender">
-        <applicationName>${SERVICE_NAME}</applicationName>
-        <path>${HTTP_PATH}</path>
-        <code>${APP_CODE}</code>
-        <key>${APP_KEY}</key>
+    <appender name="HTTP" class="central.starter.logging.logback.appender.http.HttpAppender">
+        <serviceName>${SERVICE_NAME}</serviceName>
+        <serviceVersion>${SERVICE_VERSION}</serviceVersion>
+        <servicePort>${SERVER_PORT}</servicePort>
+        <collectorServer>${COLLECTOR_SERVER}</collectorServer>
+        <collectorPath>${COLLECTOR_PATH}</collectorPath>
+        <applicationCode>${APPLICATION_CODE}</applicationCode>
+        <applicationSecret>${APPLICATION_SECRET}</applicationSecret>
     </appender>
 
     <root level="INFO">

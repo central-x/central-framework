@@ -42,9 +42,40 @@ import java.util.concurrent.Executors;
  */
 public class HttpAppender extends CentralAppender {
 
-    private String loggingServer;
+    /**
+     * 采集器服务
+     */
+    @Getter
+    @Setter
+    private String collectorServer;
 
-    private String path;
+    /**
+     * 采集器路径
+     */
+    @Getter
+    @Setter
+    private String collectorPath;
+
+    /**
+     * 微服务名
+     */
+    @Getter
+    @Setter
+    private String serviceName;
+
+    /**
+     * 微服务版本号
+     */
+    @Getter
+    @Setter
+    private String serviceVersion;
+
+    /**
+     * 微服务端口
+     */
+    @Getter
+    @Setter
+    private String servicePort;
 
     /**
      * 应用标识（应用服务名）
@@ -62,14 +93,14 @@ public class HttpAppender extends CentralAppender {
      */
     @Getter
     @Setter
-    private int batchSize;
+    private int batchSize = 100000;
 
     /**
      * 最大批量发送时间
      */
     @Getter
     @Setter
-    private int batchTime;
+    private int batchTime = 2000;
 
     @Override
     public String getTmpPath() {
@@ -82,7 +113,7 @@ public class HttpAppender extends CentralAppender {
     public void start() {
         super.start();
 
-        var sender = new LogSender(new File(this.getTmpPath(), this.getApplicationCode()), this.applicationCode, this.applicationSecret, this.loggingServer, this.path);
+        var sender = new LogSender(new File(this.getTmpPath(), this.getApplicationCode()), this.applicationCode, this.applicationSecret, this.collectorServer, this.collectorPath);
         this.executor = Executors.newCachedThreadPool(new CustomizableThreadFactory("central.logging.http.appender.sender"));
         this.executor.submit(() -> {
             try {

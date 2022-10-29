@@ -116,12 +116,12 @@ public class Filex {
      * @param file    待写入的文件
      * @param content 文本内容
      */
-    public static void appendText(@Nonnull File file, String content) throws IOException {
+    public static void appendText(@Nonnull File file, String content, Charset charset) throws IOException {
         Assertx.mustNotNull(file, "Argument 'file' must not null");
 
         RandomAccessFile randomFile = new RandomAccessFile(file, "rw");
         randomFile.seek(randomFile.length());
-        randomFile.writeUTF(content);
+        randomFile.write(content.getBytes(charset));
         randomFile.close();
     }
 
@@ -131,8 +131,8 @@ public class Filex {
      * @param file    待写入的文件
      * @param content 文本内容
      */
-    public static void appendLine(@Nonnull File file, String content) throws IOException {
-        appendText(file, content + "\n");
+    public static void appendLine(@Nonnull File file, String content, Charset charset) throws IOException {
+        appendText(file, content + "\n", charset);
     }
 
     /**

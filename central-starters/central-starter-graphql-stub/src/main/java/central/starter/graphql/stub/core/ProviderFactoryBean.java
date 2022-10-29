@@ -44,7 +44,7 @@ import java.nio.file.Path;
  * @author Alan Yeh
  * @since 2022/09/25
  */
-public class ProviderFactoryBean<T extends Provider> implements FactoryBean<T>, InitializingBean {
+public class ProviderFactoryBean<T extends Provider<?, ?>> implements FactoryBean<T>, InitializingBean {
 
     /**
      * 类型

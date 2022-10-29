@@ -32,7 +32,8 @@ import central.net.http.body.request.FileBody;
 import central.net.http.executor.okhttp.OkHttpExecutor;
 import central.net.http.processor.impl.AddHeaderProcessor;
 import central.net.http.proxy.HttpProxyFactory;
-import central.starter.logging.logback.appender.http.client.CollectorClient;
+import central.net.http.proxy.contract.spring.SpringContract;
+import central.starter.logging.logback.appender.http.client.CollectClient;
 import central.util.Guidx;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -79,11 +80,12 @@ public class LogSender implements Runnable, InitializingBean {
      */
     private final String path;
 
-    private CollectorClient client;
+    private CollectClient client;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         var builder = HttpProxyFactory.builder(OkHttpExecutor.Default())
+                .contact(new SpringContract())
                 .processor(new AddHeaderProcessor(HttpHeaders.CONTENT_ENCODING, "gzip"));
         if (Stringx.isNotBlank(code) && Stringx.isNotBlank(secret)) {
             builder.processor((target, chain) -> {
@@ -95,7 +97,7 @@ public class LogSender implements Runnable, InitializingBean {
                 return chain.process(target);
             });
         }
-        this.client = builder.baseUrl(server).target(CollectorClient.class);
+        this.client = builder.baseUrl(server).target(CollectClient.class);
     }
 
     // 上次发送日志的时间

@@ -127,9 +127,10 @@ public class LogContext implements Comparable<LogContext> {
         this.event = event;
         var data = new HashMap<String, Object>();
         // 基础属性
+        data.put("timestamp", this.getTimestamp());
         data.put("type", this.getType());
         data.put("traceId", this.getTraceId());
-        data.put("level", this.event.getLevel().levelStr);
+        data.put("level", this.event.getLevel().levelStr.toLowerCase());
         data.put("content", this.event.getFormattedMessage());
         data.put("applicationId", this.getApplicationId());
         data.put("applicationCode", this.getApplicationCode());

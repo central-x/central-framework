@@ -24,15 +24,11 @@
 
 package central.starter.graphql.stub.test.stub;
 
-import central.sql.Conditions;
-import central.sql.Orders;
 import central.starter.graphql.stub.Provider;
-import central.starter.graphql.stub.annotation.BodyPath;
 import central.starter.graphql.stub.annotation.GraphQLStub;
 import central.starter.graphql.stub.test.data.Group;
+import central.starter.graphql.stub.test.input.GroupInput;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Group Repository
@@ -42,16 +38,5 @@ import java.util.List;
  */
 @Repository
 @GraphQLStub(client = "httpClient")
-public interface GroupRepository extends Provider {
-    /**
-     * 查询数据
-     *
-     * @param limit      数据量（不传的话，就返回所有数据）
-     * @param offset     偏移量（跳过前 N 条数据）
-     * @param conditions 筛选条件
-     * @param orders     排序条件
-     * @return 数据列表
-     */
-    @BodyPath("groups")
-    List<Group> findBy(Long limit, Long offset, Conditions<Group> conditions, Orders<Group> orders);
+public interface GroupRepository extends Provider<Group, GroupInput> {
 }
