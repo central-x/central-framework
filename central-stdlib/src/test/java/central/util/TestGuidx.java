@@ -37,7 +37,7 @@ public class TestGuidx {
     @Test
     public void case1(){
         for (int i = 0; i < 10_000; i ++){
-            Assertions.assertEquals(19, Guidx.nextID().length());
+            Assertions.assertEquals(25, Guidx.nextID().length());
         }
     }
 }

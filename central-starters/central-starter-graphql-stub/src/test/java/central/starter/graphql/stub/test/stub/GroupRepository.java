@@ -25,6 +25,7 @@
 package central.starter.graphql.stub.test.stub;
 
 import central.starter.graphql.stub.Provider;
+import central.starter.graphql.stub.annotation.BodyPath;
 import central.starter.graphql.stub.annotation.GraphQLStub;
 import central.starter.graphql.stub.test.data.Group;
 import central.starter.graphql.stub.test.input.GroupInput;
@@ -38,5 +39,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @GraphQLStub(client = "httpClient")
+@BodyPath("groups")
 public interface GroupRepository extends Provider<Group, GroupInput> {
 }
