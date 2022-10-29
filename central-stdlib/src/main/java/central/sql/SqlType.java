@@ -47,7 +47,8 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public enum SqlType implements OptionalEnum<String> {
-    STRING("字符串", "STRING", String.class, new StringTypeResolver(), Listx.of(Types.LONGVARCHAR, Types.NCHAR, Types.NVARCHAR, Types.ROWID, Types.LONGVARCHAR, Types.CHAR, Types.VARCHAR, Types.CLOB, Types.NCLOB)),
+    STRING("字符串", "STRING", String.class, new StringTypeResolver(), Listx.of(Types.LONGVARCHAR, Types.NCHAR, Types.NVARCHAR, Types.ROWID, Types.LONGVARCHAR, Types.CHAR, Types.VARCHAR)),
+    CLOB("大字符串", "CLOB", String.class, new ClobTypeResolver(), Listx.of(Types.CLOB, Types.NCLOB)),
     INTEGER("整型", "INTEGER", Integer.class, new IntegerTypeResolver(), Listx.of(Types.TINYINT, Types.INTEGER, Types.SMALLINT)),
     LONG("长整型", "LONG", Long.class, new LongTypeResolver(), Listx.of(Types.BIGINT)),
     BIG_DECIMAL("大数字", "BIG_DECIMAL", BigDecimal.class, new BigDecimalTypeResolver(), Listx.of(Types.NUMERIC, Types.DECIMAL, Types.FLOAT, Types.REAL, Types.DOUBLE)),

@@ -65,6 +65,7 @@ public class MySqlBuilder extends StandardSqlBuilder {
     public String handleSqlType(SqlType type, Integer length) {
         return switch (type) {
             case STRING -> "VARCHAR(" + Objectx.getOrDefault(length, 32) + ")";
+            case CLOB -> "LONGTEXT";
             case BLOB -> "BLOB";
             case INTEGER -> "INT";
             case LONG -> "BIGINT";

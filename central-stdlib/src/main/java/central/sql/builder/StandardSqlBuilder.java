@@ -546,6 +546,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     public String handleSqlType(SqlType type, Integer length) {
         return switch (type) {
             case STRING -> "VARCHAR(" + Objectx.getOrDefault(length, 32) + ")";
+            case CLOB -> "CLOB";
             case BLOB -> "BLOB";
             case INTEGER -> "INT";
             case LONG -> "BIGINT";
