@@ -25,7 +25,7 @@
 package central.sql.impl.standard;
 
 import central.lang.Assertx;
-import central.lang.CompareResultEnum;
+import central.lang.CompareResult;
 import central.sql.Conditions;
 import central.sql.SqlExecutor;
 import central.sql.SqlMetaManager;
@@ -128,13 +128,13 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
             versions = versions.stream()
                     // 如果初始化版本为空，则
                     .filter(it -> it.getBegin() != null)
-                    .filter(it -> CompareResultEnum.GE.matches(it.getBegin(), Version.of(migration.getVersion())))
+                    .filter(it -> CompareResult.GE.matches(it.getBegin(), Version.of(migration.getVersion())))
                     .toList();
         }
 
         // 筛选掉 target 版本之后的迁移
         versions = versions.stream()
-                .filter(it -> CompareResultEnum.LE.matches(it.getEnd(), this.getTarget()))
+                .filter(it -> CompareResult.LE.matches(it.getEnd(), this.getTarget()))
                 .toList();
 
         if (versions.isEmpty()) {
@@ -184,19 +184,19 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
         var migration = mapper.findFirstBy(Conditions.of(MigrationEntity.class).eq(MigrationEntity::getCode, this.getName()));
 
         var versions = this.migrations;
-        if (migration == null || CompareResultEnum.LE.matches(Version.of(migration.getVersion()), Version.of("0"))) {
+        if (migration == null || CompareResult.LE.matches(Version.of(migration.getVersion()), Version.of("0"))) {
             // 如果当前的 migration 为空，则表示当前暂没有迁移过，因此可以跳过降级的过程
             return;
         } else {
             // 筛选掉结束版本在当前版本之前的
             versions = versions.stream()
-                    .filter(it -> CompareResultEnum.LE.matches(it.getEnd(), Version.of(migration.getVersion())))
+                    .filter(it -> CompareResult.LE.matches(it.getEnd(), Version.of(migration.getVersion())))
                     .toList();
         }
 
         // 筛选掉开始版本在目标版本之后的
         versions = versions.stream()
-                .filter(it -> CompareResultEnum.GE.matches(it.getBegin(), this.getTarget()))
+                .filter(it -> CompareResult.GE.matches(it.getBegin(), this.getTarget()))
                 .toList();
 
         if (versions.isEmpty()) {
@@ -218,7 +218,7 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
         }
 
         // 保存版本信息
-        if (CompareResultEnum.EQUALS.matches(Version.of("0"), this.getTarget())) {
+        if (CompareResult.EQUALS.matches(Version.of("0"), this.getTarget())) {
             // 如果降级到 0，则表示初始化为空
             mapper.deleteBy(Conditions.of(MigrationEntity.class).eq(MigrationEntity::getCode, this.name));
         } else {
@@ -250,12 +250,12 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
                 Assertx.mustNotEquals(migration.getEnd(), last.getEnd(), "存在相同版本号的");
 
                 // 如果结束版本不相同，则使用跨度大的版本号
-                if (CompareResultEnum.GT.matches(migration.getEnd(), last.getEnd())) {
+                if (CompareResult.GT.matches(migration.getEnd(), last.getEnd())) {
                     last = migration;
                 }
             } else {
                 // 如果起始版本不一致，则检查起始版本是不是在 last 版本的 end 版本之后（有可能被跨过了）
-                if (CompareResultEnum.LE.matches(last.getEnd(), migration.getBegin())) {
+                if (CompareResult.LE.matches(last.getEnd(), migration.getBegin())) {
                     // 如果上一版本的结束版本小于等于当前版本的开始版本，说明这个版本号还没被跳过
                     // 检查版本号是否连贯
                     Assertx.mustEquals(migration.getBegin(), last.getEnd(), "版本[{}]无法升级到[{}]: 版本升级不连贯", last.getEnd(), migration.getEnd());
@@ -297,12 +297,12 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
                 Assertx.mustNotEquals(migration.getBegin(), last.getBegin(), "存在相同版本号");
 
                 // 如果开始版本不相同，则使用跨度大的版本号
-                if (CompareResultEnum.LT.matches(migration.getBegin(), last.getBegin())) {
+                if (CompareResult.LT.matches(migration.getBegin(), last.getBegin())) {
                     last = migration;
                 }
             } else {
                 // 如果结束版本不一致，则检查起始版本是不是在 last 版本的 begin 版本之前（有可能被跨过了）
-                if (CompareResultEnum.GE.matches(last.getBegin(), migration.getEnd())) {
+                if (CompareResult.GE.matches(last.getBegin(), migration.getEnd())) {
                     // 如果上一版本的开始版本大于等于当前版本的结束版本，说明这个版本号还没被跳过
                     // 检查版本号是否连贯
                     Assertx.mustEquals(migration.getEnd(), last.getBegin(), "版本号[{}]无法降级到[{}]: 版本升级不连贯", last.getBegin(), migration.getBegin());

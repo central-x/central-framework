@@ -32,8 +32,11 @@ import java.util.List;
 
 /**
  * 比较结果
+ * <p>
  * -1: left < right
+ * <p>
  * 0: left = right
+ * <p>
  * 1: left > right
  *
  * @author Alan Yeh
@@ -42,7 +45,7 @@ import java.util.List;
 @Getter
 @PublicApi
 @AllArgsConstructor
-public enum CompareResultEnum implements OptionalEnum<String> {
+public enum CompareResult implements OptionalEnum<String> {
 
     LT("小于", "<", List.of(-1)),
     LE("小于等于", "<=", List.of(-1, 0)),

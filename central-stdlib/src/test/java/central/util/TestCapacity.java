@@ -24,38 +24,22 @@
 
 package central.util;
 
-import central.lang.CompareResult;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * Version Test Cases
+ * Capacity Test Cases
  *
  * @author Alan Yeh
- * @since 2022/07/13
+ * @since 2022/11/01
  */
-public class TestVersion {
-    /**
-     * 测试解析版本
-     */
+public class TestCapacity {
+
     @Test
-    public void case1() {
-        var version = new Version("1.2.3.45678");
-
-        Assertions.assertEquals(1, version.getMajor());
-        Assertions.assertEquals(2, version.getMinor());
-        Assertions.assertEquals(3, version.getRevision());
-        Assertions.assertEquals(45678, version.getBuild());
-    }
-
-    /**
-     * 测试版本号对比
-     */
-    @Test
-    public void case2() {
-        var first = new Version("1.0.0");
-        var second = new Version("1.0.2");
-
-        Assertions.assertTrue(CompareResult.LT.isCompatibleWith(first.compareTo(second)));
+    public void case1(){
+        var capacity = Capacity.ofB(1521L);
+        var string = capacity.toString();
+        System.out.println(string);
+        string = capacity.toString(3);
+        System.out.println(string);
     }
 }

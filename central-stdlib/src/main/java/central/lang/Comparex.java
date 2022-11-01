@@ -22,40 +22,26 @@
  * SOFTWARE.
  */
 
-package central.util;
+package central.lang;
 
-import central.lang.CompareResult;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import lombok.experimental.UtilityClass;
 
 /**
- * Version Test Cases
+ * 比较工具
  *
  * @author Alan Yeh
- * @since 2022/07/13
+ * @since 2022/11/01
  */
-public class TestVersion {
-    /**
-     * 测试解析版本
-     */
-    @Test
-    public void case1() {
-        var version = new Version("1.2.3.45678");
-
-        Assertions.assertEquals(1, version.getMajor());
-        Assertions.assertEquals(2, version.getMinor());
-        Assertions.assertEquals(3, version.getRevision());
-        Assertions.assertEquals(45678, version.getBuild());
-    }
+@UtilityClass
+public class Comparex {
 
     /**
-     * 测试版本号对比
+     * 判断第一个元数是否大于第二个元素
+     *
+     * @param first  第一个元素
+     * @param second 第二个元素
      */
-    @Test
-    public void case2() {
-        var first = new Version("1.0.0");
-        var second = new Version("1.0.2");
-
-        Assertions.assertTrue(CompareResult.LT.isCompatibleWith(first.compareTo(second)));
+    public static <T extends Comparable<T>> boolean isGreater(T first, T second) {
+        return CompareResult.GT.matches(first, second);
     }
 }

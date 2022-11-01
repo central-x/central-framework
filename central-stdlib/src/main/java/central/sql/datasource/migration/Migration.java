@@ -25,7 +25,7 @@
 package central.sql.datasource.migration;
 
 import central.lang.Assertx;
-import central.lang.CompareResultEnum;
+import central.lang.CompareResult;
 import central.sql.SqlExecutor;
 import central.util.Version;
 import central.validation.Label;
@@ -58,7 +58,7 @@ public abstract class Migration implements Validatable {
     public Migration(Version end) {
         this.begin = Version.of("0");
         this.end = end;
-        Assertx.mustTrue(CompareResultEnum.GT.matches(this.end, this.begin), "结束版本[end]必须比开始版本[start]大");
+        Assertx.mustTrue(CompareResult.GT.matches(this.end, this.begin), "结束版本[end]必须比开始版本[start]大");
     }
 
     /**
