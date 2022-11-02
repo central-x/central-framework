@@ -104,5 +104,10 @@ public class OkHttpResponse extends HttpResponse<OkHttpResponse.ResponseBody> {
         public String description() {
             return "(binary)";
         }
+
+        @Override
+        public void close() throws Exception {
+            this.body.close();
+        }
     }
 }

@@ -166,7 +166,7 @@ public class ProviderStubProxy implements InvocationHandler {
                     name = header.name();
                 }
 
-                if (value != null && Stringx.isNullOrEmpty(value.toString())) {
+                if (value != null && Stringx.isNotEmpty(value.toString())) {
                     headers.add(name, value.toString());
                 }
                 continue;

@@ -48,7 +48,7 @@ public class Guidx {
 
         var uuid = UUID.randomUUID();
 
-        return digits(timestamp, 8) + "." +
+        return digits(timestamp, 8) + "" +
                 digits(uuid.getMostSignificantBits() >> 32, 8) +
                 digits(uuid.getMostSignificantBits() >> 16, 4) +
                 digits(uuid.getMostSignificantBits(), 4) +

@@ -116,7 +116,9 @@ public class RequestPartResolver implements SpringResolver {
 
             var body = (MultipartFormBody) request.getBody();
 
-            if (value instanceof File file) {
+            if (value == null) {
+                // 如果 value 为空的话，就不传
+            } else if (value instanceof File file) {
                 body.add(MultipartFormPart.create(name, file.getName(), file));
             } else if (value instanceof InputStream stream) {
                 body.add(MultipartFormPart.create(name, name, stream));
