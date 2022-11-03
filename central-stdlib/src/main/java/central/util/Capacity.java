@@ -109,6 +109,47 @@ public final class Capacity implements Serializable, Comparable<Capacity> {
     }
 
     /**
+     * 转换成拽定单位容器
+     *
+     * @param unit 容量单位
+     */
+    public BigInteger to(Unit unit) {
+        return BigInteger.valueOf(Math.round(this.length.multiply(BigInteger.valueOf(10)).divide(unit.getValue()).doubleValue() / 10.0d));
+    }
+
+    public BigInteger toB() {
+        return this.to(Unit.B);
+    }
+
+    public BigInteger toKB() {
+        return this.to(Unit.KB);
+    }
+
+    public BigInteger toMB() {
+        return this.to(Unit.MB);
+    }
+
+    public BigInteger toGB() {
+        return this.to(Unit.GB);
+    }
+
+    public BigInteger toTB() {
+        return this.to(Unit.TB);
+    }
+
+    public BigInteger toPB() {
+        return this.to(Unit.PB);
+    }
+
+    public BigInteger toEB() {
+        return this.to(Unit.EB);
+    }
+
+    public BigInteger otZB() {
+        return this.to(Unit.ZB);
+    }
+
+    /**
      * 直接输出 B
      */
     @Override

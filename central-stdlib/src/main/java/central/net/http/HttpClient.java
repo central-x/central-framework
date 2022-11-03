@@ -24,15 +24,20 @@
 
 package central.net.http;
 
+import central.io.Filex;
 import central.net.http.body.Body;
 import central.net.http.processor.HttpProcessor;
 import central.pattern.chain.ProcessChain;
 import central.lang.Assertx;
+import central.util.Guidx;
 import central.util.Listx;
 import central.lang.Stringx;
 import lombok.Getter;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +75,31 @@ public class HttpClient {
         } else {
             this.baseUrl = null;
         }
+    }
+
+    /**
+     * 缓存目录
+     */
+    @Getter
+    private File tmp = new File("./tmp");
+
+    public void setTmp(File tmp) throws IOException {
+        if (!tmp.exists()) {
+            if (!tmp.mkdirs()) {
+                throw new AccessDeniedException("无法访问目录: " + tmp.getAbsolutePath());
+            }
+        }
+
+        // 尝试写缓存
+        var test = new File(tmp, Guidx.nextID() + ".t");
+        try {
+            if (!test.createNewFile()) {
+                throw new AccessDeniedException("无法访问目录: " + tmp.getAbsolutePath());
+            }
+        } finally {
+            Filex.delete(test);
+        }
+        this.tmp = tmp;
     }
 
     @Getter

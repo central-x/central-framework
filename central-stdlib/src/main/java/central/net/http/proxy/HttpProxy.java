@@ -24,6 +24,7 @@
 
 package central.net.http.proxy;
 
+import central.io.Filex;
 import central.io.IOStreamx;
 import central.lang.Stringx;
 import central.lang.reflect.TypeReference;
@@ -32,14 +33,18 @@ import central.net.http.body.extractor.JsonExtractor;
 import central.net.http.body.extractor.StringExtractor;
 import central.util.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.rmi.RemoteException;
 import java.util.Objects;
 
 /**
@@ -93,8 +98,29 @@ public class HttpProxy implements InvocationHandler {
 
             // 开发者希望框架完成反序列化
             // Response 需要是成功状态才能反序列化
-            if (!response.isSuccess()){
-                try (response){
+            if (!response.isSuccess()) {
+                try (response) {
+                    // 解析响应体
+                    var contentEncoding = StandardCharsets.UTF_8;
+                    var contentType = response.getHeaders().getContentType();
+                    if (contentType != null) {
+                        contentEncoding = Objectx.getOrDefault(contentType.getCharset(), contentEncoding);
+                    }
+
+                    var body = IOStreamx.readText(response.getBody().getInputStream(), contentEncoding);
+                    if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
+                        var message = Jsonx.Default().deserialize(body, TypeReference.ofMap(String.class, Object.class));
+                        body = message.get("message").toString();
+                    }
+
+                    var serials = HttpStatus.Series.resolve(response.getStatus().value());
+                    if (serials != null) {
+                        switch (serials) {
+                            case CLIENT_ERROR -> throw new IllegalArgumentException(body);
+                            case SERVER_ERROR -> throw new RemoteException(body);
+                        }
+                    }
+
                     throw new HttpException(response.getRequest(), response);
                 }
             }
@@ -110,27 +136,32 @@ public class HttpProxy implements InvocationHandler {
                     return null;
                 }
 
+                // 没有响应体
+                if (response.getHeaders().getContentLength() == 0) {
+                    return null;
+                }
+
                 // 检查一些基础数据结构
                 if (String.class.isAssignableFrom(method.getReturnType())) {
                     // 直接返回字符串
                     return response.getBody().extract(new StringExtractor());
                 }
-                if (Boolean.class == method.getReturnType() || boolean.class == method.getReturnType()){
+                if (Boolean.class == method.getReturnType() || boolean.class == method.getReturnType()) {
                     return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Boolean.class);
                 }
-                if (Integer.class == method.getReturnType() || int.class == method.getReturnType()){
+                if (Integer.class == method.getReturnType() || int.class == method.getReturnType()) {
                     return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Integer.class);
                 }
-                if (Long.class == method.getReturnType() || long.class == method.getReturnType()){
+                if (Long.class == method.getReturnType() || long.class == method.getReturnType()) {
                     return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Long.class);
                 }
-                if (Short.class == method.getReturnType() || short.class == method.getReturnType()){
+                if (Short.class == method.getReturnType() || short.class == method.getReturnType()) {
                     return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Long.class);
                 }
-                if (Double.class == method.getReturnType() || double.class == method.getReturnType()){
+                if (Double.class == method.getReturnType() || double.class == method.getReturnType()) {
                     return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Double.class);
                 }
-                if (Float.class == method.getReturnType() || float.class == method.getReturnType()){
+                if (Float.class == method.getReturnType() || float.class == method.getReturnType()) {
                     return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Float.class);
                 }
 
@@ -139,7 +170,13 @@ public class HttpProxy implements InvocationHandler {
                     // 解析文件名
                     var filename = response.getHeaders().getContentDisposition().getFilename();
 
-                    var tmp = new File("tmp", Objectx.getOrDefault(filename, Guidx.nextID() + ".tmp"));
+                    var tmp = new File(this.client.getTmp(), Objectx.getOrDefault(filename, Guidx.nextID() + ".tmp"));
+                    if (tmp.exists()) {
+                        Filex.delete(tmp);
+                    }
+                    if (!tmp.createNewFile()) {
+                        throw new AccessDeniedException("无法写入缓存: " + tmp.getAbsolutePath());
+                    }
 
                     IOStreamx.copy(response.getBody().getInputStream(), Files.newOutputStream(tmp.toPath(), StandardOpenOption.WRITE));
                     return tmp;

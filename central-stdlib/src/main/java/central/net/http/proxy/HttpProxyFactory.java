@@ -32,7 +32,9 @@ import central.net.http.proxy.contract.internal.InternalContract;
 import central.lang.Arrayx;
 import central.lang.Assertx;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
+import java.io.File;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +71,16 @@ public class HttpProxyFactory {
          */
         public T contact(Contract contract) {
             this.contract = contract;
+            return (T) this;
+        }
+
+        protected File tmp = new File("./tmp");
+
+        /**
+         * 设置缓存目录
+         */
+        public T tmp(File tmp) {
+            this.tmp = tmp;
             return (T) this;
         }
     }
@@ -115,10 +127,12 @@ public class HttpProxyFactory {
             return (T) Proxy.newProxyInstance(target.getClassLoader(), Arrayx.newArray(target), new HttpProxy(target, this.build(), this.contract));
         }
 
+        @SneakyThrows
         public HttpClient build() {
             var client = new HttpClient(this.executor);
             client.setBaseUrl(this.baseUrl);
             client.addProcessors(this.processors);
+            client.setTmp(this.tmp);
             return client;
         }
     }
