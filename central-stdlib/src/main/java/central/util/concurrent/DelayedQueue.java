@@ -423,7 +423,6 @@ public class DelayedQueue<E extends Delayed> extends AbstractQueue<E> implements
             return cursor < array.length;
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public E next() {
             if (cursor >= array.length) {

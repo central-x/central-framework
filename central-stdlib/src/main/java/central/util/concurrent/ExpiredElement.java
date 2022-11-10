@@ -22,48 +22,46 @@
  * SOFTWARE.
  */
 
-package central.validation;
+package central.util.concurrent;
 
-import central.bean.OptionalEnum;
-import central.validation.validator.EnumsValidator;
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
-import java.lang.annotation.*;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 /**
- * 枚举类型校验
+ * 过期无素
  *
  * @author Alan Yeh
- * @since 2022/07/18
+ * @since 2022/11/09
  */
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Constraint(validatedBy = EnumsValidator.class)
-public @interface Enums {
+@EqualsAndHashCode
+public class ExpiredElement<E> implements Expired {
 
     /**
-     * 默认的错误消息
+     * 创建时间
      */
-    String message() default "";
-
+    @Getter
+    private final long timestamp = System.currentTimeMillis();
     /**
-     * 枚举类
+     * 失效时间
      */
-    Class<? extends OptionalEnum<?>> value();
-
+    @Getter
+    private final Duration expires;
     /**
-     * 校验分组
+     * 元素
      */
-    Class<?>[] groups() default {};
+    @Getter
+    private final E element;
 
-    Class<? extends Payload>[] payload() default {};
+    public ExpiredElement(E element, Duration expires) {
+        this.element = element;
+        this.expires = expires;
+    }
 
-    @Documented
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
-    @interface List {
-        Enums[] value();
+    @Override
+    public long getExpire(TimeUnit unit) {
+        return unit.convert((this.timestamp + this.expires.toMillis()) - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
     }
 }

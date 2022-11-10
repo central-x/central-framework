@@ -36,7 +36,7 @@ import org.springframework.web.servlet.DispatcherServlet;
  * @since 2022/10/25
  */
 @Configuration
-@Import(TraceFilter.class)
+//@Import(TraceFilter.class)
 @ConditionalOnBean(DispatcherServlet.class)
 public class TraceConfiguration {
 }

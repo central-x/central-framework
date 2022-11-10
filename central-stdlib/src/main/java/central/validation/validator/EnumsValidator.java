@@ -22,48 +22,40 @@
  * SOFTWARE.
  */
 
-package central.validation;
+package central.validation.validator;
 
 import central.bean.OptionalEnum;
-import central.validation.validator.EnumsValidator;
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
-
-import java.lang.annotation.*;
+import central.validation.Enums;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
- * 枚举类型校验
+ * 枚举校验器
  *
  * @author Alan Yeh
- * @since 2022/07/18
+ * @since 2022/11/07
  */
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Constraint(validatedBy = EnumsValidator.class)
-public @interface Enums {
+public class EnumsValidator implements ConstraintValidator<Enums, Object> {
 
-    /**
-     * 默认的错误消息
-     */
-    String message() default "";
+    private Class<? extends OptionalEnum<?>> enumType;
 
-    /**
-     * 枚举类
-     */
-    Class<? extends OptionalEnum<?>> value();
+    @Override
+    public void initialize(Enums constraintAnnotation) {
+        this.enumType = constraintAnnotation.value();
+    }
 
-    /**
-     * 校验分组
-     */
-    Class<?>[] groups() default {};
+    @Override
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
 
-    Class<? extends Payload>[] payload() default {};
-
-    @Documented
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
-    @interface List {
-        Enums[] value();
+        var constants = enumType.getEnumConstants();
+        for (var constant : constants) {
+            if (constant.isCompatibleWith(value)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

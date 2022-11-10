@@ -22,48 +22,37 @@
  * SOFTWARE.
  */
 
-package central.validation;
+package central.validation.validator;
 
-import central.bean.OptionalEnum;
-import central.validation.validator.EnumsValidator;
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
-
-import java.lang.annotation.*;
+import central.validation.Prefix;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
- * 枚举类型校验
+ * 前缀校验器
  *
  * @author Alan Yeh
- * @since 2022/07/18
+ * @since 2022/11/07
  */
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Constraint(validatedBy = EnumsValidator.class)
-public @interface Enums {
+public class PrefixValidator implements ConstraintValidator<Prefix, Object> {
 
-    /**
-     * 默认的错误消息
-     */
-    String message() default "";
+    private String prefix;
 
-    /**
-     * 枚举类
-     */
-    Class<? extends OptionalEnum<?>> value();
+    @Override
+    public void initialize(Prefix constraintAnnotation) {
+        this.prefix = constraintAnnotation.value();
+    }
 
-    /**
-     * 校验分组
-     */
-    Class<?>[] groups() default {};
+    @Override
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
 
-    Class<? extends Payload>[] payload() default {};
-
-    @Documented
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
-    @interface List {
-        Enums[] value();
+        if (value instanceof String string) {
+            return string.startsWith(prefix);
+        } else {
+            throw new IllegalStateException("@Prefix 只支持 String 类型参数");
+        }
     }
 }

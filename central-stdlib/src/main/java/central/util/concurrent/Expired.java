@@ -22,48 +22,22 @@
  * SOFTWARE.
  */
 
-package central.validation;
+package central.util.concurrent;
 
-import central.bean.OptionalEnum;
-import central.validation.validator.EnumsValidator;
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
-
-import java.lang.annotation.*;
+import java.util.concurrent.TimeUnit;
 
 /**
- * 枚举类型校验
+ * 可过期的
  *
  * @author Alan Yeh
- * @since 2022/07/18
+ * @since 2022/11/09
  */
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Constraint(validatedBy = EnumsValidator.class)
-public @interface Enums {
-
+public interface Expired {
     /**
-     * 默认的错误消息
+     * 返回对象的剩余过期时间
+     *
+     * @param unit 时间单位
+     * @return 剩余过期时间；0 或者负数代表这个元素已过期
      */
-    String message() default "";
-
-    /**
-     * 枚举类
-     */
-    Class<? extends OptionalEnum<?>> value();
-
-    /**
-     * 校验分组
-     */
-    Class<?>[] groups() default {};
-
-    Class<? extends Payload>[] payload() default {};
-
-    @Documented
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
-    @interface List {
-        Enums[] value();
-    }
+    long getExpire(TimeUnit unit);
 }

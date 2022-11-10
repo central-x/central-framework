@@ -24,34 +24,33 @@
 
 package central.validation;
 
-import central.bean.OptionalEnum;
-import central.validation.validator.EnumsValidator;
+import central.validation.validator.FixValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
 /**
- * 枚举类型校验
+ * 固定值
  *
  * @author Alan Yeh
- * @since 2022/07/18
+ * @since 2022/11/07
  */
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = EnumsValidator.class)
-public @interface Enums {
+@Constraint(validatedBy = FixValidator.class)
+public @interface Fix {
 
     /**
      * 默认的错误消息
      */
-    String message() default "";
+    String message() default "{central.validation.constraints.Fix.message}";
 
     /**
-     * 枚举类
+     * 固定值
      */
-    Class<? extends OptionalEnum<?>> value();
+    String value();
 
     /**
      * 校验分组
@@ -59,11 +58,4 @@ public @interface Enums {
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
-    @Documented
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
-    @interface List {
-        Enums[] value();
-    }
 }
