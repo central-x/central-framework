@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -60,7 +61,7 @@ public class ExpiredMap<K, V extends Expired> implements Map<K, V>, Closeable {
                             return null;
                         } else {
                             // 重新添加到队列里，等待下次检查元素过期
-                            queue.offer(new DelayedElement<>(key, expires));
+                            queue.offer(new DelayedElement<>(key, Duration.ofMillis(expires)));
                             return value;
                         }
                     });
@@ -104,7 +105,7 @@ public class ExpiredMap<K, V extends Expired> implements Map<K, V>, Closeable {
     @Nullable
     @Override
     public V put(K key, V value) {
-        this.values.offer(new DelayedElement<>(key, value.getExpire(TimeUnit.MILLISECONDS)));
+        this.values.offer(new DelayedElement<>(key, Duration.ofMillis(value.getExpire(TimeUnit.MILLISECONDS))));
         return this.data.put(key, value);
     }
 
@@ -116,7 +117,7 @@ public class ExpiredMap<K, V extends Expired> implements Map<K, V>, Closeable {
     @Override
     public void putAll(@NotNull Map<? extends K, ? extends V> m) {
         for (var entry : m.entrySet()) {
-            this.values.offer(new DelayedElement<>(entry.getKey(), entry.getValue().getExpire(TimeUnit.MILLISECONDS)));
+            this.values.offer(new DelayedElement<>(entry.getKey(), Duration.ofMillis(entry.getValue().getExpire(TimeUnit.MILLISECONDS))));
         }
         this.data.putAll(m);
     }

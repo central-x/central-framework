@@ -27,6 +27,7 @@ package central.util.concurrent;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.time.Duration;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
@@ -47,7 +48,7 @@ public class DelayedElement<E> implements Delayed {
      * 延迟时间
      */
     @Getter
-    private final long delay;
+    private final Duration delay;
     /**
      * 再次延迟次数
      */
@@ -59,22 +60,15 @@ public class DelayedElement<E> implements Delayed {
     @Getter
     private final E element;
 
-    public DelayedElement(E element){
-        this(element, 0, 0);
+    public DelayedElement(E element) {
+        this(element, System.currentTimeMillis(), Duration.ofMillis(0), 0);
     }
 
-    public DelayedElement(E element, long delay){
-        this(element, delay, 0);
+    public DelayedElement(E element, Duration delay) {
+        this(element, System.currentTimeMillis(), delay, 0);
     }
 
-    public DelayedElement(E element, long delay, int times) {
-        this.element = element;
-        this.timestamp = System.currentTimeMillis();
-        this.delay = delay;
-        this.times = times;
-    }
-
-    private DelayedElement(E element,long timestamp, long delay, int times ){
+    private DelayedElement(E element, long timestamp, Duration delay, int times) {
         this.element = element;
         this.timestamp = timestamp;
         this.delay = delay;
@@ -84,13 +78,13 @@ public class DelayedElement<E> implements Delayed {
     /**
      * 再次延长
      */
-    public DelayedElement<E> delay(long delay){
-        return new DelayedElement<>(this.getElement(), this.getTimestamp(), this.getDelay() + delay, this.getTimes() + 1);
+    public DelayedElement<E> delay(Duration delay) {
+        return new DelayedElement<>(this.getElement(), this.getTimestamp(), Duration.ofMillis(this.getDelay().toMillis() + delay.toMillis()), this.getTimes() + 1);
     }
 
     @Override
     public long getDelay(TimeUnit unit) {
-        return unit.convert((this.timestamp + this.delay) - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+        return unit.convert((this.timestamp + this.delay.toMillis()) - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
     }
 
     @Override
