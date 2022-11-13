@@ -22,51 +22,35 @@
  * SOFTWARE.
  */
 
-package central.pluglet.control;
+package central.validation;
+
+import central.validation.validator.IpAddressValidator;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
+
+import java.lang.annotation.*;
 
 /**
- * 控件类型
+ * IP 地址格式校验
  *
  * @author Alan Yeh
- * @since 2022/07/12
+ * @since 2022/11/13
  */
-public enum ControlType {
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = {IpAddressValidator.class})
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
+public @interface IpAddress {
+
     /**
-     * 文本控件
+     * 默认的错误消息
      */
-    LABEL,
+    String message() default "{central.validation.constraints.IpAddress.message}";
+
     /**
-     * 文本输入框
+     * 校验分组
      */
-    TEXT,
-    /**
-     * 密码输入框
-     */
-    PASSWORD,
-    /**
-     * 下拉列表
-     * 属性类型必须使用 {@code ? extend Enum} 且继承于 OptionalEnum
-     */
-    RADIO,
-    /**
-     * 下拉列表
-     * 属性类型必须使用 {@code List<? extend Enum>} 且继承于 OptionalEnum
-     */
-    CHECKBOX,
-    /**
-     * 整数类型
-     */
-    NUMBER,
-    /**
-     * 时间类型（年月日）
-     */
-    DATE,
-    /**
-     * 时间类型（年月日时分秒）
-     */
-    DATETIME,
-    /**
-     * 时间类型（时分秒）
-     */
-    TIME
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

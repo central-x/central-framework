@@ -61,7 +61,7 @@ public class TestPlugletFactory {
         var controls = factory.getControls(Plugin.class);
         Assertions.assertEquals(7, controls.size());
         // Label 控件
-        Assertions.assertEquals(ControlType.LABEl.name(), controls.get(0).getType());
+        Assertions.assertEquals(ControlType.LABEL.name(), controls.get(0).getType());
         Assertions.assertEquals("说明", controls.get(0).getLabel());
 
         // 数字控件
@@ -137,7 +137,7 @@ public class TestPlugletFactory {
     }
 
     public static class Plugin implements LifeCycle {
-        @Control(label = "说明", type = ControlType.LABEl,
+        @Control(label = "说明", type = ControlType.LABEL,
                 defaultValue = """
                         　　本插件用于测试插件的运作情况
                         """)

@@ -38,7 +38,7 @@ import javax.sql.DataSource;
  * @since 2022/08/05
  */
 public class DruidDataSourceFactory implements DataSourceFactory {
-    private DruidProperties properties;
+    private final DruidProperties properties;
 
     public DruidDataSourceFactory() {
         this.properties = new DruidProperties();
