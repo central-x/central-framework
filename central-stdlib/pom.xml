@@ -12,7 +12,7 @@
 
     <artifactId>central-stdlib</artifactId>
     <version>1.0.x-SNAPSHOT</version>
-    <description>Central Core Library</description>
+    <description>Central Standard Library</description>
     <packaging>jar</packaging>
 
     <dependencies>

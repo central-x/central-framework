@@ -80,12 +80,32 @@
             </dependency>
             <dependency>
                 <groupId>com.central-x</groupId>
+                <artifactId>central-starter-cache</artifactId>
+                <version>1.0.x-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.central-x</groupId>
                 <artifactId>central-starter-graphql</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x</groupId>
+                <artifactId>central-starter-graphql-stub</artifactId>
+                <version>1.0.x-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.central-x</groupId>
                 <artifactId>central-starter-logging</artifactId>
+                <version>1.0.x-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.central-x</groupId>
+                <artifactId>central-starter-orm</artifactId>
+                <version>1.0.x-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.central-x</groupId>
+                <artifactId>central-starter-template</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -142,6 +162,13 @@
                 <groupId>com.auth0</groupId>
                 <artifactId>java-jwt</artifactId>
                 <version>${jwt.version}</version>
+            </dependency>
+
+            <!-- Beetl 模板引擎 -->
+            <dependency>
+                <groupId>com.ibeetl</groupId>
+                <artifactId>beetl</artifactId>
+                <version>3.13.0.RELEASE</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

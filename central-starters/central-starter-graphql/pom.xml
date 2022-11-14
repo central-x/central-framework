@@ -45,7 +45,6 @@
         <dependency>
             <groupId>com.central-x</groupId>
             <artifactId>central-starter-orm</artifactId>
-            <version>1.0.x-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
