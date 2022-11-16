@@ -46,5 +46,5 @@ public interface Processor<T, R> {
      * @param target 待处理对象
      * @param chain  下一处理链
      */
-    R process(T target, ProcessChain<T, R> chain) throws Exception;
+    R process(T target, ProcessChain<T, R> chain) throws Throwable;
 }

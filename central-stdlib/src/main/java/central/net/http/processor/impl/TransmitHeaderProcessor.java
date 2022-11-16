@@ -68,7 +68,7 @@ public class TransmitHeaderProcessor implements HttpProcessor, ReactiveHttpProce
     }
 
     @Override
-    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Exception {
+    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Throwable {
         var attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             var request = attributes.getRequest();

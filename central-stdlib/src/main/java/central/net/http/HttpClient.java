@@ -131,7 +131,7 @@ public class HttpClient {
      * @param request 执行请求
      * @return 响应
      */
-    public HttpResponse<? extends Body> execute(HttpRequest request) throws Exception {
+    public HttpResponse<? extends Body> execute(HttpRequest request) throws Throwable {
         request.getUrl().setBaseUrl(this.getBaseUrl());
 
         List<HttpProcessor> processors = new ArrayList<>(this.getProcessors());

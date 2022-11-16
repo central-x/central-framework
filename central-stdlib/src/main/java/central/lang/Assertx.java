@@ -90,21 +90,21 @@ public class Assertx {
      * Assertx.mustFalse(i <= 0, "The value must be greater than zero");
      */
     public static void mustFalse(boolean expression, String message, Object... args) {
-        must(expression, IllegalArgumentException::new, message, args);
+        must(!expression, IllegalArgumentException::new, message, args);
     }
 
     /**
      * Assertx.mustFalse(index <= length, IndexOutOfBoundsException::new, "Index out of range: " + index);
      */
     public static <E extends Exception> void mustFalse(boolean expression, Function<String, E> throwable, String message, Object... args) throws E {
-        must(expression, throwable, message, args);
+        must(!expression, throwable, message, args);
     }
 
     /**
      * Assertx.mustFalse(index <= length, () -> new IndexOutOfBoundsException("Index out of range: " + index));
      */
     public static <E extends Exception> void mustFalse(boolean expression, Supplier<E> throwable) throws E {
-        must(expression, throwable);
+        must(!expression, throwable);
     }
 
     /**

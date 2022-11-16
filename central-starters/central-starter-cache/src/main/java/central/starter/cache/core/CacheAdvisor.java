@@ -24,9 +24,70 @@
 
 package central.starter.cache.core;
 
-/**
- * @author Alan Yeh
- * @since 2022/11/14
- */
-public class CacheAdvisor {
+import central.pattern.chain.ProcessChain;
+import central.starter.cache.core.annotation.CacheEvict;
+import central.starter.cache.core.annotation.CachePut;
+import central.starter.cache.core.annotation.Cacheable;
+import lombok.Getter;
+import lombok.Setter;
+import org.aopalliance.aop.Advice;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.aop.Pointcut;
+import org.springframework.aop.support.AbstractPointcutAdvisor;
+import org.springframework.aop.support.StaticMethodMatcherPointcut;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+
+import javax.annotation.Nonnull;
+import java.io.Serial;
+import java.lang.reflect.Method;
+import java.util.List;
+
+
+public class CacheAdvisor extends AbstractPointcutAdvisor implements InitializingBean, MethodInterceptor, Ordered {
+    @Serial
+    private static final long serialVersionUID = 623201814085892146L;
+
+    /**
+     * 切面顺序
+     */
+    @Getter
+    private final int order;
+
+    @Setter(onMethod_ = @Autowired)
+    private List<CacheProcessor> handlers;
+
+    public CacheAdvisor(Integer order) {
+        this.order = order;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
+    }
+
+    @Nullable
+    @Override
+    public Object invoke(@NotNull MethodInvocation invocation) throws Throwable {
+        return new ProcessChain<>(this.handlers).process(invocation);
+    }
+
+    @Override
+    public @Nonnull Advice getAdvice() {
+        return this;
+    }
+
+    @Getter
+    private final Pointcut pointcut = new StaticMethodMatcherPointcut() {
+        @Override
+        public boolean matches(@Nonnull Method method, @Nonnull Class<?> targetClass) {
+            return method.isAnnotationPresent(Cacheable.class) ||
+                    method.isAnnotationPresent(CacheEvict.class) || method.isAnnotationPresent(CacheEvict.List.class) ||
+                    method.isAnnotationPresent(CachePut.class);
+        }
+    };
 }

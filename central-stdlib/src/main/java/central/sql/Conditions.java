@@ -114,6 +114,13 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
     }
 
     /**
+     * 空条件
+     */
+    public static <T extends Entity> Conditions<T> empty() {
+        return new Conditions<>();
+    }
+
+    /**
      * 快速构造器
      */
     public static <T extends Entity> Conditions<T> of(Class<T> type) {

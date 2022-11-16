@@ -22,50 +22,43 @@
  * SOFTWARE.
  */
 
-package central.pattern.chain;
+package central.starter.test.service.data;
 
-import java.util.List;
+import central.sql.data.ModifiableEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
- * 处理责任链
+ * Account
  *
  * @author Alan Yeh
- * @since 2022/07/14
+ * @since 2022/11/15
  */
-public class ProcessChain<T, R> {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class Account extends ModifiableEntity implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -211918724358308182L;
 
     /**
-     * 处理链
+     * 名称
      */
-    private final List<? extends Processor<T, R>> processors;
+    private String name;
 
     /**
-     * 当前执行的下标
+     * 部门主键
      */
-    private final int index;
+    private String departmentId;
 
-    public ProcessChain(List<? extends Processor<T, R>> processors) {
-        this.processors = processors;
-        this.index = 0;
-    }
-
-    public ProcessChain(ProcessChain<T, R> parent, int index) {
-        this.processors = parent.processors;
-        this.index = index;
-    }
-
-    public R process(T target) throws Throwable {
-        if (this.index < this.processors.size()) {
-            var processor = this.processors.get(this.index);
-            var next = new ProcessChain<>(this, this.index + 1);
-            if (processor.predicate(target)) {
-                // 断言成功，则执行处理器
-                return processor.process(target, next);
-            } else {
-                // 断言不成功，则直接执行下一个处理器
-                return next.process(target);
-            }
-        }
-        return null;
-    }
+    /**
+     * 部门信息
+     */
+    private Department department;
 }

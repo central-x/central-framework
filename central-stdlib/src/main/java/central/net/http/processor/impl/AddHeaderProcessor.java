@@ -59,7 +59,7 @@ public class AddHeaderProcessor implements HttpProcessor, ReactiveHttpProcessor 
     }
 
     @Override
-    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Exception {
+    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Throwable {
         target.getHeaders().addAll(this.headers);
         return chain.process(target);
     }

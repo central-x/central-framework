@@ -22,50 +22,61 @@
  * SOFTWARE.
  */
 
-package central.pattern.chain;
+package central.starter.cache.core.annotation;
 
-import java.util.List;
+import java.lang.annotation.*;
 
 /**
- * 处理责任链
+ * 更新缓存
  *
  * @author Alan Yeh
- * @since 2022/07/14
+ * @since 2022/11/15
  */
-public class ProcessChain<T, R> {
+@Documented
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CachePut {
+    /**
+     * 缓存键
+     * <p>
+     * 支持模板语法
+     * <p>
+     * 可以使用的上下文对象包括:
+     *
+     * <ul>
+     *     <li>args: Object[] 参数列表</li>
+     *     <li>method: Method 方法</li>
+     *     <li>target: Object 待执行方法的对象</li>
+     * </ul>
+     */
+    String key() default "";
 
     /**
-     * 处理链
+     * 缓存键
      */
-    private final List<? extends Processor<T, R>> processors;
+    CacheKey[] keys() default {};
 
     /**
-     * 当前执行的下标
+     * 缓存有效期（毫秒）
      */
-    private final int index;
+    long expires() default 30 * 60 * 1000L;
 
-    public ProcessChain(List<? extends Processor<T, R>> processors) {
-        this.processors = processors;
-        this.index = 0;
-    }
+    /**
+     * 缓存依赖
+     * <p>
+     * 当保存此缓存时，会依赖指定的缓存键。如果指定的缓存键被手动清除时，本缓存也会跟随清除。
+     */
+    String[] dependencies() default {};
 
-    public ProcessChain(ProcessChain<T, R> parent, int index) {
-        this.processors = parent.processors;
-        this.index = index;
-    }
+    /**
+     * 当满足条件时才保存缓存。支持通过模板语法，返回 true 时保存缓存
+     */
+    String condition() default "";
 
-    public R process(T target) throws Throwable {
-        if (this.index < this.processors.size()) {
-            var processor = this.processors.get(this.index);
-            var next = new ProcessChain<>(this, this.index + 1);
-            if (processor.predicate(target)) {
-                // 断言成功，则执行处理器
-                return processor.process(target, next);
-            } else {
-                // 断言不成功，则直接执行下一个处理器
-                return next.process(target);
-            }
-        }
-        return null;
+    @Documented
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface List {
+        CachePut[] value();
     }
 }

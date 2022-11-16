@@ -125,7 +125,7 @@ public class LoggerProcessor implements HttpProcessor, ReactiveHttpProcessor {
     }
 
     @Override
-    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Exception {
+    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Throwable {
         HttpResponse<? extends Body> response = chain.process(target);
         this.log(response);
         return response;

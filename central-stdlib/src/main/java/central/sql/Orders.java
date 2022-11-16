@@ -70,6 +70,13 @@ public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Va
     }
 
     /**
+     * 空排序
+     */
+    public static <T extends Entity> Orders<T> empty() {
+        return new Orders<>();
+    }
+
+    /**
      * 快速构造器
      */
     public static <T extends Entity> Orders<T> of(Class<T> type) {

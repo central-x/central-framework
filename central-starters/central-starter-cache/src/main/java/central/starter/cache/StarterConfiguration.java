@@ -24,8 +24,14 @@
 
 package central.starter.cache;
 
+import central.starter.cache.core.CacheAdvisor;
+import central.starter.cache.core.impl.menory.MemoryStorage;
+import lombok.Setter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
+import org.springframework.core.annotation.AnnotationAttributes;
+import org.springframework.core.type.AnnotationMetadata;
+
 
 /**
  * 缓存配置
@@ -34,6 +40,18 @@ import org.springframework.context.annotation.Configuration;
  * @since 2022/11/14
  */
 @Configuration
+@ComponentScan
+@Import(MemoryStorage.class)
 @EnableConfigurationProperties(CacheProperties.class)
-public class StarterConfiguration {
+public class StarterConfiguration implements ImportAware {
+
+    @Setter
+    private AnnotationMetadata importMetadata;
+
+    @Bean
+    public CacheAdvisor cacheAdvisor(){
+        var attributes = AnnotationAttributes.fromMap(importMetadata.getAnnotationAttributes(EnableCaching.class.getName(), false));
+
+        return new CacheAdvisor(attributes.getNumber("order"));
+    }
 }

@@ -31,6 +31,7 @@ import org.beetl.core.Configuration;
 import org.beetl.core.ErrorHandler;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.resource.StringTemplateResourceLoader;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 
 import java.util.Map;
 import java.util.Properties;
@@ -41,6 +42,7 @@ import java.util.Properties;
  * @author Alan Yeh
  * @since 2022/11/14
  */
+@ConditionalOnMissingBean(TemplateRender.class)
 public class BeetlRender implements TemplateRender {
 
     private final GroupTemplate groupTemplate;

@@ -24,12 +24,17 @@
 
 package central.starter.cache.core.annotation;
 
+import java.lang.annotation.*;
+
 /**
  * 缓存
  *
  * @author Alan Yeh
  * @since 2022/11/14
  */
+@Documented
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Cacheable {
     /**
      * 缓存键

@@ -22,50 +22,43 @@
  * SOFTWARE.
  */
 
-package central.pattern.chain;
-
-import java.util.List;
+package central.starter.cache.core;
 
 /**
- * 处理责任链
+ * 缓存加速
+ * <p>
+ * 通过临时缓存，将本次请求里面用到的缓存在内存里保存一份，这样就不需要去 Redis 这些远程缓存系统重复获取缓存了
  *
  * @author Alan Yeh
- * @since 2022/07/14
+ * @since 2022/11/15
  */
-public class ProcessChain<T, R> {
+public interface CacheAccelerator {
+    /**
+     * 判断缓存是否存在
+     *
+     * @param key 缓存键
+     */
+    boolean exists(String key);
 
     /**
-     * 处理链
+     * 获取缓存
+     *
+     * @param key 缓存键
      */
-    private final List<? extends Processor<T, R>> processors;
+    String get(String key);
 
     /**
-     * 当前执行的下标
+     * 保存/覆盖缓存
+     *
+     * @param key   缓存键
+     * @param value 缓存值
      */
-    private final int index;
+    void put(String key, String value);
 
-    public ProcessChain(List<? extends Processor<T, R>> processors) {
-        this.processors = processors;
-        this.index = 0;
-    }
-
-    public ProcessChain(ProcessChain<T, R> parent, int index) {
-        this.processors = parent.processors;
-        this.index = index;
-    }
-
-    public R process(T target) throws Throwable {
-        if (this.index < this.processors.size()) {
-            var processor = this.processors.get(this.index);
-            var next = new ProcessChain<>(this, this.index + 1);
-            if (processor.predicate(target)) {
-                // 断言成功，则执行处理器
-                return processor.process(target, next);
-            } else {
-                // 断言不成功，则直接执行下一个处理器
-                return next.process(target);
-            }
-        }
-        return null;
-    }
+    /**
+     * 清除缓存
+     *
+     * @param keys 缓存键
+     */
+    void evict(String... keys);
 }

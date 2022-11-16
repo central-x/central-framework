@@ -71,7 +71,7 @@ public abstract class TestHttp {
      * Test GET
      */
     @Test
-    public void case1() throws Exception {
+    public void case1() throws Throwable {
         String accountId = Guidx.nextID();
         try (var request = HttpRequest.get(HttpUrl.create("/api/accounts").setQuery("id", accountId)).build()) {
             var response = this.client.execute(request);
@@ -88,7 +88,7 @@ public abstract class TestHttp {
      * Test POST
      */
     @Test
-    public void case2() throws Exception {
+    public void case2() throws Throwable {
         try (var request = HttpRequest.post(HttpUrl.create("/api/accounts")).build()) {
             Map<String, Object> body = Mapx.newHashMap();
             body.put("age", 18);
@@ -110,7 +110,7 @@ public abstract class TestHttp {
      * Test PUT
      */
     @Test
-    public void case3() throws Exception {
+    public void case3() throws Throwable {
         try (var request = HttpRequest.put(HttpUrl.create("/api/accounts")).build()) {
             Map<String, Object> body = Mapx.newHashMap();
             body.put("id", Guidx.nextID());
@@ -133,7 +133,7 @@ public abstract class TestHttp {
      * Test DELETE
      */
     @Test
-    public void case4() throws Exception {
+    public void case4() throws Throwable {
         try (var request = HttpRequest.delete(HttpUrl.create("/api/accounts").addQuery("ids", Guidx.nextID()).addQuery("ids", Guidx.nextID())).build()) {
             var response = this.client.execute(request);
 
@@ -149,7 +149,7 @@ public abstract class TestHttp {
      * Test Processor
      */
     @Test
-    public void case5() throws Exception {
+    public void case5() throws Throwable {
         try (var request = HttpRequest.get(HttpUrl.create("/api/info")).build()) {
             this.client.addProcessor(new AddHeaderProcessor("X-Forwarded-Proto", "https"));
             this.client.addProcessor(new AddHeaderProcessor("X-Forwarded-Port", "443"));
@@ -170,7 +170,7 @@ public abstract class TestHttp {
      * Test Upload
      */
     @Test
-    public void case6() throws Exception {
+    public void case6() throws Throwable {
         try (var request = HttpRequest.post(HttpUrl.create("/api/uploads")).build()) {
             var body = new MultipartFormBody();
             body.add(MultipartFormPart.create("file", "test.txt", "Hello World".getBytes(StandardCharsets.UTF_8), MediaType.TEXT_PLAIN));

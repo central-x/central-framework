@@ -48,7 +48,7 @@ import java.rmi.RemoteException;
  */
 public class ThrowProcessor implements HttpProcessor {
     @Override
-    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Exception {
+    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Throwable {
         try {
             return chain.process(target);
         } catch (Throwable throwable) {
