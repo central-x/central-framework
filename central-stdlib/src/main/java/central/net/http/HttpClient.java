@@ -25,7 +25,6 @@
 package central.net.http;
 
 import central.io.Filex;
-import central.net.http.body.Body;
 import central.net.http.processor.HttpProcessor;
 import central.pattern.chain.ProcessChain;
 import central.lang.Assertx;
@@ -131,7 +130,7 @@ public class HttpClient {
      * @param request 执行请求
      * @return 响应
      */
-    public HttpResponse<? extends Body> execute(HttpRequest request) throws Throwable {
+    public HttpResponse execute(HttpRequest request) throws Throwable {
         request.getUrl().setBaseUrl(this.getBaseUrl());
 
         List<HttpProcessor> processors = new ArrayList<>(this.getProcessors());

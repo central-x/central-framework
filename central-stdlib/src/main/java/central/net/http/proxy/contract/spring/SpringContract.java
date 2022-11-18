@@ -30,7 +30,6 @@ import central.net.http.proxy.Contract;
 import central.net.http.proxy.contract.spring.resolver.*;
 import central.lang.Arrayx;
 import central.lang.Assertx;
-import central.util.Listx;
 import central.lang.Stringx;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpMethod;
@@ -83,13 +82,13 @@ public class SpringContract implements Contract {
         String parentPath = getPathOnClass(instance);
         String methodPath = getPathOnMethod(annotation);
         if (Stringx.isNotBlank(parentPath) && Stringx.isNotBlank(methodPath)) {
-            request.setUrl(HttpUrl.create(Stringx.removeSuffix(parentPath, "/") + "/" + Stringx.removePrefix(methodPath, "/")));
+            request.setUrl(HttpUrl.of(Stringx.removeSuffix(parentPath, "/") + "/" + Stringx.removePrefix(methodPath, "/")));
         } else if (Stringx.isNotBlank(methodPath)) {
-            request.setUrl(HttpUrl.create(methodPath));
+            request.setUrl(HttpUrl.of(methodPath));
         } else if (Stringx.isNotBlank(parentPath)) {
-            request.setUrl(HttpUrl.create(parentPath));
+            request.setUrl(HttpUrl.of(parentPath));
         } else {
-            request.setUrl(HttpUrl.create(""));
+            request.setUrl(HttpUrl.of(""));
         }
 
         // 处理 produces，也就是添加 ACCEPT 请求头

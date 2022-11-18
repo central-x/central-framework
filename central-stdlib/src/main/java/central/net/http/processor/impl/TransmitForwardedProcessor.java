@@ -28,7 +28,6 @@ import central.pattern.chain.ProcessChain;
 import central.pattern.chain.reactive.ReactiveProcessChain;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
-import central.net.http.body.Body;
 import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.ReactiveHttpProcessor;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -52,7 +51,7 @@ public class TransmitForwardedProcessor implements HttpProcessor, ReactiveHttpPr
     }
 
     @Override
-    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Throwable {
+    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Throwable {
         var attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             var request = attributes.getRequest();
@@ -68,7 +67,7 @@ public class TransmitForwardedProcessor implements HttpProcessor, ReactiveHttpPr
     }
 
     @Override
-    public Mono<HttpResponse<? extends Body>> process(HttpRequest target, ReactiveProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) {
+    public Mono<HttpResponse> process(HttpRequest target, ReactiveProcessChain<HttpRequest, HttpResponse> chain) {
         return Mono.deferContextual(context -> {
             Optional<ServerHttpRequest> request = context.getOrEmpty("webflux.request");
             if (request.isPresent()) {

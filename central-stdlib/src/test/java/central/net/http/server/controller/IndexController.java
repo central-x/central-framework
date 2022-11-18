@@ -24,6 +24,8 @@
 
 package central.net.http.server.controller;
 
+import central.io.IOStreamx;
+import central.lang.Stringx;
 import central.net.http.server.controller.data.Account;
 import central.net.http.server.controller.data.Dept;
 import central.net.http.server.controller.data.Upload;
@@ -36,10 +38,15 @@ import central.util.Mapx;
 import central.validation.group.Insert;
 import central.validation.group.Update;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.groups.Default;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -127,5 +134,23 @@ public class IndexController {
         upload.setSize(params.getFile().getSize());
         upload.setContentType(params.getFile().getContentType());
         return upload;
+    }
+
+    @GetMapping("/download")
+    public void download(@RequestParam String fileId, HttpServletResponse response) throws Exception {
+        var content = "This is the file content";
+        var body = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
+
+        // 设置状态码
+        response.setStatus(200);
+        // 设置文件名
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, Stringx.format("attachment;filename=\"{}\";filename*=utf-8''{}", "test.txt", "test.txt"));
+        // 设置响应类型
+        response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        // 设置响应长度
+        response.setHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(body.available()));
+
+        // 写响应
+        IOStreamx.copy(body, response.getOutputStream());
     }
 }

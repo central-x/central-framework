@@ -30,6 +30,7 @@ import lombok.Getter;
 
 /**
  * 压缩类型
+ *
  * @author Alan Yeh
  * @since 2022/07/14
  */
@@ -47,4 +48,8 @@ public enum CompressType implements OptionalEnum<String> {
 
     private final String name;
     private final String value;
+
+    public static CompressType resolve(String value) {
+        return OptionalEnum.resolve(CompressType.class, value);
+    }
 }

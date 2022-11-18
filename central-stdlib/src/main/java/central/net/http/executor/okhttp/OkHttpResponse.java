@@ -27,7 +27,6 @@ package central.net.http.executor.okhttp;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
 import central.net.http.body.Body;
-import central.util.LazyValue;
 import lombok.Getter;
 import okhttp3.Response;
 import org.springframework.http.HttpHeaders;
@@ -43,17 +42,21 @@ import java.io.InputStream;
  * @author Alan Yeh
  * @since 2022/07/15
  */
-public class OkHttpResponse extends HttpResponse<OkHttpResponse.ResponseBody> {
+public class OkHttpResponse extends HttpResponse {
     @Getter
     private final Response response;
 
     @Getter
-    private final ResponseBody body;
+    private final Body body;
+
+    @Getter
+    private final HttpHeaders headers = new HttpHeaders();
 
     public OkHttpResponse(HttpRequest request, Response response) {
         super(request);
         this.response = response;
-        this.body = new ResponseBody(response.body());
+        this.response.headers().forEach(header -> this.headers.add(header.getFirst(), header.getSecond()));
+        this.body = new ResponseBody(this.headers, response.body());
     }
 
     @Override
@@ -61,38 +64,26 @@ public class OkHttpResponse extends HttpResponse<OkHttpResponse.ResponseBody> {
         return HttpStatus.resolve(response.code());
     }
 
-    private final LazyValue<HttpHeaders> headers = new LazyValue<>(() -> {
-        HttpHeaders result = new HttpHeaders();
-        getResponse().headers().forEach(pair -> result.add(pair.getFirst(), pair.getSecond()));
-        return result;
-    });
-
-    @Override
-    public HttpHeaders getHeaders() {
-        return this.headers.get();
-    }
-
-    public static class ResponseBody implements Body {
+    private static class ResponseBody implements Body {
 
         private final okhttp3.ResponseBody body;
 
-        private ResponseBody(okhttp3.ResponseBody body) {
+        @Getter
+        private final HttpHeaders headers;
+
+        private ResponseBody(HttpHeaders headers, okhttp3.ResponseBody body) {
+            this.headers = headers;
             this.body = body;
         }
 
         @Override
         public MediaType getContentType() {
-            var contentType = this.body.contentType();
-            if (contentType != null) {
-                return MediaType.parseMediaType(contentType.toString());
-            } else {
-                return null;
-            }
+            return this.headers.getContentType();
         }
 
         @Override
         public Long getContentLength() {
-            return this.body.contentLength();
+            return this.headers.getContentLength();
         }
 
         @Override

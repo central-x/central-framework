@@ -29,7 +29,6 @@ import central.lang.reflect.TypeReference;
 import central.net.http.HttpException;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
-import central.net.http.body.Body;
 import central.net.http.processor.HttpProcessor;
 import central.pattern.chain.ProcessChain;
 import central.util.Jsonx;
@@ -48,7 +47,7 @@ import java.rmi.RemoteException;
  */
 public class ThrowProcessor implements HttpProcessor {
     @Override
-    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Throwable {
+    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Throwable {
         try {
             return chain.process(target);
         } catch (Throwable throwable) {

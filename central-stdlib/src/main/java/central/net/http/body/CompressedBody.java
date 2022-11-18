@@ -46,10 +46,14 @@ import java.util.zip.GZIPOutputStream;
 public class CompressedBody implements Body {
     private final Body delegate;
 
+    /**
+     * 压缩类型
+     */
     private final CompressType type;
 
     @Override
     public HttpHeaders getHeaders() {
+        // 修改请求头
         HttpHeaders headers = delegate.getHeaders();
         headers.remove(HttpHeaders.CONTENT_LENGTH);
         headers.remove(HttpHeaders.CONTENT_ENCODING);

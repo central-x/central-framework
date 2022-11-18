@@ -36,7 +36,7 @@ import java.util.Map;
 public interface SqlTransformer {
 
     /**
-     * 将实体数据转换成指定类型
+     * 将数据库读取出来的数据转换成指定类型
      *
      * @param data 数据库行数据
      * @param type 目标实体类型

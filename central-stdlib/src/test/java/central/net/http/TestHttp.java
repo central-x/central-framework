@@ -73,11 +73,11 @@ public abstract class TestHttp {
     @Test
     public void case1() throws Throwable {
         String accountId = Guidx.nextID();
-        try (var request = HttpRequest.get(HttpUrl.create("/api/accounts").setQuery("id", accountId)).build()) {
+        try (var request = HttpRequest.get(HttpUrl.of("/api/accounts").setQuery("id", accountId))) {
             var response = this.client.execute(request);
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var account = response.getBody().extract(new JsonExtractor<>(TypeReference.of(Account.class)));
+            var account = response.getBody().extract(JsonExtractor.of(TypeReference.of(Account.class)));
             Assertions.assertNotNull(account);
             Assertions.assertEquals(accountId, account.getId());
             Assertions.assertNotNull(account.getDept());
@@ -89,7 +89,7 @@ public abstract class TestHttp {
      */
     @Test
     public void case2() throws Throwable {
-        try (var request = HttpRequest.post(HttpUrl.create("/api/accounts")).build()) {
+        try (var request = HttpRequest.post(HttpUrl.of("/api/accounts"))) {
             Map<String, Object> body = Mapx.newHashMap();
             body.put("age", 18);
             body.put("name", "张三");
@@ -98,7 +98,7 @@ public abstract class TestHttp {
             var response = this.client.execute(request);
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var account = response.getBody().extract(new JsonExtractor<>(TypeReference.of(Account.class)));
+            var account = response.getBody().extract(JsonExtractor.of(TypeReference.of(Account.class)));
             Assertions.assertNotNull(account);
             Assertions.assertNotNull(account.getId());
             Assertions.assertEquals(Integer.valueOf(18), account.getAge());
@@ -111,7 +111,7 @@ public abstract class TestHttp {
      */
     @Test
     public void case3() throws Throwable {
-        try (var request = HttpRequest.put(HttpUrl.create("/api/accounts")).build()) {
+        try (var request = HttpRequest.put(HttpUrl.of("/api/accounts"))) {
             Map<String, Object> body = Mapx.newHashMap();
             body.put("id", Guidx.nextID());
             body.put("age", 18);
@@ -121,7 +121,7 @@ public abstract class TestHttp {
             var response = this.client.execute(request);
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var account = response.getBody().extract(new JsonExtractor<>(TypeReference.of(Account.class)));
+            var account = response.getBody().extract(JsonExtractor.of(TypeReference.of(Account.class)));
             Assertions.assertNotNull(account);
             Assertions.assertEquals(body.get("id"), account.getId());
             Assertions.assertEquals(Integer.valueOf(18), account.getAge());
@@ -134,12 +134,12 @@ public abstract class TestHttp {
      */
     @Test
     public void case4() throws Throwable {
-        try (var request = HttpRequest.delete(HttpUrl.create("/api/accounts").addQuery("ids", Guidx.nextID()).addQuery("ids", Guidx.nextID())).build()) {
+        try (var request = HttpRequest.delete(HttpUrl.of("/api/accounts").addQuery("ids", Guidx.nextID()).addQuery("ids", Guidx.nextID()))) {
             var response = this.client.execute(request);
 
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var count = response.getBody().extract(new JsonExtractor<>(TypeReference.of(Integer.class)));
+            var count = response.getBody().extract(JsonExtractor.of(TypeReference.of(Integer.class)));
             Assertions.assertNotNull(count);
             Assertions.assertEquals(Integer.valueOf(2), count);
         }
@@ -150,7 +150,7 @@ public abstract class TestHttp {
      */
     @Test
     public void case5() throws Throwable {
-        try (var request = HttpRequest.get(HttpUrl.create("/api/info")).build()) {
+        try (var request = HttpRequest.get(HttpUrl.of("/api/info"))) {
             this.client.addProcessor(new AddHeaderProcessor("X-Forwarded-Proto", "https"));
             this.client.addProcessor(new AddHeaderProcessor("X-Forwarded-Port", "443"));
 
@@ -158,7 +158,7 @@ public abstract class TestHttp {
 
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var info = response.getBody().extract(new JsonExtractor<>(TypeReference.ofMap(String.class, Object.class)));
+            var info = response.getBody().extract(JsonExtractor.of(TypeReference.ofMap(String.class, Object.class)));
             Assertions.assertNotNull(info.get("headers"));
             var headers = Mapx.caseInsensitive((Map<String, Object>) info.get("headers"));
             Assertions.assertEquals("https", headers.get("X-Forwarded-Proto"));
@@ -171,7 +171,7 @@ public abstract class TestHttp {
      */
     @Test
     public void case6() throws Throwable {
-        try (var request = HttpRequest.post(HttpUrl.create("/api/uploads")).build()) {
+        try (var request = HttpRequest.post(HttpUrl.of("/api/uploads"))) {
             var body = new MultipartFormBody();
             body.add(MultipartFormPart.create("file", "test.txt", "Hello World".getBytes(StandardCharsets.UTF_8), MediaType.TEXT_PLAIN));
             request.setBody(body);
@@ -179,7 +179,7 @@ public abstract class TestHttp {
             var response = this.client.execute(request);
 
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
-            var upload = response.getBody().extract(new JsonExtractor<>(TypeReference.of(Upload.class)));
+            var upload = response.getBody().extract(JsonExtractor.of(TypeReference.of(Upload.class)));
             Assertions.assertEquals("file", upload.getName());
             Assertions.assertEquals("test.txt", upload.getOriginalFilename());
             Assertions.assertEquals("Hello World".getBytes(StandardCharsets.UTF_8).length, upload.getSize());

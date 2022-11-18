@@ -28,7 +28,6 @@ import central.pattern.chain.ProcessChain;
 import central.pattern.chain.reactive.ReactiveProcessChain;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
-import central.net.http.body.Body;
 import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.ReactiveHttpProcessor;
 import org.slf4j.Logger;
@@ -66,10 +65,10 @@ public class LoggerProcessor implements HttpProcessor, ReactiveHttpProcessor {
         return true;
     }
 
-    private void log(HttpResponse<? extends Body> response) {
-        StringBuilder builder = new StringBuilder("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+    private void log(HttpResponse response) {
+        var builder = new StringBuilder("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         // 打印 HttpRequest 日志
-        HttpRequest request = response.getRequest();
+        var request = response.getRequest();
         builder.append("┣ Request:\n");
         builder.append("┣ Method: ").append(request.getMethod().name()).append("\n");
         builder.append("┣ URL: ").append(request.getUrl().toString()).append("\n");
@@ -125,14 +124,14 @@ public class LoggerProcessor implements HttpProcessor, ReactiveHttpProcessor {
     }
 
     @Override
-    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Throwable {
-        HttpResponse<? extends Body> response = chain.process(target);
+    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Throwable {
+        var response = chain.process(target);
         this.log(response);
         return response;
     }
 
     @Override
-    public Mono<HttpResponse<? extends Body>> process(HttpRequest target, ReactiveProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) {
+    public Mono<HttpResponse> process(HttpRequest target, ReactiveProcessChain<HttpRequest, HttpResponse> chain) {
         return chain.process(target).doOnSuccess(this::log);
     }
 }

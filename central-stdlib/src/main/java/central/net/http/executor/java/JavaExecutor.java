@@ -60,7 +60,7 @@ public class JavaExecutor implements HttpExecutor {
     }
 
     @Override
-    public central.net.http.HttpResponse<? extends Body> execute(central.net.http.HttpRequest request) throws Exception {
+    public central.net.http.HttpResponse execute(central.net.http.HttpRequest request) throws Exception {
         try (request) {
             var builder = HttpRequest.newBuilder()
                     .method(request.getMethod().name(), this.parseBody(request.getBody(), request.getHeaders()))

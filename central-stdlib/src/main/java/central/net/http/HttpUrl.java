@@ -57,11 +57,11 @@ public class HttpUrl {
     }
 
 
-    public static HttpUrl create(String value) {
+    public static HttpUrl of(String value) {
         return new HttpUrl(value);
     }
 
-    public static HttpUrl createImmutable(String value) {
+    public static HttpUrl ofImmutable(String value) {
         return new ImmutableHttpUrl(value);
     }
 

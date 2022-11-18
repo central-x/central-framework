@@ -58,14 +58,25 @@ public enum SqlType implements OptionalEnum<String> {
 
     UNKNOWN("未知", "UNKNOWN", Object.class, null, Collections.emptyList());
 
+    /**
+     * 类型名称
+     */
     private final String name;
-
+    /**
+     * 类型
+     */
     private final String value;
-
+    /**
+     * 对应的 Java 数据类型
+     */
     private final Class<?> type;
-
+    /**
+     * 对应的数据库类型解析器
+     */
     private final SqlTypeResolver resolver;
-
+    /**
+     * 对应的数据库类型
+     */
     private final List<Integer> types;
 
     public static @Nullable SqlType resolve(String value) {

@@ -24,10 +24,6 @@
 
 package central.net.http;
 
-import central.net.http.body.Body;
-
-import java.io.IOException;
-
 /**
  * 请求执行器
  *
@@ -45,5 +41,5 @@ public interface HttpExecutor {
      *
      * @param request 请求
      */
-    HttpResponse<? extends Body> execute(HttpRequest request) throws Exception;
+    HttpResponse execute(HttpRequest request) throws Exception;
 }

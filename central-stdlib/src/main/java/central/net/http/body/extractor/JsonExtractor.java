@@ -29,12 +29,14 @@ import central.net.http.body.Body;
 import central.net.http.body.BodyExtractor;
 import central.util.Jsonx;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
- * JSON 对象反序列化
+ * 将响应体解析成对象（JSON）
  *
  * @author Alan Yeh
  * @since 2022/07/17
@@ -43,17 +45,48 @@ public class JsonExtractor<T> implements BodyExtractor<T> {
     private final Charset charset;
     private final TypeReference<T> type;
 
-    public JsonExtractor(TypeReference<T> type) {
-        this.charset = StandardCharsets.UTF_8;
+    /**
+     * 构造函数
+     *
+     * @param type    对象类型
+     * @param charset 字符集（如果未定指，将使用响应头里指定的字符集）
+     */
+    public JsonExtractor(@Nonnull TypeReference<T> type, @Nullable Charset charset) {
+        this.charset = charset;
         this.type = type;
     }
 
+    /**
+     * 创建 JSON 解析器
+     *
+     * @param type 对象类型
+     */
     public static <T> JsonExtractor<T> of(TypeReference<T> type) {
-        return new JsonExtractor<>(type);
+        return new JsonExtractor<>(type, null);
+    }
+
+    /**
+     * 创建 JSON 解析器
+     *
+     * @param type    对象类型
+     * @param charset 字符集
+     */
+    public static <T> JsonExtractor<T> of(TypeReference<T> type, Charset charset) {
+        return new JsonExtractor<>(type, null);
     }
 
     @Override
     public T extract(Body body) throws IOException {
-        return Jsonx.Default().deserialize(body.getInputStream(), StandardCharsets.UTF_8, this.type);
+        var charset = this.charset;
+        if (charset == null) {
+            // 如果开发者没有指定字符集，则尝试从响应头获取字符集信息
+            charset = body.getContentType().getCharset();
+        }
+        if (charset == null) {
+            // 如果响应头没有指定字符集，则默认使用 UTF-8
+            charset = StandardCharsets.UTF_8;
+        }
+
+        return Jsonx.Default().deserialize(body.getInputStream(), charset, this.type);
     }
 }

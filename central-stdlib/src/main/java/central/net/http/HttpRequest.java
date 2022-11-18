@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Http 请求
@@ -191,6 +192,21 @@ public class HttpRequest implements AutoCloseable {
     }
 
     /**
+     * 添加请求头
+     * <p>
+     * 代码示例
+     * <pre>
+     * {@code request.addHeaders(headers -> {
+     *     headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+     * }).setCookie("Authorization", "xxx");
+     * </pre>
+     */
+    public HttpRequest addHeaders(Consumer<HttpHeaders> headers) {
+        headers.accept(this.headers);
+        return this;
+    }
+
+    /**
      * 请求体
      */
     @Getter
@@ -204,52 +220,65 @@ public class HttpRequest implements AutoCloseable {
         }
     }
 
-    public static Builder get(HttpUrl url){
-        return new Builder().method(HttpMethod.GET).url(url);
+    @Override
+    public String toString() {
+        return Stringx.format("HttpRequest({} {})", this.method.name(), this.url.toString());
     }
 
-    public static Builder post(HttpUrl url){
-        return new Builder().method(HttpMethod.POST).url(url);
+    /**
+     * 使用指定的方法发起请求
+     *
+     * @param url 请求地址
+     */
+    public static HttpRequest of(HttpMethod method, HttpUrl url) {
+        var request = new HttpRequest();
+        request.setMethod(method);
+        request.setUrl(url);
+        return request;
     }
 
-    public static Builder put(HttpUrl url){
-        return new Builder().method(HttpMethod.PUT).url(url);
+    /**
+     * 使用 GET 方法发起请求
+     *
+     * @param url 请求地址
+     */
+    public static HttpRequest get(HttpUrl url) {
+        return HttpRequest.of(HttpMethod.GET, url);
     }
 
-    public static Builder delete(HttpUrl url){
-        return new Builder().method(HttpMethod.DELETE).url(url);
+    /**
+     * 使用 POST 方法发起请求
+     *
+     * @param url 请求地址
+     */
+    public static HttpRequest post(HttpUrl url) {
+        return HttpRequest.of(HttpMethod.POST, url);
     }
 
-    public static Builder patch(HttpUrl url){
-        return new Builder().method(HttpMethod.PATCH).url(url);
+    /**
+     * 使用 PUT 方法发起请求
+     *
+     * @param url 请求地址
+     */
+    public static HttpRequest put(HttpUrl url) {
+        return HttpRequest.of(HttpMethod.PUT, url);
     }
 
-    public static Builder builder(){
-        return new Builder();
+    /**
+     * 使用 DELETE 方法发起请求
+     *
+     * @param url 请求地址
+     */
+    public static HttpRequest delete(HttpUrl url) {
+        return HttpRequest.of(HttpMethod.DELETE, url);
     }
 
-    public static class Builder {
-        private Builder(){}
-
-        private HttpMethod method;
-
-        public Builder method(HttpMethod method){
-            this.method = method;
-            return this;
-        }
-
-        private HttpUrl url;
-
-        public Builder url(HttpUrl url){
-            this.url = url;
-            return this;
-        }
-
-        public HttpRequest build(){
-            HttpRequest request = new HttpRequest();
-            request.setUrl(this.url);
-            request.setMethod(this.method);
-            return request;
-        }
+    /**
+     * 使用 PATCH 方法发起请求
+     *
+     * @param url 请求地址
+     */
+    public static HttpRequest patch(HttpUrl url) {
+        return HttpRequest.of(HttpMethod.PATCH, url);
     }
 }

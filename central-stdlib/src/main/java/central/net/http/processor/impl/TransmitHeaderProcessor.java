@@ -28,22 +28,17 @@ import central.pattern.chain.ProcessChain;
 import central.pattern.chain.reactive.ReactiveProcessChain;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
-import central.net.http.body.Body;
 import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.ReactiveHttpProcessor;
 import central.lang.Arrayx;
 import central.util.Listx;
-import okhttp3.internal.http2.Header;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * 传递请求头
@@ -68,7 +63,7 @@ public class TransmitHeaderProcessor implements HttpProcessor, ReactiveHttpProce
     }
 
     @Override
-    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Throwable {
+    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Throwable {
         var attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             var request = attributes.getRequest();
@@ -87,7 +82,7 @@ public class TransmitHeaderProcessor implements HttpProcessor, ReactiveHttpProce
     }
 
     @Override
-    public Mono<HttpResponse<? extends Body>> process(HttpRequest target, ReactiveProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) {
+    public Mono<HttpResponse> process(HttpRequest target, ReactiveProcessChain<HttpRequest, HttpResponse> chain) {
         return Mono.deferContextual(context -> {
             Optional<ServerHttpRequest> serverRequest = context.getOrEmpty("webflux.request");
             if (serverRequest.isPresent()) {

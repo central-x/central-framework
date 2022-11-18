@@ -63,6 +63,8 @@ public interface OptionalEnum<V> {
     }
 
     static <T extends OptionalEnum<?>> T resolve(Class<? extends OptionalEnum<?>> type, Object value) {
-        return (T) Arrayx.asStream(type.getEnumConstants()).filter(it -> Objects.equals(it.getValue(), value)).findFirst().orElse(null);
+        return (T) Arrayx.asStream(type.getEnumConstants())
+                .filter(it -> Objects.equals(it.getValue(), value))
+                .findFirst().orElse(null);
     }
 }

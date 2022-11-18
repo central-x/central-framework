@@ -72,6 +72,11 @@ public interface Body extends AutoCloseable {
     default void close() throws Exception {
     }
 
+    /**
+     * Body 解析
+     *
+     * @param extractor 解析器
+     */
     default <T> T extract(BodyExtractor<T> extractor) throws IOException {
         return extractor.extract(this);
     }

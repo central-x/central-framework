@@ -28,7 +28,6 @@ import central.pattern.chain.ProcessChain;
 import central.pattern.chain.reactive.ReactiveProcessChain;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
-import central.net.http.body.Body;
 import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.ReactiveHttpProcessor;
 import org.springframework.util.LinkedMultiValueMap;
@@ -59,13 +58,13 @@ public class AddHeaderProcessor implements HttpProcessor, ReactiveHttpProcessor 
     }
 
     @Override
-    public HttpResponse<? extends Body> process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) throws Throwable {
+    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Throwable {
         target.getHeaders().addAll(this.headers);
         return chain.process(target);
     }
 
     @Override
-    public Mono<HttpResponse<? extends Body>> process(HttpRequest target, ReactiveProcessChain<HttpRequest, HttpResponse<? extends Body>> chain) {
+    public Mono<HttpResponse> process(HttpRequest target, ReactiveProcessChain<HttpRequest, HttpResponse> chain) {
         target.getHeaders().addAll(this.headers);
         return chain.process(target);
     }

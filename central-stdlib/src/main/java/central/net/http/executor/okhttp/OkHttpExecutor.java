@@ -65,7 +65,7 @@ public class OkHttpExecutor implements HttpExecutor {
     }
 
     @Override
-    public HttpResponse<? extends Body> execute(HttpRequest request) throws Exception {
+    public HttpResponse execute(HttpRequest request) throws Exception {
         try (request) {
             // 处理请求基本信息
             var builder = new Request.Builder()

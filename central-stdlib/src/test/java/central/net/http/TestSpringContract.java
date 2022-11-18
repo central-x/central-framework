@@ -35,7 +35,7 @@ import central.net.http.server.controller.data.Upload;
 import central.net.http.server.controller.param.AccountParams;
 import central.util.Guidx;
 import central.util.Mapx;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,6 +47,8 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -67,10 +69,17 @@ public class TestSpringContract {
     public void before() {
         this.server = HttpProxyFactory.builder(JavaExecutor.Default())
                 .baseUrl("http://127.0.0.1:" + serverPort)
+                .tmp(new File("./.tmp"))
                 .contact(new SpringContract())
                 .processor(new AddHeaderProcessor("X-Forwarded-Proto", "https"))
                 .processor(new AddHeaderProcessor("X-Forwarded-Port", "443"))
                 .target(Server.class);
+    }
+
+    @AfterEach
+    public void after() throws Exception {
+        // 删除缓存目录
+        Filex.delete(new File("./.tmp"));
     }
 
     /**
@@ -81,9 +90,9 @@ public class TestSpringContract {
         var accountId = Guidx.nextID();
 
         var account = this.server.findById(accountId);
-        Assertions.assertNotNull(account);
-        Assertions.assertEquals(accountId, account.getId());
-        Assertions.assertNotNull(account.getDept());
+        assertNotNull(account);
+        assertEquals(accountId, account.getId());
+        assertNotNull(account.getDept());
     }
 
     /**
@@ -96,10 +105,10 @@ public class TestSpringContract {
         params.setName("张三");
 
         var account = this.server.create(params);
-        Assertions.assertNotNull(account);
-        Assertions.assertNotNull(account.getId());
-        Assertions.assertEquals(Integer.valueOf(18), account.getAge());
-        Assertions.assertEquals("张三", account.getName());
+        assertNotNull(account);
+        assertNotNull(account.getId());
+        assertEquals(Integer.valueOf(18), account.getAge());
+        assertEquals("张三", account.getName());
     }
 
     /**
@@ -113,10 +122,10 @@ public class TestSpringContract {
         params.setName("张三");
 
         var account = this.server.update(params);
-        Assertions.assertNotNull(account);
-        Assertions.assertEquals(params.getId(), account.getId());
-        Assertions.assertEquals(params.getAge(), account.getAge());
-        Assertions.assertEquals(params.getName(), account.getName());
+        assertNotNull(account);
+        assertEquals(params.getId(), account.getId());
+        assertEquals(params.getAge(), account.getAge());
+        assertEquals(params.getName(), account.getName());
     }
 
     /**
@@ -125,7 +134,7 @@ public class TestSpringContract {
     @Test
     public void case4() {
         var count = this.server.delete(List.of(Guidx.nextID(), Guidx.nextID()));
-        Assertions.assertEquals(2L, count);
+        assertEquals(2L, count);
     }
 
     /**
@@ -134,10 +143,10 @@ public class TestSpringContract {
     @Test
     public void case5() {
         var info = this.server.info();
-        Assertions.assertNotNull(info.get("headers"));
+        assertNotNull(info.get("headers"));
         var headers = Mapx.caseInsensitive((Map<String, Object>) info.get("headers"));
-        Assertions.assertEquals("https", headers.get("X-Forwarded-Proto"));
-        Assertions.assertEquals("443", headers.get("X-Forwarded-Port"));
+        assertEquals("https", headers.get("X-Forwarded-Proto"));
+        assertEquals("443", headers.get("X-Forwarded-Port"));
     }
 
     /**
@@ -147,26 +156,50 @@ public class TestSpringContract {
     public void case6() throws Exception {
         var file = new File("test.txt");
         try {
-            Assertions.assertTrue(file.createNewFile());
+            assertTrue(file.createNewFile());
             Filex.writeText(file, "Hello World");
 
             var upload = this.server.upload(file);
-            Assertions.assertEquals("file", upload.getName());
-            Assertions.assertEquals("test.txt", upload.getOriginalFilename());
-            Assertions.assertEquals("Hello World".getBytes(StandardCharsets.UTF_8).length, upload.getSize());
-            Assertions.assertEquals(MediaType.APPLICATION_OCTET_STREAM_VALUE, upload.getContentType());
+            assertEquals("file", upload.getName());
+            assertEquals("test.txt", upload.getOriginalFilename());
+            assertEquals("Hello World".getBytes(StandardCharsets.UTF_8).length, upload.getSize());
+            assertEquals(MediaType.APPLICATION_OCTET_STREAM_VALUE, upload.getContentType());
         } finally {
             Filex.delete(file);
         }
     }
 
     /**
-     * Test default method
+     * Test Download
      */
     @Test
     public void case7() throws Exception {
+        var file = this.server.download(Guidx.nextID());
+        assertTrue(file.exists());
+        assertEquals("test.txt", file.getName());
+        var content = Filex.readText(file, StandardCharsets.UTF_8);
+        assertEquals("This is the file content", content);
+    }
+
+    /**
+     * Test default method
+     */
+    @Test
+    public void case8() throws Exception {
         var result = this.server.testDefault();
-        Assertions.assertEquals("success", result);
+        assertEquals("success", result);
+    }
+
+    @Test
+    public void case9() throws Exception {
+        var accountId = Guidx.nextID();
+
+        var request = HttpRequest.get(HttpUrl.of("/api/accounts").setQuery("id", accountId));
+        var account = this.server.findByRequest( request);
+
+        assertNotNull(account);
+        assertEquals(accountId, account.getId());
+        assertNotNull(account.getDept());
     }
 
     @RequestMapping("/api")
@@ -174,6 +207,9 @@ public class TestSpringContract {
 
         @GetMapping("/accounts")
         Account findById(@RequestParam String id);
+
+        @GetMapping(value = "/accounts")
+        Account findByRequest(HttpRequest request);
 
         @PostMapping(value = "/accounts", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
         Account create(@RequestBody AccountParams params);
@@ -190,7 +226,10 @@ public class TestSpringContract {
         @PostMapping(value = "/uploads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
         Upload upload(@RequestPart File file);
 
-        default String testDefault(){
+        @GetMapping(value = "/download")
+        File download(@RequestParam String fileId);
+
+        default String testDefault() {
             return "success";
         }
     }

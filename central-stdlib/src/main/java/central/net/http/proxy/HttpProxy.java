@@ -24,11 +24,12 @@
 
 package central.net.http.proxy;
 
-import central.io.Filex;
 import central.io.IOStreamx;
+import central.lang.Arrayx;
 import central.lang.Stringx;
 import central.lang.reflect.TypeReference;
 import central.net.http.*;
+import central.net.http.body.extractor.FileExtractor;
 import central.net.http.body.extractor.JsonExtractor;
 import central.net.http.body.extractor.StringExtractor;
 import central.util.*;
@@ -41,9 +42,6 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.rmi.RemoteException;
 import java.util.Objects;
 
@@ -72,7 +70,7 @@ public class HttpProxy implements InvocationHandler {
             return Stringx.format("{}@({})", this.proxyType.getSimpleName(), this.client.getBaseUrl());
         } else {
             HttpRequest request = null;
-            if (args != null && args.length == 1 && args[0] instanceof HttpRequest req) {
+            if (Arrayx.isNotEmpty(args) && args.length == 1 && args[0] instanceof HttpRequest req) {
                 // 代理方法想直接执行 HttpRequest
                 request = req;
             }
@@ -144,47 +142,36 @@ public class HttpProxy implements InvocationHandler {
                 // 检查一些基础数据结构
                 if (String.class.isAssignableFrom(method.getReturnType())) {
                     // 直接返回字符串
-                    return response.getBody().extract(new StringExtractor());
+                    return response.getBody().extract(StringExtractor.of());
                 }
                 if (Boolean.class == method.getReturnType() || boolean.class == method.getReturnType()) {
-                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Boolean.class);
+                    return Convertx.Default().convert(response.getBody().extract(StringExtractor.of()), Boolean.class);
                 }
                 if (Integer.class == method.getReturnType() || int.class == method.getReturnType()) {
-                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Integer.class);
+                    return Convertx.Default().convert(response.getBody().extract(StringExtractor.of()), Integer.class);
                 }
                 if (Long.class == method.getReturnType() || long.class == method.getReturnType()) {
-                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Long.class);
+                    return Convertx.Default().convert(response.getBody().extract(StringExtractor.of()), Long.class);
                 }
                 if (Short.class == method.getReturnType() || short.class == method.getReturnType()) {
-                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Long.class);
+                    return Convertx.Default().convert(response.getBody().extract(StringExtractor.of()), Long.class);
                 }
                 if (Double.class == method.getReturnType() || double.class == method.getReturnType()) {
-                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Double.class);
+                    return Convertx.Default().convert(response.getBody().extract(StringExtractor.of()), Double.class);
                 }
                 if (Float.class == method.getReturnType() || float.class == method.getReturnType()) {
-                    return Convertx.Default().convert(response.getBody().extract(new StringExtractor()), Float.class);
+                    return Convertx.Default().convert(response.getBody().extract(StringExtractor.of()), Float.class);
                 }
 
                 if (File.class.isAssignableFrom(method.getReturnType())) {
                     // 返回文件类型
                     // 解析文件名
-                    var filename = response.getHeaders().getContentDisposition().getFilename();
-
-                    var tmp = new File(this.client.getTmp(), Objectx.getOrDefault(filename, Guidx.nextID() + ".tmp"));
-                    if (tmp.exists()) {
-                        Filex.delete(tmp);
-                    }
-                    if (!tmp.createNewFile()) {
-                        throw new AccessDeniedException("无法写入缓存: " + tmp.getAbsolutePath());
-                    }
-
-                    IOStreamx.copy(response.getBody().getInputStream(), Files.newOutputStream(tmp.toPath(), StandardOpenOption.WRITE));
-                    return tmp;
+                    return response.getBody().extract(FileExtractor.of(this.client.getTmp()));
                 }
 
                 // 使用 JSON 解析结果
                 if (MediaType.APPLICATION_JSON.isCompatibleWith(response.getHeaders().getContentType())) {
-                    return response.getBody().extract(new JsonExtractor<>(TypeReference.of(method.getGenericReturnType())));
+                    return response.getBody().extract(JsonExtractor.of(TypeReference.of(method.getGenericReturnType())));
                 }
 
                 throw new HttpException(request, response, "无法解析响应体");

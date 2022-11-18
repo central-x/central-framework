@@ -35,7 +35,7 @@ import org.springframework.http.HttpStatus;
  * @author Alan Yeh
  * @since 2022/07/14
  */
-public abstract class HttpResponse<T extends Body> implements AutoCloseable {
+public abstract class HttpResponse implements AutoCloseable {
     /**
      * 响应创建时间
      */
@@ -48,7 +48,7 @@ public abstract class HttpResponse<T extends Body> implements AutoCloseable {
     @Getter
     private final HttpRequest request;
 
-    public HttpResponse(HttpRequest request){
+    public HttpResponse(HttpRequest request) {
         this.request = request;
     }
 
@@ -60,7 +60,7 @@ public abstract class HttpResponse<T extends Body> implements AutoCloseable {
     /**
      * 状态码在 [200, 300) 之间为成功
      */
-    public boolean isSuccess(){
+    public boolean isSuccess() {
         return this.getStatus().value() >= 200 && this.getStatus().value() < 300;
     }
 
@@ -72,11 +72,11 @@ public abstract class HttpResponse<T extends Body> implements AutoCloseable {
     /**
      * 获取响应体
      */
-    public abstract T getBody();
+    public abstract Body getBody();
 
     @Override
     public void close() throws Exception {
-        if (this.getBody() != null){
+        if (this.getBody() != null) {
             this.getBody().close();
         }
     }

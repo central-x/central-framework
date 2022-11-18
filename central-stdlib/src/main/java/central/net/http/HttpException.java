@@ -43,21 +43,21 @@ public class HttpException extends RuntimeException{
     private transient final HttpRequest request;
 
     @Getter
-    private transient final HttpResponse<?> response;
+    private transient final HttpResponse response;
 
-    public HttpException(HttpRequest request, HttpResponse<?> response){
+    public HttpException(HttpRequest request, HttpResponse response){
         super(Stringx.format("Request failed: {}({}) {} {}", response.getStatus().value(), response.getStatus().getReasonPhrase(), request.getMethod().name(), request.getUrl()));
         this.request = request;
         this.response = response;
     }
 
-    public HttpException(HttpRequest request, HttpResponse<?> response, String message){
+    public HttpException(HttpRequest request, HttpResponse response, String message){
         super(message);
         this.request = request;
         this.response = response;
     }
 
-    public HttpException(HttpRequest request, HttpResponse<?> response, String message, Throwable cause){
+    public HttpException(HttpRequest request, HttpResponse response, String message, Throwable cause){
         super(message, cause);
         this.request = request;
         this.response = response;

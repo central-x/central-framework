@@ -25,27 +25,33 @@
 package central.net.http.executor.java;
 
 import central.net.http.HttpRequest;
-import central.net.http.body.InputStreamBody;
-import central.util.LazyValue;
+import central.net.http.body.Body;
 import lombok.Getter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 import java.io.InputStream;
 import java.net.http.HttpResponse;
 
 /**
+ * Java Response
+ *
  * @author Alan Yeh
  * @since 2022/07/18
  */
-public class JavaResponse extends central.net.http.HttpResponse<InputStreamBody> {
+public class JavaResponse extends central.net.http.HttpResponse {
 
     @Getter
     private final HttpResponse<InputStream> response;
 
+    @Getter
+    private final HttpHeaders headers = new HttpHeaders();
+
     public JavaResponse(HttpRequest request, HttpResponse<InputStream> response) {
         super(request);
         this.response = response;
+        this.response.headers().map().forEach(this.headers::addAll);
     }
 
     @Override
@@ -53,19 +59,41 @@ public class JavaResponse extends central.net.http.HttpResponse<InputStreamBody>
         return HttpStatus.resolve(response.statusCode());
     }
 
-    private final LazyValue<HttpHeaders> headers = new LazyValue<>(() -> {
-        var result = new HttpHeaders();
-        getResponse().headers().map().forEach(result::addAll);
-        return result;
-    });
-
     @Override
-    public HttpHeaders getHeaders() {
-        return this.headers.get();
+    public ResponseBody getBody() {
+        return new ResponseBody(this.headers, this.response.body());
     }
 
-    @Override
-    public InputStreamBody getBody() {
-        return new InputStreamBody(this.response.body());
+    private static class ResponseBody implements Body {
+        @Getter
+        private final InputStream inputStream;
+
+        @Getter
+        private final HttpHeaders headers;
+
+        private ResponseBody(HttpHeaders headers, InputStream body) {
+            this.headers = headers;
+            this.inputStream = body;
+        }
+
+        @Override
+        public MediaType getContentType() {
+            return this.headers.getContentType();
+        }
+
+        @Override
+        public Long getContentLength() {
+            return this.headers.getContentLength();
+        }
+
+        @Override
+        public String description() {
+            return "(binary)";
+        }
+
+        @Override
+        public void close() throws Exception {
+            this.inputStream.close();
+        }
     }
 }

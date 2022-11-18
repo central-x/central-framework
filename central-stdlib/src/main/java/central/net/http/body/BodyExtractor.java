@@ -34,5 +34,10 @@ import java.io.IOException;
  * @since 2022/07/17
  */
 public interface BodyExtractor<T> {
+    /**
+     * 解析 Body
+     *
+     * @param body Body
+     */
     T extract(Body body) throws IOException;
 }

@@ -28,38 +28,63 @@ import central.io.IOStreamx;
 import central.net.http.body.Body;
 import central.net.http.body.BodyExtractor;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
- * String 序列化
+ * 将响应体解析成字符串
  *
  * @author Alan Yeh
  * @since 2022/07/17
  */
 public class StringExtractor implements BodyExtractor<String> {
 
+    /**
+     * 字符集
+     */
     private final Charset charset;
 
-    public StringExtractor() {
-        this.charset = StandardCharsets.UTF_8;
-    }
-
-    public StringExtractor(Charset charset) {
+    /**
+     * 构造函数
+     *
+     * @param charset 字符集（如果未定指，将使用响应头里指定的字符集）
+     */
+    public StringExtractor(@Nullable Charset charset) {
         this.charset = charset;
     }
 
+    /**
+     * 创建字符串解析器
+     */
     public static StringExtractor of() {
-        return new StringExtractor();
+        return new StringExtractor(null);
     }
 
-    public static StringExtractor of(Charset charset) {
+    /**
+     * 创建字符串解析器
+     *
+     * @param charset 字符集（如果未定指，将使用响应头里指定的字符集）
+     */
+    public static StringExtractor of(@Nullable Charset charset) {
         return new StringExtractor(charset);
     }
 
     @Override
     public String extract(Body body) throws IOException {
-        return IOStreamx.readText(body.getInputStream(), this.charset);
+        // 开发者指定的字符串
+        var charset = this.charset;
+
+        if (charset == null) {
+            // 如果开发者没有指定字符集，则尝试从响应头获取字符集信息
+            charset = body.getContentType().getCharset();
+        }
+        if (charset == null) {
+            // 如果响应头没有指定字符集，则默认使用 UTF-8
+            charset = StandardCharsets.UTF_8;
+        }
+
+        return IOStreamx.readText(body.getInputStream(), charset);
     }
 }
