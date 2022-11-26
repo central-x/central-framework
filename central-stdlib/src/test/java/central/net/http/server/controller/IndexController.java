@@ -151,6 +151,8 @@ public class IndexController {
         response.setHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(body.available()));
 
         // 写响应
-        IOStreamx.copy(body, response.getOutputStream());
+        try (body; var output = response.getOutputStream()) {
+            IOStreamx.transfer(body, output);
+        }
     }
 }

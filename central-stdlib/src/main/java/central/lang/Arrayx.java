@@ -145,6 +145,42 @@ public class Arrayx {
     }
 
     /**
+     * 连接两个组数
+     *
+     * @param first  第一个数组
+     * @param second 第二个数组
+     * @return 连接后的数组
+     */
+    @Nonnull
+    public static <T> T[] concat(@Nullable T[] first, @Nonnull T[] second) {
+        if (isNullOrEmpty(first)) {
+            return second;
+        } else {
+            var concat = Arrays.copyOf(first, first.length + second.length);
+            System.arraycopy(second, 0, concat, first.length, second.length);
+            return concat;
+        }
+    }
+
+    /**
+     * 连接两个组数
+     *
+     * @param first  第一个数组
+     * @param second 第二个数组
+     * @return 连接后的数组
+     */
+    @Nonnull
+    public static byte[] concat(@Nullable byte[] first, @Nonnull byte[] second) {
+        if (isNullOrEmpty(first)) {
+            return Arrays.copyOf(second, second.length);
+        } else {
+            var concat = Arrays.copyOf(first, first.length + second.length);
+            System.arraycopy(second, 0, concat, first.length, second.length);
+            return concat;
+        }
+    }
+
+    /**
      * 新建数组
      *
      * @param elements 元素

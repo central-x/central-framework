@@ -109,7 +109,9 @@ public class FileExtractor implements BodyExtractor<File> {
         Assertx.mustTrue(file.createNewFile(), IOException::new, "无法访问指定文件: " + file.getAbsolutePath());
 
         // 保存数据流到指定文件
-        IOStreamx.copy(body.getInputStream(), Files.newOutputStream(file.toPath(), StandardOpenOption.WRITE));
+        try (var input = body.getInputStream(); var output = Files.newOutputStream(file.toPath(), StandardOpenOption.WRITE)) {
+            IOStreamx.transfer(input, output);
+        }
         return file;
     }
 }

@@ -105,8 +105,8 @@ public class Filex {
         }
         Assertx.mustTrue(file.createNewFile(), IOException::new, "Cannot create a new file on path '{}'", file.getAbsolutePath());
 
-        try (var output = new FileOutputStream(file)) {
-            IOStreamx.transfer(new ByteArrayInputStream(bytes), output);
+        try (var input = new ByteArrayInputStream(bytes); var output = new FileOutputStream(file)) {
+            IOStreamx.transfer(input, output);
         }
     }
 
@@ -208,8 +208,8 @@ public class Filex {
         if (!target.getParentFile().exists() && !target.getParentFile().mkdirs()) {
             throw new IOException("can't not create directory in " + target.getParentFile().getAbsolutePath());
         }
-        try (var inputStream = input; var output = new FileOutputStream(target)) {
-            IOStreamx.copy(inputStream, output);
+        try (input; var output = new FileOutputStream(target)) {
+            IOStreamx.transfer(input, output);
         }
     }
 
@@ -302,7 +302,9 @@ public class Filex {
             zip.putNextEntry(entry);
 
             // 将文件数据写入 zip 里
-            IOStreamx.transfer(new FileInputStream(src), zip);
+            try (var input = new FileInputStream(src)) {
+                IOStreamx.transfer(input, zip);
+            }
             zip.closeEntry();
         }
     }

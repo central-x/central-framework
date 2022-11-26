@@ -24,6 +24,7 @@
 
 package central.io;
 
+import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.PublicApi;
 import lombok.experimental.UtilityClass;
@@ -32,6 +33,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  * 流工具
@@ -45,75 +48,73 @@ public class IOStreamx {
     public static final int BUFFER_SIZE = 8 * 1204;
 
     /**
-     * 将输入流复制到输出流
-     * 方法完毕后将关闭输入输出流
+     * 传输数据流
      *
-     * @param input  输入流(执行后将被关闭)
-     * @param output 输出流(执行后将被关闭)
-     * @return 共复制了多少字节
-     */
-    public static long copy(@Nonnull InputStream input, @Nonnull OutputStream output) throws IOException {
-        Assertx.mustNotNull(input, "Argument 'input' must not null");
-        Assertx.mustNotNull(output, "Argument 'output' must not null");
-
-        if (input instanceof FileInputStream inputStream && output instanceof FileOutputStream outputStream) {
-            try (var inputChannel = inputStream.getChannel(); var outputChannel = outputStream.getChannel()) {
-                inputChannel.transferTo(0, inputChannel.size(), outputChannel);
-                return inputChannel.size();
-            }
-        } else {
-            try (var bufferedInput = buffered(input); var bufferedOutput = buffered(output)) {
-
-                var byteCount = 0;
-
-                var buffer = new byte[4096];
-                int bytesRead;
-                while ((bytesRead = bufferedInput.read(buffer)) != -1) {
-                    bufferedOutput.write(buffer, 0, bytesRead);
-                    byteCount += bytesRead;
-                }
-
-                bufferedOutput.flush();
-                return byteCount;
-            }
-        }
-    }
-
-    /**
-     * 将输入流的内容传输入输出流
-     * 方法执行完毕后不关闭输出流，但是会关闭输入流
-     *
-     * @param input  输入流(执行后将被关闭)
-     * @param output 输出流(执行后不关闭)
+     * @param input  输入流
+     * @param output 输出流
      * @return 共复制了多少字节
      */
     public static long transfer(@Nonnull InputStream input, @Nonnull OutputStream output) throws IOException {
+        return transfer(input, output, -1);
+    }
+
+    /**
+     * 传输数据流
+     *
+     * @param input  输入流
+     * @param output 输出流
+     * @param length 传输长度（-1 传输直至关闭）
+     */
+    public static long transfer(@Nonnull InputStream input, @Nonnull OutputStream output, long length) throws IOException {
         Assertx.mustNotNull(input, "Argument 'input' must not null");
         Assertx.mustNotNull(output, "Argument 'output' must not null");
+        if (length == 0) {
+            // 不需要传输
+            return 0;
+        }
 
-        if (input instanceof FileInputStream && output instanceof FileOutputStream) {
-            try (var inputStream = (FileInputStream) input) {
-                var outputStream = (FileOutputStream) output;
-                var inputChannel = inputStream.getChannel();
-                var outputChannel = outputStream.getChannel();
+        if (input instanceof FileInputStream fileInput && output instanceof FileOutputStream fileOutput) {
+            // 如果两个都是文件流的话，使用 Channel 传输会更快
+            var inputChannel = fileInput.getChannel();
+            var outputChannel = fileOutput.getChannel();
+
+            if (length < 0) {
+                // 传输直至完毕
                 inputChannel.transferTo(0, inputChannel.size(), outputChannel);
                 return inputChannel.size();
+            } else {
+                // 传输指定长度
+                inputChannel.transferTo(0, length, outputChannel);
+                return length;
             }
         } else {
-            try (var bufferedInput = buffered(input)) {
-                var bufferedOutput = buffered(output);
-                var transferred = 0;
+            var transferred = 0;
 
-                var buffer = new byte[BUFFER_SIZE];
-                int bytesRead;
-                while ((bytesRead = bufferedInput.read(buffer, 0, BUFFER_SIZE)) >= 0) {
-                    bufferedOutput.write(buffer, 0, bytesRead);
+            var buffer = new byte[BUFFER_SIZE];
+            int bytesRead;
+
+            if (length < 0) {
+                // 传输至完毕
+                while ((bytesRead = input.read(buffer, 0, BUFFER_SIZE)) >= 0) {
+                    output.write(buffer, 0, bytesRead);
                     transferred += bytesRead;
                 }
+            } else {
+                // 传输指定长度
+                while ((bytesRead = input.read(buffer, 0, (int) Math.min(BUFFER_SIZE, length))) >= 0) {
+                    output.write(buffer, 0, bytesRead);
+                    transferred += bytesRead;
 
-                bufferedOutput.flush();
-                return transferred;
+                    length -= bytesRead;
+                    if (length <= 0) {
+                        // 传输完毕
+                        break;
+                    }
+                }
             }
+
+            output.flush();
+            return transferred;
         }
     }
 
@@ -127,9 +128,10 @@ public class IOStreamx {
             return new byte[0];
         }
 
-        var output = new ByteArrayOutputStream(BUFFER_SIZE);
-        copy(input, output);
-        return output.toByteArray();
+        try (input; var output = new ByteArrayOutputStream(BUFFER_SIZE)) {
+            transfer(input, output);
+            return output.toByteArray();
+        }
     }
 
     /**
@@ -170,7 +172,7 @@ public class IOStreamx {
         if (input instanceof BufferedInputStream buffered) {
             return buffered;
         } else {
-            return new BufferedInputStream(input);
+            return new BufferedInputStream(input, IOStreamx.BUFFER_SIZE);
         }
     }
 
@@ -184,8 +186,71 @@ public class IOStreamx {
         if (output instanceof BufferedOutputStream buffered) {
             return buffered;
         } else {
-            return new BufferedOutputStream(output);
+            return new BufferedOutputStream(output, IOStreamx.BUFFER_SIZE);
         }
+    }
+
+    /**
+     * 读取一行文本
+     *
+     * @param input   输入流
+     * @param charset 字符集
+     */
+    public static String readLine(InputStream input, Charset charset) throws IOException {
+        var arrays = new byte[0];
+
+        var buffer = new byte[IOStreamx.BUFFER_SIZE];
+
+        int index = 0;
+        while (true) {
+            int length = input.read(buffer, index, 1);
+
+            if (buffer[index] == '\n' || length <= 0) {
+                // 如果遇到 \n 表示换一行，如果 length <= 0 表示读完了
+                arrays = Arrayx.concat(arrays, Arrays.copyOfRange(buffer, 0, index));
+                return new String(arrays, charset);
+            }
+
+            index++;
+
+            if (index >= buffer.length) {
+                // 缓存已满
+                index = 0;
+                arrays = Arrayx.concat(arrays, buffer);
+            }
+        }
+    }
+
+    /**
+     * 读取一行文本
+     *
+     * @param input 输入流
+     */
+    public static String readLine(InputStream input) throws IOException {
+        return readLine(input, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 向输出流写入一行文本
+     *
+     * @param output  输入流
+     * @param line    文本
+     * @param charset 字符集
+     */
+    public static void writeLine(OutputStream output, String line, Charset charset) throws IOException {
+        output.write(line.getBytes(charset));
+        output.write('\n');
+        output.flush();
+    }
+
+    /**
+     * 向输出流写入一行文本
+     *
+     * @param output 输入流
+     * @param line   文本
+     */
+    public static void writeLine(OutputStream output, String line) throws IOException {
+        writeLine(output, line, StandardCharsets.UTF_8);
     }
 
     /**

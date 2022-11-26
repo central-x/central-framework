@@ -146,7 +146,9 @@ public class FileRender extends Render<FileRender> {
     public void render() throws IOException {
         setHeaders();
 
-        IOStreamx.copy(this.input, getResponse().getOutputStream());
+        try (var input = this.input; var output = getResponse().getOutputStream()) {
+            IOStreamx.transfer(input, output);
+        }
     }
 
     private void setHeaders() throws IOException {

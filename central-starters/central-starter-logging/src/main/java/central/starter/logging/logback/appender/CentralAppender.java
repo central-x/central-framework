@@ -140,14 +140,15 @@ public abstract class CentralAppender extends AppenderBase<ILoggingEvent> {
 
                         var tmp = new File(this.dir, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss_SSS")) + "_" + Stringx.paddingLeft(String.valueOf(random.nextInt(100)), 3, '0') + ".logtmp");
                         if (tmp.createNewFile()) {
-                            var output = new ByteArrayOutputStream();
-                            try (var stream = new GZIPOutputStream(output)) {
+                            var gzip = new ByteArrayOutputStream();
+                            try (var stream = new GZIPOutputStream(gzip)) {
                                 stream.write(Jsonx.Default().serialize(logs.stream().map(LogContext::getData).toList()).getBytes(StandardCharsets.UTF_8));
                                 stream.flush();
                             }
 
-                            var stream = new ByteArrayInputStream(output.toByteArray());
-                            IOStreamx.copy(stream, Files.newOutputStream(tmp.toPath(), StandardOpenOption.WRITE));
+                            try (var input = new ByteArrayInputStream(gzip.toByteArray()); var output = Files.newOutputStream(tmp.toPath(), StandardOpenOption.WRITE)) {
+                                IOStreamx.transfer(input, output);
+                            }
                         }
                     } catch (IOException ex) {
                         // 没办法写入文件，丢弃

@@ -139,7 +139,9 @@ public class ResumableFileRender extends Render<ResumableFileRender> {
         Range<Long> range = this.getRange(this.getRequest().getHeader(HttpHeaders.RANGE), file.length());
 
         if (range == null) {
-            IOStreamx.copy(new FileInputStream(this.file), getResponse().getOutputStream());
+            try (var input = new FileInputStream(this.file); var output = getResponse().getOutputStream()) {
+                IOStreamx.transfer(input, output);
+            }
         } else {
             try (RandomAccessFile raf = new RandomAccessFile(this.file, "r"); BufferedOutputStream bufferedOutput = new BufferedOutputStream(getResponse().getOutputStream())) {
                 // 缓冲

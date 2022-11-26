@@ -61,7 +61,9 @@ public class ReusableBody implements Body {
             }
 
             // 将请求的 Body 写到文件里
-            IOStreamx.copy(this.body.getInputStream(), new FileOutputStream(this.cache));
+            try (var input = this.body.getInputStream(); var output = new FileOutputStream(this.cache)) {
+                IOStreamx.transfer(input, output);
+            }
         }
     }
 
