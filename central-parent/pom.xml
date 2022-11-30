@@ -45,6 +45,7 @@
         <graphql.version>19.2</graphql.version>
         <transmittable-thread-local.version>2.14.0</transmittable-thread-local.version>
         <jwt.version>4.0.0</jwt.version>
+        <apache-sshd.version>2.9.2</apache-sshd.version>
     </properties>
 
     <!-- 依赖版本管理 -->
@@ -155,6 +156,25 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>transmittable-thread-local</artifactId>
                 <version>${transmittable-thread-local.version}</version>
+            </dependency>
+
+            <!-- 远程 Shell -->
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>0.1.55</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.sshd</groupId>
+                <artifactId>sshd-core</artifactId>
+                <version>${apache-sshd.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.sshd</groupId>
+                <artifactId>sshd-sftp</artifactId>
+                <version>${apache-sshd.version}</version>
             </dependency>
 
             <!-- JWT -->
