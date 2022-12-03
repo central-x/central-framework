@@ -27,7 +27,9 @@ package central.util.shell;
 import central.io.IOStreamx;
 import central.lang.Assertx;
 import central.lang.Stringx;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.sshd.client.SshClient;
 import org.apache.sshd.client.channel.ClientChannelEvent;
@@ -40,7 +42,6 @@ import org.apache.sshd.sftp.client.SftpClientFactory;
 import org.apache.sshd.sftp.client.fs.SftpFileSystem;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -51,11 +52,26 @@ import java.util.*;
 
 /**
  * 远程 Shell
+ * <p>
  * 这是一个非交互式的 Shell，每次命令都是独立再次连到服务器去执行的
+ * <p>
+ * 例：
+ * <pre>
+ * {@code try(var shell = RemoteShell.of("10.10.20.20", "root", "x.123456")) {
+ *     shell.connect(Duration.ofSeconds(5);
+ *     // 执行命令
+ *     shell.exec("java", "--version");
+ *     // 将本地文件传输到服务器
+ *     shell.transferTo(localFile, remotePath);
+ *     // 将服务器文件传输到本地
+ *     shell.transferFrom(remoteFile, localPath);
+ * }}
+ * </pre>
  *
  * @author Alan Yeh
  * @since 2022/11/25
  */
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class RemoteShell extends Shell {
     /**
      * 主机
@@ -82,14 +98,6 @@ public class RemoteShell extends Shell {
      */
     @Getter
     private final KeyPair publicKey;
-
-    protected RemoteShell(String host, int port, String username, String password, KeyPair publicKey) {
-        this.host = host;
-        this.port = port;
-        this.username = username;
-        this.password = password;
-        this.publicKey = publicKey;
-    }
 
     /**
      * 使用默认端口创建远程 Shell
@@ -290,7 +298,7 @@ public class RemoteShell extends Shell {
     @Override
     public boolean mkdirs(Path remotePath) throws ShellException {
         try {
-            Files.createDirectories(remotePath);
+            Files.createDirectories(toRemoteAbsolute(remotePath));
             return true;
         } catch (IOException ex) {
             throw new ShellException("创建文件夹失败: " + ex.getLocalizedMessage(), ex);
@@ -357,13 +365,8 @@ public class RemoteShell extends Shell {
             commandBuilder.append(" ").append(process(arg));
         }
 
-        IOStreamx.writeLine(this.stdout, "$ " + commandBuilder, StandardCharsets.UTF_8);
-        for (var listener : this.stdoutListeners) {
-            try {
-                listener.accept("$ " + commandBuilder);
-            } catch (Throwable ignored) {
-            }
-        }
+        IOStreamx.writeLine(this.stdout, "$ " + commandBuilder, this.charset);
+        this.notifyStdoutListener("$ " + commandBuilder);
 
         try (var channel = session.createExecChannel(commandBuilder.toString())) {
             this.environments.forEach(channel::setEnv);

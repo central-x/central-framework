@@ -116,12 +116,30 @@ public abstract class Shell implements AutoCloseable {
     }
 
     /**
+     * 通知标准输出监听
+     */
+    protected void notifyStdoutListener(String line) {
+        for (var listener : this.stdoutListeners) {
+            listener.accept(line);
+        }
+    }
+
+    /**
      * 添加标准错误输出监听
      *
      * @param listener 监听
      */
     public void addStderrListener(Consumer<String> listener) {
         this.stderrListeners.add(listener);
+    }
+
+    /**
+     * 通知标准异常输出监听
+     */
+    protected void notifyStderrListener(String line) {
+        for (var listener : this.stderrListeners) {
+            listener.accept(line);
+        }
     }
 
     /**

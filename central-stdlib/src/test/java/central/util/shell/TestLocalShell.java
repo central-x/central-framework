@@ -30,30 +30,31 @@
 //import java.time.Duration;
 //
 ///**
-// * RemoteShell Test Cases
+// * LocalShell Test Cases
 // *
 // * @author Alan Yeh
-// * @since 2022/11/26
+// * @since 2022/12/02
 // */
-//public class TestRemoteShell {
+//public class TestLocalShell {
 //
 //    @Test
 //    public void case1() throws Exception {
-//        try (var shell = RemoteShell.of("10.10.20.20", 22, "root", "x.123456")) {
+//        try (var shell = new LocalShell()){
 //            shell.connect(Duration.ofSeconds(5));
 //            shell.exec("pod", "--version");
-////            shell.exec("pod", "--version");
 //
 //            System.out.println(shell.getStdout());
 //            System.err.println(shell.getStderr());
 //        }
 //    }
 //
+//
 //    @Test
 //    public void case2() throws Exception {
-//        try (var shell = RemoteShell.of("10.10.20.20", 22, "root", "x.123456")) {
+//        try (var shell = new LocalShell()){
 //            shell.connect(Duration.ofSeconds(5));
-//            shell.transferTo(Path.of("~/Documents/centralx"));
+//
+//            shell.transferTo(Path.of("~/Documents/andes"));
 //
 //            System.out.println(shell.getStdout());
 //            System.err.println(shell.getStderr());
@@ -62,9 +63,10 @@
 //
 //    @Test
 //    public void case3() throws Exception {
-//        try (var shell = RemoteShell.of("10.10.20.20", 22, "root", "x.123456")) {
+//        try (var shell = new LocalShell()){
 //            shell.connect(Duration.ofSeconds(5));
-//            shell.transferFrom(Path.of("~/centralx"), Path.of("~/Documents"));
+//
+//            shell.transferFrom(Path.of("~/andes"), Path.of("~/Documents"));
 //
 //            System.out.println(shell.getStdout());
 //            System.err.println(shell.getStderr());
@@ -73,9 +75,10 @@
 //
 //    @Test
 //    public void case4() throws Exception {
-//        try (var shell = RemoteShell.of("10.10.20.20", 22, "root", "x.123456")) {
+//        try (var shell = new LocalShell()){
 //            shell.connect(Duration.ofSeconds(5));
-//            shell.rm(Path.of("~/centralx"));
+//
+//            shell.rm(Path.of("~/andes"));
 //
 //            System.out.println(shell.getStdout());
 //            System.err.println(shell.getStderr());
