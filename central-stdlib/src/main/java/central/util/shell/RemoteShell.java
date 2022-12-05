@@ -360,7 +360,7 @@ public class RemoteShell extends Shell {
     @Override
     @SneakyThrows(IOException.class)
     public int exec(String command, String... args) throws ShellException {
-        StringBuilder commandBuilder = new StringBuilder(this.process(command));
+        var commandBuilder = new StringBuilder(this.process(command));
         for (var arg : args) {
             commandBuilder.append(" ").append(process(arg));
         }

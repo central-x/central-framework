@@ -80,15 +80,22 @@
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
-        <!-- ssh 远程 -->
+        <!-- Mina Ssh -->
         <dependency>
             <groupId>org.apache.sshd</groupId>
             <artifactId>sshd-core</artifactId>
+            <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.apache.sshd</groupId>
             <artifactId>sshd-sftp</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- JSch Ssh -->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- 数据源 -->
