@@ -36,11 +36,13 @@
 // * @since 2022/12/05
 // */
 //public class TestJSchRemoteShell {
+//
 //    @Test
 //    public void case1() throws Exception {
 //        try (var shell = JSchRemoteShell.of("10.10.20.20", 22, "root", "x.123456")) {
 //            shell.connect(Duration.ofSeconds(5));
-//            shell.exec("pod", "--version");
+//            shell.setWorkDir(Path.of("~/centralx"));
+//            shell.exec("ls", "--all");
 ////            shell.exec("pod", "--version");
 //
 //            System.out.println(shell.getStdout());

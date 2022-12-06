@@ -29,6 +29,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -181,21 +182,21 @@ public abstract class Shell implements AutoCloseable {
      *
      * @param remoteFile 远程文件（夹），支持相对路径
      */
-    public abstract boolean rm(Path remoteFile) throws ShellException;
+    public abstract boolean rm(Path remoteFile) throws ShellException, IOException;
 
     /**
      * 创建文件夹
      *
      * @param remotePath 远程目录，支持相对路径
      */
-    public abstract boolean mkdirs(Path remotePath) throws ShellException;
+    public abstract boolean mkdirs(Path remotePath) throws ShellException, IOException;
 
     /**
      * 将本地文件写入当前工作目录
      *
      * @param localFile 本地文件（夹）
      */
-    public abstract boolean transferTo(Path localFile) throws ShellException;
+    public abstract boolean transferTo(Path localFile) throws ShellException, IOException;
 
     /**
      * 将本地文件写入指定远程目录
@@ -203,7 +204,7 @@ public abstract class Shell implements AutoCloseable {
      * @param localFile  本地文件（夹）
      * @param remotePath 指定远程目录，支持相对路径
      */
-    public abstract boolean transferTo(Path localFile, Path remotePath) throws ShellException;
+    public abstract boolean transferTo(Path localFile, Path remotePath) throws ShellException, IOException;
 
     /**
      * 将指定的远程文件（夹）写入本地目录
@@ -211,7 +212,7 @@ public abstract class Shell implements AutoCloseable {
      * @param remoteFile 远程文件（夹），支持相对路径
      * @param localPath  本地文件目录
      */
-    public abstract boolean transferFrom(Path remoteFile, Path localPath) throws ShellException;
+    public abstract boolean transferFrom(Path remoteFile, Path localPath) throws ShellException, IOException;
 
     /**
      * 执行命令

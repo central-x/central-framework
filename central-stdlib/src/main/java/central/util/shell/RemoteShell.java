@@ -39,9 +39,9 @@ import org.apache.sshd.common.util.security.SecurityUtils;
 import org.apache.sshd.common.util.security.eddsa.EdDSASecurityProviderRegistrar;
 import org.apache.sshd.sftp.client.SftpClient;
 import org.apache.sshd.sftp.client.SftpClientFactory;
-import org.apache.sshd.sftp.client.fs.SftpFileSystem;
 
 import java.io.*;
+import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -144,13 +144,34 @@ public class RemoteShell extends Shell {
         return new RemoteShell(host, 22, username, null, publicKey);
     }
 
+    /**
+     * 工作目录
+     * <p>
+     * 远程工作目录没办法根据当前目录推导出相对路径，因此只能使用 '~' 或绝对路径来表达工作目录
+     */
+    @Override
+    public void setWorkDir(Path workDir) {
+        if (workDir.startsWith(Path.of(".")) || workDir.startsWith("..")) {
+            throw new IllegalArgumentException("WorkDir cannot start with '.' or '..'");
+        } else {
+            super.setWorkDir(workDir);
+        }
+    }
+
     private SshClient client;
 
     private ClientSession session;
 
     private SftpClient sftp;
 
-    private SftpFileSystem fs;
+    private FileSystem fs;
+
+    /**
+     * 远程 Home 目录
+     * <p>
+     * 用于推导以 ~ 开头的远程目录
+     */
+    private Path remoteHome;
 
     @Override
     public void connect(Duration timeout) throws ShellException {
@@ -184,64 +205,72 @@ public class RemoteShell extends Shell {
         // 创建文件访问客户端
         try {
             this.sftp = SftpClientFactory.instance().createSftpClient(this.session).singleSessionInstance();
-            this.fs = SftpClientFactory.instance().createSftpFileSystem(this.session);
+            var fs = SftpClientFactory.instance().createSftpFileSystem(this.session);
 
             // 处理 workDir
-            this.workDir = this.toRemoteAbsolute(this.workDir);
+            this.remoteHome = fs.getDefaultDir();
+            this.fs = fs;
         } catch (IOException ex) {
             throw new ShellException(Stringx.format("服务器（{}@{}:{}）创建 sftp 失败: {}", this.username, this.host, this.port, ex.getLocalizedMessage()), ex);
         }
     }
 
-    private Path toLocalAbsolute(Path path) {
+    private Path toLocalAbsolute(Path path) throws IOException {
         if (path.isAbsolute()) {
-            return Path.of(path.toString());
+            return path;
         } else {
-            var home = Path.of(System.getProperty("user.home"));
+            var localHome = Path.of(System.getProperty("user.home"));
             switch (path.getName(0).toString()) {
-                case "~", "." -> {
-                    if (path.getNameCount() == 1) {
-                        return home;
-                    } else {
-                        return home.resolve(path.subpath(1, path.getNameCount()));
-                    }
+                case ".", ".." -> {
+                    return path.toAbsolutePath();
                 }
-                case ".." -> {
+                case "~" -> {
                     if (path.getNameCount() == 1) {
-                        return home.getParent();
+                        return localHome;
                     } else {
-                        return home.getParent().resolve(path.subpath(1, path.getNameCount()));
+                        return localHome.resolve(path.subpath(1, path.getNameCount()));
                     }
                 }
                 default -> {
-                    return Path.of(path.toString());
+                    throw new IOException("解析本地路径异常");
                 }
             }
         }
     }
 
-    private Path toRemoteAbsolute(Path path) {
+    private Path toRemoteAbsolute(Path path) throws IOException {
         if (path.isAbsolute()) {
             return this.fs.getPath(path.toString());
         } else {
-            switch (path.getName(0).toString()) {
-                case "~", "." -> {
+            var remotePath = switch (path.getName(0).toString()) {
+                case "." -> {
                     if (path.getNameCount() == 1) {
-                        return this.fs.getDefaultDir();
+                        yield this.workDir;
                     } else {
-                        return this.fs.getDefaultDir().resolve(path.subpath(1, path.getNameCount()).toString());
+                        yield this.workDir.resolve(path.subpath(1, path.getNameCount()).toString());
                     }
                 }
                 case ".." -> {
                     if (path.getNameCount() == 1) {
-                        return this.fs.getDefaultDir().getParent();
+                        yield this.workDir.getParent();
                     } else {
-                        return this.fs.getDefaultDir().getParent().resolve(path.subpath(1, path.getNameCount()).toString());
+                        yield this.workDir.getParent().resolve(path.subpath(1, path.getNameCount()).toString());
                     }
                 }
-                default -> {
-                    return this.fs.getPath(path.toString());
+                case "~" -> {
+                    if (path.getNameCount() == 1) {
+                        yield this.remoteHome;
+                    } else {
+                        yield this.remoteHome.resolve(path.subpath(1, path.getNameCount()).toString());
+                    }
                 }
+                default -> throw new IOException("解析远程路径异常");
+            };
+
+            if (remotePath.startsWith(this.fs.getPath("~"))) {
+                return this.remoteHome.resolve(remotePath.subpath(1, path.getNameCount()).toString());
+            } else {
+                return this.fs.getPath(remotePath.toString());
             }
         }
     }
@@ -279,24 +308,30 @@ public class RemoteShell extends Shell {
 
     @Override
     @SneakyThrows(IOException.class)
-    public boolean rm(Path remoteFile) throws ShellException {
-        remoteFile = toRemoteAbsolute(remoteFile);
-        var attributes = Files.readAttributes(remoteFile, BasicFileAttributes.class);
-        if (attributes.isDirectory()) {
-            try (var stream = Files.list(remoteFile)) {
-                var files = stream.toList();
-                for (var file : files) {
-                    if (!this.rm(file)) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return Files.deleteIfExists(remoteFile);
+    public boolean rm(Path remoteFile) throws ShellException, IOException {
+        // sftp 不能删除一个非空的目录，因此如果要删除一个目录，需要递归删除它的子文件夹的子文件
+        // 因此直接用 rm -rf 来删除会更高效一些
+        remoteFile = this.toRemoteAbsolute(remoteFile);
+        this.exec("rm", "-rf", remoteFile.toString());
+        return true;
+
+//        remoteFile = this.toRemoteAbsolute(remoteFile);
+//        var attributes = Files.readAttributes(remoteFile, BasicFileAttributes.class);
+//        if (attributes.isDirectory()) {
+//            try (var stream = Files.list(remoteFile)) {
+//                var files = stream.toList();
+//                for (var file : files) {
+//                    if (!this.rm(file)) {
+//                        return false;
+//                    }
+//                }
+//            }
+//        }
+//        return Files.deleteIfExists(remoteFile);
     }
 
     @Override
-    public boolean mkdirs(Path remotePath) throws ShellException {
+    public boolean mkdirs(Path remotePath) throws ShellException, IOException {
         try {
             Files.createDirectories(toRemoteAbsolute(remotePath));
             return true;
@@ -306,19 +341,19 @@ public class RemoteShell extends Shell {
     }
 
     @Override
-    public boolean transferTo(Path localFile) throws ShellException {
+    public boolean transferTo(Path localFile) throws ShellException, IOException {
         return transferTo(localFile, this.workDir);
     }
 
     @Override
-    public boolean transferTo(Path localFile, Path remotePath) throws ShellException {
+    public boolean transferTo(Path localFile, Path remotePath) throws ShellException, IOException {
         localFile = this.toLocalAbsolute(localFile);
         remotePath = this.toRemoteAbsolute(remotePath);
         return this.transfer(localFile, remotePath);
     }
 
     @Override
-    public boolean transferFrom(Path remoteFile, Path localPath) throws ShellException {
+    public boolean transferFrom(Path remoteFile, Path localPath) throws ShellException, IOException {
         remoteFile = this.toRemoteAbsolute(remoteFile);
         localPath = this.toLocalAbsolute(localPath);
         return this.transfer(remoteFile, localPath);
@@ -368,7 +403,7 @@ public class RemoteShell extends Shell {
         IOStreamx.writeLine(this.stdout, "$ " + commandBuilder, this.charset);
         this.notifyStdoutListener("$ " + commandBuilder);
 
-        try (var channel = session.createExecChannel(commandBuilder.toString())) {
+        try (var channel = session.createExecChannel("cd " + this.workDir + " && " + commandBuilder)) {
             this.environments.forEach(channel::setEnv);
             channel.setOut(this.stdout);
             channel.setErr(this.stderr);

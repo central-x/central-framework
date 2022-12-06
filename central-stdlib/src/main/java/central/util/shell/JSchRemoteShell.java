@@ -122,8 +122,29 @@ public class JSchRemoteShell extends Shell {
         return new JSchRemoteShell(host, 22, username, null, publicKey);
     }
 
+    /**
+     * 工作目录
+     * <p>
+     * 远程工作目录没办法根据当前目录推导出相对路径，因此只能使用 '~' 或绝对路径来表达工作目录
+     */
+    @Override
+    public void setWorkDir(Path workDir) {
+        if (workDir.startsWith(Path.of(".")) || workDir.startsWith("..")) {
+            throw new IllegalArgumentException("WorkDir cannot start with '.' or '..'");
+        } else {
+            super.setWorkDir(workDir);
+        }
+    }
+
     private final JSch factory = new JSch();
     private Session session;
+
+    /**
+     * 远程 Home 目录
+     * <p>
+     * 用于推导以 ~ 开头的远程目录
+     */
+    private Path remoteHome;
 
     @Override
     public void connect(Duration timeout) throws ShellException {
@@ -134,11 +155,27 @@ public class JSchRemoteShell extends Shell {
             }
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect((int) timeout.toMillis());
-            if (session.isConnected()) {
+            if (!session.isConnected()) {
                 throw new ShellException("连接服务器失败");
             }
             this.session = session;
-        } catch (JSchException ex) {
+
+            ChannelSftp channel = null;
+            try {
+                channel = (ChannelSftp) session.openChannel("sftp");
+                channel.connect(500);
+                if (!channel.isConnected()) {
+                    throw new ShellException("连接服务器失败");
+                }
+
+                this.remoteHome = Path.of(channel.getHome());
+            } finally {
+                if (channel != null) {
+                    // 结束连接
+                    channel.disconnect();
+                }
+            }
+        } catch (JSchException | SftpException ex) {
             throw new ShellException("连接服务器失败: " + ex.getLocalizedMessage(), ex);
         }
     }
@@ -157,41 +194,30 @@ public class JSchRemoteShell extends Shell {
     }
 
     @Override
-    public boolean rm(Path remoteFile) throws ShellException {
-        ChannelSftp channel = null;
-        try {
-            channel = (ChannelSftp) session.openChannel("sftp");
-            channel.connect(500);
-            if (channel.isConnected()) {
-                throw new ShellException("连接服务器失败");
-            }
-
-            channel.rm(remoteFile.toString());
-            return true;
-        } catch (JSchException | SftpException ex) {
-            throw new ShellException("传输文件失败: " + ex.getLocalizedMessage(), ex);
-        } finally {
-            if (channel != null) {
-                // 结束连接
-                channel.disconnect();
-            }
-        }
+    public boolean rm(Path remoteFile) throws ShellException, IOException {
+        // sftp 不能删除一个非空的目录，因此如果要删除一个目录，需要递归删除它的子文件夹的子文件
+        // 因此直接用 rm -rf 来删除会更高效一些
+        remoteFile = this.toRemoteAbsolute(remoteFile);
+        this.exec("rm", "-rf", remoteFile.toString());
+        return true;
     }
 
     @Override
-    public boolean mkdirs(Path remotePath) throws ShellException {
+    public boolean mkdirs(Path remotePath) throws ShellException, IOException {
         ChannelSftp channel = null;
         try {
             channel = (ChannelSftp) session.openChannel("sftp");
             channel.connect(500);
-            if (channel.isConnected()) {
+            if (!channel.isConnected()) {
                 throw new ShellException("连接服务器失败");
             }
+
+            remotePath = this.toRemoteAbsolute(remotePath);
 
             this.cd(channel, remotePath);
             return true;
-        } catch (JSchException | SftpException | IOException ex) {
-            throw new ShellException("传输文件失败: " + ex.getLocalizedMessage(), ex);
+        } catch (JSchException | SftpException ex) {
+            throw new ShellException("创建文件夹失败: " + ex.getLocalizedMessage(), ex);
         } finally {
             if (channel != null) {
                 // 结束连接
@@ -201,19 +227,22 @@ public class JSchRemoteShell extends Shell {
     }
 
     @Override
-    public boolean transferTo(Path localFile) throws ShellException {
+    public boolean transferTo(Path localFile) throws ShellException, IOException {
         return this.transferTo(localFile, this.workDir);
     }
 
     @Override
-    public boolean transferTo(Path localFile, Path remotePath) throws ShellException {
+    public boolean transferTo(Path localFile, Path remotePath) throws ShellException, IOException {
         ChannelSftp channel = null;
         try {
             channel = (ChannelSftp) session.openChannel("sftp");
             channel.connect(500);
-            if (channel.isConnected()) {
+            if (!channel.isConnected()) {
                 throw new ShellException("连接服务器失败");
             }
+
+            localFile = this.toLocalAbsolute(localFile);
+            remotePath = this.toRemoteAbsolute(remotePath);
 
             this.cd(channel, remotePath);
 
@@ -226,7 +255,7 @@ public class JSchRemoteShell extends Shell {
                 throw new IOException("不支持的文件类型: " + localFile);
             }
             return true;
-        } catch (JSchException | SftpException | IOException ex) {
+        } catch (JSchException | SftpException ex) {
             throw new ShellException("传输文件失败: " + ex.getLocalizedMessage(), ex);
         } finally {
             if (channel != null) {
@@ -237,16 +266,17 @@ public class JSchRemoteShell extends Shell {
     }
 
     @Override
-    public boolean transferFrom(Path remoteFile, Path localPath) throws ShellException {
+    public boolean transferFrom(Path remoteFile, Path localPath) throws ShellException, IOException {
         ChannelSftp channel = null;
         try {
             channel = (ChannelSftp) session.openChannel("sftp");
             channel.connect(500);
-            if (channel.isConnected()) {
+            if (!channel.isConnected()) {
                 throw new ShellException("连接服务器失败");
             }
 
-            remoteFile = toAbsolute(channel, remoteFile);
+            localPath = this.toLocalAbsolute(localPath);
+            remoteFile = this.toRemoteAbsolute(remoteFile);
 
             // 查询路径状态
             // 文件不存在时会抛异常
@@ -259,7 +289,7 @@ public class JSchRemoteShell extends Shell {
             }
 
             return true;
-        } catch (JSchException | SftpException | IOException ex) {
+        } catch (JSchException | SftpException ex) {
             throw new ShellException("传输文件失败: " + ex.getLocalizedMessage(), ex);
         } finally {
             if (channel != null) {
@@ -353,7 +383,7 @@ public class JSchRemoteShell extends Shell {
             var name = remotePath.getName(i).toString();
             if ("~".equals(name)) {
                 // 进入用户目录
-                this.cd(channel, Path.of(channel.getHome()));
+                this.cd(channel, remoteHome);
             } else if (".".equals(name)) {
                 // 进入当前目录，忽略
             } else {
@@ -362,16 +392,71 @@ public class JSchRemoteShell extends Shell {
         }
     }
 
-    private Path toAbsolute(ChannelSftp channel, Path path) throws SftpException, IOException {
+    /**
+     * 将本地相对路径解析成绝对路径
+     */
+    private Path toLocalAbsolute(Path path) throws IOException {
         if (path.isAbsolute()) {
             return path.toAbsolutePath();
         } else {
+            var localHome = Path.of(System.getProperty("user.home"));
             return switch (path.getName(0).toString()) {
-                case "." -> Path.of(channel.pwd()).resolve(path.subpath(1, path.getNameCount())).toAbsolutePath();
-                case ".." -> Path.of(channel.pwd()).resolve(path).toAbsolutePath();
-                case "~" -> Path.of(channel.getHome()).resolve(path.subpath(1, path.getNameCount())).toAbsolutePath();
-                default -> throw new IOException("解析路径异常");
+                case ".", ".." -> path.toAbsolutePath();
+                case "~" -> {
+                    if (path.getNameCount() == 1) {
+                        yield localHome;
+                    } else {
+                        yield localHome.resolve(path.subpath(1, path.getNameCount())).toAbsolutePath();
+                    }
+                }
+                default -> throw new IOException("解析本地路径异常");
             };
+        }
+    }
+
+    /**
+     * 将远程相对路径解析成绝对路径
+     *
+     * <ul>
+     *     <li>.：相对工作目录</li>
+     *     <li>..：相对工作目录的上级目录</li>
+     *     <li>~：相对用户目录</li>
+     * </ul>
+     */
+    private Path toRemoteAbsolute(Path path) throws IOException {
+        if (path.isAbsolute()) {
+            return path;
+        } else {
+            var remotePath = switch (path.getName(0).toString()) {
+                case "." -> {
+                    if (path.getNameCount() == 1) {
+                        yield this.workDir;
+                    } else {
+                        yield this.workDir.resolve(path.subpath(1, path.getNameCount()));
+                    }
+                }
+                case ".." -> {
+                    if (path.getNameCount() == 1) {
+                        yield this.workDir.getParent();
+                    } else {
+                        yield this.workDir.getParent().resolve(path.subpath(1, path.getNameCount()));
+                    }
+                }
+                case "~" -> {
+                    if (path.getNameCount() == 1) {
+                        yield this.remoteHome;
+                    } else {
+                        yield this.remoteHome.resolve(path.subpath(1, path.getNameCount()));
+                    }
+                }
+                default -> throw new IOException("解析远程路径异常");
+            };
+
+            if (remotePath.startsWith(Path.of("~"))) {
+                return this.remoteHome.resolve(remotePath.subpath(1, path.getNameCount()));
+            } else {
+                return remotePath;
+            }
         }
     }
 
@@ -395,8 +480,9 @@ public class JSchRemoteShell extends Shell {
             channel = (ChannelExec) this.session.openChannel("exec");
             this.environments.forEach(channel::setEnv);
 
+            var execPath = this.toRemoteAbsolute(this.workDir);
             // 设置命令
-            channel.setCommand(commandBuilder.toString());
+            channel.setCommand("cd " + execPath + " && " + commandBuilder);
 
             // 设置标准输出
             var stdout = new ByteArrayOutputStream();
