@@ -26,6 +26,7 @@ package central.bean;
 
 /**
  * Codeable Entity
+ * <p>
  * 可设置标识实体
  *
  * @author Alan Yeh

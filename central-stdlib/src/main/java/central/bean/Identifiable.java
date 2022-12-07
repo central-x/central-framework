@@ -27,6 +27,7 @@ package central.bean;
 
 /**
  * Identifiable Entity
+ * <p>
  * 可唯一标识的实体
  *
  * @author Alan Yeh

@@ -84,6 +84,7 @@ public class Convertx {
 
     /**
      * 已注册的类型转换器
+     * <p>
      * target class name -> converter
      */
     private final Map<String, List<Converter<?>>> converters = new ConcurrentHashMap<>();
@@ -132,7 +133,8 @@ public class Convertx {
 
     /**
      * 已缓存的转换器
-     * 因为如果没找到转换器的话，需要依次调用各个 Converter::support 方法来判断是否支持的数据转换，相对来说比较低效
+     * <p>
+     * 因为如果没找到转换器的话，需要依次调用各个 Converter::support 方法来判断是否支持的数据转换，相对来说比较低效。
      * 因此将已知的已匹配的类型保存起来，这样下次就可以直接获取到指定的转换器了
      */
     private final Map<MatchedKey, Converter<?>> cachedConverter = new ConcurrentHashMap<>();
@@ -209,9 +211,8 @@ public class Convertx {
         }
 
         Converter<?> converter = this.getConverter(source.getClass(), target);
-        if (UnsupportedConverter.getInstance() == converter) {
-            throw new ConvertException(source, target);
-        }
+
+        Assertx.mustNotEquals(UnsupportedConverter.getInstance(), converter, () -> new ConvertException(source, target));
 
         return (T) converter.convert(source);
     }

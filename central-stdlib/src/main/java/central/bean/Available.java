@@ -26,6 +26,7 @@ package central.bean;
 
 /**
  * Available Entity
+ * <p>
  * 启用/禁用
  *
  * @author Alan Yeh

@@ -26,6 +26,7 @@ package central.bean;
 
 /**
  * Tenantable Entity
+ * <p>
  * 可划分租户的数据
  *
  * @author Alan Yeh

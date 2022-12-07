@@ -28,6 +28,8 @@ import central.util.converter.ConvertException;
 import central.util.converter.Converter;
 
 /**
+ * Float Converter
+ *
  * @author Alan Yeh
  * @since 2022/07/11
  */

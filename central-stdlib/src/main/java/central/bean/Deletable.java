@@ -26,6 +26,7 @@ package central.bean;
 
 /**
  * Deletable Entity
+ * <p>
  * 可标志为已删除（软删除）
  *
  * @author Alan Yeh

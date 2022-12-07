@@ -28,6 +28,7 @@ import jakarta.persistence.PreUpdate;
 
 /**
  * Versional Entity
+ * <p>
  * 版本化的实体
  *
  * @author Alan Yeh
