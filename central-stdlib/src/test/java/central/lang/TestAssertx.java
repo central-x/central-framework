@@ -24,6 +24,9 @@
 
 package central.lang;
 
+import central.lang.reflect.TypeReference;
+import central.util.Collectionx;
+import central.util.Mapx;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -44,12 +47,24 @@ public class TestAssertx {
      * @see Assertx#mustTrue
      */
     @Test
-    public void case2() {
+    public void case1() {
         assertThrows(IllegalArgumentException.class, () -> Assertx.mustTrue("test".getBytes().length < 1, "Test Assertx#mustTrue"));
 
         assertThrows(IllegalStateException.class, () -> Assertx.mustTrue("test".getBytes().length < 1, IllegalStateException::new, "Test Assertx#mustTrue"));
 
         assertThrows(IllegalStateException.class, () -> Assertx.mustTrue("test".getBytes().length < 1, () -> new IllegalStateException("Test Assertx#mustTrue")));
+    }
+
+    /**
+     * @see Assertx#mustFalse
+     */
+    @Test
+    public void case2() {
+        assertThrows(IllegalArgumentException.class, () -> Assertx.mustFalse("test".getBytes().length > 1, "Test Assertx#mustFalse"));
+
+        assertThrows(IllegalStateException.class, () -> Assertx.mustFalse("test".getBytes().length > 1, IllegalStateException::new, "Test Assertx#mustFalse"));
+
+        assertThrows(IllegalStateException.class, () -> Assertx.mustFalse("test".getBytes().length > 1, () -> new IllegalStateException("Test Assertx#mustFalse")));
     }
 
     /**
@@ -93,12 +108,21 @@ public class TestAssertx {
      */
     @Test
     public void case6() {
-        Integer obj = null;
-        assertThrows(IllegalArgumentException.class, () -> Assertx.requireNotNull(obj, "Test Assertx#{}mustNotNull"));
+        var array = new String[0];
+        assertThrows(IllegalArgumentException.class, () -> {
+            var value = Assertx.requireNotNull(Arrayx.getFirstOrNull(array), "Test Assertx#requireNotNull");
+            assertNotNull(value);
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotNull(obj, IllegalStateException::new, "Test Assertx#{}mustNotNull"));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotNull(Arrayx.getFirstOrNull(array), IllegalStateException::new, "Test Assertx#requireNotNull");
+            assertNotNull(value);
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotNull(obj, () -> new IllegalStateException("Test Assertx#{}mustNotNull")));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotNull(Arrayx.getFirstOrNull(array), () -> new IllegalStateException("Test Assertx#requireNotNull"));
+            assertNotNull(value);
+        });
     }
 
     /**
@@ -106,12 +130,12 @@ public class TestAssertx {
      */
     @Test
     public void case7() {
-        Integer obj = null;
-        assertThrows(IllegalArgumentException.class, () -> Assertx.mustNotNull(obj, "Test Assertx#{}mustNotNull"));
+        var array = new String[0];
+        assertThrows(IllegalArgumentException.class, () -> Assertx.mustNotNull(Arrayx.getFirstOrNull(array), "Test Assertx#mustNotNull"));
 
-        assertThrows(IllegalStateException.class, () -> Assertx.mustNotNull(obj, IllegalStateException::new, "Test Assertx#{}mustNotNull"));
+        assertThrows(IllegalStateException.class, () -> Assertx.mustNotNull(Arrayx.getFirstOrNull(array), IllegalStateException::new, "Test Assertx#mustNotNull"));
 
-        assertThrows(IllegalStateException.class, () -> Assertx.mustNotNull(obj, () -> new IllegalStateException("Test Assertx#{}mustNotNull")));
+        assertThrows(IllegalStateException.class, () -> Assertx.mustNotNull(Arrayx.getFirstOrNull(array), () -> new IllegalStateException("Test Assertx#mustNotNull")));
     }
 
     /**
@@ -119,11 +143,20 @@ public class TestAssertx {
      */
     @Test
     public void case8() {
-        assertThrows(IllegalArgumentException.class, () -> Assertx.requireNotEmpty("", "Test Assertx#mustNotEmpty"));
+        assertThrows(IllegalArgumentException.class, () -> {
+            var value = Assertx.requireNotEmpty("", "Test Assertx#requireNotEmpty");
+            assertTrue(Stringx.isNotEmpty(value));
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotEmpty("", IllegalStateException::new, "Test Assertx#mustNotEmpty"));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotEmpty("", IllegalStateException::new, "Test Assertx#requireNotEmpty");
+            assertTrue(Stringx.isNotEmpty(value));
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotEmpty("", () -> new IllegalStateException("Test Assertx#mustNotEmpty")));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotEmpty("", () -> new IllegalStateException("Test Assertx#requireNotEmpty"));
+            assertTrue(Stringx.isNotEmpty(value));
+        });
     }
 
     /**
@@ -156,11 +189,20 @@ public class TestAssertx {
      */
     @Test
     public void case11() {
-        assertThrows(IllegalArgumentException.class, () -> Assertx.requireNotBlank("    ", "Test Assertx#mustNotBlank"));
+        assertThrows(IllegalArgumentException.class, () -> {
+            var value = Assertx.requireNotBlank("    ", "Test Assertx#requireNotBlank");
+            assertTrue(Stringx.isNotBlank(value));
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotBlank("    ", IllegalStateException::new, "Test Assertx#mustNotBlank"));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotBlank("    ", IllegalStateException::new, "Test Assertx#requireNotBlank");
+            assertTrue(Stringx.isNotBlank(value));
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotBlank("    ", () -> new IllegalStateException("Test Assertx#mustNotBlank")));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotBlank("    ", () -> new IllegalStateException("Test Assertx#requireNotBlank"));
+            assertTrue(Stringx.isNotBlank(value));
+        });
     }
 
     /**
@@ -192,11 +234,21 @@ public class TestAssertx {
      */
     @Test
     public void case14() {
-        assertThrows(IllegalArgumentException.class, () -> Assertx.requireNotEmpty(new String[0], "Test Assertx#mustNotEmpty"));
+        assertThrows(IllegalArgumentException.class, () -> {
+            var value = Assertx.requireNotEmpty(new String[0], "Test Assertx#requireNotEmpty");
+            assertTrue(Arrayx.isNotEmpty(value));
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotEmpty(new String[0], IllegalStateException::new, "Test Assertx#mustNotEmpty"));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotEmpty(new String[0], IllegalStateException::new, "Test Assertx#requireNotEmpty");
+            assertTrue(Arrayx.isNotEmpty(value));
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotEmpty(new String[0], () -> new IllegalStateException("Test Assertx#mustNotEmpty")));
+        });
+
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotEmpty(new String[0], () -> new IllegalStateException("Test Assertx#requireNotEmpty"));
+            assertTrue(Arrayx.isNotEmpty(value));
+        });
     }
 
     /**
@@ -228,11 +280,20 @@ public class TestAssertx {
      */
     @Test
     public void case17() {
-        assertThrows(IllegalArgumentException.class, () -> Assertx.requireNotEmpty(new ArrayList<>(), "Test Assertx#mustNullOrEmpty"));
+        assertThrows(IllegalArgumentException.class, () -> {
+            var value = Assertx.requireNotEmpty(new ArrayList<>(), "Test Assertx#requireNotEmpty");
+            assertTrue(Collectionx.isNotEmpty(value));
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotEmpty(new ArrayList<>(), IllegalStateException::new, "Test Assertx#mustNullOrEmpty"));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotEmpty(new ArrayList<>(), IllegalStateException::new, "Test Assertx#requireNotEmpty");
+            assertTrue(Collectionx.isNotEmpty(value));
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotEmpty(new ArrayList<>(), () -> new IllegalStateException("Test Assertx#mustNullOrEmpty")));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotEmpty(new ArrayList<>(), () -> new IllegalStateException("Test Assertx#requireNotEmpty"));
+            assertTrue(Collectionx.isNotEmpty(value));
+        });
     }
 
     /**
@@ -264,11 +325,20 @@ public class TestAssertx {
      */
     @Test
     public void case20() {
-        assertThrows(IllegalArgumentException.class, () -> Assertx.requireNotEmpty(Map.of(), "Test Assertx#mustNotEmpty"));
+        assertThrows(IllegalArgumentException.class, () -> {
+            var value = Assertx.requireNotEmpty(Map.of(), "Test Assertx#requireNotEmpty");
+            assertTrue(Mapx.isNotEmpty(value));
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotEmpty(Map.of(), IllegalStateException::new, "Test Assertx#mustNotEmpty"));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotEmpty(Map.of(), IllegalStateException::new, "Test Assertx#requireNotEmpty");
+            assertTrue(Mapx.isNotEmpty(value));
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireNotEmpty(Map.of(), () -> new IllegalStateException("Test Assertx#mustNotEmpty")));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireNotEmpty(Map.of(), () -> new IllegalStateException("Test Assertx#requireNotEmpty"));
+            assertTrue(Mapx.isNotEmpty(value));
+        });
     }
 
     /**
@@ -300,11 +370,35 @@ public class TestAssertx {
      */
     @Test
     public void case23() {
-        assertThrows(IllegalArgumentException.class, () -> Assertx.requireInstanceOf(String.class, 1, "Test Assertx#mustInstanceOf"));
+        assertThrows(IllegalArgumentException.class, () -> {
+            var value = Assertx.requireInstanceOf(TypeReference.of(String.class), 1, "Test Assertx#requireInstanceOf");
+            assertTrue(String.class.isAssignableFrom(value.getClass()));
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireInstanceOf(String.class, 1, IllegalStateException::new, "Test Assertx#mustInstanceOf"));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireInstanceOf(TypeReference.of(String.class), 1, IllegalStateException::new, "Test Assertx#requireInstanceOf");
+            assertTrue(String.class.isAssignableFrom(value.getClass()));
+        });
 
-        assertThrows(IllegalStateException.class, () -> Assertx.requireInstanceOf(String.class, 1, () -> new IllegalStateException("Test Assertx#mustInstanceOf")));
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireInstanceOf(TypeReference.of(String.class), 1, () -> new IllegalStateException("Test Assertx#requireInstanceOf"));
+            assertTrue(String.class.isAssignableFrom(value.getClass()));
+        });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            var value = Assertx.requireInstanceOf(String.class, 1, "Test Assertx#requireInstanceOf");
+            assertTrue(String.class.isAssignableFrom(value.getClass()));
+        });
+
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireInstanceOf(String.class, 1, IllegalStateException::new, "Test Assertx#requireInstanceOf");
+            assertTrue(String.class.isAssignableFrom(value.getClass()));
+        });
+
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireInstanceOf(String.class, 1, () -> new IllegalStateException("Test Assertx#requireInstanceOf"));
+            assertTrue(String.class.isAssignableFrom(value.getClass()));
+        });
     }
 
     /**
@@ -320,7 +414,28 @@ public class TestAssertx {
     }
 
     /**
-     * @see Assertx#mustInstanceOf
+     * @see Assertx#requireAssignableFrom
+     */
+    @Test
+    public void case25() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            var value = Assertx.requireAssignableFrom(String.class, Integer.class, "Test Assertx#requireAssignableFrom");
+            assertSame(String.class, value);
+        });
+
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireAssignableFrom(String.class, Integer.class, IllegalStateException::new, "Test Assertx#requireAssignableFrom");
+            assertSame(String.class, value);
+        });
+
+        assertThrows(IllegalStateException.class, () -> {
+            var value = Assertx.requireAssignableFrom(String.class, Integer.class, () -> new IllegalStateException("Test Assertx#requireAssignableFrom"));
+            assertSame(String.class, value);
+        });
+    }
+
+    /**
+     * @see Assertx#mustAssignableFrom
      */
     @Test
     public void case26() {
