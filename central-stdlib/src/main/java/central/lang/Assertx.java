@@ -48,7 +48,7 @@ import java.util.function.Supplier;
 public class Assertx {
 
     /**
-     * Assertx.must(b instance Integer, ClassCastException::new, "Cannot case 'b' to {}", Integer.class.getName());
+     * Assertx.must(b instance Integer, ClassCastException::new, "Cannot cast 'b' to {}", Integer.class.getName());
      */
     private static <E extends Exception> void must(boolean expression, Function<String, E> throwable, String message, Object... args) throws E {
         if (!expression) {
@@ -57,7 +57,7 @@ public class Assertx {
     }
 
     /**
-     * Assertx.must(b instance Integer, () -> new ClassCastException("Cannot case 'b' to java.lang.Integer"));
+     * Assertx.must(b instance Integer, () -> new ClassCastException("Cannot cast 'b' to java.lang.Integer"));
      */
     private static <E extends Exception> void must(boolean expression, Supplier<E> throwable) throws E {
         if (!expression) {
@@ -73,14 +73,14 @@ public class Assertx {
     }
 
     /**
-     * Assertx.mustTrue(index > length, IndexOutOfBoundsException::new, "Index out of range: " + index);
+     * Assertx.mustTrue(index < length, IndexOutOfBoundsException::new, "Index out of range: " + index);
      */
     public static <E extends Exception> void mustTrue(boolean expression, Function<String, E> throwable, String message, Object... args) throws E {
         must(expression, throwable, message, args);
     }
 
     /**
-     * Assertx.mustTrue(index > length, () -> new IndexOutOfBoundsException("Index out of range: " + index));
+     * Assertx.mustTrue(index < length, () -> new IndexOutOfBoundsException("Index out of range: " + index));
      */
     public static <E extends Exception> void mustTrue(boolean expression, Supplier<E> throwable) throws E {
         must(expression, throwable);
@@ -94,14 +94,14 @@ public class Assertx {
     }
 
     /**
-     * Assertx.mustFalse(index <= length, IndexOutOfBoundsException::new, "Index out of range: " + index);
+     * Assertx.mustFalse(index > length, IndexOutOfBoundsException::new, "Index out of range: " + index);
      */
     public static <E extends Exception> void mustFalse(boolean expression, Function<String, E> throwable, String message, Object... args) throws E {
         must(!expression, throwable, message, args);
     }
 
     /**
-     * Assertx.mustFalse(index <= length, () -> new IndexOutOfBoundsException("Index out of range: " + index));
+     * Assertx.mustFalse(index > length, () -> new IndexOutOfBoundsException("Index out of range: " + index));
      */
     public static <E extends Exception> void mustFalse(boolean expression, Supplier<E> throwable) throws E {
         must(!expression, throwable);
