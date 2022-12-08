@@ -624,7 +624,7 @@ public class Assertx {
     }
 
     /**
-     * var type = Assertx.requireAssignableFrom(Number.class, type, "Number expected")
+     * var value = Assertx.requireAssignableFrom(Number.class, type, "Number expected")
      */
     public static <T> Class<T> requireAssignableFrom(@Nonnull Class<T> superType, @Nullable Class<?> subType, String message, Object... args) {
         mustNotNull(superType, NullPointerException::new, "Argument 'superType' must not null");
@@ -633,7 +633,7 @@ public class Assertx {
     }
 
     /**
-     * var type = Assertx.requireAssignableFrom(Number.class, type, FormatException::new, "Number expected")
+     * var value = Assertx.requireAssignableFrom(Number.class, type, FormatException::new, "Number expected")
      */
     public static <T, E extends Exception> Class<T> requireAssignableFrom(@Nonnull Class<T> superType, @Nullable Class<?> subType, Function<String, E> throwable, String message, Object... args) throws E {
         mustNotNull(superType, NullPointerException::new, "Argument 'superType' must not null");
@@ -642,7 +642,7 @@ public class Assertx {
     }
 
     /**
-     * var type = Assertx.requireAssignableFrom(Number.class, type, () -> new FormatException("Number expected"))
+     * var value = Assertx.requireAssignableFrom(Number.class, type, () -> new FormatException("Number expected"))
      */
     public static <T, E extends Exception> Class<T> requireAssignableFrom(@Nonnull Class<T> superType, @Nullable Class<?> subType, Supplier<E> throwable) throws E {
         mustNotNull(superType, NullPointerException::new, "Argument 'superType' must not null");

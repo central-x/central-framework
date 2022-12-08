@@ -24,59 +24,28 @@
 
 package central.util;
 
-import java.util.function.Supplier;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * 延迟初始化
+ * LazyValue Test Cases
  *
  * @author Alan Yeh
- * @since 2022/07/13
+ * @since 2022/12/09
  */
-public class LazyValue<T> {
-    /**
-     * 实例
-     */
-    private volatile T instance;
+public class TestLazyValue {
 
-    /**
-     * 实例初始化器
-     */
-    private final Supplier<T> supplier;
-
-    /**
-     * 构建延迟初始化器
-     *
-     * @param supplier 实体初始化器
-     */
-    public LazyValue(Supplier<T> supplier) {
-        this.supplier = supplier;
-    }
-
-    /**
-     * 构建延迟初始化器
-     *
-     * @param supplier 实体初始化器
-     */
-    public static <T> LazyValue<T> of(Supplier<T> supplier) {
-        return new LazyValue<>(supplier);
-    }
-
-    /**
-     * 当前是否已经初始化
-     */
-    public boolean isInitialized() {
-        return this.instance != null;
-    }
-
-    /**
-     * 获取实例
-     * <p>
-     * 如果实例不存在，则通过实始初始化器初始化实例
-     */
-    public synchronized T get() {
-        if (this.instance == null) {
-            this.instance = supplier.get();
-        }
-        return this.instance;
+    @Test
+    public void case1(){
+        var lazy = LazyValue.of(() -> Collections.singletonList("test"));
+        assertFalse(lazy.isInitialized());
+        var value = lazy.get();
+        assertNotNull(value);
+        assertTrue(lazy.isInitialized());
+        assertEquals(1, value.size());
+        assertEquals("test", value.get(0));
     }
 }
