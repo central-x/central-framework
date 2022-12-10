@@ -63,7 +63,7 @@ public class FindPageByHandler implements MapperHandler {
         Long count = executor.selectSingle(countScript, Long.class);
 
         if (count == null || count.equals(0L)) {
-            return Page.emptyPage();
+            return Page.empty();
         } else {
             var selectScript = builder.forFindBy(executor, meta, pageSize, (pageIndex - 1) * pageSize, conditions, orders);
             var data = executor.select(selectScript, meta.getType());

@@ -30,7 +30,7 @@ import central.lang.PublicApi;
 import java.util.Objects;
 
 /**
- * Optional Entity
+ * Optional Enum
  *
  * @author Alan Yeh
  * @since 2022/07/11
@@ -56,12 +56,17 @@ public interface OptionalEnum<V> {
         if (value == null) {
             return false;
         }
+        // 如果两个都是 OptionalEnum，且对方与当前是同一个类，则对比其值
         if (value.getClass().isAssignableFrom(this.getClass())) {
             return Objects.equals(this, value);
         }
+        // 对比当前选项的值是否相等
         return Objects.equals(this.getValue(), value);
     }
 
+    /**
+     * 查找与指定值相等的选项
+     */
     static <T extends OptionalEnum<?>> T resolve(Class<? extends OptionalEnum<?>> type, Object value) {
         return (T) Arrayx.asStream(type.getEnumConstants())
                 .filter(it -> Objects.equals(it.getValue(), value))

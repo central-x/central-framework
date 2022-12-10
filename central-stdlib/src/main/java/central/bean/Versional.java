@@ -48,7 +48,7 @@ public interface Versional {
     void setVersion(Integer version);
 
     /**
-     * 增长版本号
+     * 递增版本号
      */
     @PreUpdate
     default void increaseVersion() {

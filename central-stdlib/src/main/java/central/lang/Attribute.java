@@ -89,11 +89,7 @@ public class Attribute<T> implements Serializable {
      * Get nonnull value from supplier
      */
     public @Nonnull T requireValue() {
-        var value = this.getValue();
-        if (value == null) {
-            throw new IllegalStateException("Cannot return null value form supplier");
-        }
-        return value;
+        return Assertx.requireNotNull(this.getValue(), IllegalStateException::new, "Cannot return null value form supplier");
     }
 
     @Override

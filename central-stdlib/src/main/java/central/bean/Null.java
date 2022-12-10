@@ -24,6 +24,7 @@
 
 package central.bean;
 
+import central.lang.Assertx;
 import lombok.Getter;
 
 import java.io.Serial;
@@ -46,9 +47,8 @@ public class Null implements Serializable {
     private String value;
 
     public void setValue(String value) {
-        if (value != null) {
-            throw new IllegalArgumentException("value must be null");
-        }
+        Assertx.mustNull(value, "value must be null");
+        this.value = value;
     }
 
     @Override

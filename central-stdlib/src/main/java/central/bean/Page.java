@@ -35,7 +35,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 分页结果
+ * 分页
  *
  * @author Alan Yeh
  * @since 2022/07/10
@@ -83,8 +83,8 @@ public class Page<T extends Serializable> implements Serializable {
     /**
      * 创建空分页
      */
-    public static <T extends Serializable> Page<T> emptyPage() {
-        return new Page<>(Collections.emptyList(), Pager.emptyPager());
+    public static <T extends Serializable> Page<T> empty() {
+        return new Page<>(Collections.emptyList(), Pager.empty());
     }
 
     public static  <T extends Serializable> Page<T> of(List<T> data, Pager pager) {
@@ -121,7 +121,7 @@ public class Page<T extends Serializable> implements Serializable {
          */
         private long itemCount;
 
-        public static Pager emptyPager() {
+        public static Pager empty() {
             return new Pager(0, 0, 0, 0);
         }
     }
