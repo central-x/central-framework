@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>3.0.0-RC1</version>
+        <version>3.0.1</version>
         <relativePath/>
     </parent>
 
@@ -37,7 +37,7 @@
         <central.version>1.0.x-SNAPSHOT</central.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <spring-cloud.version>2022.0.0-RC1</spring-cloud.version>
+        <spring-cloud.version>2022.0.0</spring-cloud.version>
         <jsr305.version>3.0.2</jsr305.version>
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
         <bcpkix-jdk15on.version>1.70</bcpkix-jdk15on.version>
@@ -47,6 +47,8 @@
         <jwt.version>4.0.0</jwt.version>
         <apache-sshd.version>2.9.2</apache-sshd.version>
         <jsch.version>0.1.55</jsch.version>
+        <jakarta-mail.version>2.0.1</jakarta-mail.version>
+        <beetl.version>3.13.0.RELEASE</beetl.version>
     </properties>
 
     <!-- 依赖版本管理 -->
@@ -189,7 +191,14 @@
             <dependency>
                 <groupId>com.ibeetl</groupId>
                 <artifactId>beetl</artifactId>
-                <version>3.13.0.RELEASE</version>
+                <version>${beetl.version}</version>
+            </dependency>
+
+            <!-- Mail 客户端 -->
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>jakarta.mail</artifactId>
+                <version>${jakarta-mail.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
