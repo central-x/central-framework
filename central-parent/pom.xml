@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
         <relativePath/>
     </parent>
 
@@ -37,7 +37,7 @@
         <central.version>1.0.x-SNAPSHOT</central.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <spring-cloud.version>2022.0.0</spring-cloud.version>
+        <spring-cloud.version>2022.0.1</spring-cloud.version>
         <jsr305.version>3.0.2</jsr305.version>
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
         <bcpkix-jdk15on.version>1.70</bcpkix-jdk15on.version>
@@ -296,7 +296,7 @@
         <repository>
             <id>mirror</id>
             <name>Mirror Repository</name>
-            <url>https://mirror.yeh.cn/repository/maven-public/</url>
+            <url>https://mirror.central-x.com/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -305,7 +305,7 @@
         <pluginRepository>
             <id>mirror</id>
             <name>Mirror Repository</name>
-            <url>https://mirror.yeh.cn/repository/maven-public/</url>
+            <url>https://mirror.central-x.com/repository/maven-public/</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -314,12 +314,12 @@
         <repository>
             <id>centralx-releases</id>
             <name>CentralX Release Repository</name>
-            <url>https://deploy.yeh.cn/repository/maven-releases/</url>
+            <url>https://deploy.central-x.com/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>centralx-snapshots</id>
             <name>CentralX Snapshot Repository</name>
-            <url>https://deploy.yeh.cn/repository/maven-snapshots/</url>
+            <url>https://deploy.central-x.com/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
