@@ -24,7 +24,7 @@
 
 package central.pluglet;
 
-import central.lang.reflect.InstanceReference;
+import central.lang.reflect.InstanceRef;
 
 /**
  * 处理实例生命周期
@@ -36,18 +36,18 @@ public interface LifeCycleProcessor {
     /**
      * 实例刚被创建
      */
-    default void afterCreated(InstanceReference<?> instance) {
+    default void afterCreated(InstanceRef<?> instance) {
     }
 
     /**
      * 实例的属性已初始化
      */
-    default void afterPropertySet(InstanceReference<?> instance) {
+    default void afterPropertySet(InstanceRef<?> instance) {
     }
 
     /**
      * 实例将被销毁
      */
-    default void beforeDestroy(InstanceReference<?> instance) {
+    default void beforeDestroy(InstanceRef<?> instance) {
     }
 }

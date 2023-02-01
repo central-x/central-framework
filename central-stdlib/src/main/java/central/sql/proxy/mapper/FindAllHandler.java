@@ -24,7 +24,11 @@
 
 package central.sql.proxy.mapper;
 
-import central.sql.Orders;
+import central.bean.MethodNotImplementedException;
+import central.lang.reflect.MethodSignature;
+import central.sql.data.Entity;
+import central.sql.query.Columns;
+import central.sql.query.Orders;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
@@ -35,6 +39,7 @@ import central.lang.Arrayx;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * FindAll Handler
@@ -46,8 +51,23 @@ import java.sql.SQLException;
 public class FindAllHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var orders = (Orders<?>) Arrayx.getFirstOrNull(args);
-        var script = builder.forFindBy(executor, meta, null, null, null, orders);
+        Columns<?> columns = null;
+        Orders<?> orders = null;
+
+        var signature = MethodSignature.of(method);
+        if (signature.equals(MethodSignature.of("findAll", List.class, Columns.class, Orders.class))) {
+            columns = (Columns<?>) Arrayx.getOrNull(args, 0);
+            orders = (Orders<?>) Arrayx.getOrNull(args, 1);
+        } else if (signature.equals(MethodSignature.of("findAll", List.class, Orders.class))) {
+            orders = (Orders<?>) Arrayx.getOrNull(args, 0);
+        } else if (signature.equals(MethodSignature.of("findAll", Entity.class))) {
+
+        } else {
+            throw new MethodNotImplementedException("MethodNotImplemented: " + signature.getSignature());
+        }
+
+
+        var script = builder.forFindBy(executor, meta, null, null, columns, null, orders);
         return executor.select(script, meta.getType());
     }
 }

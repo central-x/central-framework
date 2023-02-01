@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-package central.sql;
+package central.sql.query;
 
 import central.sql.data.Entity;
 import central.bean.Orderable;
 import central.bean.Treeable;
 import central.validation.Validatable;
 import central.lang.Assertx;
-import central.lang.reflect.PropertyReference;
+import central.lang.reflect.PropertyRef;
 import central.lang.Arrayx;
 import central.util.Collectionx;
 import central.util.Listx;
@@ -151,7 +151,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public Conditions<T> eq(PropertyReference<T, ?> property, Object value) {
+    public Conditions<T> eq(PropertyRef<T, ?> property, Object value) {
         if (value == null) {
             return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
         } else {
@@ -179,7 +179,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public Conditions<T> ne(PropertyReference<T, ?> property, Object value) {
+    public Conditions<T> ne(PropertyRef<T, ?> property, Object value) {
         if (value == null) {
             return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
         } else {
@@ -207,7 +207,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public Conditions<T> gt(PropertyReference<T, ?> property, Object value) {
+    public Conditions<T> gt(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GT, value));
     }
 
@@ -227,7 +227,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public Conditions<T> ge(PropertyReference<T, ?> property, Object value) {
+    public Conditions<T> ge(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GE, value));
     }
 
@@ -247,7 +247,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public Conditions<T> lt(PropertyReference<T, ?> property, Object value) {
+    public Conditions<T> lt(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LT, value));
     }
 
@@ -267,7 +267,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public Conditions<T> le(PropertyReference<T, ?> property, Object value) {
+    public Conditions<T> le(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LE, value));
     }
 
@@ -287,7 +287,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public Conditions<T> like(PropertyReference<T, ?> property, Object value) {
+    public Conditions<T> like(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LIKE, value));
     }
 
@@ -307,7 +307,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param value    值
      */
-    public Conditions<T> notLike(PropertyReference<T, ?> property, Object value) {
+    public Conditions<T> notLike(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_LIKE, value));
     }
 
@@ -328,7 +328,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param start    开始值
      * @param end      结束值
      */
-    public Conditions<T> between(PropertyReference<T, ?> property, Object start, Object end) {
+    public Conditions<T> between(PropertyRef<T, ?> property, Object start, Object end) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.BETWEEN, start, end));
     }
 
@@ -350,7 +350,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param start    开始值
      * @param end      结束值
      */
-    public Conditions<T> notBetween(PropertyReference<T, ?> property, Object start, Object end) {
+    public Conditions<T> notBetween(PropertyRef<T, ?> property, Object start, Object end) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_BETWEEN, start, end));
     }
 
@@ -370,7 +370,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      *
      * @param property 实体属性的Getter方法引用，Entity::Getter
      */
-    public Conditions<T> isNull(PropertyReference<T, ?> property) {
+    public Conditions<T> isNull(PropertyRef<T, ?> property) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
     }
 
@@ -388,7 +388,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      *
      * @param property 实体属性的Getter方法引用，Entity::Getter
      */
-    public Conditions<T> isNotNull(PropertyReference<T, ?> property) {
+    public Conditions<T> isNotNull(PropertyRef<T, ?> property) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
     }
 
@@ -407,7 +407,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param args     数据项
      */
-    public Conditions<T> in(PropertyReference<T, ?> property, Object... args) {
+    public Conditions<T> in(PropertyRef<T, ?> property, Object... args) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IN, args));
     }
 
@@ -427,7 +427,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param args     数据项
      */
-    public Conditions<T> notIn(PropertyReference<T, ?> property, Object... args) {
+    public Conditions<T> notIn(PropertyRef<T, ?> property, Object... args) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_IN, args));
     }
 
@@ -727,7 +727,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         /**
          * 使用方法引用构造条件
          */
-        public Condition(String id, String parentId, Integer order, Connectors connector, PropertyReference<T, ?> property, Operators operator, Object... values) {
+        public Condition(String id, String parentId, Integer order, Connectors connector, PropertyRef<T, ?> property, Operators operator, Object... values) {
             this.id = id;
             this.parentId = parentId;
             this.order = order;

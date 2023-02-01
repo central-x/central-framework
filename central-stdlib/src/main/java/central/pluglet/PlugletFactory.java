@@ -25,8 +25,8 @@
 package central.pluglet;
 
 import central.bean.InitializeException;
-import central.lang.reflect.InstanceReference;
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.InstanceRef;
+import central.lang.reflect.TypeRef;
 import central.pluglet.binder.ControlBinder;
 import central.pluglet.control.ControlResolver;
 import central.pluglet.control.PlugletControl;
@@ -83,33 +83,33 @@ public class PlugletFactory {
         // 注册控件解析
         Arrayx.asStream(properties.getProperty("resolvers").split("[,]"))
                 // 将 properties 里面指定的 ControlResolver 类加载出来
-                .map(TypeReference::of)
+                .map(TypeRef::of)
                 // 判断这些类是否都继承了 ControlResolver
                 .peek(type -> Assertx.mustAssignableFrom(ControlResolver.class, type.getRawClass(), () -> new InitializeException(PlugletFactory.class, Stringx.format("'{}' must assignable to {}", type.getName(), ControlResolver.class.getName()))))
                 // 实例化这些 ControlResolver
-                .map(TypeReference::newInstance)
+                .map(TypeRef::newInstance)
                 // 注册
                 .forEach(it -> this.resolvers.add((ControlResolver) it.getInstance()));
 
         // 注册字段绑定
         Arrayx.asStream(properties.getProperty("binders").split("[,]"))
                 // 将 properties 里面指定的 FieldBinder 类加载出来
-                .map(TypeReference::of)
+                .map(TypeRef::of)
                 // 判断这些类是否都继承了 FieldBinder
                 .peek(type -> Assertx.mustAssignableFrom(FieldBinder.class, type.getRawClass(), () -> new InitializeException(PlugletFactory.class, Stringx.format("'{}' must assignable to {}", type.getName(), ControlBinder.class.getName()))))
                 // 实例化这些 FieldBinder
-                .map(TypeReference::newInstance)
+                .map(TypeRef::newInstance)
                 // 注册
                 .forEach(it -> this.binders.add((FieldBinder) it.getInstance()));
 
         // 生命周期处理
         Arrayx.asStream(properties.getProperty("processes").split("[,]"))
                 // 将 properties 里面指定的 LifeCycleProcessor 类加载出来
-                .map(TypeReference::of)
+                .map(TypeRef::of)
                 // 判断这些类是否都继承了 LifeCycleProcessor
                 .peek(type -> Assertx.mustAssignableFrom(LifeCycleProcessor.class, type.getRawClass(), () -> new InitializeException(PlugletFactory.class, Stringx.format("'{}' must assignable to {}", type.getName(), LifeCycleProcessor.class.getName()))))
                 // 实例化这些 LifeCycleProcessor
-                .map(TypeReference::newInstance)
+                .map(TypeRef::newInstance)
                 // 注册
                 .forEach(it -> this.processors.add((LifeCycleProcessor) it.getInstance()));
     }
@@ -120,7 +120,7 @@ public class PlugletFactory {
      * @param pluglet 插件
      */
     public List<PlugletControl> getControls(Class<?> pluglet) {
-        var reference = TypeReference.of(pluglet);
+        var reference = TypeRef.of(pluglet);
         var fields = reference.getFields();
 
         var controls = new ArrayList<PlugletControl>();
@@ -147,7 +147,7 @@ public class PlugletFactory {
      * @return 插件实例
      */
     public <T> T create(Class<T> pluglet, Map<String, Object> params) {
-        var reference = TypeReference.of(pluglet);
+        var reference = TypeRef.of(pluglet);
         var instance = reference.newInstance();
 
         // 处理生命周期
@@ -178,7 +178,7 @@ public class PlugletFactory {
         if (pluglet == null){
             return;
         }
-        var instance = InstanceReference.of(pluglet);
+        var instance = InstanceRef.of(pluglet);
         for (var processor : this.processors){
             processor.beforeDestroy(instance);
         }

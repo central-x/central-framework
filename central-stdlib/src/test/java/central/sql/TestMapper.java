@@ -37,6 +37,9 @@ import central.sql.mapper.RoleAccountMapper;
 import central.sql.mapper.RoleMapper;
 import central.sql.migration.V1;
 import central.sql.proxy.Mapper;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 import central.util.Guidx;
 import central.lang.Stringx;
 import central.util.Version;
@@ -558,5 +561,116 @@ public class TestMapper {
         assertEquals(2, receives.size());
         assertTrue(receives.stream().anyMatch(it -> it.getId().equals(lis.getId())));
         assertTrue(receives.stream().anyMatch(it -> it.getId().equals(wangw.getId())));
+    }
+
+    /**
+     * 只查询指定字段（单表查询）
+     */
+    @Test
+    public void case9() {
+        var zhangs = new AccountEntity();
+        zhangs.setUsername("zhangs");
+        zhangs.setName("张三");
+        zhangs.setAge(18);
+        zhangs.setDeptId("");
+        zhangs.setEnabled(true);
+        zhangs.setAvatar(Guidx.nextID().getBytes(StandardCharsets.UTF_8));
+        zhangs.setSalary(BigDecimal.valueOf(10086.18d));
+        zhangs.setHiredate(System.currentTimeMillis());
+        zhangs.updateCreator("sa");
+
+        var inserted = this.accountMapper.insert(zhangs);
+        assertTrue(inserted);
+
+        var record = this.accountMapper.findById(zhangs.getId(), Columns.of(AccountEntity::getId, AccountEntity::getAge));
+        assertNotNull(record);
+        assertNotNull(record.getId());
+        assertNotNull(record.getAge());
+        assertNull(record.getUsername());
+        assertNull(record.getName());
+    }
+
+    /**
+     * 只查询指定字段（关联查询）
+     */
+    @Test
+    public void case10() {
+        // 添加部门
+        var depts = new ArrayList<DeptEntity>();
+        var hr = new DeptEntity();
+        hr.setCode("hr");
+        hr.setName("人力部");
+        hr.updateCreator("sa");
+        depts.add(hr);
+
+        var sale = new DeptEntity();
+        sale.setCode("sale");
+        sale.setName("销售部");
+        sale.updateCreator("sa");
+        depts.add(sale);
+        this.deptMapper.insertBatch(depts);
+
+        // 添加帐户
+        var accounts = new ArrayList<AccountEntity>();
+        var zhangs = new AccountEntity();
+        zhangs.setUsername("zhangs");
+        zhangs.setName("张三");
+        zhangs.setAge(18);
+        zhangs.setDeptId(hr.getId());
+        zhangs.setEnabled(true);
+        zhangs.setAvatar(Guidx.nextID().getBytes(StandardCharsets.UTF_8));
+        zhangs.setSalary(BigDecimal.valueOf(10086.18d));
+        zhangs.setHiredate(System.currentTimeMillis());
+        zhangs.updateCreator("sa");
+        accounts.add(zhangs);
+
+        var lis = new AccountEntity();
+        lis.setUsername("lis");
+        lis.setName("李四");
+        lis.setAge(19);
+        lis.setDeptId(hr.getId());
+        lis.setEnabled(false);
+        lis.setAvatar(Guidx.nextID().getBytes(StandardCharsets.UTF_8));
+        lis.setSalary(BigDecimal.valueOf(10086.18d));
+        lis.setHiredate(System.currentTimeMillis());
+        lis.updateCreator("sa");
+        accounts.add(lis);
+
+        var wangw = new AccountEntity();
+        wangw.setUsername("wangw");
+        wangw.setName("王五");
+        wangw.setAge(20);
+        wangw.setDeptId(sale.getId());
+        wangw.setEnabled(false);
+        wangw.setAvatar(Guidx.nextID().getBytes(StandardCharsets.UTF_8));
+        wangw.setSalary(BigDecimal.valueOf(10086.18d));
+        wangw.setHiredate(System.currentTimeMillis());
+        wangw.updateCreator("sa");
+        accounts.add(wangw);
+
+        this.accountMapper.insertBatch(accounts);
+
+
+        // 测试一对一、一对多关联查询
+        var hrs = this.accountMapper.findBy(Columns.of(AccountEntity::getId, AccountEntity::getAge), Conditions.of(AccountEntity.class).eq("dept.code", "hr"));
+        assertEquals(2, hrs.size());
+        assertTrue(hrs.stream().anyMatch(it -> it.getId().equals(zhangs.getId())));
+        assertTrue(hrs.stream().anyMatch(it -> it.getId().equals(lis.getId())));
+        assertTrue(hrs.stream().allMatch(it -> it.getAge() != null));
+        assertTrue(hrs.stream().allMatch(it -> it.getUsername() == null));
+        assertTrue(hrs.stream().allMatch(it -> it.getName() == null));
+
+        var sales = this.accountMapper.findBy(Columns.of(AccountEntity::getId, AccountEntity::getAge), Conditions.of(AccountEntity.class).eq("dept.code", "sale"));
+        assertEquals(1, sales.size());
+        assertTrue(sales.stream().anyMatch(it -> it.getId().equals(wangw.getId())));
+        assertTrue(sales.stream().allMatch(it -> it.getAge() != null));
+        assertTrue(sales.stream().allMatch(it -> it.getUsername() == null));
+        assertTrue(sales.stream().allMatch(it -> it.getName() == null));
+
+        var hrDepts = this.deptMapper.findBy(Columns.of(DeptEntity::getId, DeptEntity::getName), Conditions.of(DeptEntity.class).in("account.id", lis.getId(), zhangs.getId()));
+        assertEquals(1, hrDepts.size());
+        assertTrue(hrDepts.stream().anyMatch(it -> it.getId().equals(hr.getId())));
+        assertTrue(hrDepts.stream().allMatch(it -> it.getName() != null));
+        assertTrue(hrDepts.stream().allMatch(it -> it.getCode() == null));
     }
 }

@@ -24,7 +24,7 @@
 
 package central.starter.graphql.graphql.dto;
 
-import central.sql.Conditions;
+import central.sql.query.Conditions;
 import central.starter.graphql.annotation.GraphQLGetter;
 import central.starter.graphql.annotation.GraphQLType;
 import central.starter.graphql.graphql.entity.PersonEntity;

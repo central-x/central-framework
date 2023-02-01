@@ -24,10 +24,13 @@
 
 package central.sql.proxy.mapper;
 
+import central.bean.MethodNotImplementedException;
 import central.bean.Page;
 import central.lang.Assertx;
-import central.sql.Conditions;
-import central.sql.Orders;
+import central.lang.reflect.MethodSignature;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
@@ -51,12 +54,25 @@ public class FindPageByHandler implements MapperHandler {
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
         long pageIndex = (long) Arrayx.getOrNull(args, 0);
         long pageSize = (long) Arrayx.getOrNull(args, 1);
+        Columns<?> columns = null;
+        Conditions<?> conditions = null;
+        Orders<?> orders = null;
+
+        var signature = MethodSignature.of(method);
+        if (signature.equals(MethodSignature.of("findPageBy", Page.class, Long.class, Long.class, Conditions.class, Orders.class))) {
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 2);
+            orders = (Orders<?>) Arrayx.getOrNull(args, 3);
+        } else if (signature.equals(MethodSignature.of("findPageBy", Page.class, Long.class, Long.class, Columns.class, Conditions.class, Orders.class))) {
+            columns = (Columns<?>) Arrayx.getOrNull(args, 2);
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 3);
+            orders = (Orders<?>) Arrayx.getOrNull(args, 4);
+        } else {
+            throw new MethodNotImplementedException("MethodNotImplemented: " + signature.getSignature());
+        }
+
         Assertx.mustTrue(pageIndex > 0, "分页下标[pageIndex]必须大于等于 1");
         Assertx.mustTrue(pageSize > 0, "分页大小[pageSize]必须大于等于 1");
         Assertx.mustTrue(pageIndex * pageSize < 1_000_000, "分页查询时不允许查询超过 100W 的数据");
-
-        var conditions = (Conditions<?>) Arrayx.getOrNull(args, 2);
-        var orders = (Orders<?>) Arrayx.getOrNull(args, 3);
 
         // 计算总数
         var countScript = builder.forCountBy(executor, meta, conditions);
@@ -65,7 +81,7 @@ public class FindPageByHandler implements MapperHandler {
         if (count == null || count.equals(0L)) {
             return Page.empty();
         } else {
-            var selectScript = builder.forFindBy(executor, meta, pageSize, (pageIndex - 1) * pageSize, conditions, orders);
+            var selectScript = builder.forFindBy(executor, meta, pageSize, (pageIndex - 1) * pageSize, columns, conditions, orders);
             var data = executor.select(selectScript, meta.getType());
             return Page.of(data, pageIndex, pageSize, (long) Math.ceil(count * 1.0d / pageSize), count);
         }

@@ -25,8 +25,8 @@
 package central.pluglet.binder;
 
 import central.bean.InitializeException;
-import central.lang.reflect.FieldReference;
-import central.lang.reflect.InstanceReference;
+import central.lang.reflect.FieldRef;
+import central.lang.reflect.InstanceRef;
 import central.pluglet.FieldBinder;
 import central.lang.Stringx;
 import org.springframework.beans.BeansException;
@@ -51,7 +51,7 @@ public class SpringBeanFieldBinder implements FieldBinder {
     }
 
     @Override
-    public boolean support(FieldReference field) {
+    public boolean support(FieldRef field) {
         if (ApplicationContext.class == field.getType().getRawClass()) {
             return true;
         } else if (Environment.class == field.getType().getRawClass()) {
@@ -62,7 +62,7 @@ public class SpringBeanFieldBinder implements FieldBinder {
     }
 
     @Override
-    public void bind(InstanceReference<?> target, FieldReference field, Map<String, Object> params) {
+    public void bind(InstanceRef<?> target, FieldRef field, Map<String, Object> params) {
         var autowired = field.getAnnotation(Autowired.class);
         var qualifier = field.getAnnotation(Qualifier.class);
 

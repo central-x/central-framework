@@ -26,7 +26,7 @@ package central.sql.builder;
 
 import central.lang.Assertx;
 import central.lang.Stringx;
-import central.sql.Conditions;
+import central.sql.query.Conditions;
 import central.sql.SqlExecutor;
 import central.sql.SqlScript;
 import central.sql.SqlType;

@@ -24,7 +24,7 @@
 
 package central.sql.impl.standard;
 
-import central.sql.SqlExecuteContext;
+import central.sql.SqlContext;
 import central.sql.SqlExecutor;
 import central.util.Listx;
 import lombok.Getter;
@@ -38,7 +38,7 @@ import java.util.*;
  * @author Alan Yeh
  * @since 2022/09/15
  */
-public class StandardExecuteContext implements SqlExecuteContext {
+public class StandardSqlContext implements SqlContext {
 
     @Getter
     private final SqlExecutor executor;
@@ -53,7 +53,7 @@ public class StandardExecuteContext implements SqlExecuteContext {
     @Setter
     private Object result;
 
-    public StandardExecuteContext(SqlExecutor executor, String sql, List<Object> args) {
+    public StandardSqlContext(SqlExecutor executor, String sql, List<Object> args) {
         this.executor = executor;
         this.sql = sql;
         if (Listx.isNullOrEmpty(args)) {

@@ -24,7 +24,10 @@
 
 package central.sql.proxy.mapper;
 
-import central.sql.Conditions;
+import central.bean.MethodNotImplementedException;
+import central.lang.reflect.MethodSignature;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.data.Entity;
@@ -33,6 +36,7 @@ import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
 import central.lang.Arrayx;
+import central.util.Listx;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -49,12 +53,24 @@ import java.util.List;
 public class FindByIdsHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        if (Arrayx.isNullOrEmpty(args)) {
+        List<String> ids = null;
+        Columns<?> columns = null;
+
+        var signature = MethodSignature.of(method);
+        if (signature.equals(MethodSignature.of("findByIds", List.class, List.class))) {
+            ids = (List<String>) Arrayx.getOrNull(args, 0);
+        } else if (signature.equals(MethodSignature.of("findByIds", List.class, List.class, Columns.class))) {
+            ids = (List<String>) Arrayx.getOrNull(args, 0);
+            columns = (Columns<?>) Arrayx.getOrNull(args, 1);
+        } else {
+            throw new MethodNotImplementedException("MethodNotImplemented: " + signature.getSignature());
+        }
+
+        if (Listx.isNullOrEmpty(ids)) {
             return Collections.emptyList();
         }
 
-        var ids = (List<String>) Arrayx.getFirstOrNull(args);
-        var script = builder.forFindBy(executor, meta, null, null, Conditions.of(Entity.class).in(meta.getId().getName(), ids), null);
+        var script = builder.forFindBy(executor, meta, null, null, columns, Conditions.of(Entity.class).in(meta.getId().getName(), ids), null);
         return executor.select(script, meta.getType());
     }
 }

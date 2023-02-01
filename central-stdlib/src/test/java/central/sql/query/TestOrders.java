@@ -22,43 +22,33 @@
  * SOFTWARE.
  */
 
-package central.sql;
+package central.sql.query;
 
-import central.lang.Arrayx;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import central.sql.data.AccountEntity;
+import central.sql.query.Orders;
+import org.junit.jupiter.api.Test;
 
-import javax.annotation.Nullable;
-import java.util.Objects;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * 条件连接符
+ * Orders Test Cases
  *
  * @author Alan Yeh
- * @since 2022/07/20
+ * @since 2022/08/02
  */
-@RequiredArgsConstructor
-public enum Connectors {
-    /**
-     * AND
-     */
-    AND("AND"),
-    /**
-     * OR
-     */
-    OR("OR");
+public class TestOrders {
+    @Test
+    public void case1(){
+        var orders = Orders.of(AccountEntity.class).asc(AccountEntity::getAge);
+        assertEquals(orders.toSql(), "age");
 
-    @Getter
-    private final String value;
-
-    @JsonCreator
-    public static @Nullable Connectors resolve(String value) {
-        return Arrayx.asStream(Connectors.values()).filter(it -> Objects.equals(it.getValue(), value)).findFirst().orElse(null);
+        orders = Orders.of(AccountEntity.class).desc(AccountEntity::getAge);
+        assertEquals(orders.toSql(), "age DESC");
     }
 
-    @Override
-    public String toString() {
-        return this.value;
+    @Test
+    public void case2(){
+        var orders = Orders.of(AccountEntity.class).asc(AccountEntity::getAge).desc(AccountEntity::getName);
+        assertEquals(orders.toSql(), "age, name DESC");
     }
 }

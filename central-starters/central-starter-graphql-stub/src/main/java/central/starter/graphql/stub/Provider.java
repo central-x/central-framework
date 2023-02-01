@@ -25,8 +25,8 @@
 package central.starter.graphql.stub;
 
 import central.bean.Page;
-import central.sql.Conditions;
-import central.sql.Orders;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 import central.sql.data.Entity;
 import central.validation.group.Insert;
 import central.web.XForwardedHeaders;

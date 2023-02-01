@@ -27,8 +27,8 @@ package central.pluglet.binder;
 import central.bean.InitializeException;
 import central.lang.Arrayx;
 import central.lang.Stringx;
-import central.lang.reflect.FieldReference;
-import central.lang.reflect.InstanceReference;
+import central.lang.reflect.FieldRef;
+import central.lang.reflect.InstanceRef;
 import central.pluglet.FieldBinder;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
@@ -48,13 +48,13 @@ public class ControlBinder implements FieldBinder {
     private final Set<ControlType> unsupported = Setx.of(ControlType.RADIO, ControlType.CHECKBOX);
 
     @Override
-    public boolean support(FieldReference field) {
+    public boolean support(FieldRef field) {
         var control = field.getAnnotation(Control.class);
         return control != null && !unsupported.contains(control.type());
     }
 
     @Override
-    public void bind(InstanceReference<?> target, FieldReference field, Map<String, Object> params) {
+    public void bind(InstanceRef<?> target, FieldRef field, Map<String, Object> params) {
         var annotation = field.getAnnotation(Control.class);
         var name = Objectx.getOrDefault(annotation.name(), field.getName());
         var value = params.get(name);

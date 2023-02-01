@@ -29,6 +29,9 @@ import central.sql.*;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.meta.entity.ForeignMeta;
 import central.sql.meta.entity.ForeignTableMeta;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 import central.util.Collectionx;
 import central.util.Listx;
 import central.util.Setx;
@@ -38,7 +41,9 @@ import lombok.SneakyThrows;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLSyntaxErrorException;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Oracle 方言
@@ -108,11 +113,24 @@ public class OracleBuilder extends StandardSqlBuilder {
      * 和 StandardSqlBuilder，主要去掉了 AS
      */
     @Override
-    public SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Conditions<?> conditions, Orders<?> orders) throws SQLSyntaxErrorException {
+    public SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Columns<?> columns, Conditions<?> conditions, Orders<?> orders) throws SQLSyntaxErrorException {
+        // SELECT DISTINCT a.* FROM ${TABLE} a
+        // SELECT DISTINCT a.column1, a.column2 FORM ${TABLE} a
+
+        columns = Columns.of(columns);
         conditions = Conditions.of(conditions);
         orders = Orders.of(orders);
-        // SELECT DISTINCT a.* FROM ${TABLE} a
-        var sql = new StringBuilder(Stringx.format("SELECT a.* FROM {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+
+        String colSql;
+        if (columns.isEmpty()) {
+            // SELECT DISTINCT a.* FROM ${TABLE} AS a
+            colSql = "a.*";
+        } else {
+            // SELECT DISTINCT a.column1, a.column2 FORM ${TABLE} AS a
+            colSql = columns.stream().map(it -> meta.getProperty(it.getProperty())).filter(Objects::nonNull)
+                    .map(it -> "a." + this.processColumn(it.getColumnName(executor.getSource().getConversion()))).distinct().collect(Collectors.joining(", "));
+        }
+        var sql = new StringBuilder(Stringx.format("SELECT {} FROM {} a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
         var whereSql = new StringBuilder();
 
@@ -123,7 +141,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         if (aliases.size() >= 1) {
             if (aliases.size() > 1 || !"a".equals(Setx.getAnyOrNull(aliases))) {
                 // 存在关联查询，会有重复数据，需要去重
-                sql = new StringBuilder(Stringx.format("SELECT DISTINCT a.* FROM {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+                sql = new StringBuilder(Stringx.format("SELECT DISTINCT {} FROM {} a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
             }
         }
 

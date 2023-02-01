@@ -24,8 +24,10 @@
 
 package central.sql.proxy.mapper;
 
-import central.lang.Assertx;
-import central.sql.Conditions;
+import central.bean.MethodNotImplementedException;
+import central.lang.reflect.MethodSignature;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.data.Entity;
@@ -46,11 +48,27 @@ import java.sql.SQLException;
  * @since 2022/08/11
  */
 public class FindByIdHandler implements MapperHandler {
+
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var id = Arrayx.getFirstOrNull(args);
-        Assertx.mustNotNull(id, "主键[id]必须不为空");
-        var script = builder.forFindBy(executor, meta, 1L, 0L, Conditions.of(Entity.class).eq(meta.getId().getName(), id), null);
+        String id = null;
+        Columns<?> columns = null;
+
+        var signature = MethodSignature.of(method);
+        if (signature.equals(MethodSignature.of("findById", Entity.class, String.class))) {
+            id = (String) Arrayx.getOrNull(args, 0);
+        } else if (signature.equals(MethodSignature.of("findById", Entity.class, String.class, Columns.class))) {
+            id = (String) Arrayx.getOrNull(args, 0);
+            columns = (Columns<?>) Arrayx.getOrNull(args, 1);
+        } else {
+            throw new MethodNotImplementedException("MethodNotImplemented: " + signature.getSignature());
+        }
+
+        if (id == null) {
+            return null;
+        }
+
+        var script = builder.forFindBy(executor, meta, 1L, 0L, columns, Conditions.of(Entity.class).eq(meta.getId().getName(), id), null);
         return executor.selectSingle(script, meta.getType());
     }
 }

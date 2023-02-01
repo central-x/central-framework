@@ -26,7 +26,7 @@ package central.starter.graphql.core.resolver;
 
 import central.lang.Arrayx;
 import central.lang.Stringx;
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import central.util.*;
 import central.validation.Validatable;
 import central.validation.Validatex;
@@ -110,7 +110,7 @@ public class RequestParamParameterResolver extends SpringAnnotatedParameterResol
                 // 如果是 Input 类型，就使用 Json 序列化来绑定参数
                 try {
                     String json = Jsonx.Default().serialize(Mapx.newHashMap("input", value));
-                    Map<String, Object> map = Jsonx.Default().deserialize(json, TypeReference.ofMap(String.class, TypeReference.of(parameter.getAnnotatedType().getType())));
+                    Map<String, Object> map = Jsonx.Default().deserialize(json, TypeRef.ofMap(String.class, TypeRef.of(parameter.getAnnotatedType().getType())));
 
                     value = map.get("input");
                 } catch (Exception ex) {

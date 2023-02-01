@@ -42,8 +42,10 @@ import java.util.stream.Collectors;
 
 /**
  * 类型引用
+ * <p>
  * 由于泛型在使用的过程中，会被类型擦除，因此可能需要比较麻烦才能拿到类型信息
  * 根据 Java 的特性，可以通过继承的方式将泛型固化下来
+ * <p>
  * 本类通过声明匿名类的方式，可以将泛型正确地固化下来。
  * <p>
  * {@code var reference = new TypeReference<List<String>>(){} }
@@ -51,7 +53,7 @@ import java.util.stream.Collectors;
  * @author Alan Yeh
  * @since 2022/07/05
  */
-public abstract class TypeReference<T> {
+public abstract class TypeRef<T> {
     /**
      * 类型
      */
@@ -104,12 +106,12 @@ public abstract class TypeReference<T> {
         return this.parameterizedType.get();
     }
 
-    private final LazyValue<List<? extends TypeReference<?>>> actualTypeArguments = new LazyValue<>(() -> getParameterizedType() == null ? Collections.emptyList() : Arrayx.asStream(getParameterizedType().getActualTypeArguments()).map(TypeReference::of).toList());
+    private final LazyValue<List<? extends TypeRef<?>>> actualTypeArguments = new LazyValue<>(() -> getParameterizedType() == null ? Collections.emptyList() : Arrayx.asStream(getParameterizedType().getActualTypeArguments()).map(TypeRef::of).toList());
 
     /**
      * 获取泛型参 类型
      */
-    public List<? extends TypeReference<?>> getActualTypeArguments() {
+    public List<? extends TypeRef<?>> getActualTypeArguments() {
         return this.actualTypeArguments.get();
     }
 
@@ -118,7 +120,7 @@ public abstract class TypeReference<T> {
      *
      * @param index 指定下标
      */
-    public TypeReference<?> getActualTypeArgument(int index) {
+    public TypeRef<?> getActualTypeArgument(int index) {
         return this.getActualTypeArguments().get(index);
     }
 
@@ -129,21 +131,21 @@ public abstract class TypeReference<T> {
         return this.type instanceof ParameterizedType;
     }
 
-    private final LazyValue<TypeReference<?>> superType = new LazyValue<>(() -> getRawClass() == null ? null : TypeReference.of(getRawClass().getGenericSuperclass()));
+    private final LazyValue<TypeRef<?>> superType = new LazyValue<>(() -> getRawClass() == null ? null : TypeRef.of(getRawClass().getGenericSuperclass()));
 
     /**
      * 获取父类型
      */
-    public TypeReference<?> getSuperType() {
+    public TypeRef<?> getSuperType() {
         return this.superType.get();
     }
 
-    private final LazyValue<List<? extends TypeReference<?>>> interfaceTypes = new LazyValue<>(() -> getRawClass() == null ? Collections.emptyList() : Arrayx.asStream(getRawClass().getAnnotatedInterfaces()).map(AnnotatedType::getType).map(TypeReference::of).toList());
+    private final LazyValue<List<? extends TypeRef<?>>> interfaceTypes = new LazyValue<>(() -> getRawClass() == null ? Collections.emptyList() : Arrayx.asStream(getRawClass().getAnnotatedInterfaces()).map(AnnotatedType::getType).map(TypeRef::of).toList());
 
     /**
      * 获取继承的接口
      */
-    public List<? extends TypeReference<?>> getInterfaceTypes() {
+    public List<? extends TypeRef<?>> getInterfaceTypes() {
         return this.interfaceTypes.get();
     }
 
@@ -152,7 +154,7 @@ public abstract class TypeReference<T> {
      *
      * @param index 下标
      */
-    public TypeReference<?> getInterfaceType(int index) {
+    public TypeRef<?> getInterfaceType(int index) {
         return this.getInterfaceTypes().get(index);
     }
 
@@ -163,12 +165,12 @@ public abstract class TypeReference<T> {
         return getRawClass().isEnum();
     }
 
-    private final LazyValue<List<FieldReference>> fields = new LazyValue<>(() -> getRawClass() == null ? Collections.emptyList() : Arrayx.asStream(getRawClass().getDeclaredFields()).map(FieldReference::of).toList());
+    private final LazyValue<List<FieldRef>> fields = new LazyValue<>(() -> getRawClass() == null ? Collections.emptyList() : Arrayx.asStream(getRawClass().getDeclaredFields()).map(FieldRef::of).toList());
 
     /**
      * 获取字段信息
      */
-    public List<FieldReference> getFields() {
+    public List<FieldRef> getFields() {
         return fields.get();
     }
 
@@ -195,7 +197,7 @@ public abstract class TypeReference<T> {
      * @param args 构造参数
      */
     @SneakyThrows
-    public InstanceReference<T> newInstance(Object... args) {
+    public InstanceRef<T> newInstance(Object... args) {
         Class<T> clazz = this.getRawClass();
         // 处理一些集合类型
         if (List.class == this.getRawType()) {
@@ -211,7 +213,7 @@ public abstract class TypeReference<T> {
             return null;
         } else {
             if (Arrayx.isNullOrEmpty(args)) {
-                return InstanceReference.of(this, clazz.getDeclaredConstructor().newInstance());
+                return InstanceRef.of(this, clazz.getDeclaredConstructor().newInstance());
             } else {
                 // 查找匹配的构造器
                 List<Constructor<?>> constructors = Arrayx.asStream(clazz.getDeclaredConstructors())
@@ -245,24 +247,24 @@ public abstract class TypeReference<T> {
                 }
 
                 // 实例化
-                return InstanceReference.of(this, (T) constructor.get().newInstance(args));
+                return InstanceRef.of(this, (T) constructor.get().newInstance(args));
             }
         }
     }
 
-    public boolean isInstance(Object object){
-        if (object == null){
+    public boolean isInstance(Object object) {
+        if (object == null) {
             return false;
         }
 
         return this.getRawClass().isInstance(object);
     }
 
-    protected TypeReference() {
+    protected TypeRef() {
         this(null);
     }
 
-    private TypeReference(@Nullable Type type) {
+    private TypeRef(@Nullable Type type) {
         if (type == null) {
             var superClass = (ParameterizedType) this.getClass().getGenericSuperclass();
             this.type = superClass.getActualTypeArguments()[0];
@@ -273,10 +275,11 @@ public abstract class TypeReference<T> {
 
     /**
      * 根据 Type 创建 TypeReference
+     * <p>
      * 也可以使用 {@link Method#getGenericReturnType()} 的值作为参数
      */
-    public static <T> TypeReference<T> of(Type type) {
-        return new TypeReference<>(type) {
+    public static <T> TypeRef<T> of(Type type) {
+        return new TypeRef<>(type) {
         };
     }
 
@@ -286,35 +289,35 @@ public abstract class TypeReference<T> {
      * @param type 类
      * @param <T>  类型
      */
-    public static <T> TypeReference<T> of(Class<T> type) {
-        return new TypeReference<>(type) {
+    public static <T> TypeRef<T> of(Class<T> type) {
+        return new TypeRef<>(type) {
         };
     }
 
     @SneakyThrows
-    public static TypeReference<?> of(String typeName) {
+    public static TypeRef<?> of(String typeName) {
         Assertx.mustNotNull("typeName", typeName);
-        return new TypeReference<>(Class.forName(typeName.trim())) {
+        return new TypeRef<>(Class.forName(typeName.trim())) {
         };
     }
 
     /**
      * 构建 List 类型
      *
-     * @param elementType 元数类型
+     * @param elementType 元素类型
      */
-    public static <T extends List<V>, V> TypeReference<T> ofList(TypeReference<V> elementType) {
-        return new TypeReference<>(new ParameterizedTypeImpl(List.class, new Type[]{elementType.getType()})) {
+    public static <T extends List<V>, V> TypeRef<T> ofList(TypeRef<V> elementType) {
+        return new TypeRef<>(new ParameterizedTypeImpl(List.class, new Type[]{elementType.getType()})) {
         };
     }
 
     /**
      * 构建 List 类型
      *
-     * @param elementType 元数类型
+     * @param elementType 元素类型
      */
-    public static <T extends List<E>, E> TypeReference<T> ofList(Class<? extends E> elementType) {
-        return new TypeReference<>(new ParameterizedTypeImpl(List.class, new Type[]{elementType})) {
+    public static <T extends List<E>, E> TypeRef<T> ofList(Class<? extends E> elementType) {
+        return new TypeRef<>(new ParameterizedTypeImpl(List.class, new Type[]{elementType})) {
         };
     }
 
@@ -324,8 +327,8 @@ public abstract class TypeReference<T> {
      * @param keyType   Key 类型
      * @param valueType Value 类型
      */
-    public static <T extends Map<K, V>, K, V> TypeReference<T> ofMap(TypeReference<K> keyType, TypeReference<V> valueType) {
-        return new TypeReference<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType.getType(), valueType.getType()})) {
+    public static <T extends Map<K, V>, K, V> TypeRef<T> ofMap(TypeRef<K> keyType, TypeRef<V> valueType) {
+        return new TypeRef<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType.getType(), valueType.getType()})) {
         };
     }
 
@@ -335,8 +338,8 @@ public abstract class TypeReference<T> {
      * @param keyType   Key 类型
      * @param valueType Value 类型
      */
-    public static <T extends Map<K, V>, K, V> TypeReference<T> ofMap(Class<? extends K> keyType, TypeReference<V> valueType) {
-        return new TypeReference<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType, valueType.getType()})) {
+    public static <T extends Map<K, V>, K, V> TypeRef<T> ofMap(Class<? extends K> keyType, TypeRef<V> valueType) {
+        return new TypeRef<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType, valueType.getType()})) {
         };
     }
 
@@ -346,8 +349,8 @@ public abstract class TypeReference<T> {
      * @param keyType   Key 类型
      * @param valueType Value 类型
      */
-    public static <T extends Map<K, V>, K, V> TypeReference<T> ofMap(Class<? extends K> keyType, Class<? extends V> valueType) {
-        return new TypeReference<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType, valueType})) {
+    public static <T extends Map<K, V>, K, V> TypeRef<T> ofMap(Class<? extends K> keyType, Class<? extends V> valueType) {
+        return new TypeRef<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType, valueType})) {
         };
     }
 
@@ -357,8 +360,8 @@ public abstract class TypeReference<T> {
      * @param rawType             原生类型
      * @param actualTypeArguments 泛型参数
      */
-    public static <T> TypeReference<T> ofParameterized(Type rawType, Type... actualTypeArguments) {
-        return new TypeReference<>(new ParameterizedTypeImpl(rawType, actualTypeArguments)) {
+    public static <T> TypeRef<T> ofParameterized(Type rawType, Type... actualTypeArguments) {
+        return new TypeRef<>(new ParameterizedTypeImpl(rawType, actualTypeArguments)) {
         };
     }
 

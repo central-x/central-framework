@@ -24,7 +24,7 @@
 
 package central.net.http;
 
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import central.net.http.body.extractor.JsonExtractor;
 import central.net.http.body.request.JsonBody;
 import central.net.http.body.request.MultipartFormBody;
@@ -77,7 +77,7 @@ public abstract class TestHttp {
             var response = this.client.execute(request);
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var account = response.getBody().extract(JsonExtractor.of(TypeReference.of(Account.class)));
+            var account = response.getBody().extract(JsonExtractor.of(TypeRef.of(Account.class)));
             Assertions.assertNotNull(account);
             Assertions.assertEquals(accountId, account.getId());
             Assertions.assertNotNull(account.getDept());
@@ -98,7 +98,7 @@ public abstract class TestHttp {
             var response = this.client.execute(request);
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var account = response.getBody().extract(JsonExtractor.of(TypeReference.of(Account.class)));
+            var account = response.getBody().extract(JsonExtractor.of(TypeRef.of(Account.class)));
             Assertions.assertNotNull(account);
             Assertions.assertNotNull(account.getId());
             Assertions.assertEquals(Integer.valueOf(18), account.getAge());
@@ -121,7 +121,7 @@ public abstract class TestHttp {
             var response = this.client.execute(request);
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var account = response.getBody().extract(JsonExtractor.of(TypeReference.of(Account.class)));
+            var account = response.getBody().extract(JsonExtractor.of(TypeRef.of(Account.class)));
             Assertions.assertNotNull(account);
             Assertions.assertEquals(body.get("id"), account.getId());
             Assertions.assertEquals(Integer.valueOf(18), account.getAge());
@@ -139,7 +139,7 @@ public abstract class TestHttp {
 
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var count = response.getBody().extract(JsonExtractor.of(TypeReference.of(Integer.class)));
+            var count = response.getBody().extract(JsonExtractor.of(TypeRef.of(Integer.class)));
             Assertions.assertNotNull(count);
             Assertions.assertEquals(Integer.valueOf(2), count);
         }
@@ -158,7 +158,7 @@ public abstract class TestHttp {
 
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var info = response.getBody().extract(JsonExtractor.of(TypeReference.ofMap(String.class, Object.class)));
+            var info = response.getBody().extract(JsonExtractor.of(TypeRef.ofMap(String.class, Object.class)));
             Assertions.assertNotNull(info.get("headers"));
             var headers = Mapx.caseInsensitive((Map<String, Object>) info.get("headers"));
             Assertions.assertEquals("https", headers.get("X-Forwarded-Proto"));
@@ -179,7 +179,7 @@ public abstract class TestHttp {
             var response = this.client.execute(request);
 
             Assertions.assertEquals(HttpStatus.OK, response.getStatus());
-            var upload = response.getBody().extract(JsonExtractor.of(TypeReference.of(Upload.class)));
+            var upload = response.getBody().extract(JsonExtractor.of(TypeRef.of(Upload.class)));
             Assertions.assertEquals("file", upload.getName());
             Assertions.assertEquals("test.txt", upload.getOriginalFilename());
             Assertions.assertEquals("Hello World".getBytes(StandardCharsets.UTF_8).length, upload.getSize());

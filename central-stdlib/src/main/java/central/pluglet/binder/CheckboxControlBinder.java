@@ -25,8 +25,8 @@
 package central.pluglet.binder;
 
 import central.bean.OptionalEnum;
-import central.lang.reflect.FieldReference;
-import central.lang.reflect.InstanceReference;
+import central.lang.reflect.FieldRef;
+import central.lang.reflect.InstanceRef;
 import central.pluglet.FieldBinder;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
@@ -46,13 +46,13 @@ import java.util.stream.Collectors;
  */
 public class CheckboxControlBinder implements FieldBinder {
     @Override
-    public boolean support(FieldReference field) {
+    public boolean support(FieldRef field) {
         var control = field.getAnnotation(Control.class);
         return control != null && ControlType.CHECKBOX == control.type();
     }
 
     @Override
-    public void bind(InstanceReference<?> target, FieldReference field, Map<String, Object> params) {
+    public void bind(InstanceRef<?> target, FieldRef field, Map<String, Object> params) {
         var annotation = field.getAnnotation(Control.class);
 
         // 类型检查

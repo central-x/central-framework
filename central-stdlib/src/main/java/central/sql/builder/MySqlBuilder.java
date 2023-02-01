@@ -32,6 +32,7 @@ import central.sql.builder.script.column.RenameColumnScript;
 import central.sql.builder.script.table.AddTableScript;
 import central.sql.builder.script.table.RenameTableScript;
 import central.sql.meta.entity.EntityMeta;
+import central.sql.query.Conditions;
 import central.util.*;
 
 import java.sql.SQLSyntaxErrorException;

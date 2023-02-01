@@ -39,7 +39,7 @@ import java.lang.reflect.Field;
  * @author Alan Yeh
  * @since 2022/07/12
  */
-public class FieldReference {
+public class FieldRef {
     /**
      * 字段
      */
@@ -53,12 +53,12 @@ public class FieldReference {
         return this.field.getName();
     }
 
-    private final LazyValue<TypeReference<?>> type = new LazyValue<>(() -> TypeReference.of(getField().getGenericType()));
+    private final LazyValue<TypeRef<?>> type = new LazyValue<>(() -> TypeRef.of(getField().getGenericType()));
 
     /**
      * 字段类型
      */
-    public TypeReference<?> getType() {
+    public TypeRef<?> getType() {
         return this.type.get();
     }
 
@@ -79,16 +79,16 @@ public class FieldReference {
      * @param value  值
      */
     @SneakyThrows
-    public void setValue(@Nonnull InstanceReference<?> target, @Nullable Object value) {
+    public void setValue(@Nonnull InstanceRef<?> target, @Nullable Object value) {
         this.field.setAccessible(true);
         this.field.set(target.getInstance(), value);
     }
 
-    private FieldReference(Field field) {
+    private FieldRef(Field field) {
         this.field = field;
     }
 
-    public static FieldReference of(Field field) {
-        return new FieldReference(field);
+    public static FieldRef of(Field field) {
+        return new FieldRef(field);
     }
 }

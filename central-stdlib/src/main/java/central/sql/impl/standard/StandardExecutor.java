@@ -93,7 +93,7 @@ public class StandardExecutor implements SqlExecutor {
 
     @Override
     public <T> T selectSingle(SqlScript script, Class<T> type) throws SQLException {
-        var context = new StandardExecuteContext(this, script.getSql(), script.getArgs());
+        var context = new StandardSqlContext(this, script.getSql(), script.getArgs());
         this.interceptors.forEach(it -> it.before(context));
 
         Connection connection = this.getSource().getConnection();
@@ -121,7 +121,7 @@ public class StandardExecutor implements SqlExecutor {
 
     @Override
     public <T> List<T> select(SqlScript script, Class<T> type) throws SQLException {
-        var context = new StandardExecuteContext(this, script.getSql(), script.getArgs());
+        var context = new StandardSqlContext(this, script.getSql(), script.getArgs());
         this.interceptors.forEach(it -> it.before(context));
 
         Connection connection = this.getSource().getConnection();
@@ -169,7 +169,7 @@ public class StandardExecutor implements SqlExecutor {
 
     @Override
     public long execute(SqlScript script) throws SQLException {
-        var context = new StandardExecuteContext(this, script.getSql(), script.getArgs());
+        var context = new StandardSqlContext(this, script.getSql(), script.getArgs());
         this.interceptors.forEach(it -> it.before(context));
 
         Connection connection = this.getSource().getConnection();
@@ -197,7 +197,7 @@ public class StandardExecutor implements SqlExecutor {
             return new long[0];
         }
 
-        var context = new StandardExecuteContext(this, batchScript.getSql(), new ArrayList<>(batchScript.getArgs()));
+        var context = new StandardSqlContext(this, batchScript.getSql(), new ArrayList<>(batchScript.getArgs()));
         this.interceptors.forEach(it -> it.before(context));
 
         Connection connection = this.getSource().getConnection();

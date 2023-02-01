@@ -27,7 +27,7 @@ package central.starter.graphql.test;
 import central.net.http.executor.java.JavaExecutor;
 import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
-import central.sql.Conditions;
+import central.sql.query.Conditions;
 import central.starter.graphql.TestApplication;
 import central.starter.graphql.test.data.Person;
 import central.starter.graphql.test.data.Pet;

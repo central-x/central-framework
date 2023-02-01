@@ -24,7 +24,6 @@
 
 package central.lang.reflect;
 
-import central.bean.InitializeException;
 import lombok.Getter;
 
 import javax.annotation.Nonnull;
@@ -39,18 +38,18 @@ import java.lang.reflect.Type;
  * @author Alan Yeh
  * @since 2022/07/13
  */
-public abstract class InstanceReference<T> {
+public abstract class InstanceRef<T> {
     @Getter(onMethod_ = @Nonnull)
-    private final TypeReference<? extends T> type;
+    private final TypeRef<? extends T> type;
 
     @Getter(onMethod_ = @Nullable)
     private final T instance;
 
-    protected InstanceReference(@Nullable T instance) {
+    protected InstanceRef(@Nullable T instance) {
         this(null, instance);
     }
 
-    protected InstanceReference(@Nullable TypeReference<? extends T> type, @Nullable T instance) {
+    protected InstanceRef(@Nullable TypeRef<? extends T> type, @Nullable T instance) {
         if (type == null && instance == null) {
             this.type = null;
         } else if (type == null) {
@@ -58,9 +57,9 @@ public abstract class InstanceReference<T> {
             Type actualType = superClass.getActualTypeArguments()[0];
             if ("T".equals(actualType.getTypeName())) {
                 // 获取类型失败
-                this.type = (TypeReference<T>) TypeReference.of(instance.getClass());
+                this.type = (TypeRef<T>) TypeRef.of(instance.getClass());
             } else {
-                this.type = TypeReference.of(actualType);
+                this.type = TypeRef.of(actualType);
             }
         } else {
             this.type = type;
@@ -68,17 +67,17 @@ public abstract class InstanceReference<T> {
         this.instance = instance;
     }
 
-    public static <T> InstanceReference<T> of(@Nonnull TypeReference<T> type, @Nullable T instance) {
-        return new InstanceReference<T>(type, instance) {
+    public static <T> InstanceRef<T> of(@Nonnull TypeRef<T> type, @Nullable T instance) {
+        return new InstanceRef<T>(type, instance) {
         };
     }
 
-    public static <T> InstanceReference<T> of(@Nullable T instance) {
+    public static <T> InstanceRef<T> of(@Nullable T instance) {
         if (instance == null) {
-            return new InstanceReference<>(null) {
+            return new InstanceRef<>(null) {
             };
         } else {
-            return new InstanceReference<>(TypeReference.of((Class<? extends T>) instance.getClass()), instance) {
+            return new InstanceRef<>(TypeRef.of((Class<? extends T>) instance.getClass()), instance) {
             };
         }
     }

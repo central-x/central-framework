@@ -25,7 +25,7 @@
 package central.starter.graphql.stub.graphql.mutation;
 
 import central.lang.Stringx;
-import central.sql.Conditions;
+import central.sql.query.Conditions;
 import central.starter.graphql.annotation.GraphQLFetcher;
 import central.starter.graphql.annotation.GraphQLSchema;
 import central.starter.graphql.stub.graphql.dto.DTO;

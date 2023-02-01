@@ -25,7 +25,7 @@
 package central.net.http.processor.impl;
 
 import central.io.IOStreamx;
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import central.net.http.HttpException;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
@@ -59,7 +59,7 @@ public class ThrowProcessor implements HttpProcessor {
                 }
                 var body = IOStreamx.readText(ex.getResponse().getBody().getInputStream(), contentEncoding);
                 if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
-                    var message = Jsonx.Default().deserialize(body, TypeReference.ofMap(String.class, Objectx.class));
+                    var message = Jsonx.Default().deserialize(body, TypeRef.ofMap(String.class, Objectx.class));
                     body = message.get("message").toString();
                 }
 

@@ -26,7 +26,7 @@ package central.util;
 
 import central.lang.Assertx;
 import central.lang.Stringx;
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
@@ -129,7 +129,7 @@ public class Objectx {
         if (obj == null) {
             return Mapx.newHashMap();
         }
-        return Jsonx.Default().deserialize(Jsonx.Default().serialize(obj), TypeReference.ofMap(String.class, Object.class));
+        return Jsonx.Default().deserialize(Jsonx.Default().serialize(obj), TypeRef.ofMap(String.class, Object.class));
     }
 
     /**

@@ -50,6 +50,12 @@ public interface SqlMetaManager {
      */
     DatabaseMeta getMeta(@Nonnull SqlExecutor executor, @Nullable Predicate<String> matcher) throws SQLException;
 
+    /**
+     * 构建数据库元数据
+     *
+     * @param executor Sql 执行器
+     * @return 数据库元数据
+     */
     default DatabaseMeta getMeta(@Nonnull SqlExecutor executor) throws SQLException {
         return this.getMeta(executor, null);
     }

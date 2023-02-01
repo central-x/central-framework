@@ -25,8 +25,9 @@
 package central.sql.builder;
 
 import central.lang.Stringx;
-import central.sql.Conditions;
-import central.sql.Orders;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 import central.sql.builder.script.column.AddColumnScript;
 import central.sql.builder.script.column.DropColumnScript;
 import central.sql.builder.script.column.RenameColumnScript;
@@ -118,11 +119,24 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Conditions<?> conditions, Orders<?> orders) throws SQLSyntaxErrorException {
+    public SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Columns<?> columns, Conditions<?> conditions, Orders<?> orders) throws SQLSyntaxErrorException {
+        // SELECT DISTINCT a.* FROM ${TABLE} AS a
+        // SELECT DISTINCT a.column1, a.column2 FORM ${TABLE} AS a
+
+        columns = Columns.of(columns);
         conditions = Conditions.of(conditions);
         orders = Orders.of(orders);
-        // SELECT DISTINCT a.* FROM ${TABLE} AS a
-        var sql = new StringBuilder(Stringx.format("SELECT a.* FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+
+        String colSql;
+        if (columns.isEmpty()) {
+            // SELECT DISTINCT a.* FROM ${TABLE} AS a
+            colSql = "a.*";
+        } else {
+            // SELECT DISTINCT a.column1, a.column2 FORM ${TABLE} AS a
+            colSql = columns.stream().map(it -> meta.getProperty(it.getProperty())).filter(Objects::nonNull)
+                    .map(it -> "a." + this.processColumn(it.getColumnName(executor.getSource().getConversion()))).distinct().collect(Collectors.joining(", "));
+        }
+        var sql = new StringBuilder(Stringx.format("SELECT {} FROM {} AS a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
         var whereSql = new StringBuilder();
 
@@ -133,7 +147,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         if (aliases.size() >= 1) {
             if (aliases.size() > 1 || !"a".equals(Setx.getAnyOrNull(aliases))) {
                 // 存在关联查询，会有重复数据，需要去重
-                sql = new StringBuilder(Stringx.format("SELECT DISTINCT a.* FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+                sql = new StringBuilder(Stringx.format("SELECT DISTINCT {} FROM {} AS a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
             }
         }
 

@@ -24,8 +24,7 @@
 
 package central.util.json;
 
-import central.lang.reflect.TypeReference;
-import com.fasterxml.jackson.core.JsonEncoding;
+import central.lang.reflect.TypeRef;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -64,7 +63,7 @@ public class JacksonSerializer implements JsonSerializer {
 
     @Override
     @SneakyThrows
-    public <T> T deserialize(InputStream input, Charset charset, TypeReference<T> reference) {
+    public <T> T deserialize(InputStream input, Charset charset, TypeRef<T> reference) {
         return mapper.readValue(new InputStreamReader(input, charset.name()), mapper.getTypeFactory().constructType(reference.getType()));
     }
 }

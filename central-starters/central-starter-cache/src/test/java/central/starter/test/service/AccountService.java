@@ -24,13 +24,12 @@
 
 package central.starter.test.service;
 
-import central.sql.Conditions;
-import central.sql.Orders;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 import central.starter.cache.core.annotation.CacheEvict;
 import central.starter.cache.core.annotation.CacheKey;
 import central.starter.cache.core.annotation.Cacheable;
 import central.starter.test.service.data.Account;
-import central.starter.test.service.data.Department;
 import central.util.Guidx;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;

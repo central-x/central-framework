@@ -24,8 +24,8 @@
 
 package central.pluglet;
 
-import central.lang.reflect.FieldReference;
-import central.lang.reflect.InstanceReference;
+import central.lang.reflect.FieldRef;
+import central.lang.reflect.InstanceRef;
 
 import java.util.Map;
 
@@ -41,7 +41,7 @@ public interface FieldBinder {
      *
      * @param field 字段
      */
-    boolean support(FieldReference field);
+    boolean support(FieldRef field);
 
     /**
      * 绑定字段
@@ -50,5 +50,5 @@ public interface FieldBinder {
      * @param field  待绑定对象字段
      * @param params 入参
      */
-    void bind(InstanceReference<?> target, FieldReference field, Map<String, Object> params);
+    void bind(InstanceRef<?> target, FieldRef field, Map<String, Object> params);
 }

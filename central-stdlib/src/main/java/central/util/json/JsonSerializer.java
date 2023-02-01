@@ -24,7 +24,7 @@
 
 package central.util.json;
 
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -77,7 +77,7 @@ public interface JsonSerializer {
      * @param json      Json 字符串
      * @param reference 类型引用
      */
-    default <T> T deserialize(String json, TypeReference<T> reference) {
+    default <T> T deserialize(String json, TypeRef<T> reference) {
         return this.deserialize(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8, reference);
     }
 
@@ -88,7 +88,7 @@ public interface JsonSerializer {
      * @param type 类型
      */
     default <T> T deserialize(String json, Class<T> type) {
-        return this.deserialize(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8, TypeReference.of(type));
+        return this.deserialize(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8, TypeRef.of(type));
     }
 
     /**
@@ -98,5 +98,5 @@ public interface JsonSerializer {
      * @param charset   字符集
      * @param reference 类型引用
      */
-    <T> T deserialize(InputStream input, Charset charset, TypeReference<T> reference);
+    <T> T deserialize(InputStream input, Charset charset, TypeRef<T> reference);
 }

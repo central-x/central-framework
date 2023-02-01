@@ -27,7 +27,7 @@ package central.net.http.proxy;
 import central.io.IOStreamx;
 import central.lang.Arrayx;
 import central.lang.Stringx;
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import central.net.http.*;
 import central.net.http.body.extractor.FileExtractor;
 import central.net.http.body.extractor.JsonExtractor;
@@ -107,7 +107,7 @@ public class HttpProxy implements InvocationHandler {
 
                     var body = IOStreamx.readText(response.getBody().getInputStream(), contentEncoding);
                     if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
-                        var message = Jsonx.Default().deserialize(body, TypeReference.ofMap(String.class, Object.class));
+                        var message = Jsonx.Default().deserialize(body, TypeRef.ofMap(String.class, Object.class));
                         body = message.get("message").toString();
                     }
 
@@ -171,7 +171,7 @@ public class HttpProxy implements InvocationHandler {
 
                 // 使用 JSON 解析结果
                 if (MediaType.APPLICATION_JSON.isCompatibleWith(response.getHeaders().getContentType())) {
-                    return response.getBody().extract(JsonExtractor.of(TypeReference.of(method.getGenericReturnType())));
+                    return response.getBody().extract(JsonExtractor.of(TypeRef.of(method.getGenericReturnType())));
                 }
 
                 throw new HttpException(request, response, "无法解析响应体");

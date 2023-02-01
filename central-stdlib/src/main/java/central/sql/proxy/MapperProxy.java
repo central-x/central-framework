@@ -25,7 +25,7 @@
 package central.sql.proxy;
 
 import central.lang.Assertx;
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import central.sql.SqlExecutor;
 import central.sql.SqlScript;
 import central.sql.data.Entity;
@@ -87,7 +87,7 @@ public class MapperProxy<T extends Mapper<?>> implements InvocationHandler {
 
     public MapperProxy(Class<T> mapperType, SqlExecutor executor, Map<String, MapperHandler> handlers, MarkdownResources resources) {
         this.mapperType = mapperType;
-        this.entityType = (Class<? extends Entity>) TypeReference.of(mapperType).getInterfaceType(0).getActualTypeArgument(0).getRawClass();
+        this.entityType = (Class<? extends Entity>) TypeRef.of(mapperType).getInterfaceType(0).getActualTypeArgument(0).getRawClass();
         Assertx.mustAssignableFrom(Entity.class, this.entityType, "Mapper 指定的实体类型必须继承于 Entity");
 
         this.executor = executor;

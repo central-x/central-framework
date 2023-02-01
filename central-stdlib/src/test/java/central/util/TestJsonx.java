@@ -24,7 +24,7 @@
 
 package central.util;
 
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +49,7 @@ public class TestJsonx {
 
         var json = Jsonx.Default().serialize(map);
 
-        var result = Jsonx.Default().deserialize(json, TypeReference.ofMap(String.class, Object.class));
+        var result = Jsonx.Default().deserialize(json, TypeRef.ofMap(String.class, Object.class));
 
         Assertions.assertEquals(3, result.size());
         Assertions.assertEquals(1, result.get("int"));
@@ -68,7 +68,7 @@ public class TestJsonx {
         Charset charset = Charset.forName("GB2312");
         Jsonx.Default().serialize(output, charset, map, false);
 
-        var result = Jsonx.Default().deserialize(output.toString(charset), TypeReference.ofMap(String.class, Object.class));
+        var result = Jsonx.Default().deserialize(output.toString(charset), TypeRef.ofMap(String.class, Object.class));
 
         Assertions.assertEquals(3, result.size());
         Assertions.assertEquals(1, result.get("int"));

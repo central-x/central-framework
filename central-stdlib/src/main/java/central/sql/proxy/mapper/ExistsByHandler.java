@@ -24,7 +24,7 @@
 
 package central.sql.proxy.mapper;
 
-import central.sql.Conditions;
+import central.sql.query.Conditions;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;

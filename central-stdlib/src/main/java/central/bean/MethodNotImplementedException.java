@@ -25,7 +25,7 @@
 package central.bean;
 
 import central.lang.PublicApi;
-import central.lang.reflect.MethodReference;
+import central.lang.reflect.MethodRef;
 import central.lang.Stringx;
 import lombok.experimental.StandardException;
 
@@ -56,7 +56,7 @@ public class MethodNotImplementedException extends RuntimeException {
         super(Stringx.format("Method '{}#{}' not implemented", clazz.getName(), method));
     }
 
-    public MethodNotImplementedException(MethodReference reference) {
+    public MethodNotImplementedException(MethodRef reference) {
         super(Stringx.format("Method '{}#{}' not implemented", reference.getMethod().getDeclaringClass().getName(), reference.getMethod().getName()));
     }
 }

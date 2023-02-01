@@ -25,7 +25,7 @@
 package central.sql;
 
 /**
- * Sql 处理器
+ * Sql 拦载器
  *
  * @author Alan Yeh
  * @since 2022/08/05
@@ -37,14 +37,14 @@ public interface SqlInterceptor {
      *
      * @param context Sql 执行上下文
      */
-    void before(SqlExecuteContext context);
+    void before(SqlContext context);
 
     /**
      * Sql 执行之后
      *
      * @param context Sql 执行上下文
      */
-    void after(SqlExecuteContext context);
+    void after(SqlContext context);
 
     /**
      * Sql 执行异常
@@ -52,5 +52,5 @@ public interface SqlInterceptor {
      * @param context   Sql 执行上下文
      * @param throwable 异常信息
      */
-    void error(SqlExecuteContext context, Throwable throwable);
+    void error(SqlContext context, Throwable throwable);
 }

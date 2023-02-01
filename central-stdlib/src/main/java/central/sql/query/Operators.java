@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package central.sql;
+package central.sql.query;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;

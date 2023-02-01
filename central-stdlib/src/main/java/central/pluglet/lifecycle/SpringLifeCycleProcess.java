@@ -24,7 +24,7 @@
 
 package central.pluglet.lifecycle;
 
-import central.lang.reflect.InstanceReference;
+import central.lang.reflect.InstanceRef;
 import central.pluglet.LifeCycleProcessor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.DisposableBean;
@@ -47,7 +47,7 @@ public class SpringLifeCycleProcess implements LifeCycleProcessor {
     }
 
     @Override
-    public void afterCreated(InstanceReference<?> instance) {
+    public void afterCreated(InstanceRef<?> instance) {
         if (instance.getInstance() instanceof ApplicationContextAware aware){
             aware.setApplicationContext(this.applicationContext);
         }
@@ -58,7 +58,7 @@ public class SpringLifeCycleProcess implements LifeCycleProcessor {
 
     @Override
     @SneakyThrows
-    public void afterPropertySet(InstanceReference<?> instance) {
+    public void afterPropertySet(InstanceRef<?> instance) {
         if (instance.getInstance() instanceof InitializingBean bean){
             bean.afterPropertiesSet();
         }
@@ -66,7 +66,7 @@ public class SpringLifeCycleProcess implements LifeCycleProcessor {
 
     @Override
     @SneakyThrows
-    public void beforeDestroy(InstanceReference<?> instance) {
+    public void beforeDestroy(InstanceRef<?> instance) {
         if (instance.getInstance() instanceof DisposableBean bean){
             bean.destroy();
         }

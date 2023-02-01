@@ -38,7 +38,7 @@ import java.util.function.Function;
  * @since 2022/07/20
  */
 @FunctionalInterface
-public interface GetterReference<T, R> extends Function<T, R>, Serializable {
+public interface GetterRef<T, R> extends Function<T, R>, Serializable {
 
     default String getProperty() {
         try {

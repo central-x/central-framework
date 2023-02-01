@@ -27,7 +27,7 @@ package central.util;
 import central.bean.InitializeException;
 import central.lang.Assertx;
 import central.lang.Stringx;
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import central.util.converter.ConvertException;
 import central.util.converter.Converter;
 import central.util.converter.impl.UnsupportedConverter;
@@ -68,11 +68,11 @@ public class Convertx {
 
         Arrays.stream(classes.split("[,]"))
                 // 将 properties 里面指定的类加载出来
-                .map(TypeReference::of)
+                .map(TypeRef::of)
                 // 判断这些类是否都继承 Converter 接口
                 .peek(type -> Assertx.mustAssignableFrom(Converter.class, type.getRawClass(), () -> new InitializeException(type.getRawClass(), Stringx.format("'{}' must assignable to {}", type.getName(), Converter.class.getName()))))
                 // 实例化这些转换器
-                .map(TypeReference::newInstance)
+                .map(TypeRef::newInstance)
                 // 注册转换器
                 .forEach(it -> this.register((Converter<?>) it.getInstance()));
     }

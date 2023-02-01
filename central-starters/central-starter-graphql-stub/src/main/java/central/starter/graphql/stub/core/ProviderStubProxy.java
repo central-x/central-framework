@@ -28,7 +28,7 @@ import central.bean.Page;
 import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.Stringx;
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import central.starter.graphql.stub.GraphQLRequest;
 import central.starter.graphql.stub.ProviderClient;
 import central.starter.graphql.stub.Provider;
@@ -56,7 +56,7 @@ public class ProviderStubProxy implements InvocationHandler {
 
     private final Class<? extends Provider<?, ?>> stub;
 
-    private final Map<String, TypeReference<?>> dataTypes = new HashMap<>();
+    private final Map<String, TypeRef<?>> dataTypes = new HashMap<>();
 
     private final ProviderClient client;
 
@@ -67,9 +67,9 @@ public class ProviderStubProxy implements InvocationHandler {
         this.client = client;
         this.resources = resources;
         if (stub.getAnnotatedInterfaces()[0].getType() instanceof ParameterizedType type) {
-            this.dataTypes.put("Data", TypeReference.of(type.getActualTypeArguments()[0]));
-            this.dataTypes.put("java.util.List<Data>", TypeReference.ofList(TypeReference.of(type.getActualTypeArguments()[0])));
-            this.dataTypes.put("central.bean.Page<Data>", TypeReference.ofParameterized(Page.class, type.getActualTypeArguments()[0]));
+            this.dataTypes.put("Data", TypeRef.of(type.getActualTypeArguments()[0]));
+            this.dataTypes.put("java.util.List<Data>", TypeRef.ofList(TypeRef.of(type.getActualTypeArguments()[0])));
+            this.dataTypes.put("central.bean.Page<Data>", TypeRef.ofParameterized(Page.class, type.getActualTypeArguments()[0]));
         }
     }
 
@@ -118,13 +118,13 @@ public class ProviderStubProxy implements InvocationHandler {
         }
 
         if (Stringx.isNullOrEmpty(path)) {
-            var result = Jsonx.Default().deserialize(response, TypeReference.ofMap(String.class, TypeReference.ofMap(String.class, TypeReference.of(returnType))));
+            var result = Jsonx.Default().deserialize(response, TypeRef.ofMap(String.class, TypeRef.ofMap(String.class, TypeRef.of(returnType))));
             return result.getOrDefault(method.getName(), Mapx.newHashMap()).get(method.getName());
         } else {
             var paths = Arrayx.asStream(path.trim().split("[.]")).map(String::trim).filter(Stringx::isNotEmpty).toList();
-            TypeReference<?> resultType = TypeReference.ofMap(String.class, TypeReference.of(returnType));
+            TypeRef<?> resultType = TypeRef.ofMap(String.class, TypeRef.of(returnType));
             for (int i = 0; i < paths.size(); i++) {
-                resultType = TypeReference.ofMap(String.class, resultType);
+                resultType = TypeRef.ofMap(String.class, resultType);
             }
             var result = Jsonx.Default().deserialize(response, resultType);
             for (var p : paths) {

@@ -28,7 +28,7 @@ import central.bean.NameValue;
 import central.bean.OptionalEnum;
 import central.lang.Arrayx;
 import central.lang.Assertx;
-import central.lang.reflect.FieldReference;
+import central.lang.reflect.FieldRef;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
 import central.pluglet.control.PlugletControl;
@@ -44,13 +44,13 @@ import java.util.List;
  */
 public class CheckBoxFieldResolver extends FieldResolver {
     @Override
-    public boolean support(FieldReference field) {
+    public boolean support(FieldRef field) {
         var annotation = field.getAnnotation(Control.class);
         return annotation != null && ControlType.CHECKBOX == annotation.type();
     }
 
     @Override
-    public PlugletControl resolve(FieldReference field) {
+    public PlugletControl resolve(FieldRef field) {
         var annotation = field.getAnnotation(Control.class);
 
         // 类型检查

@@ -24,41 +24,50 @@
 
 package central.sql;
 
-import central.lang.Arrayx;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-import javax.annotation.Nullable;
-import java.util.Objects;
+import java.util.List;
 
 /**
- * 条件类型
+ * Sql 执行上下文
  *
  * @author Alan Yeh
- * @since 2022/07/20
+ * @since 2022/09/15
  */
-@AllArgsConstructor
-public enum Types {
+public interface SqlContext {
     /**
-     * 条件分组
+     * Sql 执行器
      */
-    GROUP("GROUP"),
+    SqlExecutor getExecutor();
+
     /**
-     * 条件类型
+     * 待执行 Sql
      */
-    CONDITION("CONDITION");
+    String getSql();
 
-    @Getter
-    private final String value;
+    /**
+     * Sql 参数
+     */
+    List<List<Object>> getArgs();
 
-    @JsonCreator
-    public static @Nullable Types resolve(String value) {
-        return Arrayx.asStream(Types.values()).filter(it -> Objects.equals(it.getValue(), value)).findFirst().orElse(null);
-    }
+    /**
+     * 执行结果
+     */
+    Object getResult();
 
-    @Override
-    public String toString() {
-        return this.value;
-    }
+    /**
+     * 保存执行过程信息
+     *
+     * @param key   键
+     * @param value 值
+     * @param <T>   值类型
+     */
+    <T> void put(String key, T value);
+
+    /**
+     * 获取执行过程信息
+     *
+     * @param key 键
+     * @param <T> 值类型
+     * @return 值
+     */
+    <T> T get(String key);
 }

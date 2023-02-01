@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-package central.sql;
+package central.sql.query;
 
 import central.sql.data.Entity;
 import central.validation.Validatable;
 import central.lang.Assertx;
-import central.lang.reflect.PropertyReference;
+import central.lang.reflect.PropertyRef;
 import central.util.Listx;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -35,6 +35,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Delegate;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,16 +59,19 @@ public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Va
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null) {
             return false;
         }
-        var that = (Orders<?>) o;
-        return orders.equals(that.orders);
+
+        if (o instanceof Orders<?> that) {
+            return this.orders.equals(that.orders);
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orders);
+        return Objects.hash(this.orders);
     }
 
     /**
@@ -123,7 +128,7 @@ public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Va
      * @param property 实体属性的Getter方法引用，Entity::Getter
      * @param desc     是否倒序
      */
-    public Orders<T> and(PropertyReference<T, ?> property, boolean desc) {
+    public Orders<T> and(PropertyRef<T, ?> property, boolean desc) {
         this.orders.add(new Order<>(property, desc));
         return this;
     }
@@ -144,7 +149,7 @@ public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Va
      *
      * @param property 实体属性的Getter方法引用，Entity::Getter
      */
-    public Orders<T> asc(PropertyReference<T, ?> property) {
+    public Orders<T> asc(PropertyRef<T, ?> property) {
         this.orders.add(new Order<>(property, false));
         return this;
     }
@@ -164,7 +169,7 @@ public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Va
      *
      * @param property 实体属性的Getter方法引用，Entity::Getter
      */
-    public Orders<T> desc(PropertyReference<T, ?> property) {
+    public Orders<T> desc(PropertyRef<T, ?> property) {
         this.orders.add(new Order<>(property, true));
         return this;
     }
@@ -183,7 +188,9 @@ public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Va
     // 内部排序条件存放类
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @NoArgsConstructor
-    public static class Order<T extends Entity> implements Validatable {
+    public static class Order<T extends Entity> implements Validatable, Serializable {
+        @Serial
+        private static final long serialVersionUID = 6931560122919921055L;
 
         /**
          * 实体属性Getter对应的属性
@@ -200,7 +207,7 @@ public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Va
         @Setter
         private boolean desc;
 
-        Order(PropertyReference<T, ?> property, boolean desc) {
+        Order(PropertyRef<T, ?> property, boolean desc) {
             this.property = property.getPropertyName();
             this.desc = desc;
 
@@ -249,12 +256,15 @@ public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Va
             if (this == o) {
                 return true;
             }
-            if (o == null || getClass() != o.getClass()) {
+            if (o == null) {
                 return false;
             }
-            var order = (Order<?>) o;
-            return desc == order.desc &&
-                    property.equals(order.property);
+
+            if (o instanceof Order<?> order) {
+                return Objects.equals(this.desc, order.desc) && Objects.equals(this.property, order.property);
+            }
+
+            return false;
         }
 
         @Override

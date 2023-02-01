@@ -24,7 +24,7 @@
 
 package central.lang;
 
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import central.util.Collectionx;
 import central.util.Mapx;
 import org.junit.jupiter.api.Test;
@@ -371,17 +371,17 @@ public class TestAssertx {
     @Test
     public void case23() {
         assertThrows(IllegalArgumentException.class, () -> {
-            var value = Assertx.requireInstanceOf(TypeReference.of(String.class), 1, "Test Assertx#requireInstanceOf");
+            var value = Assertx.requireInstanceOf(TypeRef.of(String.class), 1, "Test Assertx#requireInstanceOf");
             assertTrue(String.class.isAssignableFrom(value.getClass()));
         });
 
         assertThrows(IllegalStateException.class, () -> {
-            var value = Assertx.requireInstanceOf(TypeReference.of(String.class), 1, IllegalStateException::new, "Test Assertx#requireInstanceOf");
+            var value = Assertx.requireInstanceOf(TypeRef.of(String.class), 1, IllegalStateException::new, "Test Assertx#requireInstanceOf");
             assertTrue(String.class.isAssignableFrom(value.getClass()));
         });
 
         assertThrows(IllegalStateException.class, () -> {
-            var value = Assertx.requireInstanceOf(TypeReference.of(String.class), 1, () -> new IllegalStateException("Test Assertx#requireInstanceOf"));
+            var value = Assertx.requireInstanceOf(TypeRef.of(String.class), 1, () -> new IllegalStateException("Test Assertx#requireInstanceOf"));
             assertTrue(String.class.isAssignableFrom(value.getClass()));
         });
 

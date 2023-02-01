@@ -26,7 +26,7 @@ package central.sql.impl.standard;
 
 import central.lang.Assertx;
 import central.lang.CompareResult;
-import central.sql.Conditions;
+import central.sql.query.Conditions;
 import central.sql.SqlExecutor;
 import central.sql.SqlMetaManager;
 import central.sql.SqlType;

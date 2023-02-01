@@ -26,8 +26,9 @@ package central.sql.proxy;
 
 import central.sql.data.Entity;
 import central.bean.Page;
-import central.sql.Conditions;
-import central.sql.Orders;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -132,7 +133,9 @@ public interface Mapper<E extends Entity> {
 
     /**
      * 根据主键查询
+     * <p>
      * 如果没有找到，则返回 null
+     * <p>
      * {@code SELECT * FROM TABLE WHERE ID = ?}
      *
      * @param id 主键
@@ -142,7 +145,22 @@ public interface Mapper<E extends Entity> {
     E findById(@Nullable String id);
 
     /**
+     * 根据主键查询，只返回指定字段信息
+     * <p>
+     * 如果没有找到，则返回 null
+     * <p>
+     * {@code SELECT column1, column2, ... FROM TABLE WHERE ID = ?}
+     *
+     * @param id      主键
+     * @param columns 字段列表
+     * @return 数据实体
+     */
+    @Nullable
+    E findById(@Nullable String id, Columns<E> columns);
+
+    /**
      * 根据主键查询
+     * <p>
      * {@code SELECT * FROM TABLE WHERE ID IN (?, ?, ?, ...)}
      *
      * @param ids 主键列表
@@ -150,6 +168,18 @@ public interface Mapper<E extends Entity> {
      */
     @Nonnull
     List<E> findByIds(@Nullable List<String> ids);
+
+    /**
+     * 根据主键查询
+     * <p>
+     * {@code SELECT column1, column2, ... FROM TABLE WHERE ID IN (?, ?, ?, ...)}
+     *
+     * @param ids     主键列表
+     * @param columns 字段列表
+     * @return 数据实体列表
+     */
+    @Nonnull
+    List<E> findByIds(@Nullable List<String> ids, Columns<E> columns);
 
     /**
      * 根据条件获取第一条数据
@@ -161,23 +191,63 @@ public interface Mapper<E extends Entity> {
     @Nullable
     E findFirstBy(@Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
 
+    /**
+     * 根据条件获取第一条数据
+     *
+     * @param columns    字段列表
+     * @param conditions 查询条件
+     * @param orders     排序
+     * @return 实体数据
+     */
+    @Nullable
+    E findFirstBy(@Nullable Columns<E> columns, @Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
+
+    /**
+     * 根据条件获取第一条数据
+     *
+     * @param conditions 查询条件
+     * @return 实体数据
+     */
     @Nullable
     E findFirstBy(@Nonnull Conditions<E> conditions);
 
     /**
-     * 根据条件获取实体集合
+     * 根据条件获取第一条数据
      *
-     * @param first      取前几条数据，如果不为空，则取所有值
+     * @param columns    字段列表
+     * @param conditions 查询条件
+     * @return 实体数据
+     */
+    @Nullable
+    E findFirstBy(@Nullable Columns<E> columns, @Nonnull Conditions<E> conditions);
+
+    /**
+     * 根据条件获取实体列表
+     *
+     * @param first      取前几条数据，如果为空，则取所有值
      * @param offset     偏移量。如果为空，则不偏移。此值在 first 不为空时才生效
-     * @param conditions 过滤条件
+     * @param conditions 查询条件
      * @param orders     排序
      * @return 实体列表
      */
     @Nonnull
-    List<E> findBy(Long first, Long offset, @Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
+    List<E> findBy(@Nullable Long first, @Nullable Long offset, @Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
 
     /**
-     * 根据条件获取实体集合
+     * 根据条件获取实体列表
+     *
+     * @param first      取前几条数据，如果为空，则取所有值
+     * @param offset     偏移量。如果为空，则不偏移。此值在 first 不为空时才生效
+     * @param columns    字段列表
+     * @param conditions 查询条件
+     * @param orders     排序
+     * @return 实体列表
+     */
+    @Nonnull
+    List<E> findBy(@Nullable Long first, @Nullable Long offset, @Nullable Columns<E> columns, @Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
+
+    /**
+     * 根据条件获取实体列表
      *
      * @param conditions 过滤条件
      * @param orders     排序
@@ -187,13 +257,35 @@ public interface Mapper<E extends Entity> {
     List<E> findBy(@Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
 
     /**
-     * 根据条件获取实体集合
+     * 根据条件获取实体列表
+     *
+     * @param columns    字段列表
+     * @param conditions 查询条件
+     * @param orders     排序
+     * @return 实体列表
+     */
+    @Nonnull
+    List<E> findBy(@Nullable Columns<E> columns, @Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
+
+
+    /**
+     * 根据条件获取实体列表
      *
      * @param conditions 过滤条件
      * @return 实体列表
      */
     @Nonnull
     List<E> findBy(@Nonnull Conditions<E> conditions);
+
+    /**
+     * 根据条件获取实体列表
+     *
+     * @param columns    字段列表
+     * @param conditions 查询条件
+     * @return 实体列表
+     */
+    @Nonnull
+    List<E> findBy(@Nullable Columns<E> columns, @Nonnull Conditions<E> conditions);
 
     /**
      * 获取所有数据
@@ -203,6 +295,16 @@ public interface Mapper<E extends Entity> {
      */
     @Nonnull
     List<E> findAll(@Nullable Orders<E> orders);
+
+    /**
+     * 获取所有数据
+     *
+     * @param columns 字段列表
+     * @param orders  查询条件
+     * @return 实体列表
+     */
+    @Nonnull
+    List<E> findAll(@Nullable Columns<E> columns, @Nullable Orders<E> orders);
 
     /**
      * 获取所有数据
@@ -217,23 +319,25 @@ public interface Mapper<E extends Entity> {
      *
      * @param pageIndex  分页起始（从 1 开始）
      * @param pageSize   分页大小
-     * @param conditions 条件参数
+     * @param conditions 查询条件
      * @param orders     排序
      * @return 分页结果
      */
     @Nonnull
-    Page<E> findPageBy(@Nonnull Long pageIndex, @Nonnull Long pageSize, @Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
+    Page<E> findPageBy(@Nonnull Long pageIndex, @Nonnull Long pageSize, @Nonnull Conditions<E> conditions, @Nonnull Orders<E> orders);
 
     /**
      * 根据条件分页查询数据
      *
      * @param pageIndex  分页起始（从 1 开始）
      * @param pageSize   分页大小
-     * @param conditions 条件参数
+     * @param columns    字段列表
+     * @param conditions 查询条件
+     * @param orders     排序
      * @return 分页结果
      */
     @Nonnull
-    Page<E> findPageBy(@Nonnull Long pageIndex, @Nonnull Long pageSize, @Nonnull Conditions<E> conditions);
+    Page<E> findPageBy(@Nonnull Long pageIndex, @Nonnull Long pageSize, @Nullable Columns<E> columns, @Nonnull Conditions<E> conditions, @Nonnull Orders<E> orders);
 
     /**
      * 询查表的数据量

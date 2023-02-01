@@ -25,11 +25,8 @@
 package central.pluglet.control;
 
 import central.bean.MethodNotImplementedException;
-import central.lang.reflect.FieldReference;
-import central.lang.reflect.MethodReference;
-import central.pluglet.control.PlugletControl;
-
-import java.lang.reflect.Field;
+import central.lang.reflect.FieldRef;
+import central.lang.reflect.MethodRef;
 
 /**
  * Pluglet Control Resolver
@@ -39,9 +36,9 @@ import java.lang.reflect.Field;
  * @since 2022/07/11
  */
 public interface ControlResolver {
-    boolean support(FieldReference field);
+    boolean support(FieldRef field);
 
-    default PlugletControl resolve(FieldReference field) {
-        throw new MethodNotImplementedException(new MethodReference() {});
+    default PlugletControl resolve(FieldRef field) {
+        throw new MethodNotImplementedException(new MethodRef() {});
     }
 }

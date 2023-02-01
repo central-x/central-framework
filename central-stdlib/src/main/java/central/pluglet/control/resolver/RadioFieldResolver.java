@@ -27,7 +27,7 @@ package central.pluglet.control.resolver;
 import central.bean.TypeCheckException;
 import central.bean.NameValue;
 import central.bean.OptionalEnum;
-import central.lang.reflect.FieldReference;
+import central.lang.reflect.FieldRef;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
 import central.pluglet.control.PlugletControl;
@@ -44,13 +44,13 @@ import central.util.Objectx;
  */
 public class RadioFieldResolver extends FieldResolver {
     @Override
-    public boolean support(FieldReference field) {
+    public boolean support(FieldRef field) {
         var annotation = field.getAnnotation(Control.class);
         return annotation != null && ControlType.RADIO == annotation.type();
     }
 
     @Override
-    public PlugletControl resolve(FieldReference field) {
+    public PlugletControl resolve(FieldRef field) {
         var annotation = field.getAnnotation(Control.class);
 
         // 类型检查

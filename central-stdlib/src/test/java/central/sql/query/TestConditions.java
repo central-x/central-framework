@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-package central.sql;
+package central.sql.query;
 
 import central.sql.data.AccountEntity;
+import central.sql.query.Conditions;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.Collectors;

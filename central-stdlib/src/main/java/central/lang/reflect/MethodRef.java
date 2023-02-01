@@ -22,32 +22,36 @@
  * SOFTWARE.
  */
 
-package central.sql;
+package central.lang.reflect;
 
-import central.sql.data.AccountEntity;
-import org.junit.jupiter.api.Test;
+import lombok.Getter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.lang.reflect.Method;
 
 /**
- * Orders Test Cases
+ * 方法引用
  *
  * @author Alan Yeh
- * @since 2022/08/02
+ * @since 2022/07/12
  */
-public class TestOrders {
-    @Test
-    public void case1(){
-        var orders = Orders.of(AccountEntity.class).asc(AccountEntity::getAge);
-        assertEquals(orders.toSql(), "age");
+public abstract class MethodRef {
+    @Getter
+    private final Method method;
 
-        orders = Orders.of(AccountEntity.class).desc(AccountEntity::getAge);
-        assertEquals(orders.toSql(), "age DESC");
+    private MethodRef(Method method){
+        this.method = method;
     }
 
-    @Test
-    public void case2(){
-        var orders = Orders.of(AccountEntity.class).asc(AccountEntity::getAge).desc(AccountEntity::getName);
-        assertEquals(orders.toSql(), "age, name DESC");
+    public MethodRef(){
+        this.method = this.getClass().getEnclosingMethod();
+    }
+
+    public static MethodRef of(Method method){
+        return new MethodRef(method){
+        };
+    }
+
+    public TypeRef<?> getReturnType(){
+        return TypeRef.of(this.method.getGenericReturnType());
     }
 }

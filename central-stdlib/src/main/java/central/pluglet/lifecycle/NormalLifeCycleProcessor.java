@@ -25,7 +25,7 @@
 package central.pluglet.lifecycle;
 
 import central.bean.LifeCycle;
-import central.lang.reflect.InstanceReference;
+import central.lang.reflect.InstanceRef;
 import central.pluglet.LifeCycleProcessor;
 
 /**
@@ -37,21 +37,21 @@ import central.pluglet.LifeCycleProcessor;
 public class NormalLifeCycleProcessor implements LifeCycleProcessor {
 
     @Override
-    public void afterCreated(InstanceReference<?> instance) {
+    public void afterCreated(InstanceRef<?> instance) {
         if (instance.getInstance() instanceof LifeCycle cycle) {
             cycle.created();
         }
     }
 
     @Override
-    public void afterPropertySet(InstanceReference<?> instance) {
+    public void afterPropertySet(InstanceRef<?> instance) {
         if (instance.getInstance() instanceof LifeCycle cycle) {
             cycle.initialized();
         }
     }
 
     @Override
-    public void beforeDestroy(InstanceReference<?> instance) {
+    public void beforeDestroy(InstanceRef<?> instance) {
         if (instance.getInstance() instanceof LifeCycle cycle) {
             cycle.destroy();
         }

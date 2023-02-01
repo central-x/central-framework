@@ -24,7 +24,7 @@
 
 package central.sql.impl.standard;
 
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import central.sql.SqlTransformer;
 import central.sql.SqlExecutor;
 import central.util.Setx;
@@ -82,7 +82,7 @@ public class StandardTransformer implements SqlTransformer {
             throw new SQLException(Stringx.format("调用类[{}]的无参构造函数创建实例失败", type.getName()), ex);
         }
 
-        var reference = TypeReference.of(type);
+        var reference = TypeRef.of(type);
 
         for (var entry : data.entrySet()) {
             if (entry.getValue() == null) {

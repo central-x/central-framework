@@ -22,47 +22,43 @@
  * SOFTWARE.
  */
 
-package central.sql.data;
+package central.sql.query;
 
-import central.sql.meta.annotation.Relation;
-import central.validation.Label;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import central.lang.Arrayx;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-import java.io.Serial;
+import javax.annotation.Nullable;
+import java.util.Objects;
 
 /**
- * 部门
+ * 条件类型
  *
  * @author Alan Yeh
- * @since 2022/08/02
+ * @since 2022/07/20
  */
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "XT_DEPT")
-@Relation(target = AccountEntity.class, alias = "account", referencedProperty = "deptId")
-@EqualsAndHashCode(callSuper = true)
-public class DeptEntity extends ModifiableEntity {
-    @Serial
-    private static final long serialVersionUID = -648590837056111873L;
+public enum Types {
+    /**
+     * 条件分组
+     */
+    GROUP("GROUP"),
+    /**
+     * 条件类型
+     */
+    CONDITION("CONDITION");
 
-    @Id
-    @Override
-    public String getId() {
-        return super.getId();
+    @Getter
+    private final String value;
+
+    @JsonCreator
+    public static @Nullable Types resolve(String value) {
+        return Arrayx.asStream(Types.values()).filter(it -> Objects.equals(it.getValue(), value)).findFirst().orElse(null);
     }
 
-    @NotBlank
-    @Label("标识")
-    private String code;
-
-    @NotBlank
-    @Label("名称")
-    private String name;
+    @Override
+    public String toString() {
+        return this.value;
+    }
 }

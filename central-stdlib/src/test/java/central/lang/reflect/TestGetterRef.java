@@ -24,36 +24,41 @@
 
 package central.lang.reflect;
 
-import central.lang.Stringx;
+import central.sql.data.Entity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import java.io.Serializable;
-import java.lang.invoke.SerializedLambda;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.function.Function;
+import java.io.Serial;
 
 /**
- * Property Reference
- * 属性引用
+ * GetterReference Test Cases
  *
  * @author Alan Yeh
- * @since 2022/07/13
+ * @since 2022/07/20
  */
-@FunctionalInterface
-public interface PropertyReference<T, R> extends Function<T, R>, Serializable {
-    /**
-     * 根据属性名
-     */
-    default String getPropertyName() {
-        try {
-            Method method = this.getClass().getDeclaredMethod("writeReplace");
-            method.setAccessible(true);
-            SerializedLambda lambda = (SerializedLambda) method.invoke(this);
+public class TestGetterRef {
 
-            String getter = lambda.getImplMethodName();
-            return Stringx.lowerCaseFirstLetter(Stringx.removePrefix(Stringx.removePrefix(getter, "get"), "is"));
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-            throw new RuntimeException("[PropertyReference] 解析属性异常", ex);
-        }
+    @Test
+    public void case1() {
+        Assertions.assertEquals("test", getProperty(Account::getTest));
+        Assertions.assertEquals("success", getProperty(Account::isSuccess));
+    }
+
+
+    public <T> String getProperty(GetterRef<T, ?> getter) {
+        return getter.getProperty();
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    public static class Account extends Entity {
+        @Serial
+        private static final long serialVersionUID = -1275944389220795141L;
+
+        private String test;
+
+        private boolean success;
     }
 }

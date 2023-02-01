@@ -24,7 +24,7 @@
 
 package central.pluglet.control.resolver;
 
-import central.lang.reflect.FieldReference;
+import central.lang.reflect.FieldRef;
 import central.pluglet.control.ControlResolver;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
@@ -46,13 +46,13 @@ public class FieldResolver implements ControlResolver {
 
     private final Set<ControlType> unsupported = Setx.of(ControlType.CHECKBOX, ControlType.RADIO);
     @Override
-    public boolean support(FieldReference field) {
+    public boolean support(FieldRef field) {
         var annotation = field.getAnnotation(Control.class);
         return annotation != null && !unsupported.contains(annotation.type());
     }
 
     @Override
-    public PlugletControl resolve(FieldReference field) {
+    public PlugletControl resolve(FieldRef field) {
         var annotation = field.getAnnotation(Control.class);
         return PlugletControl.builder()
                 .label(annotation.label())

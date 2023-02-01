@@ -24,8 +24,12 @@
 
 package central.sql.proxy.mapper;
 
-import central.sql.Conditions;
-import central.sql.Orders;
+import central.bean.MethodNotImplementedException;
+import central.lang.reflect.MethodSignature;
+import central.sql.data.Entity;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
@@ -47,9 +51,28 @@ import java.sql.SQLException;
 public class FindFirstByHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
-        var conditions = (Conditions<?>) Arrayx.getOrNull(args, 0);
-        var orders = (Orders<?>) Arrayx.getOrNull(args, 1);
-        var script = builder.forFindBy(executor, meta, 1L, 0L, conditions, orders);
+        Columns<?> columns = null;
+        Conditions<?> conditions = null;
+        Orders<?> orders = null;
+
+        var signature = MethodSignature.of(method);
+        if (signature.equals(MethodSignature.of("findFirstBy", Entity.class, Conditions.class, Orders.class))) {
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 0);
+            orders = (Orders<?>) Arrayx.getOrNull(args, 1);
+        } else if (signature.equals(MethodSignature.of("findFirstBy", Entity.class, Columns.class, Conditions.class, Orders.class))) {
+            columns = (Columns<?>) Arrayx.getOrNull(args, 0);
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 1);
+            orders = (Orders<?>) Arrayx.getOrNull(args, 2);
+        } else if (signature.equals(MethodSignature.of("findFirstBy", Entity.class, Conditions.class))) {
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 0);
+        } else if (signature.equals(MethodSignature.of("findFirstBy", Entity.class, Columns.class, Conditions.class))) {
+            columns = (Columns<?>) Arrayx.getOrNull(args, 0);
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 1);
+        } else {
+            throw new MethodNotImplementedException("MethodNotImplemented: " + signature.getSignature());
+        }
+
+        var script = builder.forFindBy(executor, meta, 1L, 0L, columns, conditions, orders);
         return executor.selectSingle(script, meta.getType());
     }
 }

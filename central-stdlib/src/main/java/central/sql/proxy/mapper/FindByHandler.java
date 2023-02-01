@@ -24,8 +24,11 @@
 
 package central.sql.proxy.mapper;
 
-import central.sql.Conditions;
-import central.sql.Orders;
+import central.bean.MethodNotImplementedException;
+import central.lang.reflect.MethodSignature;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
@@ -36,6 +39,7 @@ import central.lang.Arrayx;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * FindBy Handler
@@ -49,20 +53,39 @@ public class FindByHandler implements MapperHandler {
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
         Long first = null;
         Long offset = null;
-        Conditions<?> conditions;
-        Orders<?> orders;
+        Columns<?> columns = null;
+        Conditions<?> conditions = null;
+        Orders<?> orders = null;
 
-        if (args.length == 4) {
+        var signature = MethodSignature.of(method);
+        if (signature.equals(MethodSignature.of("findBy", List.class, Long.class, Long.class, Conditions.class, Orders.class))) {
             first = (Long) Arrayx.getOrNull(args, 0);
             offset = (Long) Arrayx.getOrNull(args, 1);
             conditions = (Conditions<?>) Arrayx.getOrNull(args, 2);
             orders = (Orders<?>) Arrayx.getOrNull(args, 3);
-        } else {
+        } else if (signature.equals(MethodSignature.of("findBy", List.class, Long.class, Long.class, Columns.class, Conditions.class, Orders.class))) {
+            first = (Long) Arrayx.getOrNull(args, 0);
+            offset = (Long) Arrayx.getOrNull(args, 1);
+            columns = (Columns<?>) Arrayx.getOrNull(args, 2);
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 3);
+            orders = (Orders<?>) Arrayx.getOrNull(args, 4);
+        } else if (signature.equals(MethodSignature.of("findBy", List.class, Conditions.class, Orders.class))) {
             conditions = (Conditions<?>) Arrayx.getOrNull(args, 0);
             orders = (Orders<?>) Arrayx.getOrNull(args, 1);
+        } else if (signature.equals(MethodSignature.of("findBy", List.class, Columns.class, Conditions.class, Orders.class))) {
+            columns = (Columns<?>) Arrayx.getOrNull(args, 0);
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 1);
+            orders = (Orders<?>) Arrayx.getOrNull(args, 2);
+        } else if (signature.equals(MethodSignature.of("findBy", List.class, Conditions.class))) {
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 0);
+        } else if (signature.equals(MethodSignature.of("findBy", List.class, Columns.class, Conditions.class))) {
+            columns = (Columns<?>) Arrayx.getOrNull(args, 0);
+            conditions = (Conditions<?>) Arrayx.getOrNull(args, 1);
+        } else {
+            throw new MethodNotImplementedException("MethodNotImplemented: " + signature.getSignature());
         }
 
-        var script = builder.forFindBy(executor, meta, first, offset, conditions, orders);
+        var script = builder.forFindBy(executor, meta, first, offset, columns, conditions, orders);
         return executor.select(script, meta.getType());
     }
 }

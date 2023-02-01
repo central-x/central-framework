@@ -24,7 +24,7 @@
 
 package central.lang;
 
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import central.util.Collectionx;
 import central.util.Mapx;
 import lombok.experimental.UtilityClass;
@@ -548,7 +548,7 @@ public class Assertx {
     /**
      * var value = Assertx.requireInstanceOf(TypeReference.of(Number.class), type, "Number expected")
      */
-    public static <T> T requireInstanceOf(@Nonnull TypeReference<T> type, @Nullable Object obj, String message, Object... args) {
+    public static <T> T requireInstanceOf(@Nonnull TypeRef<T> type, @Nullable Object obj, String message, Object... args) {
         mustNotNull(type, NullPointerException::new, "Argument 'type' must not null");
         must(type.isInstance(obj), IllegalArgumentException::new, message, args);
         return (T) obj;
@@ -557,7 +557,7 @@ public class Assertx {
     /**
      * var value = Assertx.requireInstanceOf(TypeReference.of(Number.class), type, IllegalArgumentException::new, "Number expected")
      */
-    public static <T, E extends Exception> T requireInstanceOf(@Nonnull TypeReference<T> type, @Nullable Object obj, Function<String, E> throwable, String message, Object... args) throws E {
+    public static <T, E extends Exception> T requireInstanceOf(@Nonnull TypeRef<T> type, @Nullable Object obj, Function<String, E> throwable, String message, Object... args) throws E {
         mustNotNull(type, NullPointerException::new, "Argument 'type' must not null");
         must(type.getRawClass().isInstance(obj), throwable, message, args);
         return (T) obj;
@@ -566,7 +566,7 @@ public class Assertx {
     /**
      * var value = Assertx.requireInstanceOf(TypeReference.of(Number.class), type, () -> new IllegalArgumentException("Number expected"))
      */
-    public static <T, E extends Exception> T requireInstanceOf(@Nonnull TypeReference<T> type, @Nullable Object obj, Supplier<E> throwable) throws E {
+    public static <T, E extends Exception> T requireInstanceOf(@Nonnull TypeRef<T> type, @Nullable Object obj, Supplier<E> throwable) throws E {
         mustNotNull(type, NullPointerException::new, "Argument 'type' must not null");
         must(type.getRawClass().isInstance(obj), throwable);
         return (T) obj;

@@ -24,7 +24,7 @@
 
 package central.starter.graphql.stub.test;
 
-import central.sql.Conditions;
+import central.sql.query.Conditions;
 import central.starter.graphql.stub.TestApplication;
 import central.starter.graphql.stub.test.data.Group;
 import central.starter.graphql.stub.test.stub.GroupRepository;

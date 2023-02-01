@@ -25,7 +25,7 @@
 package central.sql.interceptor;
 
 import central.bean.OptionalEnum;
-import central.sql.SqlExecuteContext;
+import central.sql.SqlContext;
 import central.sql.SqlInterceptor;
 import central.lang.Arrayx;
 import central.util.Listx;
@@ -57,12 +57,12 @@ public class LogInterceptor implements SqlInterceptor {
     }
 
     @Override
-    public void before(SqlExecuteContext context) {
+    public void before(SqlContext context) {
         context.put(LogInterceptor.class.getName() + ".begin", System.currentTimeMillis());
     }
 
     @Override
-    public void after(SqlExecuteContext context) {
+    public void after(SqlContext context) {
         long end = System.currentTimeMillis();
         long begin = context.get(LogInterceptor.class.getName() + ".begin");
 
@@ -79,7 +79,7 @@ public class LogInterceptor implements SqlInterceptor {
     }
 
     @Override
-    public void error(SqlExecuteContext context, Throwable throwable) {
+    public void error(SqlContext context, Throwable throwable) {
         long end = System.currentTimeMillis();
         long begin = context.get(LogInterceptor.class.getName() + ".begin");
 

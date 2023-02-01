@@ -22,43 +22,43 @@
  * SOFTWARE.
  */
 
-package central.lang.reflect;
+package central.sql.query;
 
-import central.sql.data.Entity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import central.lang.Arrayx;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import java.io.Serial;
+import javax.annotation.Nullable;
+import java.util.Objects;
 
 /**
- * GetterReference Test Cases
+ * 条件连接符
  *
  * @author Alan Yeh
  * @since 2022/07/20
  */
-public class TestGetterReference {
+@RequiredArgsConstructor
+public enum Connectors {
+    /**
+     * AND
+     */
+    AND("AND"),
+    /**
+     * OR
+     */
+    OR("OR");
 
-    @Test
-    public void case1() {
-        Assertions.assertEquals("test", getProperty(Account::getTest));
-        Assertions.assertEquals("success", getProperty(Account::isSuccess));
+    @Getter
+    private final String value;
+
+    @JsonCreator
+    public static @Nullable Connectors resolve(String value) {
+        return Arrayx.asStream(Connectors.values()).filter(it -> Objects.equals(it.getValue(), value)).findFirst().orElse(null);
     }
 
-
-    public <T> String getProperty(GetterReference<T, ?> getter) {
-        return getter.getProperty();
-    }
-
-    @Data
-    @EqualsAndHashCode(callSuper = true)
-    public static class Account extends Entity {
-        @Serial
-        private static final long serialVersionUID = -1275944389220795141L;
-
-        private String test;
-
-        private boolean success;
+    @Override
+    public String toString() {
+        return this.value;
     }
 }

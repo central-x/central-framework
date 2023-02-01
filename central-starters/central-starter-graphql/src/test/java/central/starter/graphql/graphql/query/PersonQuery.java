@@ -25,8 +25,8 @@
 package central.starter.graphql.graphql.query;
 
 import central.bean.Page;
-import central.sql.Conditions;
-import central.sql.Orders;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 import central.starter.graphql.annotation.GraphQLBatchLoader;
 import central.starter.graphql.annotation.GraphQLFetcher;
 import central.starter.graphql.annotation.GraphQLSchema;

@@ -24,8 +24,8 @@
 
 package central.starter.test.service;
 
-import central.sql.Conditions;
-import central.sql.Orders;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 import central.starter.cache.core.annotation.CacheEvict;
 import central.starter.cache.core.annotation.CacheKey;
 import central.starter.cache.core.annotation.Cacheable;

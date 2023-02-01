@@ -33,6 +33,9 @@ import central.sql.builder.script.table.AddTableScript;
 import central.sql.builder.script.table.DropTableScript;
 import central.sql.builder.script.table.RenameTableScript;
 import central.sql.meta.entity.EntityMeta;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 
 import java.sql.SQLSyntaxErrorException;
 import java.util.List;
@@ -86,11 +89,12 @@ public interface SqlBuilder {
      * @param meta       主表元数据
      * @param first      查询前 N 条数据
      * @param offset     跳过前 N 条数据
+     * @param columns    字段列表
      * @param conditions 筛选条件
      * @param orders     排序条件
      * @return 构建好的 Sql
      */
-    SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Conditions<?> conditions, Orders<?> orders) throws SQLSyntaxErrorException;
+    SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Columns<?> columns, Conditions<?> conditions, Orders<?> orders) throws SQLSyntaxErrorException;
 
     /**
      * Insert Sql

@@ -24,7 +24,7 @@
 
 package central.net.http.body.extractor;
 
-import central.lang.reflect.TypeReference;
+import central.lang.reflect.TypeRef;
 import central.net.http.body.Body;
 import central.net.http.body.BodyExtractor;
 import central.util.Jsonx;
@@ -43,7 +43,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class JsonExtractor<T> implements BodyExtractor<T> {
     private final Charset charset;
-    private final TypeReference<T> type;
+    private final TypeRef<T> type;
 
     /**
      * 构造函数
@@ -51,7 +51,7 @@ public class JsonExtractor<T> implements BodyExtractor<T> {
      * @param type    对象类型
      * @param charset 字符集（如果未定指，将使用响应头里指定的字符集）
      */
-    public JsonExtractor(@Nonnull TypeReference<T> type, @Nullable Charset charset) {
+    public JsonExtractor(@Nonnull TypeRef<T> type, @Nullable Charset charset) {
         this.charset = charset;
         this.type = type;
     }
@@ -61,7 +61,7 @@ public class JsonExtractor<T> implements BodyExtractor<T> {
      *
      * @param type 对象类型
      */
-    public static <T> JsonExtractor<T> of(TypeReference<T> type) {
+    public static <T> JsonExtractor<T> of(TypeRef<T> type) {
         return new JsonExtractor<>(type, null);
     }
 
@@ -71,7 +71,7 @@ public class JsonExtractor<T> implements BodyExtractor<T> {
      * @param type    对象类型
      * @param charset 字符集
      */
-    public static <T> JsonExtractor<T> of(TypeReference<T> type, Charset charset) {
+    public static <T> JsonExtractor<T> of(TypeRef<T> type, Charset charset) {
         return new JsonExtractor<>(type, null);
     }
 

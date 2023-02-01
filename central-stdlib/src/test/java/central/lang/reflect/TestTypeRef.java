@@ -40,17 +40,17 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Alan Yeh
  * @since 2022/07/13
  */
-public class TestTypeReference {
+public class TestTypeRef {
     /**
      * 通过 Class 构建 TypeReference
      */
     @Test
     public void case1() {
-        var reference = TypeReference.of(TestTypeReference.class);
+        var reference = TypeRef.of(TestTypeRef.class);
 
-        assertEquals(TestTypeReference.class.getTypeName(), reference.getName());
+        assertEquals(TestTypeRef.class.getTypeName(), reference.getName());
         assertFalse(reference.isParameterized());
-        assertEquals(TestTypeReference.class, reference.getType());
+        assertEquals(TestTypeRef.class, reference.getType());
     }
 
     /**
@@ -58,9 +58,9 @@ public class TestTypeReference {
      */
     @Test
     public void case2() {
-        var reference = TypeReference.of("central.lang.reflect.TestTypeReference");
+        var reference = TypeRef.of("central.lang.reflect.TestTypeReference");
         assertFalse(reference.isParameterized());
-        assertEquals(TestTypeReference.class, reference.getType());
+        assertEquals(TestTypeRef.class, reference.getType());
     }
 
     /**
@@ -68,10 +68,10 @@ public class TestTypeReference {
      */
     @Test
     public void case3() {
-        var reference = new TypeReference<TestTypeReference>() {
+        var reference = new TypeRef<TestTypeRef>() {
         };
         assertFalse(reference.isParameterized());
-        assertEquals(TestTypeReference.class, reference.getType());
+        assertEquals(TestTypeRef.class, reference.getType());
     }
 
     /**
@@ -79,7 +79,7 @@ public class TestTypeReference {
      */
     @Test
     public void case4() {
-        var reference = new TypeReference<List<String>>() {
+        var reference = new TypeRef<List<String>>() {
         };
         assertTrue(reference.isParameterized());
         assertEquals(List.class, reference.getRawType());
@@ -92,7 +92,7 @@ public class TestTypeReference {
      */
     @Test
     public void case5() {
-        var reference = TypeReference.ofList(String.class);
+        var reference = TypeRef.ofList(String.class);
         assertTrue(reference.isParameterized());
         assertEquals(List.class, reference.getRawType());
         assertEquals(String.class, reference.getActualTypeArgument(0).getType());
@@ -104,7 +104,7 @@ public class TestTypeReference {
      */
     @Test
     public void case6() {
-        var reference = TypeReference.ofList(TypeReference.ofList(String.class));
+        var reference = TypeRef.ofList(TypeRef.ofList(String.class));
         assertTrue(reference.isParameterized());
         assertEquals(List.class, reference.getRawType());
 
@@ -120,7 +120,7 @@ public class TestTypeReference {
      */
     @Test
     public void case7() {
-        var reference = TypeReference.ofMap(String.class, Integer.class);
+        var reference = TypeRef.ofMap(String.class, Integer.class);
         assertTrue(reference.isParameterized());
         assertEquals(Map.class, reference.getRawType());
 
@@ -134,7 +134,7 @@ public class TestTypeReference {
      */
     @Test
     public void case8() {
-        var reference = TypeReference.ofMap(String.class, TypeReference.ofList(Integer.class));
+        var reference = TypeRef.ofMap(String.class, TypeRef.ofList(Integer.class));
         assertTrue(reference.isParameterized());
         assertEquals(Map.class, reference.getRawType());
 
@@ -149,7 +149,7 @@ public class TestTypeReference {
      */
     @Test
     public void case9() {
-        var reference = TypeReference.ofList(String.class);
+        var reference = TypeRef.ofList(String.class);
         var instance = reference.newInstance(List.of("String"));
         var object = instance.getInstance();
 
@@ -164,7 +164,7 @@ public class TestTypeReference {
      */
     @Test
     public void case10() {
-        var reference = new TypeReference<TestClass>() {
+        var reference = new TypeRef<TestClass>() {
         };
         var instance = reference.newInstance(Integer.valueOf(1));
         assertEquals(Integer.valueOf(1), instance.getInstance().getIntValue());
@@ -188,7 +188,7 @@ public class TestTypeReference {
 
     @Test
     public void case11() {
-        var reference = new TypeReference<TestClass2>() {
+        var reference = new TypeRef<TestClass2>() {
         };
 
         assertEquals(TestClass2.class, reference.getRawClass());
@@ -197,7 +197,7 @@ public class TestTypeReference {
 
     @Test
     public void case12() {
-        var reference = TypeReference.ofList(String.class);
+        var reference = TypeRef.ofList(String.class);
 
         var strings = List.of("test");
 

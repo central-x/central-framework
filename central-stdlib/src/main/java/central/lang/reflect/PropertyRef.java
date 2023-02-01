@@ -22,52 +22,38 @@
  * SOFTWARE.
  */
 
-package central.sql;
+package central.lang.reflect;
 
-import java.util.List;
+import central.lang.Stringx;
+
+import java.io.Serializable;
+import java.lang.invoke.SerializedLambda;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.function.Function;
 
 /**
- * Sql 执行上下文
+ * Property Reference
+ * 属性引用
  *
  * @author Alan Yeh
- * @since 2022/09/15
+ * @since 2022/07/13
  */
-public interface SqlExecuteContext {
+@FunctionalInterface
+public interface PropertyRef<T, R> extends Function<T, R>, Serializable {
     /**
-     * Sql 执行器
+     * 根据属性名
      */
-    SqlExecutor getExecutor();
+    default String getPropertyName() {
+        try {
+            Method method = this.getClass().getDeclaredMethod("writeReplace");
+            method.setAccessible(true);
+            SerializedLambda lambda = (SerializedLambda) method.invoke(this);
 
-    /**
-     * 待执行 Sql
-     */
-    String getSql();
-
-    /**
-     * Sql 参数
-     */
-    List<List<Object>> getArgs();
-
-    /**
-     * 执行结果
-     */
-    Object getResult();
-
-    /**
-     * 保存执行过程信息
-     *
-     * @param key   键
-     * @param value 值
-     * @param <T>   值类型
-     */
-    <T> void put(String key, T value);
-
-    /**
-     * 获取执行过程信息
-     *
-     * @param key 键
-     * @param <T> 值类型
-     * @return 值
-     */
-    <T> T get(String key);
+            String getter = lambda.getImplMethodName();
+            return Stringx.lowerCaseFirstLetter(Stringx.removePrefix(Stringx.removePrefix(getter, "get"), "is"));
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            throw new RuntimeException("[PropertyReference] 解析属性异常", ex);
+        }
+    }
 }
