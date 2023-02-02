@@ -1,5 +1,5 @@
 default:
-  image: mirror.yeh.cn/compiler:jdk17
+  image: mirror.central-x.com/compiler:jdk17
   tags:
     - docker
 
