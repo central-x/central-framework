@@ -34,7 +34,7 @@ project:unit-test:
 pages:
   stage: lint
   image:
-    name: jetbrains/qodana-jvm-community:2022.2
+    name: jetbrains/qodana-jvm-community:2023.1
     entrypoint: [""]
   script:
     - /opt/idea/bin/entrypoint --results-dir=$CI_PROJECT_DIR/public --save-report --report-dir=$CI_PROJECT_DIR/public

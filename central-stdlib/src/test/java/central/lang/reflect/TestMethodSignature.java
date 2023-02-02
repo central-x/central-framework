@@ -42,7 +42,7 @@ public class TestMethodSignature {
     public void case1() throws Exception {
         var method = this.getClass().getMethod("test", int.class, String.class);
         var signature = new MethodSignature(method);
-        assertEquals("test(int, java.lang.String): java.lang.String", signature.getSignature());
+        assertEquals("java.lang.String test(int, java.lang.String)", signature.getSignature());
     }
 
     @Test
@@ -56,10 +56,10 @@ public class TestMethodSignature {
     @Test
     public void case3() throws Exception {
         var signature = new MethodSignature(this.getClass().getMethod("findById", String.class));
-        assertEquals("findById(java.lang.String): central.sql.data.Entity", signature.getSignature());
+        assertEquals("central.sql.data.Entity findById(java.lang.String)", signature.getSignature());
 
         var signature2 = new MethodSignature(TestClass.class.getMethod("findById", String.class));
-        assertEquals("findById(java.lang.String): central.sql.data.Entity", signature2.getSignature());
+        assertEquals("central.sql.data.Entity findById(java.lang.String)", signature2.getSignature());
     }
 
     public String test(int arg1, String arg2) {
