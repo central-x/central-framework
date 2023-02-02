@@ -60,7 +60,7 @@ public class FindAllHandler implements MapperHandler {
             orders = (Orders<?>) Arrayx.getOrNull(args, 1);
         } else if (signature.equals(MethodSignature.of("findAll", List.class, Orders.class))) {
             orders = (Orders<?>) Arrayx.getOrNull(args, 0);
-        } else if (signature.equals(MethodSignature.of("findAll", Entity.class))) {
+        } else if (signature.equals(MethodSignature.of("findAll", List.class))) {
 
         } else {
             throw new MethodNotImplementedException("MethodNotImplemented: " + signature.getSignature());

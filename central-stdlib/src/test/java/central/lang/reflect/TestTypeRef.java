@@ -58,7 +58,7 @@ public class TestTypeRef {
      */
     @Test
     public void case2() {
-        var reference = TypeRef.of("central.lang.reflect.TestTypeReference");
+        var reference = TypeRef.of("central.lang.reflect.TestTypeRef");
         assertFalse(reference.isParameterized());
         assertEquals(TestTypeRef.class, reference.getType());
     }
