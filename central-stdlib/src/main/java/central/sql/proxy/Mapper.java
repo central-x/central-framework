@@ -71,7 +71,7 @@ public interface Mapper<E extends Entity> {
      * @param entities 数据实体
      * @return 已插入的数据数量
      */
-    long insertBatch(@Nonnull List<E> entities);
+    long insertBatch(@Nonnull List<? extends E> entities);
 
     /**
      * 根据主键批量删除数据
@@ -97,7 +97,7 @@ public interface Mapper<E extends Entity> {
      * @param conditions 参数条件，如果条件为空，将清空表
      * @return 受影响的数据量
      */
-    long deleteBy(@Nonnull Conditions<E> conditions);
+    long deleteBy(@Nonnull Conditions<? extends E> conditions);
 
     /**
      * 清空表
@@ -129,7 +129,7 @@ public interface Mapper<E extends Entity> {
      * @param conditions 条件
      * @return 受影响数据量
      */
-    long updateBy(@Nonnull E entity, @Nullable Conditions<E> conditions);
+    long updateBy(@Nonnull E entity, @Nullable Conditions<? extends E> conditions);
 
     /**
      * 根据主键查询
@@ -156,7 +156,7 @@ public interface Mapper<E extends Entity> {
      * @return 数据实体
      */
     @Nullable
-    E findById(@Nullable String id, Columns<E> columns);
+    E findById(@Nullable String id, Columns<? extends E> columns);
 
     /**
      * 根据主键查询
@@ -179,7 +179,7 @@ public interface Mapper<E extends Entity> {
      * @return 数据实体列表
      */
     @Nonnull
-    List<E> findByIds(@Nullable List<String> ids, Columns<E> columns);
+    List<E> findByIds(@Nullable List<String> ids, Columns<? extends E> columns);
 
     /**
      * 根据条件获取第一条数据
@@ -189,7 +189,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体数据
      */
     @Nullable
-    E findFirstBy(@Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
+    E findFirstBy(@Nonnull Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
     /**
      * 根据条件获取第一条数据
@@ -200,7 +200,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体数据
      */
     @Nullable
-    E findFirstBy(@Nullable Columns<E> columns, @Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
+    E findFirstBy(@Nullable Columns<? extends E> columns, @Nonnull Conditions<? extends E> conditions, @Nullable Orders<E> orders);
 
     /**
      * 根据条件获取第一条数据
@@ -209,7 +209,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体数据
      */
     @Nullable
-    E findFirstBy(@Nonnull Conditions<E> conditions);
+    E findFirstBy(@Nonnull Conditions<? extends E> conditions);
 
     /**
      * 根据条件获取第一条数据
@@ -219,7 +219,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体数据
      */
     @Nullable
-    E findFirstBy(@Nullable Columns<E> columns, @Nonnull Conditions<E> conditions);
+    E findFirstBy(@Nullable Columns<? extends E> columns, @Nonnull Conditions<? extends E> conditions);
 
     /**
      * 根据条件获取实体列表
@@ -231,7 +231,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体列表
      */
     @Nonnull
-    List<E> findBy(@Nullable Long first, @Nullable Long offset, @Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
+    List<E> findBy(@Nullable Long first, @Nullable Long offset, @Nonnull Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
     /**
      * 根据条件获取实体列表
@@ -244,7 +244,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体列表
      */
     @Nonnull
-    List<E> findBy(@Nullable Long first, @Nullable Long offset, @Nullable Columns<E> columns, @Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
+    List<E> findBy(@Nullable Long first, @Nullable Long offset, @Nullable Columns<? extends E> columns, @Nonnull Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
     /**
      * 根据条件获取实体列表
@@ -254,7 +254,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体列表
      */
     @Nonnull
-    List<E> findBy(@Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
+    List<E> findBy(@Nonnull Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
     /**
      * 根据条件获取实体列表
@@ -265,7 +265,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体列表
      */
     @Nonnull
-    List<E> findBy(@Nullable Columns<E> columns, @Nonnull Conditions<E> conditions, @Nullable Orders<E> orders);
+    List<E> findBy(@Nullable Columns<? extends E> columns, @Nonnull Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
 
     /**
@@ -275,7 +275,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体列表
      */
     @Nonnull
-    List<E> findBy(@Nonnull Conditions<E> conditions);
+    List<E> findBy(@Nonnull Conditions<? extends E> conditions);
 
     /**
      * 根据条件获取实体列表
@@ -285,7 +285,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体列表
      */
     @Nonnull
-    List<E> findBy(@Nullable Columns<E> columns, @Nonnull Conditions<E> conditions);
+    List<E> findBy(@Nullable Columns<? extends E> columns, @Nonnull Conditions<? extends E> conditions);
 
     /**
      * 获取所有数据
@@ -294,7 +294,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体列表
      */
     @Nonnull
-    List<E> findAll(@Nullable Orders<E> orders);
+    List<E> findAll(@Nullable Orders<? extends E> orders);
 
     /**
      * 获取所有数据
@@ -304,7 +304,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体列表
      */
     @Nonnull
-    List<E> findAll(@Nullable Columns<E> columns, @Nullable Orders<E> orders);
+    List<E> findAll(@Nullable Columns<? extends E> columns, @Nullable Orders<? extends E> orders);
 
     /**
      * 获取所有数据
@@ -324,7 +324,7 @@ public interface Mapper<E extends Entity> {
      * @return 分页结果
      */
     @Nonnull
-    Page<E> findPageBy(@Nonnull Long pageIndex, @Nonnull Long pageSize, @Nonnull Conditions<E> conditions, @Nonnull Orders<E> orders);
+    Page<E> findPageBy(@Nonnull Long pageIndex, @Nonnull Long pageSize, @Nonnull Conditions<? extends E> conditions, @Nonnull Orders<? extends E> orders);
 
     /**
      * 根据条件分页查询数据
@@ -337,7 +337,7 @@ public interface Mapper<E extends Entity> {
      * @return 分页结果
      */
     @Nonnull
-    Page<E> findPageBy(@Nonnull Long pageIndex, @Nonnull Long pageSize, @Nullable Columns<E> columns, @Nonnull Conditions<E> conditions, @Nonnull Orders<E> orders);
+    Page<E> findPageBy(@Nonnull Long pageIndex, @Nonnull Long pageSize, @Nullable Columns<? extends E> columns, @Nonnull Conditions<? extends E> conditions, @Nonnull Orders<? extends E> orders);
 
     /**
      * 询查表的数据量
@@ -353,7 +353,7 @@ public interface Mapper<E extends Entity> {
      * @param conditions 条件参数
      * @return 数量
      */
-    long countBy(@Nullable Conditions<E> conditions);
+    long countBy(@Nullable Conditions<? extends E> conditions);
 
     /**
      * 根据条件查询数据是否存在
@@ -361,5 +361,5 @@ public interface Mapper<E extends Entity> {
      * @param conditions 条件参数
      * @return 是否存在满足条件的数据
      */
-    boolean existsBy(@Nullable Conditions<E> conditions);
+    boolean existsBy(@Nullable Conditions<? extends E> conditions);
 }

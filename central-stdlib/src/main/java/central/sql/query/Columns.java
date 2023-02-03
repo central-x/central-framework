@@ -36,6 +36,7 @@ import lombok.experimental.Delegate;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 列
@@ -47,6 +48,11 @@ public class Columns<T extends Entity> implements Collection<Columns.Column<T>> 
 
     @Delegate
     private final List<Column<T>> columns = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Columns(" + this.columns.stream().map(Column::getProperty).collect(Collectors.joining(", ")) + ")";
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -141,6 +147,11 @@ public class Columns<T extends Entity> implements Collection<Columns.Column<T>> 
         @Override
         public int hashCode() {
             return this.property.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            return "Column(property=" + this.property + ")";
         }
     }
 

@@ -26,7 +26,6 @@ package central.sql.proxy.mapper;
 
 import central.bean.MethodNotImplementedException;
 import central.lang.reflect.MethodSignature;
-import central.sql.data.Entity;
 import central.sql.query.Columns;
 import central.sql.query.Orders;
 import central.sql.SqlBuilder;
