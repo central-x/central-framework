@@ -37,7 +37,7 @@ pages:
     name: jetbrains/qodana-jvm-community:2023.1
     entrypoint: [""]
   script:
-    - /opt/idea/bin/entrypoint --results-dir=$CI_PROJECT_DIR/public --save-report --report-dir=$CI_PROJECT_DIR/public
+    - qodana --save-report --results-dir=$CI_PROJECT_DIR/public --report-dir=$CI_PROJECT_DIR/public
   artifacts:
     expose_as: 'Lint report'
     paths:
