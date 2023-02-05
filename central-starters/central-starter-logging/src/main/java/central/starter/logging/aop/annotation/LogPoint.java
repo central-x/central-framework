@@ -22,33 +22,24 @@
  * SOFTWARE.
  */
 
-package central.starter.logging;
+package central.starter.logging.aop.annotation;
 
-import central.starter.logging.aop.LogAdvisor;
-import lombok.Setter;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ImportAware;
-import org.springframework.core.annotation.AnnotationAttributes;
-import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.boot.logging.LogLevel;
+
+import java.lang.annotation.*;
 
 /**
- * Starter Configuration
+ * 日志切面点
  *
  * @author Alan Yeh
- * @since 2022/07/17
+ * @since 2023/02/05
  */
-@EnableConfigurationProperties(LoggingProperties.class)
-public class StarterConfiguration implements ImportAware {
-
-    @Setter
-    private AnnotationMetadata importMetadata;
-
-    @Bean
-    public LogAdvisor logAdvisor() {
-        var attributes = AnnotationAttributes.fromMap(importMetadata.getAnnotationAttributes(EnableLogPoint.class.getName(), false));
-
-        return new LogAdvisor(attributes.getNumber("order"));
-    }
-
+@Documented
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface LogPoint {
+    /**
+     * 打印日志时的日志等级
+     */
+    LogLevel level() default LogLevel.INFO;
 }

@@ -24,31 +24,26 @@
 
 package central.starter.logging;
 
-import central.starter.logging.aop.LogAdvisor;
-import lombok.Setter;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ImportAware;
-import org.springframework.core.annotation.AnnotationAttributes;
-import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.Ordered;
+
+import java.lang.annotation.*;
 
 /**
- * Starter Configuration
+ * 启用日志切面
  *
  * @author Alan Yeh
- * @since 2022/07/17
+ * @since 2023/02/05
  */
-@EnableConfigurationProperties(LoggingProperties.class)
-public class StarterConfiguration implements ImportAware {
-
-    @Setter
-    private AnnotationMetadata importMetadata;
-
-    @Bean
-    public LogAdvisor logAdvisor() {
-        var attributes = AnnotationAttributes.fromMap(importMetadata.getAnnotationAttributes(EnableLogPoint.class.getName(), false));
-
-        return new LogAdvisor(attributes.getNumber("order"));
-    }
-
+@Documented
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Import(StarterConfiguration.class)
+public @interface EnableLogPoint {
+    /**
+     * 日志切面优先级
+     * <p>
+     * 一般情况下，日志切面应用是最后执行的
+     */
+    int order() default Ordered.LOWEST_PRECEDENCE;
 }
