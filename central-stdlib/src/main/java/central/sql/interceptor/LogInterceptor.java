@@ -75,7 +75,7 @@ public class LogInterceptor implements SqlInterceptor {
         log.append("┣ 耗时: ").append(end - begin).append("ms").append(lineSeparator);
         log.append("┣ 结果: ").append(context.getResult()).append(lineSeparator);
         log.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        logger.debug(log.toString());
+        logger.info(log.toString());
     }
 
     @Override
@@ -99,7 +99,7 @@ public class LogInterceptor implements SqlInterceptor {
                 .forEach(log::append);
 
         log.append(lineSeparator).append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        logger.debug(log.toString());
+        logger.error(log.toString());
     }
 
     private String formatArgs(List<List<Object>> args, String lineSeparator) {
