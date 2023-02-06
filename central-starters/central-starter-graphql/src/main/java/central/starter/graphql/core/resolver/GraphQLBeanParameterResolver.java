@@ -47,28 +47,28 @@ import java.lang.reflect.ParameterizedType;
 public class GraphQLBeanParameterResolver implements ParameterResolver {
     @Override
     public boolean support(@Nonnull Class<?> clazz, @Nonnull Method method, @Nonnull Parameter parameter) {
-        return GraphQLRequest.class == parameter.getType() ||
-                DataFetchingEnvironment.class == parameter.getType() ||
-                BatchLoaderEnvironment.class == parameter.getType() ||
-                DataLoader.class == parameter.getType();
+        return GraphQLRequest.class.equals(parameter.getType()) ||
+                DataFetchingEnvironment.class.equals(parameter.getType()) ||
+                BatchLoaderEnvironment.class.equals(parameter.getType()) ||
+                DataLoader.class.equals(parameter.getType());
     }
 
     @Nullable
     @Override
     public Object resolve(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter, @NotNull Context context) {
-        if (GraphQLRequest.class == parameter.getType()) {
+        if (GraphQLRequest.class.equals(parameter.getType())) {
             return context.get(GraphQLRequest.class);
         }
 
-        if (DataFetchingEnvironment.class == parameter.getType()) {
+        if (DataFetchingEnvironment.class.equals(parameter.getType())) {
             return context.get(DataFetchingEnvironment.class);
         }
 
-        if (BatchLoaderEnvironment.class == parameter.getType()) {
+        if (BatchLoaderEnvironment.class.equals(parameter.getType())) {
             return context.get(BatchLoaderEnvironment.class);
         }
 
-        if (DataLoader.class == parameter.getType()) {
+        if (DataLoader.class.equals(parameter.getType())) {
             var fetchingEnvironment = context.get(DataFetchingEnvironment.class);
             if (fetchingEnvironment != null) {
                 ParameterizedType type = (ParameterizedType) parameter.getParameterizedType();

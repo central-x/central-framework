@@ -49,8 +49,8 @@ import java.lang.reflect.Parameter;
 public class SpringBeanParameterResolver implements ParameterResolver {
     @Override
     public boolean support(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter) {
-        if (ApplicationContext.class == parameter.getType() ||
-                Environment.class == parameter.getType()) {
+        if (ApplicationContext.class.equals(parameter.getType()) ||
+                Environment.class.equals(parameter.getType())) {
             return true;
         }
         return parameter.isAnnotationPresent(Autowired.class) || parameter.isAnnotationPresent(Qualifier.class);
@@ -75,9 +75,9 @@ public class SpringBeanParameterResolver implements ParameterResolver {
 
         if (applicationContext != null) {
             try {
-                if (ApplicationContext.class == parameter.getType()) {
+                if (ApplicationContext.class.equals(parameter.getType())) {
                     bean = applicationContext;
-                } else if (Environment.class == parameter.getType()) {
+                } else if (Environment.class.equals(parameter.getType())) {
                     bean = applicationContext.getEnvironment();
                 } else if (Stringx.isNotBlank(name)) {
                     bean = applicationContext.getBean(name);
