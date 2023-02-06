@@ -39,6 +39,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.time.ZoneId;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 /**
@@ -50,51 +51,51 @@ import java.util.TimeZone;
 public class ServletParameterResolver implements ParameterResolver {
     @Override
     public boolean support(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter) {
-        return ServletRequest.class.equals(parameter.getType()) ||
-                HttpServletRequest.class.equals(parameter.getType()) ||
-                ServletResponse.class.equals(parameter.getType()) ||
-                HttpServletResponse.class.equals(parameter.getType()) ||
-                HttpMethod.class.equals(parameter.getType()) ||
-                Locale.class.equals(parameter.getType()) ||
-                TimeZone.class.equals(parameter.getType()) ||
-                ZoneId.class.equals(parameter.getType());
+        return Objects.equals(ServletRequest.class, parameter.getType()) ||
+                Objects.equals(HttpServletRequest.class, parameter.getType()) ||
+                Objects.equals(ServletResponse.class, parameter.getType()) ||
+                Objects.equals(HttpServletResponse.class, parameter.getType()) ||
+                Objects.equals(HttpMethod.class, parameter.getType()) ||
+                Objects.equals(Locale.class, parameter.getType()) ||
+                Objects.equals(TimeZone.class, parameter.getType()) ||
+                Objects.equals(ZoneId.class, parameter.getType());
     }
 
     @Nullable
     @Override
     public Object resolve(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter, @NotNull Context context) {
-        if (ServletResponse.class.equals(parameter.getType())) {
+        if (Objects.equals(ServletResponse.class, parameter.getType())) {
             return context.get(ServletResponse.class);
         }
 
-        if (HttpServletResponse.class.equals(parameter.getType())) {
+        if (Objects.equals(HttpServletResponse.class, parameter.getType())) {
             return context.get(HttpServletResponse.class);
         }
 
-        if (ServletRequest.class.equals(parameter.getType())) {
+        if (Objects.equals(ServletRequest.class, parameter.getType())) {
             return context.get(ServletRequest.class);
         }
 
-        if (HttpServletRequest.class.equals(parameter.getType())) {
+        if (Objects.equals(HttpServletRequest.class, parameter.getType())) {
             return context.get(HttpServletRequest.class);
         }
 
         HttpServletRequest request = context.get(HttpServletRequest.class);
         // 获取请求相关信息
         if (request != null) {
-            if (HttpMethod.class.equals(parameter.getType())) {
+            if (Objects.equals(HttpMethod.class, parameter.getType())) {
                 return HttpMethod.valueOf(request.getMethod());
             }
 
-            if (Locale.class.equals(parameter.getType())) {
+            if (Objects.equals(Locale.class, parameter.getType())) {
                 return RequestContextUtils.getLocale(request);
             }
 
-            if (TimeZone.class.equals(parameter.getType())) {
+            if (Objects.equals(TimeZone.class, parameter.getType())) {
                 return RequestContextUtils.getTimeZone(request);
             }
 
-            if (ZoneId.class.equals(parameter.getType())) {
+            if (Objects.equals(ZoneId.class, parameter.getType())) {
                 TimeZone timeZone = RequestContextUtils.getTimeZone(request);
                 return (timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault());
             }

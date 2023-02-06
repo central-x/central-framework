@@ -37,6 +37,7 @@ import org.springframework.core.env.Environment;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Objects;
 
 /**
  * 处理 Spring Bean 参数注入
@@ -49,8 +50,8 @@ import java.lang.reflect.Parameter;
 public class SpringBeanParameterResolver implements ParameterResolver {
     @Override
     public boolean support(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter) {
-        if (ApplicationContext.class.equals(parameter.getType()) ||
-                Environment.class.equals(parameter.getType())) {
+        if (Objects.equals(ApplicationContext.class, parameter.getType()) ||
+                Objects.equals(Environment.class, parameter.getType())) {
             return true;
         }
         return parameter.isAnnotationPresent(Autowired.class) || parameter.isAnnotationPresent(Qualifier.class);
@@ -75,9 +76,9 @@ public class SpringBeanParameterResolver implements ParameterResolver {
 
         if (applicationContext != null) {
             try {
-                if (ApplicationContext.class.equals(parameter.getType())) {
+                if (Objects.equals(ApplicationContext.class, parameter.getType())) {
                     bean = applicationContext;
-                } else if (Environment.class.equals(parameter.getType())) {
+                } else if (Objects.equals(Environment.class, parameter.getType())) {
                     bean = applicationContext.getEnvironment();
                 } else if (Stringx.isNotBlank(name)) {
                     bean = applicationContext.getBean(name);

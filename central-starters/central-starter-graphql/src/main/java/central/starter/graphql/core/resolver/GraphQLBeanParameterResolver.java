@@ -37,6 +37,7 @@ import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
+import java.util.Objects;
 
 /**
  * GraphQL 原生参数注入
@@ -47,28 +48,28 @@ import java.lang.reflect.ParameterizedType;
 public class GraphQLBeanParameterResolver implements ParameterResolver {
     @Override
     public boolean support(@Nonnull Class<?> clazz, @Nonnull Method method, @Nonnull Parameter parameter) {
-        return GraphQLRequest.class.equals(parameter.getType()) ||
-                DataFetchingEnvironment.class.equals(parameter.getType()) ||
-                BatchLoaderEnvironment.class.equals(parameter.getType()) ||
-                DataLoader.class.equals(parameter.getType());
+        return Objects.equals(GraphQLRequest.class, parameter.getType()) ||
+                Objects.equals(DataFetchingEnvironment.class, parameter.getType()) ||
+                Objects.equals(BatchLoaderEnvironment.class, parameter.getType()) ||
+                Objects.equals(DataLoader.class, parameter.getType());
     }
 
     @Nullable
     @Override
     public Object resolve(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter, @NotNull Context context) {
-        if (GraphQLRequest.class.equals(parameter.getType())) {
+        if (Objects.equals(GraphQLRequest.class, parameter.getType())) {
             return context.get(GraphQLRequest.class);
         }
 
-        if (DataFetchingEnvironment.class.equals(parameter.getType())) {
+        if (Objects.equals(DataFetchingEnvironment.class, parameter.getType())) {
             return context.get(DataFetchingEnvironment.class);
         }
 
-        if (BatchLoaderEnvironment.class.equals(parameter.getType())) {
+        if (Objects.equals(BatchLoaderEnvironment.class, parameter.getType())) {
             return context.get(BatchLoaderEnvironment.class);
         }
 
-        if (DataLoader.class.equals(parameter.getType())) {
+        if (Objects.equals(DataLoader.class, parameter.getType())) {
             var fetchingEnvironment = context.get(DataFetchingEnvironment.class);
             if (fetchingEnvironment != null) {
                 ParameterizedType type = (ParameterizedType) parameter.getParameterizedType();
