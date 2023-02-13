@@ -22,21 +22,20 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql;
+package central.starter.security.unittest.controller.data;
 
-import central.starter.orm.EnableOrm;
-import org.springframework.context.annotation.Configuration;
+import central.sql.data.Entity;
+
+import java.io.Serial;
 
 /**
- * 应用配置
+ * Resource
+ * 资源
  *
  * @author Alan Yeh
- * @since 2022/09/28
+ * @since 2023/02/13
  */
-@EnableOrm
-@EnableGraphQL
-@Configuration
-public class ApplicationConfiguration {
-
-
+public class Resource extends Entity {
+    @Serial
+    private static final long serialVersionUID = 4841280900540104984L;
 }

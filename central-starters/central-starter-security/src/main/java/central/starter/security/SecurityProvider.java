@@ -22,21 +22,39 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql;
+package central.starter.security;
 
-import central.starter.orm.EnableOrm;
-import org.springframework.context.annotation.Configuration;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 
 /**
- * 应用配置
+ * 应用认证信息提供
+ * <p>
+ * 外部项目如果需要自定义登录过程，需要继承此类，并需要标注 @Component 和 @Primary
  *
  * @author Alan Yeh
- * @since 2022/09/28
+ * @since 2023/02/13
  */
-@EnableOrm
-@EnableGraphQL
-@Configuration
-public class ApplicationConfiguration {
+public interface SecurityProvider {
+    /**
+     * 当应用接入到 Token 信息时，应用需要对该 Token 进行鉴权
+     *
+     * @param token JWT
+     */
+    void onReceiveAuthenticationToken(String token);
 
+    /**
+     * 对帐户进行授权
+     * 如果不需要进行授权，可以不处理
+     *
+     * @param token             JWT
+     * @param authorizationInfo 授权信息
+     */
+    default void onReceiveAuthorizationInfo(String token, SimpleAuthorizationInfo authorizationInfo) {}
 
+    /**
+     * 注销
+     *
+     * @param token JWT
+     */
+    default void onLogout(String token) {}
 }

@@ -22,21 +22,43 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql;
+package central.starter.security.shiro;
 
-import central.starter.orm.EnableOrm;
-import org.springframework.context.annotation.Configuration;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.annotation.Nonnull;
+import lombok.Getter;
+import org.apache.shiro.authc.AuthenticationToken;
+
+import java.io.Serial;
 
 /**
- * 应用配置
+ * Json Web Token
  *
  * @author Alan Yeh
- * @since 2022/09/28
+ * @since 2023/02/13
  */
-@EnableOrm
-@EnableGraphQL
-@Configuration
-public class ApplicationConfiguration {
+public class JsonWebToken implements AuthenticationToken {
+    @Serial
+    private static final long serialVersionUID = -4407799661511688123L;
 
+    private final String token;
 
+    @Getter
+    private final DecodedJWT decodedJWT;
+
+    public JsonWebToken(@Nonnull String token) {
+        this.token = token;
+        this.decodedJWT = JWT.decode(token);
+    }
+
+    @Override
+    public Object getPrincipal() {
+        return decodedJWT.getSubject();
+    }
+
+    @Override
+    public Object getCredentials() {
+        return token;
+    }
 }

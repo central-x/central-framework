@@ -22,21 +22,25 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql;
+package central.starter.security.shiro.resolver;
 
-import central.starter.orm.EnableOrm;
-import org.springframework.context.annotation.Configuration;
+import org.apache.shiro.aop.AnnotationResolver;
+import org.apache.shiro.aop.MethodInvocation;
+import org.springframework.core.annotation.AnnotationUtils;
+
+import java.lang.annotation.Annotation;
 
 /**
- * 应用配置
+ * 查找类下面的注解
  *
  * @author Alan Yeh
- * @since 2022/09/28
+ * @see org.apache.shiro.spring.aop.SpringAnnotationResolver
+ * @since 2023/02/13
  */
-@EnableOrm
-@EnableGraphQL
-@Configuration
-public class ApplicationConfiguration {
+public class ClassAnnotationResolver implements AnnotationResolver {
 
-
+    @Override
+    public Annotation getAnnotation(MethodInvocation mi, Class<? extends Annotation> clazz) {
+        return AnnotationUtils.findAnnotation(mi.getThis().getClass(), clazz);
+    }
 }

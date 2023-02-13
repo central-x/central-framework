@@ -22,21 +22,20 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql;
+package central.starter.security.unittest;
 
-import central.starter.orm.EnableOrm;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * 应用配置
+ * 测试应用
  *
  * @author Alan Yeh
- * @since 2022/09/28
+ * @since 2023/02/13
  */
-@EnableOrm
-@EnableGraphQL
-@Configuration
-public class ApplicationConfiguration {
-
-
+@SpringBootApplication
+public class TestApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(TestApplication.class, args);
+    }
 }

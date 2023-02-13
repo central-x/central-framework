@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import java.util.Map;
 
 /**
+ * GraphQL Client
+ *
  * @author Alan Yeh
  * @since 2022/09/09
  */

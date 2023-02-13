@@ -50,6 +50,7 @@
         <jsch.version>0.1.55</jsch.version>
         <jakarta-mail.version>2.0.1</jakarta-mail.version>
         <beetl.version>3.13.0.RELEASE</beetl.version>
+        <shiro.version>1.11.0</shiro.version>
     </properties>
 
     <!-- 依赖版本管理 -->
@@ -200,6 +201,37 @@
                 <groupId>com.sun.mail</groupId>
                 <artifactId>jakarta.mail</artifactId>
                 <version>${jakarta-mail.version}</version>
+            </dependency>
+
+            <!-- Shiro -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <classifier>jakarta</classifier>
+                <version>${shiro.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.shiro</groupId>
+                        <artifactId>shiro-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.shiro</groupId>
+                        <artifactId>shiro-web</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-core</artifactId>
+                <classifier>jakarta</classifier>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-web</artifactId>
+                <classifier>jakarta</classifier>
+                <version>${shiro.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

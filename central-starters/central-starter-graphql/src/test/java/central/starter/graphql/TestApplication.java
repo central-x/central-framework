@@ -24,7 +24,6 @@
 
 package central.starter.graphql;
 
-import central.starter.orm.EnableOrm;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -34,8 +33,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Alan Yeh
  * @since 2022/09/09
  */
-@EnableOrm
-@EnableGraphQL
 @SpringBootApplication
 public class TestApplication {
     public static void main(String[] args) {

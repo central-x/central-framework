@@ -22,21 +22,27 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql;
+package central.starter.security.unittest.controller.data;
 
-import central.starter.orm.EnableOrm;
-import org.springframework.context.annotation.Configuration;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
- * 应用配置
+ * Resource Input
  *
  * @author Alan Yeh
- * @since 2022/09/28
+ * @since 2023/02/13
  */
-@EnableOrm
-@EnableGraphQL
-@Configuration
-public class ApplicationConfiguration {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ResourceInput implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 2480546005849844402L;
 
-
+    private String id;
 }

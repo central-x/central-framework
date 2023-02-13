@@ -22,21 +22,21 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql;
+package central.starter.security;
 
-import central.starter.orm.EnableOrm;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import java.lang.annotation.*;
 
 /**
- * 应用配置
+ * 启用安全认证服务
  *
  * @author Alan Yeh
- * @since 2022/09/28
+ * @since 2023/02/13
  */
-@EnableOrm
-@EnableGraphQL
-@Configuration
-public class ApplicationConfiguration {
-
-
+@Documented
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Import(StarterConfiguration.class)
+public @interface EnableSecurity {
 }

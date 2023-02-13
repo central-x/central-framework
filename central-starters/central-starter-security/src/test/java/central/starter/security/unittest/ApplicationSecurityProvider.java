@@ -22,21 +22,37 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql;
+package central.starter.security.unittest;
 
-import central.starter.orm.EnableOrm;
-import org.springframework.context.annotation.Configuration;
+import central.starter.security.SecurityProvider;
+import com.auth0.jwt.JWT;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 /**
- * 应用配置
+ * 应用安全配转走
  *
  * @author Alan Yeh
- * @since 2022/09/28
+ * @since 2023/02/13
  */
-@EnableOrm
-@EnableGraphQL
-@Configuration
-public class ApplicationConfiguration {
+@Component
+public class ApplicationSecurityProvider implements SecurityProvider {
+    @Override
+    public void onReceiveAuthenticationToken(String token) {
 
+    }
 
+    @Override
+    public void onReceiveAuthorizationInfo(String token, SimpleAuthorizationInfo authorizationInfo) {
+        var jwt = JWT.decode(token);
+        var permissions = jwt.getClaim("permissions").asString();
+        authorizationInfo.addStringPermissions(Arrays.asList(permissions.split(",")));
+    }
+
+    @Override
+    public void onLogout(String token) {
+
+    }
 }
