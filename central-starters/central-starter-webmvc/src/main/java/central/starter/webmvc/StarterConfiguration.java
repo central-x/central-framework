@@ -27,6 +27,7 @@ package central.starter.webmvc;
 import central.starter.web.converter.LongToTimestampConverter;
 import central.starter.webmvc.exception.JsonExceptionResolver;
 import central.starter.webmvc.filter.UnderlineParameterNameFilter;
+import central.starter.webmvc.filter.WebMvcWrapFilter;
 import central.starter.webmvc.interceptor.ActionReportInterceptor;
 import central.validation.MessageInterpolator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -104,6 +105,10 @@ public class StarterConfiguration implements WebMvcConfigurer {
         return converter;
     }
 
+    /**
+     * 自定义参数校验器
+     * 支持 @Label 注解
+     */
     @Override
     public Validator getValidator() {
         return new SpringValidatorAdapter(Validation.byProvider(HibernateValidator.class)
@@ -113,12 +118,28 @@ public class StarterConfiguration implements WebMvcConfigurer {
                 .getValidator());
     }
 
+    /**
+     * 支持下划线命名的入参
+     */
     @Bean
     public FilterRegistrationBean<UnderlineParameterNameFilter> underlineParameterNameFilterRegistrationBean() {
         var bean = new FilterRegistrationBean<UnderlineParameterNameFilter>();
         bean.setFilter(new UnderlineParameterNameFilter());
         bean.addUrlPatterns("/*");
         bean.setName("underlineParameterNameFilter");
+        bean.setOrder(0);
+        return bean;
+    }
+
+    /**
+     * 将所有 HttpServletRequest 封装为 WebMvcRequest
+     */
+    @Bean
+    public FilterRegistrationBean<WebMvcWrapFilter> webMvcWrapFilterRegistrationBean() {
+        var bean = new FilterRegistrationBean<WebMvcWrapFilter>();
+        bean.setFilter(new WebMvcWrapFilter());
+        bean.addUrlPatterns("/*");
+        bean.setName("webMvcWrapFilter");
         bean.setOrder(0);
         return bean;
     }
