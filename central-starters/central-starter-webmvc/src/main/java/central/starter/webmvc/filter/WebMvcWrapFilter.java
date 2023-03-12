@@ -24,7 +24,8 @@
 
 package central.starter.webmvc.filter;
 
-import central.starter.webmvc.servlet.DefaultWebMvcRequest;
+import central.starter.webmvc.servlet.WebMvcRequest;
+import central.starter.webmvc.servlet.WebMvcResponse;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -36,6 +37,7 @@ import java.io.IOException;
 
 /**
  * WebMvcRequest Wrap Filter
+ * <p>
  * 将 HttpServletRequest 封装成 WebMvcRequest
  *
  * @author Alan Yeh
@@ -44,6 +46,6 @@ import java.io.IOException;
 public class WebMvcWrapFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain filterChain) throws ServletException, IOException {
-        filterChain.doFilter(DefaultWebMvcRequest.of(request), response);
+        filterChain.doFilter(WebMvcRequest.of(request), WebMvcResponse.of(response));
     }
 }

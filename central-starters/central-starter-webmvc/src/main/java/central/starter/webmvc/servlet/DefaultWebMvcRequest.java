@@ -47,7 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Alan Yeh
  * @since 2023/03/08
  */
-public class DefaultWebMvcRequest extends HttpServletRequestWrapper implements WebMvcRequest {
+class DefaultWebMvcRequest extends HttpServletRequestWrapper implements WebMvcRequest {
 
     public DefaultWebMvcRequest(HttpServletRequest request) {
         super(request);

@@ -24,33 +24,21 @@
 
 package central.starter.webmvc.servlet;
 
-import jakarta.annotation.Nonnull;
-import jakarta.servlet.http.HttpServletRequest;
-
-import java.net.URI;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponseWrapper;
 
 /**
- * WebMvc Request
- * <p>
- * 支持常见的操作
+ * WebMvcResponse 实现
  *
  * @author Alan Yeh
- * @since 2023/03/08
+ * @since 2023/03/12
  */
-public interface WebMvcRequest extends AttributedHttpServletRequest, TenantedHttpServletRequest {
-
-    static WebMvcRequest of(HttpServletRequest request) {
-        return DefaultWebMvcRequest.of(request);
+class DefaultWebMvcResponse extends HttpServletResponseWrapper implements WebMvcResponse {
+    public DefaultWebMvcResponse(HttpServletResponse response) {
+        super(response);
     }
 
-    /**
-     * 获取当前请求地址
-     */
-    @Nonnull
-    URI getUri();
-
-    /**
-     * 获取 Cookie 值
-     */
-    String getCookie(String name);
+    public static WebMvcResponse of(HttpServletResponse response) {
+        return new DefaultWebMvcResponse(response);
+    }
 }
