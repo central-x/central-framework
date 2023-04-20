@@ -26,6 +26,7 @@ package central.starter.webmvc.servlet;
 
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.MediaType;
 
 import java.net.URI;
 
@@ -53,4 +54,11 @@ public interface WebMvcRequest extends AttributedHttpServletRequest, TenantedHtt
      * 获取 Cookie 值
      */
     String getCookie(String name);
+
+    /**
+     * 是否支持指定响应体
+     *
+     * @param contentType 响应体类型
+     */
+    boolean isAcceptContentType(MediaType contentType);
 }

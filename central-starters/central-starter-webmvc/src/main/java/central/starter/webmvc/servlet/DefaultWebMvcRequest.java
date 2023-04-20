@@ -33,6 +33,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -69,6 +71,29 @@ class DefaultWebMvcRequest extends HttpServletRequestWrapper implements WebMvcRe
     }
 
     @Override
+    public String getCookie(String name) {
+        return Arrayx.asStream(this.getCookies())
+                .filter(it -> Objects.equals(name, it.getName()))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElse(null);
+    }
+
+    @Override
+    public boolean isAcceptContentType(MediaType contentType) {
+        var accepts = MediaType.parseMediaTypes(this.getHeader(HttpHeaders.ACCEPT));
+        for (var accept : accepts) {
+            if ("*".equals(accept.getType()) && "*".equals(accept.getSubtype())) {
+                continue;
+            }
+            if (accept.isCompatibleWith(contentType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public String getTenantCode() {
         return this.getHeader(XForwardedHeaders.TENANT);
     }
@@ -76,15 +101,6 @@ class DefaultWebMvcRequest extends HttpServletRequestWrapper implements WebMvcRe
     @Override
     public String getTenantPath() {
         return Objectx.getOrDefault(this.getHeader(XForwardedHeaders.PATH), "/");
-    }
-
-    @Override
-    public String getCookie(String name) {
-        return Arrayx.asStream(this.getCookies())
-                .filter(it -> Objects.equals(name, it.getName()))
-                .findFirst()
-                .map(Cookie::getValue)
-                .orElse(null);
     }
 
     private final Map<String, Object> attributes = new ConcurrentHashMap<>();

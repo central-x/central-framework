@@ -28,7 +28,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -64,6 +66,14 @@ public abstract class Render<T extends Render<?>> {
      */
     public T setHeader(String name, String value) {
         response.setHeader(name, value);
+        return (T) this;
+    }
+
+    /**
+     * 设置响应体类型
+     */
+    public T setContentType(MediaType contentType) {
+        response.setHeader(HttpHeaders.CONTENT_TYPE, contentType.toString());
         return (T) this;
     }
 
