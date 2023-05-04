@@ -37,27 +37,24 @@ import java.util.concurrent.TimeUnit;
  * @author Alan Yeh
  * @since 2022/07/14
  */
+@Getter
 @EqualsAndHashCode
 public class DelayedElement<E> implements Delayed {
     /**
      * 创建时间
      */
-    @Getter
     private final long timestamp;
     /**
      * 延迟时间
      */
-    @Getter
     private final Duration delay;
     /**
      * 再次延迟次数
      */
-    @Getter
     private final int times;
     /**
      * 元素
      */
-    @Getter
     private final E element;
 
     public DelayedElement(E element) {
