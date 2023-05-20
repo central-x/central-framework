@@ -31,6 +31,7 @@ import central.net.http.proxy.contract.spring.resolver.*;
 import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.Stringx;
+import central.util.Objectx;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -76,7 +77,7 @@ public class SpringContract implements Contract {
         if (Arrayx.isNullOrEmpty(methods)) {
             methods = Arrayx.newArray(RequestMethod.GET);
         }
-        request.setMethod(HttpMethod.valueOf(methods[0].name()));
+        request.setMethod(HttpMethod.valueOf(Objectx.getOrDefault(methods[0], RequestMethod.GET).name()));
 
         // Path
         String parentPath = getPathOnClass(instance);
@@ -111,7 +112,7 @@ public class SpringContract implements Contract {
         if (annotation != null && Arrayx.isNotEmpty(annotation.headers())) {
             for (var header : annotation.headers()) {
                 String[] nameValue = header.split("[=]");
-                Assertx.mustTrue(nameValue.length == 2, "Invalid header '{}' ", header);
+                Assertx.mustTrue(nameValue.length == 2, "Invalid header '{}'", header);
             }
         }
 

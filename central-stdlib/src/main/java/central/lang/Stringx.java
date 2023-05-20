@@ -36,7 +36,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * String 工具包
@@ -99,7 +98,7 @@ public class Stringx {
      */
     @SneakyThrows
     public static String encodeUrl(String text) {
-        return URLEncoder.encode(text, StandardCharsets.UTF_8.name());
+        return URLEncoder.encode(text, StandardCharsets.UTF_8);
     }
 
     /**
@@ -107,7 +106,7 @@ public class Stringx {
      */
     @SneakyThrows
     public static String encodeUrl(String text, Charset charset) {
-        return URLEncoder.encode(text, charset.name());
+        return URLEncoder.encode(text, charset);
     }
 
     /**
@@ -115,7 +114,7 @@ public class Stringx {
      */
     @SneakyThrows
     public static String decodeUrl(String text) {
-        return URLDecoder.decode(text, StandardCharsets.UTF_8.name());
+        return URLDecoder.decode(text, StandardCharsets.UTF_8);
     }
 
     /**
@@ -123,7 +122,7 @@ public class Stringx {
      */
     @SneakyThrows
     public static String decodeUrl(String text, Charset charset) {
-        return URLDecoder.decode(text, charset.name());
+        return URLDecoder.decode(text, charset);
     }
 
     private static int toDigit(final char ch, final int index) throws ParseException {
@@ -179,18 +178,18 @@ public class Stringx {
         if (text == null) {
             return true;
         }
-        return text.length() < 1;
+        return text.isEmpty();
     }
 
     /**
      * 判断文本列表是否全部为空或空字符串
      */
     public static boolean isAllNullOrEmpty(@Nullable String first, String... others) {
-        if (first != null && first.length() > 0) {
+        if (first != null && !first.isEmpty()) {
             return false;
         }
         for (var str : others) {
-            if (str != null && str.length() > 0) {
+            if (str != null && !str.isEmpty()) {
                 return false;
             }
         }
@@ -204,7 +203,7 @@ public class Stringx {
         if (text == null) {
             return false;
         }
-        return text.length() > 0;
+        return !text.isEmpty();
     }
 
     /**
@@ -214,7 +213,7 @@ public class Stringx {
         if (text == null) {
             return true;
         }
-        return text.trim().length() < 1;
+        return text.trim().isEmpty();
     }
 
     /**
@@ -224,7 +223,7 @@ public class Stringx {
         if (text == null) {
             return false;
         }
-        return text.trim().length() > 0;
+        return !text.trim().isEmpty();
     }
 
     /**
@@ -315,8 +314,7 @@ public class Stringx {
      * eg:
      * Stringx.format("{}, {}", "hello", "world");
      */
-    public static @Nonnull
-    String format(@Nonnull String format, Object... args) {
+    public static @Nonnull String format(@Nonnull String format, Object... args) {
         if (args == null || args.length < 1) {
             return format;
         }

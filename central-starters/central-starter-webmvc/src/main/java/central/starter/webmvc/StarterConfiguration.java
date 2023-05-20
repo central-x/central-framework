@@ -26,6 +26,7 @@ package central.starter.webmvc;
 
 import central.starter.web.converter.LongToTimestampConverter;
 import central.starter.webmvc.exception.JsonExceptionResolver;
+import central.starter.webmvc.filter.UnderlineParameterNameFilter;
 import central.starter.webmvc.interceptor.ActionReportInterceptor;
 import central.validation.MessageInterpolator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -37,6 +38,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -91,10 +93,10 @@ public class StarterConfiguration implements WebMvcConfigurer {
      */
     @Bean
     @ConditionalOnClass(ObjectMapper.class)
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(){
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+        var converter = new MappingJackson2HttpMessageConverter();
 
-        SimpleModule module = new SimpleModule();
+        var module = new SimpleModule();
 
         converter.getObjectMapper().registerModule(module);
         converter.getObjectMapper().enable(JsonParser.Feature.ALLOW_COMMENTS);
@@ -109,5 +111,15 @@ public class StarterConfiguration implements WebMvcConfigurer {
                 .messageInterpolator(new MessageInterpolator())
                 .buildValidatorFactory()
                 .getValidator());
+    }
+
+    @Bean
+    public FilterRegistrationBean<UnderlineParameterNameFilter> underlineParameterNameFilterRegistrationBean() {
+        var bean = new FilterRegistrationBean<UnderlineParameterNameFilter>();
+        bean.setFilter(new UnderlineParameterNameFilter());
+        bean.addUrlPatterns("/*");
+        bean.setName("underlineParameterNameFilter");
+        bean.setOrder(0);
+        return bean;
     }
 }
