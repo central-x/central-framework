@@ -51,6 +51,7 @@
         <jakarta-mail.version>2.0.1</jakarta-mail.version>
         <beetl.version>3.13.0.RELEASE</beetl.version>
         <shiro.version>1.11.0</shiro.version>
+        <jmh.version>1.35</jmh.version>
     </properties>
 
     <!-- 依赖版本管理 -->
@@ -244,6 +245,18 @@
                 <artifactId>shiro-web</artifactId>
                 <classifier>jakarta</classifier>
                 <version>${shiro.version}</version>
+            </dependency>
+
+            <!-- 压力测试 -->
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-generator-annprocess</artifactId>
+                <version>${jmh.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-core</artifactId>
+                <version>${jmh.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
