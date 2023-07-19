@@ -26,10 +26,12 @@ package central.util;
 
 import central.lang.Assertx;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Objects;
 
 /**
@@ -40,7 +42,7 @@ import java.util.Objects;
  * @author Alan Yeh
  * @since 2022/07/16
  */
-public class Range<T extends Number> implements Serializable {
+public class Range<T extends Number> implements Serializable, Iterable<Long> {
     @Serial
     private static final long serialVersionUID = 6237219732864605077L;
 
@@ -147,6 +149,39 @@ public class Range<T extends Number> implements Serializable {
         @Override
         public int compare(Object o1, Object o2) {
             return ((Comparable) o1).compareTo(o2);
+        }
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Long> iterator() {
+        return new RangeIterator(this);
+    }
+
+    private static class RangeIterator implements Iterator<Long> {
+        private final long minimum;
+        private final long maximum;
+        private long index;
+
+        public RangeIterator(Range<?> range) {
+            this.minimum = (long) Math.floor(range.getMinimum().doubleValue());
+            this.maximum = (long) Math.floor(range.getMaximum().doubleValue());
+            this.index = this.minimum;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return this.index < this.maximum;
+        }
+
+        @Override
+        public Long next() {
+            return ++this.index;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("无法删除区间内整数");
         }
     }
 }
