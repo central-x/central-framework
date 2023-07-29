@@ -103,7 +103,7 @@ public class ExpirableValue<V> {
         if (this.expireTime < 0) {
             return false;
         } else {
-            return System.currentTimeMillis() - this.timestamp >= 0;
+            return System.currentTimeMillis() - this.expireTime >= 0;
         }
     }
 

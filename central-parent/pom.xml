@@ -52,12 +52,16 @@
         <beetl.version>3.13.0.RELEASE</beetl.version>
         <shiro.version>1.11.0</shiro.version>
         <jmh.version>1.35</jmh.version>
+
+        <jakarta-servlet-api.version>6.0.0</jakarta-servlet-api.version>
+        <jakarta-annotation-api.version>2.1.1</jakarta-annotation-api.version>
+        <jakarta-validation-api.version>3.0.2</jakarta-validation-api.version>
+        <jakarta-persistence-api.version>3.1.0</jakarta-persistence-api.version>
     </properties>
 
     <!-- 依赖版本管理 -->
     <dependencyManagement>
         <dependencies>
-
             <!-- Spring Cloud 组件 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -247,6 +251,27 @@
                 <version>${shiro.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${jakarta-servlet-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>${jakarta-validation-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>${jakarta-annotation-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>${jakarta-persistence-api.version}</version>
+            </dependency>
+
             <!-- 压力测试 -->
             <dependency>
                 <groupId>org.openjdk.jmh</groupId>
@@ -265,8 +290,8 @@
     <dependencies>
         <!-- JSR 305 标准，用于提供 @Nonnull、@Nullable 等注解 -->
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
 
         <!-- Lombok -->
@@ -378,12 +403,12 @@
         <repository>
             <id>centralx-releases</id>
             <name>CentralX Release Repository</name>
-            <url>https://deploy.central-x.com/repository/maven-releases/</url>
+            <url>https://mirror.central-x.com/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>centralx-snapshots</id>
             <name>CentralX Snapshot Repository</name>
-            <url>https://deploy.central-x.com/repository/maven-snapshots/</url>
+            <url>https://mirror.central-x.com/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
