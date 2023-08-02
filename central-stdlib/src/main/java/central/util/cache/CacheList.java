@@ -25,6 +25,7 @@
 package central.util.cache;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -51,6 +52,16 @@ public interface CacheList {
      */
     @Nonnull
     List<String> range(long start, long end);
+
+    /**
+     * 获取指定下标的元素
+     *
+     * @param index 元素下标
+     * @return 元素
+     * @throws IndexOutOfBoundsException 下标越界时抛出
+     */
+    @Nullable
+    String get(long index);
 
     /**
      * 删除指定区间的元素
@@ -109,6 +120,16 @@ public interface CacheList {
     void set(long index, @Nonnull String value);
 
     /**
+     * 移除首个元素
+     */
+    String removeFirst();
+
+    /**
+     * 移除最尾部元素
+     */
+    String removeLast();
+
+    /**
      * 移除指定元素
      *
      * @param count 移除前几个出现的元素。如果 count > 0，则从头向尾移除指定元素数量；count < 0，则从尾向头移除指定元素数量；如果 count = 0，则移除所有元素
@@ -123,7 +144,16 @@ public interface CacheList {
      * @param index 待移除的下标
      * @throws IndexOutOfBoundsException 下标超界时抛出异常
      */
-    long remove(long index);
+    @Nullable
+    String remove(long index);
+
+    /**
+     * 移除指定元素
+     *
+     * @param value 待移除的元素
+     * @return 是否已移除
+     */
+    boolean remove(@Nonnull String value);
 
     /**
      * 从头向尾检索，返回元素第一次出现的下标

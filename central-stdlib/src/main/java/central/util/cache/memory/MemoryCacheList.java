@@ -30,6 +30,7 @@ import central.util.cache.DataType;
 import central.util.Range;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -67,6 +68,18 @@ public class MemoryCacheList implements CacheList {
         } else {
             var list = (List<String>) cache.getValue();
             return list.subList((int) start, (int) end);
+        }
+    }
+
+    @Nullable
+    @Override
+    public String get(long index) {
+        var cache = this.repository.get(this.key);
+        if (cache == null) {
+            return null;
+        } else {
+            var list = (List<String>) cache.getValue();
+            return list.get((int) index);
         }
     }
 
@@ -161,6 +174,36 @@ public class MemoryCacheList implements CacheList {
     }
 
     @Override
+    public String removeFirst() {
+        var cache = this.repository.get(this.key);
+        if (cache == null) {
+            return null;
+        } else {
+            var list = (List<String>) cache.getValue();
+            if (list.isEmpty()) {
+                return null;
+            } else {
+                return list.remove(0);
+            }
+        }
+    }
+
+    @Override
+    public String removeLast() {
+        var cache = this.repository.get(this.key);
+        if (cache == null) {
+            return null;
+        } else {
+            var list = (List<String>) cache.getValue();
+            if (list.isEmpty()) {
+                return null;
+            } else {
+                return list.remove(list.size() - 1);
+            }
+        }
+    }
+
+    @Override
     public long remove(long count, @NotNull String value) {
         var cache = this.repository.get(this.key);
         if (cache == null) {
@@ -184,15 +227,26 @@ public class MemoryCacheList implements CacheList {
         }
     }
 
+    @Nullable
     @Override
-    public long remove(long index) {
+    public String remove(long index) {
         var cache = this.repository.get(this.key);
         if (cache == null) {
-            return 0;
+            return null;
         } else {
             var list = (List<String>) cache.getValue();
-            var removed = list.remove((int) index);
-            return removed == null ? 0 : 1;
+            return list.remove((int) index);
+        }
+    }
+
+    @Override
+    public boolean remove(@NotNull String value) {
+        var cache = this.repository.get(this.key);
+        if (cache == null) {
+            return true;
+        } else {
+            var list = (List<String>) cache.getValue();
+            return list.remove(value);
         }
     }
 
