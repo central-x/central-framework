@@ -27,6 +27,7 @@ package central.util.cache.memory;
 import central.lang.Assertx;
 import central.util.cache.*;
 import central.util.concurrent.ConsumableQueue;
+import central.util.regex.GlobPattern;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
@@ -82,12 +83,28 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
 
     @Override
     public boolean delete(@NotNull String key) {
-        Cache cache = this.caches.remove(key);
-        if (cache == null) {
-            return false;
+        if (GlobPattern.isGlobPattern(key)){
+            // 通过正则匹配删除缓存
+            var keys = this.caches.keySet();
+            var matcher = GlobPattern.compile(key);
+            for (var it : keys) {
+                if (matcher.matcher(it).matches()) {
+                    var cache = this.caches.remove(it);
+                    if (cache == null) {
+                        continue;
+                    }
+                    // 将缓存置为无效
+                    cache.invalid();
+                }
+            }
+        } else {
+            var cache = this.caches.remove(key);
+            if (cache == null) {
+                return false;
+            }
+            // 将缓存置为无效
+            cache.invalid();
         }
-        // 将缓存置为无效
-        cache.invalid();
         return true;
     }
 
@@ -178,7 +195,7 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
     public @Nonnull CacheList opsList(@Nonnull String key) throws ClassCastException {
         var cache = this.caches.get(key);
         if (cache != null) {
-            Assertx.mustTrue(DataType.STRING.isCompatibleWith(cache.getType()), ClassCastException::new,
+            Assertx.mustTrue(DataType.LIST.isCompatibleWith(cache.getType()), ClassCastException::new,
                     "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
                     key, cache.getType().getName(), cache.getType().getCode(), DataType.LIST.getName(), DataType.LIST.getCode());
         }
@@ -189,7 +206,7 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
     public @Nonnull CacheQueue opsQueue(@Nonnull String key) throws ClassCastException {
         var cache = this.caches.get(key);
         if (cache != null) {
-            Assertx.mustTrue(DataType.STRING.isCompatibleWith(cache.getType()), ClassCastException::new,
+            Assertx.mustTrue(DataType.QUEUE.isCompatibleWith(cache.getType()), ClassCastException::new,
                     "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
                     key, cache.getType().getName(), cache.getType().getCode(), DataType.QUEUE.getName(), DataType.QUEUE.getCode());
         }
@@ -200,7 +217,7 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
     public @Nonnull CacheSet opsSet(@Nonnull String key) throws ClassCastException {
         var cache = this.caches.get(key);
         if (cache != null) {
-            Assertx.mustTrue(DataType.STRING.isCompatibleWith(cache.getType()), ClassCastException::new,
+            Assertx.mustTrue(DataType.SET.isCompatibleWith(cache.getType()), ClassCastException::new,
                     "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
                     key, cache.getType().getName(), cache.getType().getCode(), DataType.SET.getName(), DataType.SET.getCode());
         }
@@ -211,7 +228,7 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
     public @Nonnull CacheSet opsZSet(@Nonnull String key) throws ClassCastException {
         var cache = this.caches.get(key);
         if (cache != null) {
-            Assertx.mustTrue(DataType.STRING.isCompatibleWith(cache.getType()), ClassCastException::new,
+            Assertx.mustTrue(DataType.ZSET.isCompatibleWith(cache.getType()), ClassCastException::new,
                     "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
                     key, cache.getType().getName(), cache.getType().getCode(), DataType.ZSET.getName(), DataType.ZSET.getCode());
         }
@@ -222,7 +239,7 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
     public @Nonnull CacheMap opsMap(@Nonnull String key) throws ClassCastException {
         var cache = this.caches.get(key);
         if (cache != null) {
-            Assertx.mustTrue(DataType.STRING.isCompatibleWith(cache.getType()), ClassCastException::new,
+            Assertx.mustTrue(DataType.MAP.isCompatibleWith(cache.getType()), ClassCastException::new,
                     "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
                     key, cache.getType().getName(), cache.getType().getCode(), DataType.MAP.getName(), DataType.MAP.getCode());
         }
