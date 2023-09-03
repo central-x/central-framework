@@ -37,6 +37,8 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
 
 /**
  * 内存缓存仓库
@@ -49,6 +51,17 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
     private final Map<String, Cache> caches = new HashMap<>();
     private final ConsumableQueue<Cache, DelayQueue<Cache>> timeoutQueue;
 
+    private final ReentrantLock lock = new ReentrantLock();
+
+    private <R> R transactional(Function<Map<String, Cache>, R> action) {
+        try {
+            this.lock.lock();
+            return action.apply(this.caches);
+        } finally {
+            this.lock.unlock();
+        }
+    }
+
     public MemoryCacheRepository() {
         this.timeoutQueue = new ConsumableQueue<>(new DelayQueue<>(), "central.cache-repository.memory.cleaner");
         this.timeoutQueue.addConsumer(queue -> {
@@ -58,7 +71,7 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
                     if (cache != null) {
                         if (cache.isExpired()) {
                             // 缓存已过期
-                            this.caches.remove(cache.getKey());
+                            this.transactional(caches -> caches.remove(cache.getKey()));
                         } else if (!cache.isPermanent() && !cache.isInvalid()) {
                             // 如果缓存是临时并且有效的，那么需要重新加入队列进行倒计时
                             queue.offer(cache);
@@ -83,188 +96,223 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
 
     @Override
     public boolean delete(@NotNull String key) {
-        if (GlobPattern.isGlobPattern(key)){
-            // 通过正则匹配删除缓存
-            var keys = this.caches.keySet();
-            var matcher = GlobPattern.compile(key);
-            for (var it : keys) {
-                if (matcher.matcher(it).matches()) {
-                    var cache = this.caches.remove(it);
+        return this.transactional(caches -> {
+            if (GlobPattern.isGlobPattern(key)) {
+                // 通过正则匹配删除缓存
+                var invalidKeys = new HashSet<String>();
+                var matcher = GlobPattern.compile(key);
+                for (var it : caches.keySet()) {
+                    if (matcher.matcher(it).matches()) {
+                        invalidKeys.add(it);
+                    }
+                }
+                // 删除缓存
+                for (var it : invalidKeys) {
+                    var cache = caches.remove(it);
                     if (cache == null) {
                         continue;
                     }
                     // 将缓存置为无效
                     cache.invalid();
                 }
+            } else {
+                var cache = caches.remove(key);
+                if (cache == null) {
+                    return false;
+                }
+                // 将缓存置为无效
+                cache.invalid();
             }
-        } else {
-            var cache = this.caches.remove(key);
-            if (cache == null) {
-                return false;
-            }
-            // 将缓存置为无效
-            cache.invalid();
-        }
-        return true;
+            return true;
+        });
     }
 
     @Override
     public long delete(@Nonnull Collection<String> keys) {
-        long count = 0;
-        for (var key : keys) {
-            count += (this.delete(key) ? 1 : 0);
-        }
-        return count;
+        return this.transactional(caches -> {
+            long count = 0;
+            for (var key : keys) {
+                count += (this.delete(key) ? 1 : 0);
+            }
+            return count;
+        });
     }
 
     @Override
     public @Nonnull DataType type(@Nonnull String key) {
-        var cache = this.caches.get(key);
-        if (cache == null) {
-            return DataType.NONE;
-        } else {
-            return cache.getType();
-        }
+        return this.transactional(caches -> {
+            var cache = caches.get(key);
+            if (cache == null) {
+                return DataType.NONE;
+            } else {
+                return cache.getType();
+            }
+        });
     }
 
     @Override
     public @Nonnull Set<String> keys() {
-        return this.caches.keySet();
+        return this.transactional(Map::keySet);
     }
 
     @Override
     public boolean expire(@Nonnull String key, @Nonnull Duration timeout) {
-        var cache = this.caches.get(key);
-        if (cache == null) {
-            return false;
-        }
-        cache.setExpire(new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(timeout)));
-        this.timeoutQueue.offer(cache);
-        return true;
+        return this.transactional(caches -> {
+            var cache = caches.get(key);
+            if (cache == null) {
+                return false;
+            }
+            cache.setExpire(new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(timeout)));
+            this.timeoutQueue.offer(cache);
+            return true;
+        });
     }
 
     @Override
     public boolean expireAt(@Nonnull String key, @Nonnull Date date) {
-        var cache = this.caches.get(key);
-        if (cache == null) {
-            return false;
-        }
+        return this.transactional(caches -> {
+            var cache = caches.get(key);
+            if (cache == null) {
+                return false;
+            }
 
-        cache.setExpire(date);
-        this.timeoutQueue.offer(cache);
-        return true;
+            cache.setExpire(date);
+            this.timeoutQueue.offer(cache);
+            return true;
+        });
     }
 
     @Override
     public boolean persist(@Nonnull String key) {
-        var cache = this.caches.get(key);
-        if (cache == null) {
-            return false;
-        }
-        cache.persist();
-        return true;
+        return this.transactional(caches -> {
+            var cache = caches.get(key);
+            if (cache == null) {
+                return false;
+            }
+            cache.persist();
+            return true;
+        });
     }
 
     @Override
     public void clear() {
-        this.caches.clear();
+        this.transactional(caches -> {
+            caches.clear();
+            return true;
+        });
     }
 
     @Override
     public Duration getExpire(@Nonnull String key) {
-        var cache = this.caches.get(key);
-        if (cache == null) {
-            return null;
-        } else {
-            return Duration.ofMillis(cache.getDelay(TimeUnit.MILLISECONDS));
-        }
+        return this.transactional(caches -> {
+            var cache = caches.get(key);
+            if (cache == null) {
+                return null;
+            } else {
+                return Duration.ofMillis(cache.getDelay(TimeUnit.MILLISECONDS));
+            }
+        });
     }
 
     @Override
     public @Nonnull CacheValue opsValue(@Nonnull String key) throws ClassCastException {
-        var cache = this.caches.get(key);
-        if (cache != null) {
-            Assertx.mustTrue(DataType.STRING.isCompatibleWith(cache.getType()), ClassCastException::new,
-                    "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
-                    key, cache.getType().getName(), cache.getType().getCode(), DataType.STRING.getName(), DataType.STRING.getCode());
-        }
-        return new MemoryCacheValue(key, this);
+        return this.transactional(caches -> {
+            var cache = caches.get(key);
+            if (cache != null) {
+                Assertx.mustTrue(DataType.STRING.isCompatibleWith(cache.getType()), ClassCastException::new,
+                        "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
+                        key, cache.getType().getName(), cache.getType().getCode(), DataType.STRING.getName(), DataType.STRING.getCode());
+            }
+            return new MemoryCacheValue(key, this);
+        });
     }
 
     @Override
     public @Nonnull CacheList opsList(@Nonnull String key) throws ClassCastException {
-        var cache = this.caches.get(key);
-        if (cache != null) {
-            Assertx.mustTrue(DataType.LIST.isCompatibleWith(cache.getType()), ClassCastException::new,
-                    "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
-                    key, cache.getType().getName(), cache.getType().getCode(), DataType.LIST.getName(), DataType.LIST.getCode());
-        }
-        return new MemoryCacheList(key, this);
+        return this.transactional(caches -> {
+            var cache = caches.get(key);
+            if (cache != null) {
+                Assertx.mustTrue(DataType.LIST.isCompatibleWith(cache.getType()), ClassCastException::new,
+                        "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
+                        key, cache.getType().getName(), cache.getType().getCode(), DataType.LIST.getName(), DataType.LIST.getCode());
+            }
+            return new MemoryCacheList(key, this);
+        });
     }
 
     @Override
     public @Nonnull CacheQueue opsQueue(@Nonnull String key) throws ClassCastException {
-        var cache = this.caches.get(key);
-        if (cache != null) {
-            Assertx.mustTrue(DataType.QUEUE.isCompatibleWith(cache.getType()), ClassCastException::new,
-                    "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
-                    key, cache.getType().getName(), cache.getType().getCode(), DataType.QUEUE.getName(), DataType.QUEUE.getCode());
-        }
-        return new MemoryCacheQueue(key, this);
+        return this.transactional(caches -> {
+            var cache = caches.get(key);
+            if (cache != null) {
+                Assertx.mustTrue(DataType.QUEUE.isCompatibleWith(cache.getType()), ClassCastException::new,
+                        "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
+                        key, cache.getType().getName(), cache.getType().getCode(), DataType.QUEUE.getName(), DataType.QUEUE.getCode());
+            }
+            return new MemoryCacheQueue(key, this);
+        });
     }
 
     @Override
     public @Nonnull CacheSet opsSet(@Nonnull String key) throws ClassCastException {
-        var cache = this.caches.get(key);
-        if (cache != null) {
-            Assertx.mustTrue(DataType.SET.isCompatibleWith(cache.getType()), ClassCastException::new,
-                    "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
-                    key, cache.getType().getName(), cache.getType().getCode(), DataType.SET.getName(), DataType.SET.getCode());
-        }
-        return new MemoryCacheSet(key, this);
+        return this.transactional(caches -> {
+            var cache = caches.get(key);
+            if (cache != null) {
+                Assertx.mustTrue(DataType.SET.isCompatibleWith(cache.getType()), ClassCastException::new,
+                        "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
+                        key, cache.getType().getName(), cache.getType().getCode(), DataType.SET.getName(), DataType.SET.getCode());
+            }
+            return new MemoryCacheSet(key, this);
+        });
     }
 
     @Override
     public @Nonnull CacheSet opsZSet(@Nonnull String key) throws ClassCastException {
-        var cache = this.caches.get(key);
-        if (cache != null) {
-            Assertx.mustTrue(DataType.ZSET.isCompatibleWith(cache.getType()), ClassCastException::new,
-                    "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
-                    key, cache.getType().getName(), cache.getType().getCode(), DataType.ZSET.getName(), DataType.ZSET.getCode());
-        }
-        return new MemoryCacheZSet(key, this);
+        return this.transactional(caches -> {
+            var cache = caches.get(key);
+            if (cache != null) {
+                Assertx.mustTrue(DataType.ZSET.isCompatibleWith(cache.getType()), ClassCastException::new,
+                        "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
+                        key, cache.getType().getName(), cache.getType().getCode(), DataType.ZSET.getName(), DataType.ZSET.getCode());
+            }
+            return new MemoryCacheZSet(key, this);
+        });
     }
 
     @Override
     public @Nonnull CacheMap opsMap(@Nonnull String key) throws ClassCastException {
-        var cache = this.caches.get(key);
-        if (cache != null) {
-            Assertx.mustTrue(DataType.MAP.isCompatibleWith(cache.getType()), ClassCastException::new,
-                    "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
-                    key, cache.getType().getName(), cache.getType().getCode(), DataType.MAP.getName(), DataType.MAP.getCode());
-        }
-        return new MemoryCacheMap(key, this);
+        return this.transactional(caches -> {
+            var cache = caches.get(key);
+            if (cache != null) {
+                Assertx.mustTrue(DataType.MAP.isCompatibleWith(cache.getType()), ClassCastException::new,
+                        "缓存[key={}]的类型为{}({})，不支持转换为{}({})类型",
+                        key, cache.getType().getName(), cache.getType().getCode(), DataType.MAP.getName(), DataType.MAP.getCode());
+            }
+            return new MemoryCacheMap(key, this);
+        });
     }
 
     /// internal api
     @Nullable
     Cache put(@Nonnull String key, @Nullable Object value, @Nonnull DataType type, @Nullable Duration timeout) {
-        var cache = new Cache(key, value, type);
-        var old = this.caches.put(key, new Cache(key, value, type));
-        if (timeout != null) {
-            cache.setExpire(new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(timeout)));
-            this.timeoutQueue.offer(cache);
-        }
-        return old;
+        return this.transactional(caches -> {
+            var cache = new Cache(key, value, type);
+            var old = caches.put(key, new Cache(key, value, type));
+            if (timeout != null) {
+                cache.setExpire(new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(timeout)));
+                this.timeoutQueue.offer(cache);
+            }
+            return old;
+        });
     }
 
     @Nullable
     Cache get(@Nonnull String key) {
-        return this.caches.get(key);
+        return this.transactional(caches -> caches.get(key));
     }
 
     @Nullable
     Cache remove(@Nonnull String key) {
-        return this.caches.remove(key);
+        return this.transactional(caches -> caches.remove(key));
     }
 }
