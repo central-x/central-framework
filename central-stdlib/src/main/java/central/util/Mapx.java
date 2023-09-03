@@ -24,6 +24,9 @@
 
 package central.util;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 
@@ -157,6 +160,49 @@ public class Mapx {
         var map = new HashMap<K, V>();
         map.put(key, value);
         return map;
+    }
+
+    /**
+     * 快速构建 Map
+     *
+     * @param entries 键值对
+     * @param <K>     键类型
+     * @param <V>     值类型
+     */
+    @SafeVarargs
+    public static <K, V> Map<K, V> of(Map.Entry<K, V>... entries) {
+        var map = new HashMap<K, V>();
+        for (var entry : entries) {
+            map.put(entry.getKey(), entry.getValue());
+        }
+        return map;
+    }
+
+    /**
+     * 快速构建健值对
+     *
+     * @param key   键
+     * @param value 值
+     * @param <K>   键类型
+     * @param <V>   值类型
+     */
+    public static <K, V> Map.Entry<K, V> entry(K key, V value) {
+        return new Entry<>(key, value);
+    }
+
+    @Getter
+    @EqualsAndHashCode
+    @AllArgsConstructor
+    private static class Entry<K, V> implements Map.Entry<K, V> {
+        private final K key;
+        private V value;
+
+        @Override
+        public V setValue(V value) {
+            var origin = this.value;
+            this.value = value;
+            return origin;
+        }
     }
 
     /**
