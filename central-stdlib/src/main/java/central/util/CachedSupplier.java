@@ -24,7 +24,10 @@
 
 package central.util;
 
+import jakarta.annotation.Nonnull;
+
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.function.Supplier;
 
 /**
@@ -40,7 +43,7 @@ public class CachedSupplier<T extends Serializable> implements Supplier<T> {
      * 如果 timeout == 0，则每次都从 supplier 中重新获取新的值
      * 如果 timeout > 0，则在 timeout 过期前不再获取新值，过期后重新从 supplier 中获取新值
      */
-    private final long timeout;
+    private final Duration timeout;
     /**
      * 缓存过期过，从 Supplier 中获取新的值
      */
@@ -56,7 +59,7 @@ public class CachedSupplier<T extends Serializable> implements Supplier<T> {
 
     private final Object lock = new Object();
 
-    public CachedSupplier(long timeout, Supplier<T> supplier) {
+    public CachedSupplier(@Nonnull Duration timeout, @Nonnull Supplier<T> supplier) {
         this.timeout = timeout;
         this.supplier = supplier;
     }
@@ -76,16 +79,16 @@ public class CachedSupplier<T extends Serializable> implements Supplier<T> {
             }
             return value.get();
         } else {
-            if (timeout < 0) {
+            if (timeout.isNegative()) {
                 // 永不更新
                 return value.get();
-            } else if (timeout == 0) {
+            } else if (timeout.isZero()) {
                 // 永不缓存
                 return supplier.get();
-            } else if (System.currentTimeMillis() - this.last > this.timeout) {
+            } else if (System.currentTimeMillis() - this.last > this.timeout.toMillis()) {
                 // 缓存失效
                 synchronized (lock) {
-                    if (System.currentTimeMillis() - this.last > this.timeout) {
+                    if (System.currentTimeMillis() - this.last > this.timeout.toMillis()) {
                         value = Value.of(supplier.get());
                         last = System.currentTimeMillis();
                     }

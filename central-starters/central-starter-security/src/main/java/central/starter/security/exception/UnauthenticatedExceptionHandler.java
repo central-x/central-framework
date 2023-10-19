@@ -92,7 +92,7 @@ public class UnauthenticatedExceptionHandler implements ExceptionHandler {
         }
 
         if (returnJson) {
-            ModelAndView mv = new ModelAndView(new MappingJackson2JsonView(), Map.of("message", throwable.getLocalizedMessage()));
+            ModelAndView mv = new ModelAndView(new MappingJackson2JsonView(), Map.of("message", "未登录"));
             mv.setStatus(HttpStatus.UNAUTHORIZED);
             return mv;
         } else {

@@ -36,9 +36,9 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
  */
 public interface SecurityProvider {
     /**
-     * 当应用接入到 Token 信息时，应用需要对该 Token 进行鉴权
+     * 当应用接入到会话凭证信息时，应用需要对该凭证进行鉴权
      *
-     * @param token JWT
+     * @param token 会话凭证
      */
     void onReceiveAuthenticationToken(String token);
 
@@ -46,15 +46,17 @@ public interface SecurityProvider {
      * 对帐户进行授权
      * 如果不需要进行授权，可以不处理
      *
-     * @param token             JWT
+     * @param token             会话凭证
      * @param authorizationInfo 授权信息
      */
-    default void onReceiveAuthorizationInfo(String token, SimpleAuthorizationInfo authorizationInfo) {}
+    default void onReceiveAuthorizationInfo(String token, SimpleAuthorizationInfo authorizationInfo) {
+    }
 
     /**
      * 注销
      *
-     * @param token JWT
+     * @param token 会话凭证
      */
-    default void onLogout(String token) {}
+    default void onLogout(String token) {
+    }
 }

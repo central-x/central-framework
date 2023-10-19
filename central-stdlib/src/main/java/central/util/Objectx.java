@@ -27,6 +27,7 @@ package central.util;
 import central.lang.Assertx;
 import central.lang.Stringx;
 import central.lang.reflect.TypeRef;
+import central.util.function.ThrowableSupplier;
 import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
@@ -150,6 +151,24 @@ public class Objectx {
             return null;
         } else {
             return instance.getClass();
+        }
+    }
+
+    /**
+     * 安静地获取值
+     * <p>
+     * 如果获取的过程中发生异常，将返回空
+     *
+     * @param supplier 值提供者
+     * @param <T>      值类型
+     * @param <E>      异常类型
+     * @return 获取的值
+     */
+    public static <T, E extends Exception> @Nullable T getSilently(@Nonnull ThrowableSupplier<T, E> supplier) {
+        try {
+            return supplier.get();
+        } catch (Exception ignored) {
+            return null;
         }
     }
 }
