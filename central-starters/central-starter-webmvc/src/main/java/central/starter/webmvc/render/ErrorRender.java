@@ -97,8 +97,9 @@ public class ErrorRender extends Render<ErrorRender> {
             response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
             response.setDateHeader(HttpHeaders.EXPIRES, 0);
             response.setContentType("text/html; charset=utf-8");
-            PrintWriter writer = response.getWriter();
-            writer.write(body);
+            try (PrintWriter writer = response.getWriter()) {
+                writer.write(body);
+            }
         }
     }
 
