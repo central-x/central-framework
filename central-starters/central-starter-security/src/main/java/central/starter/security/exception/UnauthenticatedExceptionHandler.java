@@ -48,9 +48,6 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-
-import java.util.Map;
 
 /**
  * 未登录异常捕捉
@@ -85,43 +82,36 @@ public class UnauthenticatedExceptionHandler implements ExceptionHandler {
             returnJson = true;
         }
 
-        var acceptContentType = MediaType.parseMediaType(request.getHeader(HttpHeaders.ACCEPT));
-        if (!MediaType.ALL.equalsTypeAndSubtype(acceptContentType)) {
-            if (!returnJson && MediaType.APPLICATION_JSON.isCompatibleWith(acceptContentType)) {
-                // 如果客户端要求返回 Json
-                returnJson = true;
+        if (!returnJson) {
+            var acceptContentType = MediaType.parseMediaType(request.getHeader(HttpHeaders.ACCEPT));
+            if (MediaType.ALL.equalsTypeAndSubtype(acceptContentType)) {
+                // 如果客户端没有指定返回类型，一般就是浏览器请求
+                // 未登录时，需要重定向到登录界面
+                if (Stringx.isNotBlank(this.properties.getUnauthorizedUrl())) {
+                    var unauthorizedUrl = properties.getUnauthorizedUrl();
+
+                    var tenantPath = request.getHeader(XForwardedHeaders.PATH);
+                    if (Stringx.isNotBlank(tenantPath)) {
+                        unauthorizedUrl = tenantPath + unauthorizedUrl;
+                    }
+
+                    log.info("[central-starter-security] 未登录，重定向到 " + unauthorizedUrl);
+
+                    var requestUrl = request.getHeader(XForwardedHeaders.ORIGIN_URI);
+                    if (Stringx.isNotBlank(requestUrl)) {
+                        requestUrl = request.getRequestURL().toString();
+                    }
+
+                    // 如果请求的是页面，则重定向到指定地址
+                    var redirect = new RedirectView(Stringx.format("{}?redirect_uri={}", unauthorizedUrl, Stringx.encodeUrl(requestUrl)));
+                    return new ModelAndView(redirect);
+                }
             }
         }
 
-        if (returnJson) {
-            ModelAndView mv = new ModelAndView(new MappingJackson2JsonView(), Map.of("message", "未登录"));
-            mv.setStatus(HttpStatus.UNAUTHORIZED);
-            return mv;
-        } else {
-            if (Stringx.isNullOrBlank(this.properties.getUnauthorizedUrl())) {
-                // 如果没有配置未登录地址，由于不知道要重定向到什么地方，只能返回错误信息
-                var mv = new ModelAndView(new ErrorView(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "未登录")));
-                mv.setStatus(HttpStatus.UNAUTHORIZED);
-                return mv;
-            } else {
-                var unauthorizedUrl = properties.getUnauthorizedUrl();
-
-                var tenantPath = request.getHeader(XForwardedHeaders.PATH);
-                if (Stringx.isNotBlank(tenantPath)) {
-                    unauthorizedUrl = tenantPath + unauthorizedUrl;
-                }
-
-                log.info("[central-starter-security] 未登录，重定向到 " + unauthorizedUrl);
-
-                var requestUrl = request.getHeader(XForwardedHeaders.ORIGIN_URI);
-                if (Stringx.isNotBlank(requestUrl)) {
-                    requestUrl = request.getRequestURL().toString();
-                }
-
-                // 如果请求的是页面，则重定向到指定地址
-                var redirect = new RedirectView(Stringx.format("{}?redirect_uri={}", unauthorizedUrl, Stringx.encodeUrl(requestUrl)));
-                return new ModelAndView(redirect);
-            }
-        }
+        // 如果客户端要求返回 JSON，或业务系统没有配置登录地址，由于不知道要重定向到什么地方，只能返回错误信息
+        var mv = new ModelAndView(new ErrorView(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "未登录")));
+        mv.setStatus(HttpStatus.UNAUTHORIZED);
+        return mv;
     }
 }
