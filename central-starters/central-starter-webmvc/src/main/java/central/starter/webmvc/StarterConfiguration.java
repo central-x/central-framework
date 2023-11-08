@@ -51,6 +51,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -96,6 +97,7 @@ public class StarterConfiguration implements WebMvcConfigurer {
     @ConditionalOnClass(ObjectMapper.class)
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
         var converter = new MappingJackson2HttpMessageConverter();
+        converter.setDefaultCharset(StandardCharsets.UTF_8);
 
         var module = new SimpleModule();
 
