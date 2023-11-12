@@ -86,8 +86,16 @@ public class UnauthorizedExceptionHandler implements ExceptionHandler {
             returnJson = true;
         }
         if (!returnJson) {
-            var acceptContentType = MediaType.parseMediaType(request.getHeader(HttpHeaders.ACCEPT));
-            if (MediaType.ALL.equalsTypeAndSubtype(acceptContentType)) {
+            var acceptContentTypes = MediaType.parseMediaTypes(request.getHeader(HttpHeaders.ACCEPT));
+            boolean returnHtml = false;
+            for (var type : acceptContentTypes) {
+                if (MediaType.ALL.equalsTypeAndSubtype(type) || MediaType.TEXT_HTML.equalsTypeAndSubtype(type)) {
+                    returnHtml = true;
+                    break;
+                }
+            }
+
+            if (returnHtml) {
                 if (Stringx.isNotBlank(this.properties.getForbiddenUrl())) {
                     var forbiddenUrl = properties.getForbiddenUrl();
 

@@ -83,8 +83,16 @@ public class UnauthenticatedExceptionHandler implements ExceptionHandler {
         }
 
         if (!returnJson) {
-            var acceptContentType = MediaType.parseMediaType(request.getHeader(HttpHeaders.ACCEPT));
-            if (MediaType.ALL.equalsTypeAndSubtype(acceptContentType)) {
+            var acceptContentTypes = MediaType.parseMediaTypes(request.getHeader(HttpHeaders.ACCEPT));
+            boolean returnHtml = false;
+            for (var type : acceptContentTypes) {
+                if (MediaType.ALL.equalsTypeAndSubtype(type) || MediaType.TEXT_HTML.equalsTypeAndSubtype(type)) {
+                    returnHtml = true;
+                    break;
+                }
+            }
+
+            if (returnHtml) {
                 // 如果客户端没有指定返回类型，一般就是浏览器请求
                 // 未登录时，需要重定向到登录界面
                 if (Stringx.isNotBlank(this.properties.getUnauthorizedUrl())) {
