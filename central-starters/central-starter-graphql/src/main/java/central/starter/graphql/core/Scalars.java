@@ -27,8 +27,8 @@ package central.starter.graphql.core;
 import central.lang.Stringx;
 import graphql.language.StringValue;
 import graphql.schema.*;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 

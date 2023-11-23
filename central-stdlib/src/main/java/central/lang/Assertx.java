@@ -27,10 +27,10 @@ package central.lang;
 import central.lang.reflect.TypeRef;
 import central.util.Collectionx;
 import central.util.Mapx;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.experimental.UtilityClass;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;

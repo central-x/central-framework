@@ -26,9 +26,8 @@ package central.sql.impl.standard;
 
 import central.sql.SqlConverter;
 import central.util.Convertx;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * 标准 Sql Converter

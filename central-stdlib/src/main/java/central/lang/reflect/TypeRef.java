@@ -29,10 +29,10 @@ import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.Stringx;
 import central.util.*;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
-import javax.annotation.Nullable;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;

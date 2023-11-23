@@ -24,8 +24,7 @@
 
 package central.util;
 
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * 观查者

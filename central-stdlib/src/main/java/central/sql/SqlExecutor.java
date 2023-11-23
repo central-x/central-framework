@@ -31,10 +31,10 @@ import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
 import central.util.MarkdownResources;
 import central.lang.Stringx;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.SneakyThrows;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.sql.SQLException;

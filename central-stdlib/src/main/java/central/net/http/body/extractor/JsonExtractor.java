@@ -28,9 +28,9 @@ import central.lang.reflect.TypeRef;
 import central.net.http.body.Body;
 import central.net.http.body.BodyExtractor;
 import central.util.Jsonx;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

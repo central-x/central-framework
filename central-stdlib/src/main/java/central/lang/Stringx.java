@@ -24,11 +24,11 @@
 
 package central.lang;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;

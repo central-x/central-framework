@@ -28,6 +28,7 @@ import central.pattern.chain.ProcessChain;
 import central.starter.cache.core.annotation.CacheEvict;
 import central.starter.cache.core.annotation.CachePut;
 import central.starter.cache.core.annotation.Cacheable;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.Setter;
 import org.aopalliance.aop.Advice;
@@ -42,7 +43,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 
-import javax.annotation.Nonnull;
 import java.io.Serial;
 import java.lang.reflect.Method;
 import java.util.List;

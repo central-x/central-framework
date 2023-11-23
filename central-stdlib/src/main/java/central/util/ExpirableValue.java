@@ -25,9 +25,9 @@
 package central.util;
 
 import central.bean.Nullable;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 
-import javax.annotation.Nonnull;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;

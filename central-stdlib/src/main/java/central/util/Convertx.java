@@ -31,9 +31,9 @@ import central.lang.reflect.TypeRef;
 import central.util.converter.ConvertException;
 import central.util.converter.Converter;
 import central.util.converter.impl.UnsupportedConverter;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

@@ -27,10 +27,10 @@ package central.io;
 import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.PublicApi;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.experimental.UtilityClass;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

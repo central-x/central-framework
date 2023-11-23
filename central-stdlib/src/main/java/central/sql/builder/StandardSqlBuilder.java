@@ -44,9 +44,9 @@ import central.sql.meta.entity.ForeignMeta;
 import central.sql.meta.entity.ForeignTableMeta;
 import central.sql.meta.entity.PropertyMeta;
 import central.util.*;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLSyntaxErrorException;
 import java.util.*;

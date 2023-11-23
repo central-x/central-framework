@@ -25,12 +25,11 @@
 package central.lang.reflect;
 
 import central.bean.Nullable;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;

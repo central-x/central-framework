@@ -27,9 +27,9 @@ package central.io;
 import central.lang.PublicApi;
 import central.lang.Arrayx;
 import central.lang.Assertx;
+import jakarta.annotation.Nonnull;
 import lombok.experimental.UtilityClass;
 
-import javax.annotation.Nonnull;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Arrays;

@@ -29,12 +29,12 @@ import central.sql.data.Entity;
 import central.util.Listx;
 import central.util.Objectx;
 import central.lang.Stringx;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

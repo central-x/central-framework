@@ -25,8 +25,7 @@
 package central.net.http.body.converter;
 
 import central.net.http.body.HttpConverter;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Boolean 转换器

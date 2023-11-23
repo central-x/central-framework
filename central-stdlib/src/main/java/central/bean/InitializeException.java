@@ -25,8 +25,8 @@
 package central.bean;
 
 import central.lang.PublicApi;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.io.Serial;
 import java.util.Objects;
 

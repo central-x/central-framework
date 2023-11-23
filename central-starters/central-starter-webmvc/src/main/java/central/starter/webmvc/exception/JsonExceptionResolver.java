@@ -24,30 +24,22 @@
 
 package central.starter.webmvc.exception;
 
+import central.lang.Stringx;
 import central.starter.webmvc.exception.handlers.FallbackHandler;
 import central.util.Listx;
-import central.util.Mapx;
-import central.lang.Stringx;
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.propertyeditors.ClassEditor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import javax.annotation.Nonnull;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 全局异常处理

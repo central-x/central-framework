@@ -29,6 +29,7 @@ import central.lang.Stringx;
 import central.sql.SqlExecutor;
 import central.sql.proxy.Mapper;
 import central.starter.orm.EnableOrm;
+import jakarta.annotation.Nonnull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -46,7 +47,6 @@ import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Nonnull;
 import java.util.Set;
 
 /**

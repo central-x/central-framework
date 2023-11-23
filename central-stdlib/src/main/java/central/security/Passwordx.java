@@ -26,9 +26,9 @@ package central.security;
 
 import central.lang.Assertx;
 import central.lang.Stringx;
+import jakarta.annotation.Nonnull;
 import lombok.experimental.UtilityClass;
 
-import javax.annotation.Nonnull;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

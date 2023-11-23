@@ -37,14 +37,14 @@ import central.sql.datasource.migration.migrator.DatabaseMigrator;
 import central.sql.meta.database.DatabaseMeta;
 import central.util.Version;
 import central.validation.Label;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;

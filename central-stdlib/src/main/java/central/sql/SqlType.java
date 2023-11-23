@@ -28,10 +28,10 @@ import central.bean.OptionalEnum;
 import central.sql.resolver.*;
 import central.lang.Arrayx;
 import central.util.Listx;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.sql.Types;

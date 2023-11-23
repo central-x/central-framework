@@ -28,12 +28,12 @@ import central.lang.reflect.invoke.ParameterResolver;
 import central.starter.graphql.GraphQLRequest;
 import central.util.Context;
 import graphql.schema.DataFetchingEnvironment;
+import jakarta.annotation.Nonnull;
 import org.dataloader.BatchLoaderEnvironment;
 import org.dataloader.DataLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;

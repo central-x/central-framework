@@ -27,9 +27,9 @@ package central.sql;
 import central.sql.data.Entity;
 import central.sql.meta.database.DatabaseMeta;
 import central.sql.meta.entity.EntityMeta;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.sql.SQLException;
 import java.util.function.Predicate;
 

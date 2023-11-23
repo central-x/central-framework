@@ -26,9 +26,9 @@ package central.sql.datasource.migration;
 
 import central.sql.SqlExecutor;
 import central.util.Version;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.sql.SQLException;
 
 /**

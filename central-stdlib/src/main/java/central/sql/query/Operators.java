@@ -25,10 +25,10 @@
 package central.sql.query;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 /**

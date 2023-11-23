@@ -24,7 +24,7 @@
 
 package central.net.http.body;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * 将对象转换为 String

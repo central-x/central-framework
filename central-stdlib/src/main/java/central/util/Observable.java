@@ -24,9 +24,9 @@
 
 package central.util;
 
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 

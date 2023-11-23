@@ -25,13 +25,13 @@
 package central.starter.logging.trace.reactive;
 
 import central.lang.TraceLocal;
+import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.reactivestreams.Subscription;
 import org.slf4j.MDC;
 import reactor.core.CoreSubscriber;
 import reactor.util.context.Context;
 
-import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 /**

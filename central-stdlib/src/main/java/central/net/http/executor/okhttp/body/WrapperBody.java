@@ -26,13 +26,13 @@ package central.net.http.executor.okhttp.body;
 
 import central.net.http.body.Body;
 import central.io.IOStreamx;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
 import okio.Okio;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 /**

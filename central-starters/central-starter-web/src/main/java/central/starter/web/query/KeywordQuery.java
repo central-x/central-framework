@@ -26,9 +26,9 @@ package central.starter.web.query;
 
 import central.lang.Arrayx;
 import central.lang.Stringx;
+import jakarta.annotation.Nonnull;
 import lombok.Data;
 
-import javax.annotation.Nonnull;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;

@@ -27,8 +27,8 @@ package central.net.http.body.extractor;
 import central.io.IOStreamx;
 import central.net.http.body.Body;
 import central.net.http.body.BodyExtractor;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

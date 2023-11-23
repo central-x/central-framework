@@ -24,12 +24,11 @@
 
 package central.starter.webmvc.exception;
 
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.annotation.Nullable;
 
 /**
  * 异常处理器

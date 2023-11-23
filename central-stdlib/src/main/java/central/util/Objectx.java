@@ -28,10 +28,10 @@ import central.lang.Assertx;
 import central.lang.Stringx;
 import central.lang.reflect.TypeRef;
 import central.util.function.ThrowableSupplier;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.experimental.UtilityClass;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;

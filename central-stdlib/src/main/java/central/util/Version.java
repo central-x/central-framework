@@ -27,9 +27,8 @@ package central.util;
 import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.Stringx;
+import jakarta.annotation.Nullable;
 import lombok.*;
-
-import javax.annotation.Nullable;
 
 /**
  * 版本号

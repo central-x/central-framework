@@ -27,9 +27,9 @@ package central.sql.meta.entity;
 import central.sql.SqlConversion;
 import central.util.Objectx;
 import central.lang.Stringx;
+import jakarta.annotation.Nullable;
 import lombok.Data;
 
-import javax.annotation.Nullable;
 import java.beans.PropertyDescriptor;
 
 /**

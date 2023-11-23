@@ -24,22 +24,20 @@
 
 package central.starter.webmvc.exception.handlers;
 
-import central.starter.webmvc.exception.ExceptionHandler;
 import central.lang.Stringx;
+import central.starter.webmvc.exception.ExceptionHandler;
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 参数校验错误异常处理

@@ -34,13 +34,13 @@ import central.starter.graphql.stub.graphql.dto.DTO;
 import central.starter.graphql.stub.graphql.dto.ProjectDTO;
 import central.starter.graphql.stub.graphql.entity.ProjectEntity;
 import central.starter.graphql.stub.graphql.mapper.ProjectMapper;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

@@ -25,8 +25,8 @@
 package central.net.http.body.converter;
 
 import central.net.http.body.HttpConverter;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.sql.Timestamp;
 
 /**

@@ -24,9 +24,9 @@
 
 package central.starter.web.converter;
 
+import jakarta.annotation.Nonnull;
 import org.springframework.core.convert.converter.Converter;
 
-import javax.annotation.Nonnull;
 import java.sql.Timestamp;
 
 /**

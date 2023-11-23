@@ -25,9 +25,9 @@
 package central.util.function;
 
 import central.lang.Assertx;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 
-import javax.annotation.Nonnull;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
