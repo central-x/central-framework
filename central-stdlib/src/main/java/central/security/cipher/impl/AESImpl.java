@@ -27,6 +27,7 @@ package central.security.cipher.impl;
 import central.lang.Assertx;
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 
 import javax.crypto.KeyGenerator;
@@ -49,13 +50,13 @@ public class AESImpl implements CipherImpl {
     private static final int KEY_LENGTH = 256;
 
     @Override
-    public String getName() {
+    public @Nonnull String getName() {
         return ALGORITHM;
     }
 
     @Override
     @SneakyThrows
-    public KeyPair generateKeyPair() {
+    public @Nonnull KeyPair generateKeyPair() {
         KeyGenerator generator = KeyGenerator.getInstance(ALGORITHM);
         generator.init(KEY_LENGTH);
 
@@ -70,7 +71,7 @@ public class AESImpl implements CipherImpl {
      * @param keySpec 密钥，必须是 16 + N * 8 位
      */
     @Override
-    public Key getEncryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return this.getKey(keySpec);
     }
 
@@ -81,11 +82,11 @@ public class AESImpl implements CipherImpl {
      * @param keySpec 密钥，必须是 16 + N * 8 位
      */
     @Override
-    public Key getDecryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return this.getKey(keySpec);
     }
 
-    private Key getKey(String keySpec) {
+    private @Nonnull Key getKey(@Nonnull String keySpec) {
         Assertx.mustNotBlank(keySpec, "Argument 'keySpec' must not blank");
         Assertx.mustTrue((keySpec.length() - 16) % 8 == 0, "密钥必须是 16 + N * 8 位");
 
@@ -93,16 +94,16 @@ public class AESImpl implements CipherImpl {
     }
 
     @Override
-    public byte[] encrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] encrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         return this.cipher(javax.crypto.Cipher.ENCRYPT_MODE, data, key);
     }
 
     @Override
-    public byte[] decrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] decrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         return this.cipher(javax.crypto.Cipher.DECRYPT_MODE, data, key);
     }
 
-    private byte[] cipher(int mode, byte[] data, Key key) throws GeneralSecurityException {
+    private byte[] cipher(int mode, byte[] data, @Nonnull Key key) throws GeneralSecurityException {
         // Cipher 对象完成加密操作
         javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance(ALGORITHM);
 

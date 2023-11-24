@@ -198,7 +198,7 @@ public class HttpRequest implements AutoCloseable {
      * <pre>
      * {@code request.addHeaders(headers -> {
      *     headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-     * }).setCookie("Authorization", "xxx");
+     * }).setCookie("Authorization", "xxx");}
      * </pre>
      */
     public HttpRequest addHeaders(Consumer<HttpHeaders> headers) {

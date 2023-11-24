@@ -25,7 +25,6 @@
 package central.bean;
 
 import central.lang.PublicApi;
-import lombok.experimental.StandardException;
 
 import java.io.Serial;
 
@@ -36,8 +35,19 @@ import java.io.Serial;
  * @since 2022/08/05
  */
 @PublicApi
-@StandardException
 public class BeanValidateException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -6937382915740841796L;
+
+    public BeanValidateException(String message) {
+        super(message);
+    }
+
+    public BeanValidateException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public BeanValidateException(Throwable cause) {
+        super(cause);
+    }
 }

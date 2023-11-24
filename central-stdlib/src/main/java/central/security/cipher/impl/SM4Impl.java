@@ -26,6 +26,7 @@ package central.security.cipher.impl;
 
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bouncycastle.crypto.CipherKeyGenerator;
@@ -60,12 +61,13 @@ public class SM4Impl implements CipherImpl {
     // Initial vector's size is 16 bytes
     public static final int IV_SIZE = 16;
 
-    public String getName() {
+    @Override
+    public @Nonnull String getName() {
         return "SM4";
     }
 
     @Override
-    public KeyPair generateKeyPair() {
+    public @Nonnull KeyPair generateKeyPair() {
         CipherKeyGenerator generator = new CipherKeyGenerator();
         // To provide secure randomness and key length as input
         // to prepare generate private key
@@ -110,17 +112,17 @@ public class SM4Impl implements CipherImpl {
     }
 
     @Override
-    public Key getEncryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return new SM4Key(Base64.getDecoder().decode(keySpec));
     }
 
     @Override
-    public Key getDecryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return new SM4Key(Base64.getDecoder().decode(keySpec));
     }
 
     @Override
-    public byte[] encrypt(byte[] data, Key encryptKey) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] encrypt(@Nonnull byte[] data, @Nonnull Key encryptKey) throws GeneralSecurityException, IOException {
         // 向量
         byte[] iv = new byte[IV_SIZE];
         SecureRandom random = new SecureRandom();
@@ -156,7 +158,7 @@ public class SM4Impl implements CipherImpl {
     }
 
     @Override
-    public byte[] decrypt(byte[] data, Key decryptKey) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] decrypt(@Nonnull byte[] data, @Nonnull Key decryptKey) throws GeneralSecurityException, IOException {
         byte[] iv = new byte[IV_SIZE];
         System.arraycopy(data, 0, iv, 0, BLOCK_SIZE);
 

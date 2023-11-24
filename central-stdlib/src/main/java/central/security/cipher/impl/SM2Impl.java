@@ -26,6 +26,7 @@ package central.security.cipher.impl;
 
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
@@ -67,12 +68,13 @@ public class SM2Impl implements CipherImpl {
     // The length of sm3 output is 32 bytes
     public static final int SM3DIGEST_LENGTH = 32;
 
-    public String getName() {
+    @Override
+    public @Nonnull String getName() {
         return "SM2";
     }
 
     @Override
-    public KeyPair generateKeyPair() {
+    public @Nonnull KeyPair generateKeyPair() {
         SecureRandom random = new SecureRandom();
 
         ECKeyGenerationParameters keyGenerationParams = new ECKeyGenerationParameters(DOMAIN_PARAMS, random);
@@ -89,7 +91,7 @@ public class SM2Impl implements CipherImpl {
     }
 
     @Override
-    public Key getEncryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return new SM2EncryptKey(Base64.getDecoder().decode(keySpec));
     }
 
@@ -126,7 +128,7 @@ public class SM2Impl implements CipherImpl {
     }
 
     @Override
-    public Key getDecryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return new SM2DecryptKey(Base64.getDecoder().decode(keySpec));
     }
 
@@ -172,7 +174,7 @@ public class SM2Impl implements CipherImpl {
     }
 
     @Override
-    public byte[] encrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] encrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         SecureRandom random = new SecureRandom();
         ECPoint pubKeyPoint = CURVE.decodePoint(key.getEncoded());
         ECPublicKeyParameters pubKey = new ECPublicKeyParameters(pubKeyPoint, DOMAIN_PARAMS);
@@ -203,7 +205,7 @@ public class SM2Impl implements CipherImpl {
     }
 
     @Override
-    public byte[] decrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] decrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(new BigInteger(1, key.getEncoded()), DOMAIN_PARAMS);
 
         SM2Engine decryptor = new SM2Engine();

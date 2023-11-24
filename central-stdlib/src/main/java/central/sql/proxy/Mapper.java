@@ -362,4 +362,10 @@ public interface Mapper<E extends Entity> {
      * @return 是否存在满足条件的数据
      */
     boolean existsBy(@Nullable Conditions<? extends E> conditions);
+
+    /**
+     * 打印 Mapper 信息
+     */
+    @Override
+    String toString();
 }

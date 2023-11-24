@@ -40,6 +40,7 @@ import java.sql.SQLException;
 public interface DataSourceMigrator {
     /**
      * 迁移名
+     * <p>
      * 不同的迁移名之间的版本可以共存
      */
     @Nonnull
@@ -47,6 +48,7 @@ public interface DataSourceMigrator {
 
     /**
      * 基线版本
+     * <p>
      * 低于基线版本的 Migration 将不被执行
      */
     @Nullable
@@ -54,7 +56,8 @@ public interface DataSourceMigrator {
 
     /**
      * 目标版本
-     * baseline < version <= target 的 Migration 将被执行
+     * <p>
+     * {@code baseline < version <= target} 的 Migration 将被执行
      */
     @Nonnull
     Version getTarget();
@@ -75,6 +78,7 @@ public interface DataSourceMigrator {
 
     /**
      * 降级 Sql 执行器
+     *
      * @param executor
      * @throws SQLException
      */

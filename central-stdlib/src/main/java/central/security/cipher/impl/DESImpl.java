@@ -27,6 +27,7 @@ package central.security.cipher.impl;
 import central.lang.Assertx;
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 
 import javax.crypto.Cipher;
@@ -49,13 +50,13 @@ public class DESImpl implements CipherImpl {
     private static final String ALGORITHM = "DES";
 
     @Override
-    public String getName() {
+    public @Nonnull String getName() {
         return ALGORITHM;
     }
 
     @Override
     @SneakyThrows
-    public KeyPair generateKeyPair() {
+    public @Nonnull KeyPair generateKeyPair() {
         KeyGenerator generator = KeyGenerator.getInstance(ALGORITHM);
         generator.init(56);
         Key key = generator.generateKey();
@@ -70,7 +71,7 @@ public class DESImpl implements CipherImpl {
      * @param keySpec Key Spec
      */
     @Override
-    public Key getEncryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return this.getKey(keySpec);
     }
 
@@ -81,11 +82,11 @@ public class DESImpl implements CipherImpl {
      * @param keySpec Key Spec
      */
     @Override
-    public Key getDecryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return this.getKey(keySpec);
     }
 
-    private Key getKey(String keySpec) throws GeneralSecurityException {
+    private @Nonnull Key getKey(@Nonnull String keySpec) throws GeneralSecurityException {
         Assertx.mustNotBlank(keySpec, "Argument 'keySpec' must not blank");
         Assertx.mustTrue(keySpec.length() >= 8, "密钥必须大于 8 位的");
         // 从原始密钥数据创建 DESKeySpec 对象
@@ -97,12 +98,12 @@ public class DESImpl implements CipherImpl {
     }
 
     @Override
-    public byte[] encrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] encrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         return this.cipher(Cipher.ENCRYPT_MODE, data, key);
     }
 
     @Override
-    public byte[] decrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] decrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         return this.cipher(Cipher.DECRYPT_MODE, data, key);
     }
 

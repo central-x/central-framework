@@ -27,6 +27,7 @@ package central.pluglet.control.resolver;
 import central.bean.TypeCheckException;
 import central.bean.NameValue;
 import central.bean.OptionalEnum;
+import central.lang.Stringx;
 import central.lang.reflect.FieldRef;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
@@ -57,7 +58,7 @@ public class RadioFieldResolver extends FieldResolver {
         Assertx.mustTrue(field.getType().isEnum(), TypeCheckException::new, "Field '{}' requires Enum type", field.getName());
         // 枚举列表
         var options = Arrayx.asStream(field.getType().getRawClass().getEnumConstants())
-                .map(it -> (OptionalEnum<String>)Assertx.requireInstanceOf(OptionalEnum.class, it, TypeCheckException::new, "Enum '{}' MUST implements Optional<String>"))
+                .map(it -> (OptionalEnum<String>)Assertx.requireInstanceOf(OptionalEnum.class, it, () -> new TypeCheckException(Stringx.format("Enum '{}' MUST implements Optional<String>", it.getClass().getSimpleName()))))
                 .map(it -> new NameValue<>(it.getName(), it.getValue()))
                 .toList();
 

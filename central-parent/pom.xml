@@ -25,6 +25,11 @@
         </license>
     </licenses>
 
+    <scm>
+        <connection>scm:https://github.com/central-x/central-framework.git</connection>
+        <url>https://github.com/central-x/central-framework</url>
+    </scm>
+
     <!-- 开发者信息 -->
     <developers>
         <developer>
@@ -45,8 +50,7 @@
         <bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
         <graphql.version>19.2</graphql.version>
         <transmittable-thread-local.version>2.14.0</transmittable-thread-local.version>
-        <jwt.version>4.0.0</jwt.version>
-        <apache-sshd.version>2.9.2</apache-sshd.version>
+        <jwt.version>4.0.0</jwt.version>        <apache-sshd.version>2.9.2</apache-sshd.version>
         <jsch.version>0.1.55</jsch.version>
         <jakarta-mail.version>2.0.1</jakarta-mail.version>
         <beetl.version>3.13.0.RELEASE</beetl.version>
@@ -69,13 +73,6 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-
-            <!-- JSR305 规范 -->
-            <dependency>
-                <groupId>com.google.code.findbugs</groupId>
-                <artifactId>jsr305</artifactId>
-                <version>${jsr305.version}</version>
             </dependency>
 
             <!-- Central -->
@@ -140,11 +137,33 @@
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
 
+            <!-- jakarta 规范 -->
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${jakarta-servlet-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>${jakarta-validation-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>${jakarta-annotation-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>${jakarta-persistence-api.version}</version>
+            </dependency>
+
             <!-- 基础工具包 -->
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>32.0.0-jre</version>
+                <version>32.1.3-jre</version>
             </dependency>
 
             <!-- 加解密算法 -->
@@ -249,27 +268,6 @@
                 <artifactId>shiro-web</artifactId>
                 <classifier>jakarta</classifier>
                 <version>${shiro.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>jakarta.servlet</groupId>
-                <artifactId>jakarta.servlet-api</artifactId>
-                <version>${jakarta-servlet-api.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>jakarta.validation</groupId>
-                <artifactId>jakarta.validation-api</artifactId>
-                <version>${jakarta-validation-api.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>jakarta.annotation</groupId>
-                <artifactId>jakarta.annotation-api</artifactId>
-                <version>${jakarta-annotation-api.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>jakarta.persistence</groupId>
-                <artifactId>jakarta.persistence-api</artifactId>
-                <version>${jakarta-persistence-api.version}</version>
             </dependency>
 
             <!-- 压力测试 -->
@@ -377,6 +375,98 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
             </plugin>
+
+            <!-- Sonatype 发布 -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.13</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>sonatype</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+            <!-- 发布时附带源代码 -->
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.18.20.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                    <outputDirectory>target/generated-sources/delombok</outputDirectory>
+                    <addOutputDirectory>false</addOutputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <charset>UTF-8</charset>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                    <sourcepath>target/generated-sources/delombok</sourcepath>
+                    <outputDirectory>${project.build.directory}/javadoc</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- GPG 签名 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <keyname>${gpg.keyname}</keyname>
+                    <passphraseServerId>${gpg.keyname}</passphraseServerId>
+                    <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </gpgArguments>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 

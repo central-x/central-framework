@@ -132,7 +132,7 @@ public interface CacheList {
     /**
      * 移除指定元素
      *
-     * @param count 移除前几个出现的元素。如果 count > 0，则从头向尾移除指定元素数量；count < 0，则从尾向头移除指定元素数量；如果 count = 0，则移除所有元素
+     * @param count 移除前几个出现的元素。如果 {@code count > 0}，则从头向尾移除指定元素数量；{@code count < 0}，则从尾向头移除指定元素数量；如果 {@code count = 0}，则移除所有元素
      * @param value 待移除的元素
      * @return 已移除的元素数量
      */

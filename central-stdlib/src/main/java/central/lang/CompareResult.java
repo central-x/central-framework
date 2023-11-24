@@ -33,11 +33,11 @@ import java.util.List;
 /**
  * 比较结果
  * <p>
- * -1: left < right
+ * -1: {@code left < right}
  * <p>
- * 0: left = right
+ * 0: {@code left = right}
  * <p>
- * 1: left > right
+ * 1: {@code left > right}
  *
  * @author Alan Yeh
  * @since 2022/07/13
@@ -71,8 +71,8 @@ public enum CompareResult implements OptionalEnum<String> {
     /**
      * 是否匹配结果
      * 例：
-     * {@code CompareResultEnum.GREATER.matches(first, second) } 的结果为 true 时，表示 first > second
-     * {@code CompareResultEnum.LESS.matches(first, second) } 的结果为 true 时，表示 first < second
+     * {@code CompareResultEnum.GREATER.matches(first, second) } 的结果为 true 时，表示 {@code first > second}
+     * {@code CompareResultEnum.LESS.matches(first, second) } 的结果为 true 时，表示 {@code first < second}
      *
      * @param first  第一个待比较的对象
      * @param second 第二个待比较的对象

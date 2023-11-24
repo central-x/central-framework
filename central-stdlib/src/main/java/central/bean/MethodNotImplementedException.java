@@ -25,9 +25,8 @@
 package central.bean;
 
 import central.lang.PublicApi;
-import central.lang.reflect.MethodRef;
 import central.lang.Stringx;
-import lombok.experimental.StandardException;
+import central.lang.reflect.MethodRef;
 
 import java.io.Serial;
 import java.lang.reflect.Method;
@@ -39,13 +38,16 @@ import java.lang.reflect.Method;
  * @since 2022/07/12
  */
 @PublicApi
-@StandardException
 public class MethodNotImplementedException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -7315730828175305310L;
 
     public MethodNotImplementedException() {
         super();
+    }
+
+    public MethodNotImplementedException(String message) {
+        super(message);
     }
 
     public MethodNotImplementedException(Method method) {

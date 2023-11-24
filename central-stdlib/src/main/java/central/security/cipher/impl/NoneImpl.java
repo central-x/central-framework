@@ -26,6 +26,7 @@ package central.security.cipher.impl;
 
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
+import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -41,12 +42,13 @@ import java.util.Arrays;
  */
 public class NoneImpl implements CipherImpl {
 
-    public String getName() {
+    @Override
+    public @Nonnull String getName() {
         return "NONE";
     }
 
     @Override
-    public KeyPair generateKeyPair() {
+    public @Nonnull KeyPair generateKeyPair() {
         return new KeyPair(new EmptyKey(), new EmptyKey());
     }
 
@@ -83,32 +85,32 @@ public class NoneImpl implements CipherImpl {
     }
 
     @Override
-    public Key getEncryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return EMPTY_KEY;
     }
 
     @Override
-    public Key getDecryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return EMPTY_KEY;
     }
 
     @Override
-    public String encrypt(String content, Key encryptKey) throws GeneralSecurityException, IOException {
+    public @Nonnull String encrypt(@Nonnull String content, @Nonnull Key encryptKey) throws GeneralSecurityException, IOException {
         return content;
     }
 
     @Override
-    public byte[] encrypt(byte[] data, Key encryptKey) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] encrypt(@Nonnull byte[] data, @Nonnull Key encryptKey) throws GeneralSecurityException, IOException {
         return data;
     }
 
     @Override
-    public String decrypt(String content, Key decryptKey) throws GeneralSecurityException, IOException {
+    public @Nonnull String decrypt(@Nonnull String content, @Nonnull Key decryptKey) throws GeneralSecurityException, IOException {
         return content;
     }
 
     @Override
-    public byte[] decrypt(byte[] data, Key decryptKey) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] decrypt(@Nonnull byte[] data, @Nonnull Key decryptKey) throws GeneralSecurityException, IOException {
         return data;
     }
 }

@@ -27,6 +27,7 @@ package central.security.cipher.impl;
 import central.lang.Assertx;
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 
 import javax.crypto.Cipher;
@@ -52,13 +53,13 @@ public class DESedeImpl implements CipherImpl {
     private static final String CIPHER_ALGORITHM = "DESede/CBC/PKCS5Padding";
 
     @Override
-    public String getName() {
+    public @Nonnull String getName() {
         return ALGORITHM;
     }
 
     @Override
     @SneakyThrows
-    public KeyPair generateKeyPair() {
+    public @Nonnull KeyPair generateKeyPair() {
         KeyGenerator generator = KeyGenerator.getInstance(ALGORITHM);
         generator.init(168);
 
@@ -73,7 +74,7 @@ public class DESedeImpl implements CipherImpl {
      * @param keySpec 密钥，必须是 16 + N * 8 位
      */
     @Override
-    public Key getEncryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return this.getKey(keySpec);
     }
 
@@ -84,11 +85,11 @@ public class DESedeImpl implements CipherImpl {
      * @param keySpec 密钥，必须是 16 + N * 8 位
      */
     @Override
-    public Key getDecryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return this.getKey(keySpec);
     }
 
-    private Key getKey(String keySpec) throws GeneralSecurityException {
+    private @Nonnull Key getKey(@Nonnull String keySpec) throws GeneralSecurityException {
         Assertx.mustNotBlank(keySpec, "Argument 'keySpec' must not null");
         byte[] keyData = Base64.getDecoder().decode(keySpec);
         Assertx.mustTrue(keyData.length >= 8, "不是有效的 DESede 密钥: " + keySpec);
@@ -100,12 +101,12 @@ public class DESedeImpl implements CipherImpl {
     }
 
     @Override
-    public byte[] encrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] encrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         return this.cipher(Cipher.ENCRYPT_MODE, data, key);
     }
 
     @Override
-    public byte[] decrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] decrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         return this.cipher(Cipher.DECRYPT_MODE, data, key);
     }
 

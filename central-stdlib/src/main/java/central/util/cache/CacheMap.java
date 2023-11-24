@@ -61,7 +61,8 @@ public interface CacheMap {
      * @param key 待取元素键
      * @return 已取出的元素
      */
-    @Nullable String get(@Nonnull String key);
+    @Nullable
+    String get(@Nonnull String key);
 
     /**
      * 获取指定键的元素
@@ -69,7 +70,8 @@ public interface CacheMap {
      * @param keys 待取元素键集合
      * @return 已取出的元素
      */
-    @Nonnull List<String> get(@Nonnull String... keys);
+    @Nonnull
+    List<String> get(@Nonnull String... keys);
 
     /**
      * 获取指定键的元素
@@ -77,12 +79,14 @@ public interface CacheMap {
      * @param keys 待取元素键集合
      * @return 已取出的元素
      */
-    @Nonnull List<String> get(@Nonnull Collection<String> keys);
+    @Nonnull
+    List<String> get(@Nonnull Collection<String> keys);
 
     /**
      * 获取所有键
      */
-    @Nonnull Set<String> keys();
+    @Nonnull
+    Set<String> keys();
 
     /**
      * 获取所有元素数量
@@ -107,7 +111,7 @@ public interface CacheMap {
     /**
      * 如果当前 Map 不存在指定的键，则保存为新值
      *
-     * @param map 待保存的元素
+     * @param values 待保存的元素
      * @return 是否保存民功
      */
     boolean putIfAbsent(@Nonnull Map<String, String> values);
@@ -115,10 +119,12 @@ public interface CacheMap {
     /**
      * 获取所有元素
      */
-    @Nonnull List<String> values();
+    @Nonnull
+    List<String> values();
 
     /**
      * 获取整个 Map
      */
-    @Nonnull Map<String, String> entries();
+    @Nonnull
+    Map<String, String> entries();
 }

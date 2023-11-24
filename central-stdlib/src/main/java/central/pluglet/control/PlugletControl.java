@@ -70,5 +70,6 @@ public class PlugletControl {
      * 控件选项列表
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Builder.Default
     private List<NameValue<String>> options = new ArrayList<>();
 }

@@ -26,7 +26,6 @@ package central.bean;
 
 import central.lang.PublicApi;
 import central.lang.Stringx;
-import lombok.experimental.StandardException;
 
 import java.io.Serial;
 
@@ -37,10 +36,21 @@ import java.io.Serial;
  * @since 2022/07/12
  */
 @PublicApi
-@StandardException
 public class TypeCheckException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 7212345137343048200L;
+
+    public TypeCheckException(String message) {
+        super(message);
+    }
+
+    public TypeCheckException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public TypeCheckException(Throwable cause) {
+        super(cause);
+    }
 
     public static void asserts(Class<?> expected, Class<?> actual) {
         if (actual.isAssignableFrom(expected)) {

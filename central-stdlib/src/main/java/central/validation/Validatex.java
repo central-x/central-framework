@@ -56,7 +56,7 @@ public class Validatex {
         return INSTANCE;
     }
 
-    public <T, E extends Throwable> void validate(T object, Class<?>[] groups, Function<? super String, ? extends E> error) throws E {
+    public <T, E extends Throwable> void validate(T object, Class<?>[] groups, Function<String, E> error) throws E {
         if (Arrayx.isNullOrEmpty(groups)) {
             groups = new Class[]{Default.class};
         }

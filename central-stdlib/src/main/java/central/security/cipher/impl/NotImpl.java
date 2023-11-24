@@ -26,6 +26,8 @@ package central.security.cipher.impl;
 
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
+import jakarta.annotation.Nonnull;
+import kotlin.NotImplementedError;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -39,32 +41,33 @@ import java.security.Key;
  */
 public class NotImpl implements CipherImpl {
 
-    public String getName() {
+    @Override
+    public @Nonnull String getName() {
         return "NOT_IMPL";
     }
 
     @Override
-    public byte[] encrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] encrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         throw new UnsupportedOperationException("未实现");
     }
 
     @Override
-    public byte[] decrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] decrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         throw new UnsupportedOperationException("未实现");
     }
 
     @Override
-    public KeyPair generateKeyPair() {
-        return null;
+    public @Nonnull KeyPair generateKeyPair() {
+        throw new NotImplementedError();
     }
 
     @Override
-    public Key getEncryptKey(String keySpec) throws GeneralSecurityException {
-        return null;
+    public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
+        throw new NotImplementedError();
     }
 
     @Override
-    public Key getDecryptKey(String keySpec) throws GeneralSecurityException {
-        return null;
+    public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
+        throw new NotImplementedError();
     }
 }

@@ -26,6 +26,7 @@ package central.security.cipher.impl;
 
 import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 
 import javax.crypto.Cipher;
@@ -51,13 +52,13 @@ public class RSAImpl implements CipherImpl {
     private static final int KEY_SIZE = 2048;
 
     @Override
-    public String getName() {
+    public @Nonnull String getName() {
         return ALGORITHM;
     }
 
     @Override
     @SneakyThrows
-    public KeyPair generateKeyPair() {
+    public @Nonnull KeyPair generateKeyPair() {
         KeyPairGenerator generator = KeyPairGenerator.getInstance(ALGORITHM);
         generator.initialize(KEY_SIZE);
 
@@ -74,7 +75,7 @@ public class RSAImpl implements CipherImpl {
      * @return 公钥
      */
     @Override
-    public Key getEncryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
     }
 
@@ -86,12 +87,12 @@ public class RSAImpl implements CipherImpl {
      * @return 私钥
      */
     @Override
-    public Key getDecryptKey(String keySpec) throws GeneralSecurityException {
+    public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return KeyFactory.getInstance("RSA").generatePrivate(new X509EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
     }
 
     @Override
-    public byte[] encrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] encrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, key);
 
@@ -117,7 +118,7 @@ public class RSAImpl implements CipherImpl {
     }
 
     @Override
-    public byte[] decrypt(byte[] data, Key key) throws GeneralSecurityException, IOException {
+    public @Nonnull byte[] decrypt(@Nonnull byte[] data, @Nonnull Key key) throws GeneralSecurityException, IOException {
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, key);
 

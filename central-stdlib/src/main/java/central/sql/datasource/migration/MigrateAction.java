@@ -39,6 +39,7 @@ public interface MigrateAction {
      * 执行迁移脚本
      *
      * @param executor 待迁移的 Sql 执行器
+     * @throws SQLException SQL 执行异常
      */
     void migrate(SqlExecutor executor) throws SQLException;
 }

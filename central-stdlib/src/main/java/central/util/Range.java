@@ -37,7 +37,7 @@ import java.util.Objects;
 /**
  * 范围
  * <p>
- * minimum <= range <= maximum
+ * {@code minimum <= range <= maximum}
  *
  * @author Alan Yeh
  * @since 2022/07/16

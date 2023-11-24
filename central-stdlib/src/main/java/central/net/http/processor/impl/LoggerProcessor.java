@@ -66,10 +66,9 @@ public class LoggerProcessor implements HttpProcessor, ReactiveHttpProcessor {
     }
 
     private void log(HttpResponse response) {
-        var builder = new StringBuilder("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+        var builder = new StringBuilder("\n┏━━━━━━━━━━━━━━━━━━ Request ━━━━━━━━━━━━━━━━━━━\n");
         // 打印 HttpRequest 日志
         var request = response.getRequest();
-        builder.append("┣ Request:\n");
         builder.append("┣ Method: ").append(request.getMethod().name()).append("\n");
         builder.append("┣ URL: ").append(request.getUrl().toString()).append("\n");
         builder.append("┣ Headers: (").append(request.getHeaders().size()).append(")\n");
@@ -89,11 +88,9 @@ public class LoggerProcessor implements HttpProcessor, ReactiveHttpProcessor {
         } else {
             builder.append("┣ Body: (NULL)\n");
         }
-        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-
+        builder.append("┣━━━━━━━━━━━━━━━━━━ Response ━━━━━━━━━━━━━━━━━━\n");
 
         // 打印 HttpResponse 日志
-        builder.append("┣ Response:\n");
         builder.append("┣ Duration: ").append(response.getTimestamp() - response.getRequest().getTimestamp()).append("ms\n");
         builder.append("┣ Status: ").append(response.getStatus().value()).append("(").append(response.getStatus().name()).append(")\n");
         builder.append("┣ Headers: (").append(response.getHeaders().size()).append(")\n");
