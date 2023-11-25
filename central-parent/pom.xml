@@ -378,19 +378,6 @@
                 <artifactId>versions-maven-plugin</artifactId>
             </plugin>
 
-            <!-- Sonatype 发布 -->
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.13</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>sonatype</serverId>
-                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-
             <!-- 发布时附带源代码 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -453,7 +440,6 @@
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <keyname>0x839CD986</keyname>
                     <gpgArguments>
                         <arg>--pinentry-mode</arg>
                         <arg>loopback</arg>
@@ -473,73 +459,173 @@
         </plugins>
     </build>
 
-    <!-- 镜像仓库 -->
-    <repositories>
-        <repository>
-            <id>mirror</id>
-            <name>Mirror Repository</name>
-            <url>https://mirror.central-x.com/repository/maven-public/</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>sonatype</id>
-            <name>Sonatype Repository</name>
-            <url>https://s01.oss.sonatype.org/content/groups/public/</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>central</id>
-            <name>Maven Central Repository</name>
-            <url>https://repo1.maven.org/maven2/</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
+    <profiles>
+        <profile>
+            <id>centralx</id>
+            <!-- 镜像仓库 -->
+            <repositories>
+                <repository>
+                    <id>centralx</id>
+                    <name>CentralX Repository</name>
+                    <url>https://mirror.central-x.com/repository/maven-public/</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <!-- 插件仓库 -->
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>centralx</id>
+                    <name>CentralX Repository</name>
+                    <url>https://mirror.central-x.com/repository/maven-public/</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+            <!-- 发布仓库 -->
+            <distributionManagement>
+                <repository>
+                    <id>centralx</id>
+                    <name>CentralX Release Repository</name>
+                    <url>https://mirror.central-x.com/repository/maven-releases/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>centralx</id>
+                    <name>CentralX Snapshot Repository</name>
+                    <url>https://mirror.central-x.com/repository/maven-snapshots/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
 
-    <!-- 插件仓库 -->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>mirror</id>
-            <name>Mirror Repository</name>
-            <url>https://mirror.central-x.com/repository/maven-public/</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
+        <profile>
             <id>sonatype</id>
-            <name>Sonatype Repository</name>
-            <url>https://s01.oss.sonatype.org/content/groups/public/</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>central</id>
-            <name>Maven Central Repository</name>
-            <url>https://repo1.maven.org/maven2/</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- Sonatype 发布 -->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.13</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>sonatype</serverId>
+                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <!-- 镜像仓库 -->
+            <repositories>
+                <repository>
+                    <id>sonatype</id>
+                    <name>Sonatype Repository</name>
+                    <url>https://s01.oss.sonatype.org/content/groups/public/</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>central</id>
+                    <name>Maven Central Repository</name>
+                    <url>https://repo1.maven.org/maven2/</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <!-- 插件仓库 -->
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>sonatype</id>
+                    <name>Sonatype Repository</name>
+                    <url>https://s01.oss.sonatype.org/content/groups/public/</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>central</id>
+                    <name>Maven Central Repository</name>
+                    <url>https://repo1.maven.org/maven2/</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+            <!-- 发布仓库 -->
+            <distributionManagement>
+                <repository>
+                    <id>sonatype</id>
+                    <name>Sonatype Release Repository</name>
+                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>sonatype</id>
+                    <name>Sonatype Snapshot Repository</name>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
 
-    <!-- 发布仓库 -->
-    <distributionManagement>
-        <repository>
-            <id>sonatype</id>
-            <name>Sonatype Release Repository</name>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-        <snapshotRepository>
-            <id>sonatype</id>
-            <name>Sonatype Snapshot Repository</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
+        <profile>
+            <id>github</id>
+            <!-- 镜像仓库 -->
+            <repositories>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Repository</name>
+                    <url>https://maven.pkg.github.com/central-x/*</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>central</id>
+                    <name>Maven Central Repository</name>
+                    <url>https://repo1.maven.org/maven2/</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <!-- 插件仓库 -->
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>github</id>
+                    <name>GitHub Repository</name>
+                    <url>https://maven.pkg.github.com/central-x/*</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>central</id>
+                    <name>Maven Central Repository</name>
+                    <url>https://repo1.maven.org/maven2/</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+            <!-- 发布仓库 -->
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Repository</name>
+                    <url>https://maven.pkg.github.com/central-x/central-framework</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
 </project>

@@ -1,11 +1,12 @@
-name: Publish package to Maven Central Repository
+name: Publish packages
 on:
   push:
     branches:
       - master
       - '*.x'
 jobs:
-  publish:
+  publish-to-github-packages:
+    name: Publish to GitHub Packages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -15,11 +16,44 @@ jobs:
       - name: Set up java
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
-          distribution: 'zulu'
-          server-id: sonatype
-          server-username: ${{ secrets.MAVEN_USERNAME }}
-          server-password: ${{secrets.MAVEN_PASSWORD }}
-          gpg-private-key: ${{ secrets.GPG_SECRET_KEY }}
+          java-version: 17
+          distribution: zulu
+          server-id: github
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+      - name: Echo settings.xml
+        run: cat /home/runner/.m2/settings.xml
       - name: Publish packages
-        run: mvn --batch-mode clean deploy
+        run: mvn -P github --batch-mode clean deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.GHPKG_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.GHPKG_TOKEN }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+  publish-to-maven-central:
+    name: Publish to Maven Central
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: zulu
+          server-id: sonatype
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+      - name: Echo settings.xml
+        run: cat /home/runner/.m2/settings.xml
+      - name: Publish packages
+        run: mvn -P sonatype --batch-mode clean deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
