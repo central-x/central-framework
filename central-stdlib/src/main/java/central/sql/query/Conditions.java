@@ -621,9 +621,8 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         /**
          * 子条件列表
          */
-        @Getter
         @Setter
-        @JsonIgnore
+        @Getter(onMethod_ = @JsonIgnore)
         private transient List<Condition<T>> children;
 
         /**
@@ -651,9 +650,9 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         /**
          * 别名
          */
-        @JsonIgnore
         private transient String alias;
 
+        @JsonIgnore
         public String getAlias() {
             if (alias != null) {
                 return alias;
