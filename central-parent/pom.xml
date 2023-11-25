@@ -16,11 +16,12 @@
     <packaging>pom</packaging>
     <version>1.0.x-SNAPSHOT</version>
     <description>Central Framework Parent</description>
+    <url>https://central-x.com</url>
 
     <licenses>
         <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <name>The MIT License</name>
+            <url>https://github.com/central-x/central-framework/blob/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -50,7 +51,8 @@
         <bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
         <graphql.version>19.2</graphql.version>
         <transmittable-thread-local.version>2.14.0</transmittable-thread-local.version>
-        <jwt.version>4.0.0</jwt.version>        <apache-sshd.version>2.9.2</apache-sshd.version>
+        <jwt.version>4.0.0</jwt.version>
+        <apache-sshd.version>2.9.2</apache-sshd.version>
         <jsch.version>0.1.55</jsch.version>
         <jakarta-mail.version>2.0.1</jakarta-mail.version>
         <beetl.version>3.13.0.RELEASE</beetl.version>
@@ -391,13 +393,28 @@
 
             <!-- 发布时附带源代码 -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 本项目使用了 lombok，在生成 javadoc 时会报异常，因此先使用 delombok 变成普通项目代码，再生成文档 -->
+            <plugin>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok-maven-plugin</artifactId>
                 <version>1.18.20.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                    <outputDirectory>target/generated-sources/delombok</outputDirectory>
+                    <sourceDirectory>src/main/java</sourceDirectory>
+                    <outputDirectory>target/intermediates/src</outputDirectory>
                     <addOutputDirectory>false</addOutputDirectory>
                 </configuration>
                 <executions>
@@ -411,26 +428,13 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <charset>UTF-8</charset>
                     <encoding>UTF-8</encoding>
                     <docencoding>UTF-8</docencoding>
-                    <sourcepath>target/generated-sources/delombok</sourcepath>
-                    <outputDirectory>${project.build.directory}/javadoc</outputDirectory>
+                    <!-- 基于 delombok 生成的 java 源代码来生成文档 -->
+                    <sourcepath>target/intermediates/src</sourcepath>
                 </configuration>
                 <executions>
                     <execution>
@@ -449,8 +453,7 @@
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <keyname>${gpg.keyname}</keyname>
-                    <passphraseServerId>${gpg.keyname}</passphraseServerId>
+                    <keyname>0x839CD986</keyname>
                     <gpgArguments>
                         <arg>--pinentry-mode</arg>
                         <arg>loopback</arg>
@@ -476,6 +479,25 @@
             <id>mirror</id>
             <name>Mirror Repository</name>
             <url>https://mirror.central-x.com/repository/maven-public/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>sonatype</id>
+            <name>Sonatype Repository</name>
+            <url>https://s01.oss.sonatype.org/content/groups/public/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo1.maven.org/maven2/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
     </repositories>
 
@@ -485,20 +507,39 @@
             <id>mirror</id>
             <name>Mirror Repository</name>
             <url>https://mirror.central-x.com/repository/maven-public/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>sonatype</id>
+            <name>Sonatype Repository</name>
+            <url>https://s01.oss.sonatype.org/content/groups/public/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo1.maven.org/maven2/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </pluginRepository>
     </pluginRepositories>
 
     <!-- 发布仓库 -->
     <distributionManagement>
         <repository>
-            <id>centralx-releases</id>
-            <name>CentralX Release Repository</name>
-            <url>https://mirror.central-x.com/repository/maven-releases/</url>
+            <id>sonatype</id>
+            <name>Sonatype Release Repository</name>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
         <snapshotRepository>
-            <id>centralx-snapshots</id>
-            <name>CentralX Snapshot Repository</name>
-            <url>https://mirror.central-x.com/repository/maven-snapshots/</url>
+            <id>sonatype</id>
+            <name>Sonatype Snapshot Repository</name>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
