@@ -27,6 +27,7 @@ package central.sql.datasource.migration.action;
 import central.sql.SqlExecutor;
 import central.sql.builder.script.index.DropIndexScript;
 import central.sql.datasource.migration.MigrateAction;
+import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.SQLException;
@@ -43,7 +44,7 @@ public class DropIndexMigration implements MigrateAction {
     private final DropIndexScript script;
 
     @Override
-    public void migrate(SqlExecutor executor) throws SQLException {
+    public void migrate(@Nonnull SqlExecutor executor) throws SQLException {
         var scripts = executor.getSource().getDialect().getBuilder().forDropIndex(this.script);
         for (var script : scripts) {
             executor.execute(script);

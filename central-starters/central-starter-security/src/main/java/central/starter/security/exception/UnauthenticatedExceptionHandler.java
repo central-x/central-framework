@@ -95,9 +95,8 @@ public class UnauthenticatedExceptionHandler implements ExceptionHandler {
             if (returnHtml) {
                 // 如果客户端没有指定返回类型，一般就是浏览器请求
                 // 未登录时，需要重定向到登录界面
-                if (Stringx.isNotBlank(this.properties.getUnauthorizedUrl())) {
-                    var unauthorizedUrl = properties.getUnauthorizedUrl();
-
+                var unauthorizedUrl = properties.getUnauthorizedUrl();
+                if (Stringx.isNotBlank(unauthorizedUrl)) {
                     var tenantPath = request.getHeader(XForwardedHeaders.PATH);
                     if (Stringx.isNotBlank(tenantPath)) {
                         unauthorizedUrl = tenantPath + unauthorizedUrl;

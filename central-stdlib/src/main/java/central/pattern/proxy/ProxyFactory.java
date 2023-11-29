@@ -26,7 +26,6 @@ package central.pattern.proxy;
 
 import central.lang.Arrayx;
 import central.lang.Stringx;
-import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -55,16 +54,21 @@ public class ProxyFactory {
         this.fallback = method;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T create(Class<T> target) {
         return (T) Proxy.newProxyInstance(target.getClassLoader(), Arrayx.newArray(target), new ProxyInvocationHandler(Collections.unmodifiableList(this.methods), fallback));
     }
 
-    @RequiredArgsConstructor
     private static class ProxyInvocationHandler implements InvocationHandler {
 
         private final List<ProxyMethod> methods;
 
         private final ProxyMethod fallback;
+
+        public ProxyInvocationHandler(List<ProxyMethod> methods, ProxyMethod fallback) {
+            this.methods = methods;
+            this.fallback = fallback;
+        }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -80,8 +84,8 @@ public class ProxyFactory {
                 }
 
                 // 最后的方法
-                if (fallback != null && fallback.support(method)) {
-                    return fallback.invoke(proxy, method, args);
+                if (this.fallback != null && this.fallback.support(method)) {
+                    return this.fallback.invoke(proxy, method, args);
                 }
 
                 throw new NoSuchMethodException(Stringx.format("{}#{}", proxy.getClass().getName(), method.getName()));

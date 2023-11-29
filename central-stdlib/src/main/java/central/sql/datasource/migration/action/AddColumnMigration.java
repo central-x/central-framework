@@ -27,6 +27,7 @@ package central.sql.datasource.migration.action;
 import central.sql.SqlExecutor;
 import central.sql.builder.script.column.AddColumnScript;
 import central.sql.datasource.migration.MigrateAction;
+import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.SQLException;
@@ -43,7 +44,7 @@ public class AddColumnMigration implements MigrateAction {
     private final AddColumnScript script;
 
     @Override
-    public void migrate(SqlExecutor executor) throws SQLException {
+    public void migrate(@Nonnull SqlExecutor executor) throws SQLException {
         var scripts = executor.getSource().getDialect().getBuilder().forAddColumn(this.script);
         for (var script : scripts) {
             executor.execute(script);

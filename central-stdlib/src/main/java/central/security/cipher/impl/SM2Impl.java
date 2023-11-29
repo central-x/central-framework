@@ -28,7 +28,6 @@ import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
 import jakarta.annotation.Nonnull;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.SM2Engine;
@@ -95,13 +94,16 @@ public class SM2Impl implements CipherImpl {
         return new SM2EncryptKey(Base64.getDecoder().decode(keySpec));
     }
 
-    @RequiredArgsConstructor
     private static class SM2EncryptKey implements Key {
         @Serial
         private static final long serialVersionUID = 7138366658809908375L;
 
         @Getter
         private final byte[] encoded;
+
+        public SM2EncryptKey(byte[] encoded) {
+            this.encoded = encoded;
+        }
 
         @Override
         public String getAlgorithm() {
@@ -118,12 +120,12 @@ public class SM2Impl implements CipherImpl {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             SM2EncryptKey that = (SM2EncryptKey) o;
-            return Arrays.equals(encoded, that.encoded);
+            return Arrays.equals(this.encoded, that.encoded);
         }
 
         @Override
         public int hashCode() {
-            return Arrays.hashCode(encoded);
+            return Arrays.hashCode(this.encoded);
         }
     }
 

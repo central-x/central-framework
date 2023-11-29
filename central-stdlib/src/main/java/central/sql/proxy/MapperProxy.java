@@ -85,6 +85,7 @@ public class MapperProxy<T extends Mapper<?>> implements InvocationHandler {
      */
     private final String lookupKey;
 
+    @SuppressWarnings("unchecked")
     public MapperProxy(Class<T> mapperType, SqlExecutor executor, Map<String, MapperHandler> handlers, MarkdownResources resources) {
         this.mapperType = mapperType;
         this.entityType = (Class<? extends Entity>) TypeRef.of(mapperType).getInterfaceType(0).getActualTypeArgument(0).getRawClass();

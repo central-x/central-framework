@@ -28,7 +28,6 @@ import central.lang.Stringx;
 import central.security.signer.KeyPair;
 import central.security.signer.SignerImpl;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Integer;
@@ -92,13 +91,16 @@ public class SM2Impl implements SignerImpl {
         return new KeyPair(signKey, verifyKey);
     }
 
-    @RequiredArgsConstructor
     private static class SM2SignKey implements Key {
         @Serial
         private static final long serialVersionUID = 7138366658809908375L;
 
         @Getter
         private final byte[] encoded;
+
+        public SM2SignKey(byte[] encoded) {
+            this.encoded = encoded;
+        }
 
         @Override
         public String getAlgorithm() {
@@ -115,12 +117,12 @@ public class SM2Impl implements SignerImpl {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             SM2SignKey that = (SM2SignKey) o;
-            return Arrays.equals(encoded, that.encoded);
+            return Arrays.equals(this.encoded, that.encoded);
         }
 
         @Override
         public int hashCode() {
-            return Arrays.hashCode(encoded);
+            return Arrays.hashCode(this.encoded);
         }
     }
 

@@ -36,6 +36,7 @@ import central.sql.meta.entity.EntityMeta;
 import central.sql.query.Columns;
 import central.sql.query.Conditions;
 import central.sql.query.Orders;
+import jakarta.annotation.Nonnull;
 
 import java.sql.SQLSyntaxErrorException;
 import java.util.List;
@@ -159,41 +160,49 @@ public interface SqlBuilder {
     /**
      * 创建表
      */
-    List<SqlScript> forAddTable(AddTableScript script) throws SQLSyntaxErrorException;
+    @Nonnull
+    List<SqlScript> forAddTable(@Nonnull AddTableScript script) throws SQLSyntaxErrorException;
 
     /**
      * 删除表
      */
-    List<SqlScript> forDropTable(DropTableScript script) throws SQLSyntaxErrorException;
+    @Nonnull
+    List<SqlScript> forDropTable(@Nonnull DropTableScript script) throws SQLSyntaxErrorException;
 
     /**
      * 重命名表
      */
-    List<SqlScript> forRenameTable(RenameTableScript script) throws SQLSyntaxErrorException;
+    @Nonnull
+    List<SqlScript> forRenameTable(@Nonnull RenameTableScript script) throws SQLSyntaxErrorException;
 
     /**
      * 添加字段
      */
-    List<SqlScript> forAddColumn(AddColumnScript script) throws SQLSyntaxErrorException;
+    @Nonnull
+    List<SqlScript> forAddColumn(@Nonnull AddColumnScript script) throws SQLSyntaxErrorException;
 
     /**
      * 删除字段
      */
-    List<SqlScript> forDropColumn(DropColumnScript script) throws SQLSyntaxErrorException;
+    @Nonnull
+    List<SqlScript> forDropColumn(@Nonnull DropColumnScript script) throws SQLSyntaxErrorException;
 
     /**
      * 重命名字段
      */
-    List<SqlScript> forRenameColumn(RenameColumnScript script) throws SQLSyntaxErrorException;
+    @Nonnull
+    List<SqlScript> forRenameColumn(@Nonnull RenameColumnScript script) throws SQLSyntaxErrorException;
 
     /**
      * 添加索引
      */
-    List<SqlScript> forAddIndex(AddIndexScript script) throws SQLSyntaxErrorException;
+    @Nonnull
+    List<SqlScript> forAddIndex(@Nonnull AddIndexScript script) throws SQLSyntaxErrorException;
 
     /**
      * 删除索引
      */
-    List<SqlScript> forDropIndex(DropIndexScript script) throws SQLSyntaxErrorException;
+    @Nonnull
+    List<SqlScript> forDropIndex(@Nonnull DropIndexScript script) throws SQLSyntaxErrorException;
 }
 

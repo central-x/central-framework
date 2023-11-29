@@ -33,6 +33,7 @@ import central.sql.SqlType;
 import central.sql.builder.script.index.DropIndexScript;
 import central.sql.meta.entity.EntityMeta;
 import central.util.*;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
@@ -146,7 +147,7 @@ public class PostgreSqlBuilder extends StandardSqlBuilder {
     }
 
     @Override
-    public List<SqlScript> forDropIndex(DropIndexScript script) throws SQLSyntaxErrorException {
+    public @Nonnull List<SqlScript> forDropIndex(@Nonnull DropIndexScript script) throws SQLSyntaxErrorException {
         // DROP INDEX `IDX_MC_AUTH_CREDENTIAL_ACCOUNTID`;
 
         var result = new SqlScript(Stringx.format("DROP INDEX {}", this.processIndex(script.getName())));

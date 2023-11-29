@@ -25,6 +25,7 @@
 package central.sql.datasource.migration;
 
 import central.sql.SqlExecutor;
+import jakarta.annotation.Nonnull;
 
 import java.sql.SQLException;
 
@@ -41,5 +42,5 @@ public interface MigrateAction {
      * @param executor 待迁移的 Sql 执行器
      * @throws SQLException SQL 执行异常
      */
-    void migrate(SqlExecutor executor) throws SQLException;
+    void migrate(@Nonnull SqlExecutor executor) throws SQLException;
 }

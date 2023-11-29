@@ -48,7 +48,7 @@ public interface SqlMetaManager {
      * @param matcher  表匹配器，参数为表名。如果表匹配器为空，或返回 true 时解析表
      * @return 数据库元数据
      */
-    DatabaseMeta getMeta(@Nonnull SqlExecutor executor, @Nullable Predicate<String> matcher) throws SQLException;
+    @Nonnull DatabaseMeta getMeta(@Nonnull SqlExecutor executor, @Nullable Predicate<String> matcher) throws SQLException;
 
     /**
      * 构建数据库元数据
@@ -56,7 +56,7 @@ public interface SqlMetaManager {
      * @param executor Sql 执行器
      * @return 数据库元数据
      */
-    default DatabaseMeta getMeta(@Nonnull SqlExecutor executor) throws SQLException {
+    default @Nonnull DatabaseMeta getMeta(@Nonnull SqlExecutor executor) throws SQLException {
         return this.getMeta(executor, null);
     }
 
@@ -66,5 +66,5 @@ public interface SqlMetaManager {
      * @param entity 实体类型
      * @return 实体元数据
      */
-    EntityMeta getMeta(@Nonnull Class<? extends Entity> entity);
+    @Nonnull EntityMeta getMeta(@Nonnull Class<? extends Entity> entity);
 }

@@ -28,7 +28,6 @@ import central.security.cipher.CipherImpl;
 import central.security.cipher.KeyPair;
 import jakarta.annotation.Nonnull;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.bouncycastle.crypto.CipherKeyGenerator;
 import org.bouncycastle.crypto.KeyGenerationParameters;
 import org.bouncycastle.crypto.engines.SM4Engine;
@@ -79,13 +78,16 @@ public class SM4Impl implements CipherImpl {
         return new KeyPair(key, key);
     }
 
-    @RequiredArgsConstructor
     private static class SM4Key implements Key {
         @Serial
         private static final long serialVersionUID = 6807028080317910008L;
 
         @Getter
         private final byte[] encoded;
+
+        public SM4Key(byte[] encoded) {
+            this.encoded = encoded;
+        }
 
         @Override
         public String getAlgorithm() {
@@ -102,12 +104,12 @@ public class SM4Impl implements CipherImpl {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             SM4Key sm4Key = (SM4Key) o;
-            return Arrays.equals(encoded, sm4Key.encoded);
+            return Arrays.equals(this.encoded, sm4Key.encoded);
         }
 
         @Override
         public int hashCode() {
-            return Arrays.hashCode(encoded);
+            return Arrays.hashCode(this.encoded);
         }
     }
 

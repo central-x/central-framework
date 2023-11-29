@@ -133,7 +133,7 @@ public class HttpClient {
     public HttpResponse execute(HttpRequest request) throws Throwable {
         request.getUrl().setBaseUrl(this.getBaseUrl());
 
-        List<HttpProcessor> processors = new ArrayList<>(this.getProcessors());
+        List<HttpProcessor> processors = new ArrayList<>(this.processors);
         // 最后一个处理链使用 executor 发送请求
         processors.add(this.executeProcessor);
 

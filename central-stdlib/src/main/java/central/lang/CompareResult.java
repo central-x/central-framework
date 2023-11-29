@@ -25,9 +25,9 @@
 package central.lang;
 
 import central.bean.OptionalEnum;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -44,7 +44,6 @@ import java.util.List;
  */
 @Getter
 @PublicApi
-@AllArgsConstructor
 public enum CompareResult implements OptionalEnum<String> {
 
     LT("小于", "<", List.of(-1)),
@@ -56,6 +55,12 @@ public enum CompareResult implements OptionalEnum<String> {
     private final String name;
     private final String value;
     private final List<Integer> result;
+
+    CompareResult(String name, String value, List<Integer> result) {
+        this.name = name;
+        this.value = value;
+        this.result = Collections.unmodifiableList(result);
+    }
 
     @Override
     public boolean isCompatibleWith(Object value) {
@@ -70,7 +75,9 @@ public enum CompareResult implements OptionalEnum<String> {
 
     /**
      * 是否匹配结果
+     * <p>
      * 例：
+     * <p>
      * {@code CompareResultEnum.GREATER.matches(first, second) } 的结果为 true 时，表示 {@code first > second}
      * {@code CompareResultEnum.LESS.matches(first, second) } 的结果为 true 时，表示 {@code first < second}
      *

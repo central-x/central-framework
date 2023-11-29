@@ -163,7 +163,9 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
                 return false;
             }
             cache.setExpire(new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(timeout)));
-            this.timeoutQueue.offer(cache);
+            if (!this.timeoutQueue.offer(cache)) {
+                throw new IllegalStateException("设置缓存自动过期失败");
+            }
             return true;
         });
     }
@@ -177,8 +179,7 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
             }
 
             cache.setExpire(date);
-            this.timeoutQueue.offer(cache);
-            return true;
+            return this.timeoutQueue.offer(cache);
         });
     }
 
@@ -300,7 +301,9 @@ public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
             var old = caches.put(key, new Cache(key, value, type));
             if (timeout != null) {
                 cache.setExpire(new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(timeout)));
-                this.timeoutQueue.offer(cache);
+                if (!this.timeoutQueue.offer(cache)) {
+                    throw new IllegalStateException("设置缓存自动过期失败");
+                }
             }
             return old;
         });

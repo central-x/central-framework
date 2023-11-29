@@ -64,8 +64,8 @@ public class ContextFilter implements WebFilter {
                         .put("webflux.response", exchange.getResponse())
                         .put("webflux.exchange", exchange))
                 .onErrorResume(error -> {
-                    if (Listx.isNotEmpty(handlers)) {
-                        for (var handler : handlers) {
+                    if (Listx.isNotEmpty(this.handlers)) {
+                        for (var handler : this.handlers) {
                             if (handler.support(error)) {
                                 return handler.handle(exchange, error);
                             }

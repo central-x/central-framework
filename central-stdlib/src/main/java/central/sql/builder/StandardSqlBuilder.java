@@ -110,7 +110,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         // 处理查询条件
         applyConditions(executor, meta, whereSql, args, conditions);
 
-        if (whereSql.length() > 0) {
+        if (!whereSql.isEmpty()) {
             sql.append("WHERE\n  ")
                     .append(whereSql);
         }
@@ -144,7 +144,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         // 查找此次查询，会使用哪些关联查询
         var aliases = getAliases(conditions);
 
-        if (aliases.size() >= 1) {
+        if (!aliases.isEmpty()) {
             if (aliases.size() > 1 || !"a".equals(Setx.getAnyOrNull(aliases))) {
                 // 存在关联查询，会有重复数据，需要去重
                 sql = new StringBuilder(Stringx.format("SELECT DISTINCT {} FROM {} AS a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
@@ -172,7 +172,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         // 处理查询条件
         applyConditions(executor, meta, whereSql, args, conditions);
 
-        if (whereSql.length() > 0) {
+        if (!whereSql.isEmpty()) {
             sql.append("WHERE\n  ").append(whereSql).append("\n");
         }
         // 处理排序
@@ -254,7 +254,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
             // 处理条件
             applyConditions(executor, meta, whereSql, args, conditions);
 
-            if (whereSql.length() > 0) {
+            if (!whereSql.isEmpty()) {
                 sql.append("WHERE\n  ")
                         .append(whereSql);
             }
@@ -317,7 +317,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
                 continue;
             }
 
-            if (setSql.length() > 0) {
+            if (!setSql.isEmpty()) {
                 setSql.append(",\n");
             }
 
@@ -424,13 +424,13 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
             applyOrder(executor, "a", orderBy, order, property);
         }
 
-        if (orderBy.length() > 0) {
+        if (!orderBy.isEmpty()) {
             sql.append("ORDER BY\n").append(orderBy).append("\n");
         }
     }
 
     protected void applyOrder(SqlExecutor executor, String alias, StringBuilder orderBy, Orders.Order<?> order, PropertyMeta property) throws SQLSyntaxErrorException {
-        if (orderBy.length() > 0) {
+        if (!orderBy.isEmpty()) {
             orderBy.append(",\n");
         }
 
@@ -572,7 +572,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public List<SqlScript> forAddTable(AddTableScript script) throws SQLSyntaxErrorException {
+    public @Nonnull List<SqlScript> forAddTable(@Nonnull AddTableScript script) throws SQLSyntaxErrorException {
         // CREATE TABLE MC_AUTH_CREDENTIAL (
         //     "ID"             VARCHAR(36)    PRIMARY KEY NOT NULL,
         //     "ACCOUNT_ID"     VARCHAR(36)    NOT NULL,
@@ -627,7 +627,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public List<SqlScript> forDropTable(DropTableScript script) throws SQLSyntaxErrorException {
+    public @Nonnull List<SqlScript> forDropTable(@Nonnull DropTableScript script) throws SQLSyntaxErrorException {
         // DROP TABLE "MC_API";
 
         var result = new SqlScript(Stringx.format("DROP TABLE {}", this.processTable(script.getName())));
@@ -635,7 +635,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public List<SqlScript> forRenameTable(RenameTableScript script) throws SQLSyntaxErrorException {
+    public @Nonnull List<SqlScript> forRenameTable(@Nonnull RenameTableScript script) throws SQLSyntaxErrorException {
         // ALTER TABLE "MC_REL_DEPT_PARENT" RENAME TO "MC_REL_DEPT_FUNCTION";
 
         var result = new SqlScript(Stringx.format("ALTER TABLE {} RENAME TO {}", this.processTable(script.getName()), this.processColumn(script.getNewName())));
@@ -643,7 +643,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public List<SqlScript> forAddColumn(AddColumnScript script) throws SQLSyntaxErrorException {
+    public @Nonnull List<SqlScript> forAddColumn(@Nonnull AddColumnScript script) throws SQLSyntaxErrorException {
         // ALTER TABLE "MC_ORG_DEPT" ADD COLUMN "LEADER_ID" VARCHAR(36);
         // COMMENT ON COLUMN "MC_ORG_DEPT"."LEADER_ID" IS '负责人主键';
 
@@ -654,7 +654,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public List<SqlScript> forDropColumn(DropColumnScript script) throws SQLSyntaxErrorException {
+    public @Nonnull List<SqlScript> forDropColumn(@Nonnull DropColumnScript script) throws SQLSyntaxErrorException {
         // ALTER TABLE "MC_ORG_DEPT" DROP COLUMN "LEADER";
 
         var result = new SqlScript(Stringx.format("ALTER TABLE {} DROP COLUMN {}", this.processTable(script.getTable()), this.processColumn(script.getName())));
@@ -662,7 +662,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public List<SqlScript> forRenameColumn(RenameColumnScript script) throws SQLSyntaxErrorException {
+    public @Nonnull List<SqlScript> forRenameColumn(@Nonnull RenameColumnScript script) throws SQLSyntaxErrorException {
         // ALTER TABLE "MC_ATT_ATTACHMENT" RENAME COLUMN "CODE" TO "KEY";
         // COMMENT ON COLUMN "MC_ATT_ATTACHMENT"."KEY" IS '文件在网盘的存储标识';
 
@@ -673,7 +673,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public List<SqlScript> forAddIndex(AddIndexScript script) throws SQLSyntaxErrorException {
+    public @Nonnull List<SqlScript> forAddIndex(@Nonnull AddIndexScript script) throws SQLSyntaxErrorException {
         // CREATE [UNIQUE] INDEX `IDX_MC_API_CODE` ON `MC_API` ( `CODE` );
 
         var builder = new StringBuilder("CREATE ");
@@ -687,7 +687,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
     }
 
     @Override
-    public List<SqlScript> forDropIndex(DropIndexScript script) throws SQLSyntaxErrorException {
+    public @Nonnull List<SqlScript> forDropIndex(@Nonnull DropIndexScript script) throws SQLSyntaxErrorException {
         // DROP INDEX `IDX_MC_AUTH_CREDENTIAL_ACCOUNTID` ON `MC_AUTH_CREDENTIAL`;
 
         var result = new SqlScript(Stringx.format("DROP INDEX {} ON {}", this.processIndex(script.getName()), this.processTable(script.getTable())));

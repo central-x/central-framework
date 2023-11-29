@@ -96,8 +96,8 @@ public class UnauthorizedExceptionHandler implements ExceptionHandler {
             }
 
             if (returnHtml) {
-                if (Stringx.isNotBlank(this.properties.getForbiddenUrl())) {
-                    var forbiddenUrl = properties.getForbiddenUrl();
+                var forbiddenUrl = properties.getForbiddenUrl();
+                if (Stringx.isNotBlank(forbiddenUrl)) {
 
                     var tenantPath = request.getHeader(XForwardedHeaders.PATH);
                     if (Stringx.isNotBlank(tenantPath)) {

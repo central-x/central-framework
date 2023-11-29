@@ -308,11 +308,56 @@ public class Stringx {
         return isNullOrEmpty(string) ? null : string;
     }
 
+//    /**
+//     * 格式化字符串，使用 {name} 作为占位符，从 args 取值替换
+//     * <p>
+//     * 例：
+//     * <pre>{@code
+//     * // Hello Alan
+//     * var content = Stringx.format("Hello {name}", Map.of("name", "Alan", "user", "alan"));
+//     * }</pre>
+//     *
+//     * 如果未找到可以替换的，将保留原来的内容，例：
+//     * <pre>{@code
+//     * // Hello {name}
+//     * var content = Stringx.format("Hello {name}", Map.of("user", "Alan"));
+//     * }</pre>
+//     *
+//     * @param format 待格式化字符串
+//     * @param args   占位值
+//     * @return 已格式化字符串
+//     */
+//    public static @Nonnull String format(@Nonnull String format, Map<String, Object> args) {
+//
+//    }
+
+//    /**
+//     * 格式化字符串，使用 {num} 作为占位符
+//     *
+//     * 例：
+//     * <pre>{@code
+//     * // Hello Alan, how are you
+//     * var content = Stringx.format("Hello {0}, how are {1}", "Alan", "you")
+//     * }</pre>
+//     *
+//     * 如果指定下标没有参数，则保留原参数，例：
+//     * <pre>{@code
+//     * // Hello {3}
+//     * var content = Stringx.format("Hello {3}, how are you {1}", "Alan", "you")
+//     * }</pre>
+//     */
+//    public static @Nonnull String format(@Nonnull String format, Object... args) {
+//
+//    }
+
     /**
-     * 格式化字符串，使用{}作为占位符
+     * 格式化字符串，使用 {} 作为占位符
      * <p>
-     * eg:
-     * Stringx.format("{}, {}", "hello", "world");
+     * 例:
+     * <pre>{@code
+     * // hello world
+     * var content = Stringx.format("{} {}", "hello", "world");}
+     * </pre>
      */
     public static @Nonnull String format(@Nonnull String format, Object... args) {
         if (args == null || args.length < 1) {

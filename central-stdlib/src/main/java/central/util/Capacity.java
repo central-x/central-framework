@@ -159,24 +159,33 @@ public final class Capacity implements Serializable, Comparable<Capacity> {
 
     /**
      * 保留小数点位数
+     *
+     * @param digit 小数点位数
      */
-    public String toString(int digit) {
+    public String toString(Integer digit) {
         if (CompareResult.LE.matches(this.length, Unit.KB.getValue())) {
             return this.length + " " + Unit.B.getName();
         } else if (CompareResult.LE.matches(this.length, Unit.MB.getValue())) {
-            return String.format("%." + digit + "f KB", Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.KB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
+            var format = "%." + digit + "f KB";
+            return String.format(format, Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.KB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
         } else if (CompareResult.LE.matches(this.length, Unit.GB.getValue())) {
-            return String.format("%." + digit + "f MB", Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.MB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
+            var format = "%." + digit + "f MB";
+            return String.format(format, Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.MB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
         } else if (CompareResult.LE.matches(this.length, Unit.TB.getValue())) {
-            return String.format("%." + digit + "f GB", Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.GB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
+            var format = "%." + digit + "f GB";
+            return String.format(format, Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.GB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
         } else if (CompareResult.LE.matches(this.length, Unit.PB.getValue())) {
-            return String.format("%." + digit + "f TB", Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.TB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
+            var format = "%." + digit + "f TB";
+            return String.format(format, Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.TB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
         } else if (CompareResult.LE.matches(this.length, Unit.EB.getValue())) {
-            return String.format("%." + digit + "f PB", Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.PB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
+            var format = "%." + digit + "f PB";
+            return String.format(format, Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.PB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
         } else if (CompareResult.LE.matches(this.length, Unit.ZB.getValue())) {
-            return String.format("%." + digit + "f EB", Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.EB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
+            var format = "%." + digit + "f EB";
+            return String.format(format, Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.EB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
         } else {
-            return String.format("%." + digit + "f ZB", Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.ZB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
+            var format = "%." + digit + "f ZB";
+            return String.format(format, Math.round(this.length.multiply(BigInteger.valueOf(10).pow(digit + 1)).divide(Unit.ZB.getValue()).floatValue()) / Math.pow(10d, digit + 1));
         }
     }
 

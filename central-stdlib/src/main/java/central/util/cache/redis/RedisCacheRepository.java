@@ -24,6 +24,7 @@
 
 package central.util.cache.redis;
 
+import central.bean.MethodNotImplementedException;
 import central.util.cache.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,90 +43,90 @@ import java.util.Set;
 public class RedisCacheRepository implements CacheRepository {
     @Override
     public boolean hasKey(@NotNull String key) {
-        return false;
+        throw new MethodNotImplementedException();
     }
 
     @Override
     public boolean delete(@NotNull String key) {
-        return false;
+        throw new MethodNotImplementedException();
     }
 
     @Override
     public long delete(@NotNull Collection<String> keys) {
-        return 0;
+        throw new MethodNotImplementedException();
     }
 
     @NotNull
     @Override
     public DataType type(@NotNull String key) {
-        return null;
+        throw new MethodNotImplementedException();
     }
 
     @NotNull
     @Override
     public Set<String> keys() {
-        return null;
+        throw new MethodNotImplementedException();
     }
 
     @Override
     public boolean expire(@NotNull String key, @NotNull Duration timeout) {
-        return false;
+        throw new MethodNotImplementedException();
     }
 
     @Override
     public boolean expireAt(@NotNull String key, @NotNull Date date) {
-        return false;
+        throw new MethodNotImplementedException();
     }
 
     @Override
     public boolean persist(@NotNull String key) {
-        return false;
+        throw new MethodNotImplementedException();
     }
 
     @Override
     public void clear() {
-
+        throw new MethodNotImplementedException();
     }
 
     @Nullable
     @Override
     public Duration getExpire(@NotNull String key) {
-        return null;
+        throw new MethodNotImplementedException();
     }
 
     @NotNull
     @Override
     public CacheValue opsValue(@NotNull String key) throws ClassCastException {
-        return null;
+        throw new MethodNotImplementedException();
     }
 
     @NotNull
     @Override
     public CacheList opsList(@NotNull String key) throws ClassCastException {
-        return null;
+        throw new MethodNotImplementedException();
     }
 
     @NotNull
     @Override
     public CacheQueue opsQueue(@NotNull String key) throws ClassCastException {
-        return null;
+        throw new MethodNotImplementedException();
     }
 
     @NotNull
     @Override
     public CacheSet opsSet(@NotNull String key) throws ClassCastException {
-        return null;
+        throw new MethodNotImplementedException();
     }
 
     @NotNull
     @Override
     public CacheSet opsZSet(@NotNull String key) throws ClassCastException {
-        return null;
+        throw new MethodNotImplementedException();
     }
 
     @NotNull
     @Override
     public CacheMap opsMap(@NotNull String key) throws ClassCastException {
-        return null;
+        throw new MethodNotImplementedException();
     }
 }

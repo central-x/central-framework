@@ -62,8 +62,8 @@ public class JsonExceptionResolver extends ExceptionHandlerExceptionResolver {
     protected ModelAndView doResolveHandlerMethodException(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, HandlerMethod handlerMethod, @Nonnull Exception exception) {
         ModelAndView result = null;
 
-        if (Listx.isNotEmpty(handlers)) {
-            for (ExceptionHandler handler : handlers) {
+        if (Listx.isNotEmpty(this.handlers)) {
+            for (ExceptionHandler handler : this.handlers) {
                 if (handler.support(exception)) {
                     result = handler.handle(request, response, handlerMethod, exception);
                     break;

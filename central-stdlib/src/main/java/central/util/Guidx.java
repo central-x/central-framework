@@ -25,6 +25,7 @@
 package central.util;
 
 import central.lang.Numberx;
+import jakarta.annotation.Nonnull;
 import lombok.experimental.UtilityClass;
 
 import java.util.UUID;
@@ -43,7 +44,7 @@ public class Guidx {
                 .substring(1);
     }
 
-    public static String nextID() {
+    public static @Nonnull String nextID() {
         var timestamp = System.currentTimeMillis();
 
         var uuid = UUID.randomUUID();

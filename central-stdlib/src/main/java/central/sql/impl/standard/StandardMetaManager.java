@@ -84,7 +84,7 @@ public class StandardMetaManager implements SqlMetaManager {
     }
 
     @Override
-    public DatabaseMeta getMeta(@Nonnull SqlExecutor executor, @Nullable Predicate<String> matcher) throws SQLException {
+    public @Nonnull DatabaseMeta getMeta(@Nonnull SqlExecutor executor, @Nullable Predicate<String> matcher) throws SQLException {
         Connection connection = executor.getSource().getConnection();
         try {
             var databaseMeta = connection.getMetaData();
@@ -226,7 +226,7 @@ public class StandardMetaManager implements SqlMetaManager {
     private final Map<String, EntityMeta> metas = new ConcurrentHashMap<>();
 
     @Override
-    public EntityMeta getMeta(Class<? extends Entity> entity) {
+    public @Nonnull EntityMeta getMeta(@Nonnull Class<? extends Entity> entity) {
         synchronized (this.lock) {
             var meta = metas.getOrNull(entity.getName());
             if (meta == null) {
