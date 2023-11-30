@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- Http Appender 需要的属性 -->
-    <springProperty scope="context" name="COLLECTOR_SERVER" source="central.logging.http.server" defaultValue="http://127.0.0.1:3400/logging"/>
+    <springProperty scope="context" name="COLLECTOR_SERVER" source="central.logging.http.server" defaultValue="http://central-logging/logging"/>
     <springProperty scope="context" name="COLLECTOR_PATH" source="central.logging.http.path" defaultValue="central"/>
 
     <!-- 日志需要的属性 -->

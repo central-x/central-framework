@@ -60,7 +60,7 @@ public class JavaResponse extends central.net.http.HttpResponse {
     }
 
     @Override
-    public ResponseBody getBody() {
+    public Body getBody() {
         return new ResponseBody(this.headers, this.response.body());
     }
 

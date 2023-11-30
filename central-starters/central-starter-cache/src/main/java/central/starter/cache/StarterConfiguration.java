@@ -29,6 +29,7 @@ import central.starter.cache.core.impl.menory.MemoryStorage;
 import lombok.Setter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.*;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 
@@ -49,9 +50,12 @@ public class StarterConfiguration implements ImportAware {
     private AnnotationMetadata importMetadata;
 
     @Bean
-    public CacheAdvisor cacheAdvisor(){
+    public CacheAdvisor cacheAdvisor() {
         var attributes = AnnotationAttributes.fromMap(importMetadata.getAnnotationAttributes(EnableCaching.class.getName(), false));
-
-        return new CacheAdvisor(attributes.getNumber("order"));
+        if (attributes != null) {
+            return new CacheAdvisor(attributes.getNumber("order"));
+        } else {
+            return new CacheAdvisor(Ordered.HIGHEST_PRECEDENCE);
+        }
     }
 }

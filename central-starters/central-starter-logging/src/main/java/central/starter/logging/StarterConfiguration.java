@@ -29,6 +29,7 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportAware;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 
@@ -47,8 +48,11 @@ public class StarterConfiguration implements ImportAware {
     @Bean
     public LogAdvisor logAdvisor() {
         var attributes = AnnotationAttributes.fromMap(importMetadata.getAnnotationAttributes(EnableLogPoint.class.getName(), false));
-
-        return new LogAdvisor(attributes.getNumber("order"));
+        if (attributes != null) {
+            return new LogAdvisor(attributes.getNumber("order"));
+        } else {
+            return new LogAdvisor(Ordered.LOWEST_PRECEDENCE);
+        }
     }
 
 }
