@@ -7,3 +7,4 @@ exclude:
   - name: LoopStatementsThatDontLoop
   - name: MismatchedCollectionQueryUpdate
   - name: UnusedAssignment
+  - name: KotlinInternalInJava

@@ -105,17 +105,17 @@
             </dependency>
             <dependency>
                 <groupId>com.central-x</groupId>
+                <artifactId>central-starter-identity</artifactId>
+                <version>1.0.x-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.central-x</groupId>
                 <artifactId>central-starter-logging</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x</groupId>
                 <artifactId>central-starter-orm</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.central-x</groupId>
-                <artifactId>central-starter-security</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
