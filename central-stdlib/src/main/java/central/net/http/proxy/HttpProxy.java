@@ -24,7 +24,6 @@
 
 package central.net.http.proxy;
 
-import central.io.IOStreamx;
 import central.lang.Arrayx;
 import central.lang.Stringx;
 import central.lang.reflect.TypeRef;
@@ -32,17 +31,14 @@ import central.net.http.*;
 import central.net.http.body.extractor.FileExtractor;
 import central.net.http.body.extractor.JsonExtractor;
 import central.net.http.body.extractor.StringExtractor;
-import central.util.*;
+import central.util.Convertx;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
-import java.rmi.RemoteException;
 import java.util.Objects;
 
 /**
@@ -98,28 +94,7 @@ public class HttpProxy implements InvocationHandler {
             // Response 需要是成功状态才能反序列化
             if (!response.isSuccess()) {
                 try (response) {
-                    // 解析响应体
-                    var contentEncoding = StandardCharsets.UTF_8;
-                    var contentType = response.getHeaders().getContentType();
-                    if (contentType != null) {
-                        contentEncoding = Objectx.getOrDefault(contentType.getCharset(), contentEncoding);
-                    }
-
-                    var body = IOStreamx.readText(response.getBody().getInputStream(), contentEncoding);
-                    if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
-                        var message = Jsonx.Default().deserialize(body, TypeRef.ofMap(String.class, Object.class));
-                        body = message.get("message").toString();
-                    }
-
-                    var serials = HttpStatus.Series.resolve(response.getStatus().value());
-                    if (serials != null) {
-                        switch (serials) {
-                            case CLIENT_ERROR -> throw new IllegalArgumentException(body);
-                            case SERVER_ERROR -> throw new RemoteException(body);
-                        }
-                    }
-
-                    throw new HttpException(response.getRequest(), response);
+                    throw new HttpProxyException(method, HttpException.of(request, response));
                 }
             }
 
@@ -174,7 +149,7 @@ public class HttpProxy implements InvocationHandler {
                     return response.getBody().extract(JsonExtractor.of(TypeRef.of(method.getGenericReturnType())));
                 }
 
-                throw new HttpException(request, response, "无法解析响应体");
+                throw new HttpProxyException(method, Stringx.format("无将处理返回值类型[{}]", method.getReturnType().getSimpleName()));
             }
         }
     }

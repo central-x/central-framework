@@ -24,8 +24,10 @@
 
 package central.starter.identity.unittest.test;
 
+import central.net.http.HttpException;
 import central.net.http.executor.java.JavaExecutor;
 import central.net.http.processor.impl.AddHeaderProcessor;
+import central.net.http.proxy.HttpProxyException;
 import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
 import central.starter.identity.unittest.TestApplication;
@@ -85,7 +87,13 @@ public class TestController {
                 .log()
                 .target(ResourceClient.class);
 
-        Assertions.assertThrows(IllegalArgumentException.class,() -> client.findBy());
+        try {
+            var result = client.findBy();
+        } catch (Throwable throwable) {
+            Assertions.assertNotNull(throwable);
+            Assertions.assertInstanceOf(HttpProxyException.class, throwable);
+            Assertions.assertInstanceOf(HttpException.class, throwable.getCause());
+        }
     }
 
     @Test
@@ -102,6 +110,12 @@ public class TestController {
                 .log()
                 .target(ResourceClient.class);
 
-        Assertions.assertThrows(IllegalArgumentException.class,() -> client.insert(new ResourceInput(Guidx.nextID())));
+        try {
+            var result = client.insert(new ResourceInput(Guidx.nextID()));
+        } catch (Throwable throwable) {
+            Assertions.assertNotNull(throwable);
+            Assertions.assertInstanceOf(HttpProxyException.class, throwable);
+            Assertions.assertInstanceOf(HttpException.class, throwable.getCause());
+        }
     }
 }

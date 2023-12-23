@@ -141,15 +141,26 @@ public class IOStreamx {
      * @param charset 字符编码
      * @return 文本，如果 input 为空时，返回空字符串
      */
-    @Nonnull
-    public static String readText(InputStream input, Charset charset) throws IOException {
+    public static @Nonnull String readText(InputStream input, Charset charset) throws IOException {
+        return readText(input, -1, charset);
+    }
+
+    /**
+     * 读取流指定长度的本文
+     *
+     * @param input   输入流
+     * @param length  只读指定长度, 负数时为不限长度
+     * @param charset 字符编码
+     * @return 文本，如果 input 为空时，返回空字符串
+     */
+    public static @Nonnull String readText(InputStream input, int length, Charset charset) throws IOException {
         if (input == null) {
             return "";
         }
 
         var result = new StringBuilder();
 
-        var separator = System.getProperty("line.separator");
+        var separator = System.lineSeparator();
 
         try (var reader = new BufferedReader(new InputStreamReader(input, charset))) {
             String line;
@@ -157,6 +168,12 @@ public class IOStreamx {
             while ((line = reader.readLine()) != null) {
                 result.append(flag ? separator : "").append(line);
                 flag = true;
+            }
+            if (length > 0) {
+                // 只返回指定长度
+                if (result.length() > length) {
+                    return result.substring(0, length);
+                }
             }
             return result.toString();
         }
