@@ -22,44 +22,39 @@
  * SOFTWARE.
  */
 
-package central.starter.identity.unittest;
+package central.net.http.exception;
 
-import central.starter.identity.IdentityProvider;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.authz.UnauthorizedException;
-import org.springframework.stereotype.Component;
+import central.lang.Assertx;
+import central.lang.Stringx;
+import central.net.http.HttpException;
+import central.net.http.HttpRequest;
+import central.net.http.HttpResponse;
+import jakarta.annotation.Nonnull;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
+import java.io.Serial;
 
 /**
- * 应用安全配转走
+ * Client Exception
+ * <p>
+ * 客户端异常
+ * <p>
+ * 当服务器端返回的状态码是 400~499 范围时，将抛此异常
  *
  * @author Alan Yeh
- * @since 2023/02/13
+ * @since 2023/12/25
  */
-@Component
-public class ApplicationIdentityProvider implements IdentityProvider {
-    @Override
-    public void onReceiveAuthenticationToken(String token) {
-        try {
-            JWT.require(Algorithm.HMAC256("test")).build()
-                    .verify(token);
-        } catch (Exception ignored) {
-            throw new UnauthorizedException("凭证无效");
-        }
-    }
+@Getter
+public class ClientSeriesHttpException extends HttpException {
+    @Serial
+    private static final long serialVersionUID = -3991361930158736573L;
 
-    @Override
-    public void onReceiveAuthorizationInfo(String token, SimpleAuthorizationInfo authorizationInfo) {
-        var jwt = JWT.decode(token);
-        var permissions = jwt.getClaim("permissions").asString();
-        authorizationInfo.addStringPermissions(Arrays.asList(permissions.split(",")));
-    }
+    private transient final HttpStatus status;
 
-    @Override
-    public void onLogout(String token) {
-
+    public ClientSeriesHttpException(@Nonnull HttpStatus status, @Nonnull HttpRequest request, @Nonnull HttpResponse response) {
+        super(Stringx.format("[{} {}] {} {}", status.value(), status.getReasonPhrase(), request.getMethod().name(), request.getUrl().getValue()), request, response, null);
+        Assertx.mustEquals(HttpStatus.Series.CLIENT_ERROR, HttpStatus.Series.resolve(status.value()), "Parameter 'status' must be Server Series Status");
+        this.status = status;
     }
 }

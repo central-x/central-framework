@@ -22,44 +22,31 @@
  * SOFTWARE.
  */
 
-package central.starter.identity.unittest;
+package central.starter.identity.unittest.controller;
 
-import central.starter.identity.IdentityProvider;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.authz.UnauthorizedException;
-import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
+import central.starter.identity.unittest.controller.data.Resource;
+import central.util.Guidx;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 应用安全配转走
+ * Index Controller
+ * <p>
+ * 首页控制器
  *
  * @author Alan Yeh
- * @since 2023/02/13
+ * @since 2023/12/25
  */
-@Component
-public class ApplicationIdentityProvider implements IdentityProvider {
-    @Override
-    public void onReceiveAuthenticationToken(String token) {
-        try {
-            JWT.require(Algorithm.HMAC256("test")).build()
-                    .verify(token);
-        } catch (Exception ignored) {
-            throw new UnauthorizedException("凭证无效");
-        }
-    }
+@RestController
+@RequestMapping("/api")
+public class IndexController {
 
-    @Override
-    public void onReceiveAuthorizationInfo(String token, SimpleAuthorizationInfo authorizationInfo) {
-        var jwt = JWT.decode(token);
-        var permissions = jwt.getClaim("permissions").asString();
-        authorizationInfo.addStringPermissions(Arrays.asList(permissions.split(",")));
-    }
-
-    @Override
-    public void onLogout(String token) {
-
+    @GetMapping
+    public Resource resource() {
+        var resource = new Resource();
+        resource.setId(Guidx.nextID());
+        resource.updateCreator("syssa");
+        return resource;
     }
 }

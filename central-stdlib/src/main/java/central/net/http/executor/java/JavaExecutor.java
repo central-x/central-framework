@@ -24,11 +24,11 @@
 
 package central.net.http.executor.java;
 
-import central.net.http.HttpException;
 import central.net.http.HttpExecutor;
 import central.net.http.body.Body;
+import central.net.http.exception.IOHttpException;
+import central.net.http.exception.TimeoutHttpRequest;
 import central.net.http.ssl.X509TrustManagerImpl;
-import central.lang.Stringx;
 import central.util.function.ThrowableSupplier;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -78,9 +78,9 @@ public class JavaExecutor implements HttpExecutor {
 
                 return new JavaResponse(request, response);
             } catch (SocketTimeoutException cause) {
-                throw new HttpException(request, null, Stringx.format("网络超时: {} {}", request.getMethod(), request.getUrl()), cause);
+                throw new TimeoutHttpRequest(request, cause);
             } catch (IOException cause) {
-                throw new HttpException(request, null, Stringx.format("网络异常: {} {}", request.getMethod(), request.getUrl()), cause);
+                throw new IOHttpException(request, cause);
             }
         }
     }

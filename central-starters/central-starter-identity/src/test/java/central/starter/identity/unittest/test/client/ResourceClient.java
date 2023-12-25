@@ -22,44 +22,33 @@
  * SOFTWARE.
  */
 
-package central.starter.identity.unittest;
+package central.starter.identity.unittest.test.client;
 
-import central.starter.identity.IdentityProvider;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.authz.UnauthorizedException;
-import org.springframework.stereotype.Component;
+import central.starter.identity.unittest.controller.data.Resource;
+import central.starter.identity.unittest.controller.data.ResourceInput;
+import central.starter.web.param.IdsParams;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
- * 应用安全配转走
+ * Resource Client
  *
  * @author Alan Yeh
  * @since 2023/02/13
  */
-@Component
-public class ApplicationIdentityProvider implements IdentityProvider {
-    @Override
-    public void onReceiveAuthenticationToken(String token) {
-        try {
-            JWT.require(Algorithm.HMAC256("test")).build()
-                    .verify(token);
-        } catch (Exception ignored) {
-            throw new UnauthorizedException("凭证无效");
-        }
-    }
+public interface ResourceClient {
 
-    @Override
-    public void onReceiveAuthorizationInfo(String token, SimpleAuthorizationInfo authorizationInfo) {
-        var jwt = JWT.decode(token);
-        var permissions = jwt.getClaim("permissions").asString();
-        authorizationInfo.addStringPermissions(Arrays.asList(permissions.split(",")));
-    }
+    @GetMapping(value = "/api/resources", consumes = MediaType.APPLICATION_JSON_VALUE)
+    List<Resource> findBy();
 
-    @Override
-    public void onLogout(String token) {
+    @PostMapping(value = "/api/resources", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    Resource insert(@RequestBody ResourceInput input);
 
-    }
+    @PutMapping(value = "/api/resources", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    Resource update(@RequestBody ResourceInput input);
+
+    @DeleteMapping("/api/resources")
+    long deleteBy(IdsParams params);
 }

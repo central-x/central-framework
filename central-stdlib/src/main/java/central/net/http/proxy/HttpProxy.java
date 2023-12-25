@@ -39,7 +39,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Http Proxy
@@ -94,7 +96,7 @@ public class HttpProxy implements InvocationHandler {
             // Response 需要是成功状态才能反序列化
             if (!response.isSuccess()) {
                 try (response) {
-                    throw new HttpProxyException(method, HttpException.of(request, response));
+                    throw HttpException.of(request, response);
                 }
             }
 
@@ -149,7 +151,9 @@ public class HttpProxy implements InvocationHandler {
                     return response.getBody().extract(JsonExtractor.of(TypeRef.of(method.getGenericReturnType())));
                 }
 
-                throw new HttpProxyException(method, Stringx.format("无将处理返回值类型[{}]", method.getReturnType().getSimpleName()));
+                throw new IllegalStateException(Stringx.format("{} {}#{}({}): 无法处理返回值类型[{}]",
+                        method.getReturnType().getSimpleName(), method.getDeclaringClass().getSimpleName(), method.getName(), Arrays.stream(method.getParameterTypes()).map(Class::getSimpleName).collect(Collectors.joining(", ")),
+                        method.getName()));
             }
         }
     }

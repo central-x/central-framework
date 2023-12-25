@@ -24,17 +24,18 @@
 
 package central.net.http;
 
-import central.io.IOStreamx;
 import central.lang.Stringx;
-import central.lang.reflect.TypeRef;
-import central.util.Jsonx;
-import central.util.Objectx;
+import central.net.http.exception.*;
+import central.util.Mapx;
+import central.util.function.TriFunction;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 
-import java.io.IOException;
 import java.io.Serial;
-import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  * Http Exception
@@ -42,72 +43,77 @@ import java.nio.charset.StandardCharsets;
  * @author Alan Yeh
  * @since 2022/07/14
  */
+@Getter
 public class HttpException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 8580026645615849189L;
 
-    @Getter
-    private transient final HttpRequest request;
+    private transient @Nonnull
+    final HttpRequest request;
 
-    @Getter
-    private transient final HttpResponse response;
+    private transient @Nullable
+    final HttpResponse response;
 
-    public static HttpException of(HttpRequest request, HttpResponse response) {
-        // 解析响应体
-        var contentEncoding = StandardCharsets.UTF_8;
-        var contentType = response.getHeaders().getContentType();
-        if (contentType != null) {
-            contentEncoding = Objectx.getOrDefault(contentType.getCharset(), contentEncoding);
-        }
+    private static final Map<HttpStatus, BiFunction<HttpRequest, HttpResponse, ? extends HttpException>> STATUS_ERRORS = Mapx.of(
+            Mapx.entry(HttpStatus.BAD_REQUEST, BadRequestHttpException::new),
+            Mapx.entry(HttpStatus.UNAUTHORIZED, UnauthorizedHttpException::new),
+            Mapx.entry(HttpStatus.FORBIDDEN, ForbiddenHttpException::new),
+            Mapx.entry(HttpStatus.NOT_FOUND, NotFoundHttpException::new),
+            Mapx.entry(HttpStatus.METHOD_NOT_ALLOWED, MethodNotAllowedHttpException::new),
+            Mapx.entry(HttpStatus.REQUEST_TIMEOUT, RequestTimeoutHttpException::new),
+            Mapx.entry(HttpStatus.TOO_MANY_REQUESTS, TooManyRequestsHttpException::new),
+            Mapx.entry(HttpStatus.INTERNAL_SERVER_ERROR, InternalServerErrorHttpException::new),
+            Mapx.entry(HttpStatus.SERVICE_UNAVAILABLE, ServiceUnavailableHttpException::new),
+            Mapx.entry(HttpStatus.BAD_GATEWAY, BadGatewayHttpException::new)
+    );
 
-        var body = "";
-        if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
-            try {
-                // 尝试读取异常
-                body = IOStreamx.readText(response.getBody().getInputStream(), contentEncoding);
-            } catch (IOException ignored) {
+    private static final Map<HttpStatus.Series, TriFunction<HttpStatus, HttpRequest, HttpResponse, ? extends HttpException>> SERIES_ERRORS = Mapx.of(
+            Mapx.entry(HttpStatus.Series.CLIENT_ERROR, ClientSeriesHttpException::new),
+            Mapx.entry(HttpStatus.Series.SERVER_ERROR, ServerSeriesHttpException::new)
+    );
+
+    /**
+     * 快速构建 Http 异常
+     *
+     * @param request  请求
+     * @param response 响应
+     */
+    public static HttpException of(@Nonnull HttpRequest request, @Nullable HttpResponse response) {
+        if (response != null) {
+            {
+                var error = STATUS_ERRORS.get(response.getStatus());
+                if (error != null) {
+                    return error.apply(request, response);
+                }
             }
 
-            if (Stringx.isNotBlank(body)){
-                var message = Jsonx.Default().deserialize(body, TypeRef.ofMap(String.class, Object.class));
-                body = message.get("message").toString();
+            {
+                var error = SERIES_ERRORS.get(HttpStatus.Series.resolve(response.getStatus().value()));
+                if (error != null) {
+                    return error.apply(response.getStatus(), request, response);
+                }
             }
-        } else if (MediaType.TEXT_PLAIN.isCompatibleWith(contentType)) {
-            try {
-                // 尝试读取异常
-                body = IOStreamx.readText(response.getBody().getInputStream(), 50, contentEncoding);
-            } catch (IOException ignored) {
-            }
-        }
-
-        if (Stringx.isNotBlank(body)) {
-            return new HttpException(request, response, body);
-        } else {
             return new HttpException(request, response);
+        } else {
+            return new HttpException(request);
         }
     }
 
-    public HttpException(String message, HttpRequest request, HttpResponse response) {
+    public HttpException(String message, @Nonnull HttpRequest request, @Nullable HttpResponse response, Throwable throwable) {
         super(message);
         this.request = request;
         this.response = response;
     }
 
-    public HttpException(HttpRequest request, HttpResponse response) {
+    public HttpException(@Nonnull HttpRequest request, @Nonnull HttpResponse response) {
         super(Stringx.format("[{} {}] {} {}", response.getStatus().value(), response.getStatus().getReasonPhrase(), request.getMethod().name(), request.getUrl()));
         this.request = request;
         this.response = response;
     }
 
-    private HttpException(HttpRequest request, HttpResponse response, String body) {
-        super(Stringx.format("[{} {}] {} {}: {}", response.getStatus().value(), response.getStatus().getReasonPhrase(), request.getMethod().name(), request.getUrl(), body));
+    public HttpException(@Nonnull HttpRequest request) {
+        super(Stringx.format("{} {}", request.getMethod().name(), request.getUrl()));
         this.request = request;
-        this.response = response;
-    }
-
-    public HttpException(HttpRequest request, HttpResponse response, String message, Throwable cause) {
-        super(message, cause);
-        this.request = request;
-        this.response = response;
+        this.response = null;
     }
 }

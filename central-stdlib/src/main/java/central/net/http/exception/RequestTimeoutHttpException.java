@@ -22,33 +22,27 @@
  * SOFTWARE.
  */
 
-package central.starter.identity.unittest.test;
+package central.net.http.exception;
 
-import central.starter.identity.unittest.controller.data.Resource;
-import central.starter.identity.unittest.controller.data.ResourceInput;
-import central.starter.web.param.IdsParams;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import central.net.http.HttpRequest;
+import central.net.http.HttpResponse;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.http.HttpStatus;
 
-import java.util.List;
+import java.io.Serial;
 
 /**
- * Resource Client
+ * Request Timeout Http Exception
  *
  * @author Alan Yeh
- * @since 2023/02/13
+ * @since 2023/12/25
  */
-public interface ResourceClient {
+public class RequestTimeoutHttpException extends ClientSeriesHttpException {
+    @Serial
+    private static final long serialVersionUID = 1111765175713785840L;
 
-    @GetMapping(value = "/api/resources", consumes = MediaType.APPLICATION_JSON_VALUE)
-    List<Resource> findBy();
-
-    @PostMapping(value = "/api/resources", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    Resource insert(@RequestBody ResourceInput input);
-
-    @PutMapping(value = "/api/resources", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    Resource update(@RequestBody ResourceInput input);
-
-    @DeleteMapping("/api/resources")
-    long deleteBy(IdsParams params);
+    public RequestTimeoutHttpException(@NotNull HttpRequest request, @Nullable HttpResponse response) {
+        super(HttpStatus.REQUEST_TIMEOUT, request, response);
+    }
 }

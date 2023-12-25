@@ -24,16 +24,16 @@
 
 package central.net.http.executor.okhttp;
 
-import central.net.http.HttpException;
 import central.net.http.HttpExecutor;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
 import central.net.http.body.Body;
+import central.net.http.exception.IOHttpException;
+import central.net.http.exception.TimeoutHttpRequest;
 import central.net.http.executor.okhttp.body.EmptyBody;
 import central.net.http.executor.okhttp.body.WrapperBody;
 import central.net.http.ssl.HostnameVerifierImpl;
 import central.net.http.ssl.X509TrustManagerImpl;
-import central.lang.Stringx;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
@@ -84,9 +84,9 @@ public class OkHttpExecutor implements HttpExecutor {
 
                 return new OkHttpResponse(request, response);
             } catch (SocketTimeoutException cause) {
-                throw new HttpException(request, null, Stringx.format("网络超时: {} {}", request.getMethod(), request.getUrl()), cause);
+                throw new TimeoutHttpRequest(request, cause);
             } catch (IOException cause) {
-                throw new HttpException(request, null, Stringx.format("网络异常: {} {}", request.getMethod(), request.getUrl()), cause);
+                throw new IOHttpException(request, cause);
             }
         }
     }

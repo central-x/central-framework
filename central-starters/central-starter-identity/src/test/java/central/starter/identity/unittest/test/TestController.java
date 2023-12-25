@@ -24,15 +24,17 @@
 
 package central.starter.identity.unittest.test;
 
-import central.net.http.HttpException;
+import central.net.http.exception.ForbiddenHttpException;
+import central.net.http.exception.UnauthorizedHttpException;
 import central.net.http.executor.java.JavaExecutor;
 import central.net.http.processor.impl.AddHeaderProcessor;
-import central.net.http.proxy.HttpProxyException;
 import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
 import central.starter.identity.unittest.TestApplication;
 import central.starter.identity.unittest.controller.ResourceController;
 import central.starter.identity.unittest.controller.data.ResourceInput;
+import central.starter.identity.unittest.test.client.IndexClient;
+import central.starter.identity.unittest.test.client.ResourceClient;
 import central.util.Guidx;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -54,8 +56,11 @@ public class TestController {
     @Value("${server.port}")
     private int port;
 
+    /**
+     * Test OK
+     */
     @Test
-    void case1() {
+    public void case1() {
         var permissions = String.join(",", ResourceController.Permissions.VIEW, ResourceController.Permissions.EDIT);
         var jwt = JWT.create()
                 .withClaim("permissions", permissions)
@@ -73,12 +78,16 @@ public class TestController {
         Assertions.assertEquals(1, resources.size());
     }
 
+    /**
+     * Test Unauthorized
+     */
     @Test
-    void case2() {
+    public void case2() {
         var permissions = String.join(",", ResourceController.Permissions.ADD, ResourceController.Permissions.EDIT);
         var jwt = JWT.create()
                 .withClaim("permissions", permissions)
-                .sign(Algorithm.HMAC256("test"));
+                // 密钥错了
+                .sign(Algorithm.HMAC256("test1"));
 
         var client = HttpProxyFactory.builder(JavaExecutor.Default())
                 .baseUrl("http://127.0.0.1:" + port)
@@ -87,17 +96,14 @@ public class TestController {
                 .log()
                 .target(ResourceClient.class);
 
-        try {
-            var result = client.findBy();
-        } catch (Throwable throwable) {
-            Assertions.assertNotNull(throwable);
-            Assertions.assertInstanceOf(HttpProxyException.class, throwable);
-            Assertions.assertInstanceOf(HttpException.class, throwable.getCause());
-        }
+        Assertions.assertThrows(UnauthorizedHttpException.class, () -> client.findBy());
     }
 
+    /**
+     * Test Forbidden
+     */
     @Test
-    void case3() {
+    public void case3() {
         var permissions = String.join(",", ResourceController.Permissions.ADD, ResourceController.Permissions.EDIT);
         var jwt = JWT.create()
                 .withClaim("permissions", permissions)
@@ -110,12 +116,29 @@ public class TestController {
                 .log()
                 .target(ResourceClient.class);
 
-        try {
-            var result = client.insert(new ResourceInput(Guidx.nextID()));
-        } catch (Throwable throwable) {
-            Assertions.assertNotNull(throwable);
-            Assertions.assertInstanceOf(HttpProxyException.class, throwable);
-            Assertions.assertInstanceOf(HttpException.class, throwable.getCause());
-        }
+        Assertions.assertThrows(ForbiddenHttpException.class, () -> client.insert(new ResourceInput(Guidx.nextID())));
+    }
+
+    /**
+     * Test OK
+     */
+    @Test
+    public void case4(){
+        var permissions = String.join(",", ResourceController.Permissions.ADD, ResourceController.Permissions.EDIT);
+        var jwt = JWT.create()
+                .withClaim("permissions", permissions)
+                // 密钥错了
+                .sign(Algorithm.HMAC256("test1"));
+
+        var client = HttpProxyFactory.builder(JavaExecutor.Default())
+                .baseUrl("http://127.0.0.1:" + port)
+                .contact(new SpringContract())
+                .processor(new AddHeaderProcessor("Authorization", jwt))
+                .log()
+                .target(IndexClient.class);
+
+        var resource = client.resource();
+        Assertions.assertNotNull(resource);
+        Assertions.assertNotNull(resource.getId());
     }
 }

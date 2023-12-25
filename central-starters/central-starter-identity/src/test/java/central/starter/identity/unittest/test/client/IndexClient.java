@@ -22,44 +22,20 @@
  * SOFTWARE.
  */
 
-package central.starter.identity.unittest;
+package central.starter.identity.unittest.test.client;
 
-import central.starter.identity.IdentityProvider;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.authz.UnauthorizedException;
-import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
+import central.starter.identity.unittest.controller.data.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * 应用安全配转走
+ * Index Client
  *
  * @author Alan Yeh
- * @since 2023/02/13
+ * @since 2023/12/25
  */
-@Component
-public class ApplicationIdentityProvider implements IdentityProvider {
-    @Override
-    public void onReceiveAuthenticationToken(String token) {
-        try {
-            JWT.require(Algorithm.HMAC256("test")).build()
-                    .verify(token);
-        } catch (Exception ignored) {
-            throw new UnauthorizedException("凭证无效");
-        }
-    }
+public interface IndexClient {
 
-    @Override
-    public void onReceiveAuthorizationInfo(String token, SimpleAuthorizationInfo authorizationInfo) {
-        var jwt = JWT.decode(token);
-        var permissions = jwt.getClaim("permissions").asString();
-        authorizationInfo.addStringPermissions(Arrays.asList(permissions.split(",")));
-    }
-
-    @Override
-    public void onLogout(String token) {
-
-    }
+    @GetMapping(value = "/api", consumes = MediaType.APPLICATION_JSON_VALUE)
+    Resource resource();
 }
