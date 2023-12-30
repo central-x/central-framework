@@ -172,6 +172,29 @@ public class Stringx {
     }
 
     /**
+     * 生成固定长度的字符串
+     * <p>
+     * 如果长度过长，则截取；如果长度过短，则两端填充指定字符
+     *
+     * @param text   字符串
+     * @param length 目标长度
+     * @param pad    填充字符
+     */
+    public static String paddingBoth(@Nonnull String text, int length, char pad) {
+        if (text.length() > length) {
+            return text.substring(0, length);
+        } else {
+            var leftPadding = new char[(length - text.length()) / 2];
+            Arrays.fill(leftPadding, pad);
+
+            var rightPadding = new char[length - text.length() - leftPadding.length];
+            Arrays.fill(rightPadding, pad);
+
+            return new String(leftPadding) + text + new String(rightPadding);
+        }
+    }
+
+    /**
      * 判断文本是否为空或空字符串
      */
     public static boolean isNullOrEmpty(@Nullable String text) {
