@@ -56,14 +56,14 @@ public class Validatex {
         return INSTANCE;
     }
 
-    public <T, E extends Throwable> void validate(T object, Class<?>[] groups, Function<String, E> error) throws E {
+    public <T, E extends Throwable> void validate(T object, Class<?>[] groups, Function<ConstraintViolation<T>, E> error) throws E {
         if (Arrayx.isNullOrEmpty(groups)) {
             groups = new Class[]{Default.class};
         }
         var violations = this.factory.getValidator().validate(object, groups);
         var violation = Setx.getAny(violations);
         if (violation.isPresent()) {
-            throw error.apply(violation.get().getMessage());
+            throw error.apply(violation.get());
         }
     }
 
@@ -74,13 +74,13 @@ public class Validatex {
      * @param groups 校验分组
      */
     public <T> void validateBean(T object, Class<?>... groups) throws BeanValidateException {
-        this.validate(object, groups, BeanValidateException::new);
+        this.validate(object, groups, violation -> new BeanValidateException(violation.getMessage()));
     }
 
     /**
      * 校验参数
      */
     public <T> void validate(T object, Class<?>... groups) throws IllegalArgumentException {
-        this.validate(object, groups, IllegalArgumentException::new);
+        this.validate(object, groups, violation -> new IllegalArgumentException(violation.getMessage()));
     }
 }

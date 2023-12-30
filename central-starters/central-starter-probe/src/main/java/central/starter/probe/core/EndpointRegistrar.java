@@ -27,7 +27,9 @@ package central.starter.probe.core;
 import central.lang.Stringx;
 import central.starter.probe.ProbeProperties;
 import central.util.Listx;
+import central.validation.Validatex;
 import lombok.Setter;
+import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanNameGenerator;
@@ -57,6 +59,8 @@ public class EndpointRegistrar implements ImportBeanDefinitionRegistrar, Environ
         if (bindResult.isBound()) {
             this.properties = bindResult.get();
         }
+
+        Validatex.Default().validate(this.properties, new Class[0], violation -> new InvalidPropertyException(this.properties.getClass(), violation.getPropertyPath().toString(), violation.getMessage()));
 
         if (!properties.isEnabled()) {
             return;

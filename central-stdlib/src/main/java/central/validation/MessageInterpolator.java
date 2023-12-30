@@ -30,7 +30,9 @@ import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpo
 import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -66,13 +68,23 @@ public class MessageInterpolator extends ResourceBundleMessageInterpolator {
     protected String getLabelByPath(Class<?> type, String[] paths) {
         Field field;
         try {
-            field = type.getDeclaredField(paths[0]);
+            var path = paths[0];
+            if (path.contains("[")){
+                // 数组或列表
+                path = path.substring(0, path.indexOf("["));
+            }
+            field = type.getDeclaredField(path);
         } catch (NoSuchFieldException ex) {
             return null;
         }
 
         if (paths.length > 1) {
-            return getLabelByPath(field.getType(), Arrays.copyOfRange(paths, 1, paths.length));
+            if (paths[0].contains("[") && field.getType().equals(List.class)) {
+                var actualType = ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0];
+                return getLabelByPath((Class<?>) actualType, Arrays.copyOfRange(paths, 1, paths.length));
+            } else {
+                return getLabelByPath(field.getType(), Arrays.copyOfRange(paths, 1, paths.length));
+            }
         } else {
             var label = field.getAnnotation(Label.class);
             if (label == null) {

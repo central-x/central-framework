@@ -24,6 +24,9 @@
 
 package central.starter.probe.properties;
 
+import central.validation.Label;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Map;
@@ -39,10 +42,14 @@ public class EndpointProperties {
     /**
      * 端点名称
      */
+    @NotBlank
+    @Label("端点名称")
     private String name;
     /**
      * 端点类型
      */
+    @NotNull
+    @Label("端点类型")
     private EndpointType type;
     /**
      * 初始化参数

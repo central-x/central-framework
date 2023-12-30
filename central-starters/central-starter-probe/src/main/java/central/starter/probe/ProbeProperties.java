@@ -25,6 +25,7 @@
 package central.starter.probe;
 
 import central.starter.probe.properties.EndpointProperties;
+import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -47,5 +48,6 @@ public class ProbeProperties {
     /**
      * 探测端点配置
      */
+    @Valid
     private List<EndpointProperties> points = new ArrayList<>();
 }
