@@ -131,7 +131,7 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
         this.dialect = Assertx.requireNotNull(SqlDialect.resolve(this.url), IllegalArgumentException::new, Stringx.format("不支持的数据库类型"));
     }
 
-    private ThreadLocal<SimpleDateFormat> formatter = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
+    private final ThreadLocal<SimpleDateFormat> formatter = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
 
     @Override
     public void perform() throws Exception {
@@ -217,6 +217,12 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
             builder.append("┣ Params: \n");
             builder.append("┣ - driver: ").append(this.driver).append("\n");
             builder.append("┣ - url: ").append(this.url).append("\n");
+            if (Stringx.isNotBlank(this.username)) {
+                builder.append("┣ - username: ").append(this.username.charAt(0)).append(Stringx.paddingLeft("", this.username.length() - 2, '*')).append(this.username.charAt(this.username.length() - 1)).append("\n");
+            }
+            if (Stringx.isNotBlank(this.password)) {
+                builder.append("┣ - password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append("\n");
+            }
             builder.append("┣ - query: ").append(this.query).append("\n");
             builder.append("┣ Result: \n");
             builder.append("┣ ").append(title).append("\n");
