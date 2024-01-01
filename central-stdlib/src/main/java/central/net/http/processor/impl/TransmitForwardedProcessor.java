@@ -51,7 +51,7 @@ public class TransmitForwardedProcessor implements HttpProcessor, ReactiveHttpPr
     }
 
     @Override
-    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Throwable {
+    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Exception {
         var attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             var request = attributes.getRequest();

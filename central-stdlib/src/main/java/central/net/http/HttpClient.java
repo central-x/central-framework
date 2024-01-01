@@ -130,7 +130,7 @@ public class HttpClient {
      * @param request 执行请求
      * @return 响应
      */
-    public HttpResponse execute(HttpRequest request) throws Throwable {
+    public HttpResponse execute(HttpRequest request) throws Exception {
         request.getUrl().setBaseUrl(this.getBaseUrl());
 
         List<HttpProcessor> processors = new ArrayList<>(this.processors);

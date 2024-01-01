@@ -54,7 +54,7 @@ public class CompressBodyProcessor implements HttpProcessor, ReactiveHttpProcess
     }
 
     @Override
-    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Throwable {
+    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Exception {
         target.setBody(new CompressedBody(target.getBody(), type));
         return chain.process(target);
     }

@@ -58,7 +58,7 @@ public class SetHeaderProcessor implements HttpProcessor, ReactiveHttpProcessor 
     }
 
     @Override
-    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Throwable {
+    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Exception {
         target.getHeaders().putAll(this.headers);
         return chain.process(target);
     }

@@ -54,7 +54,7 @@ public class ProcessChain<T, R> {
         this.index = index;
     }
 
-    public R process(T target) throws Throwable {
+    public R process(T target) throws Exception {
         if (this.index < this.processors.size()) {
             var processor = this.processors.get(this.index);
             var next = new ProcessChain<>(this, this.index + 1);

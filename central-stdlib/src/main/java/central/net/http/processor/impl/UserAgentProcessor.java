@@ -51,7 +51,7 @@ public class UserAgentProcessor implements HttpProcessor, ReactiveHttpProcessor 
     }
 
     @Override
-    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Throwable {
+    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Exception {
         target.setHeader(HttpHeaders.USER_AGENT, this.userAgent);
         return chain.process(target);
     }

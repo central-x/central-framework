@@ -58,7 +58,7 @@ public class AddCookieProcessor implements HttpProcessor, ReactiveHttpProcessor 
     }
 
     @Override
-    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Throwable {
+    public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Exception {
         target.setCookies(this.cookies);
         return chain.process(target);
     }
