@@ -322,6 +322,26 @@ public abstract class TypeRef<T> {
     }
 
     /**
+     * 构建 Set 类型
+     *
+     * @param elementType 元素类型
+     */
+    public static <T extends Set<V>, V> TypeRef<T> ofSet(TypeRef<V> elementType) {
+        return new TypeRef<>(new ParameterizedTypeImpl(Set.class, new Type[]{elementType.getType()})) {
+        };
+    }
+
+    /**
+     * 构建 Set 类型
+     *
+     * @param elementType 元素类型
+     */
+    public static <T extends Set<E>, E> TypeRef<T> ofSet(Class<? extends E> elementType) {
+        return new TypeRef<>(new ParameterizedTypeImpl(Set.class, new Type[]{elementType})) {
+        };
+    }
+
+    /**
      * 构建 Map 类型
      *
      * @param keyType   Key 类型

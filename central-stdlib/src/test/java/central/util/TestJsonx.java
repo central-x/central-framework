@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Jsonx Test Cases
@@ -58,7 +59,7 @@ public class TestJsonx {
     }
 
     @Test
-    public void case2(){
+    public void case2() {
         var map = new HashMap<String, Object>();
         map.put("int", 1);
         map.put("string", "我是中国人");
@@ -74,5 +75,19 @@ public class TestJsonx {
         Assertions.assertEquals(1, result.get("int"));
         Assertions.assertEquals("我是中国人", result.get("string"));
         Assertions.assertNull(result.get("null"));
+    }
+
+    @Test
+    public void case3() {
+        var set = new HashSet<String>();
+        set.add("test");
+        set.add("abc");
+
+        var json = Jsonx.Default().serialize(set);
+
+        var result = Jsonx.Default().deserialize(json, TypeRef.ofSet(String.class));
+
+        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals(set, result);
     }
 }
