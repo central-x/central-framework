@@ -37,6 +37,6 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(IdentityConfiguration.class)
+@Import(StarterConfiguration.class)
 public @interface EnableIdentity {
 }

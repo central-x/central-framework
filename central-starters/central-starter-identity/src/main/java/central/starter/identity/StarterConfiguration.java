@@ -62,7 +62,7 @@ import java.util.List;
 @ConditionalOnProperty(name = "central.identity.enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(IdentityProperties.class)
 @Import({ShiroFilter.class, SecurityRealm.class, UnauthenticatedExceptionHandler.class, UnauthorizedExceptionHandler.class})
-public class IdentityConfiguration {
+public class StarterConfiguration {
 
     @Bean
     public SecurityManager securityManager(SecurityRealm realm) {
