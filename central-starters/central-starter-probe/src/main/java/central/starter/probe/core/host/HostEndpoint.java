@@ -24,7 +24,20 @@
 
 package central.starter.probe.core.host;
 
+import central.lang.Stringx;
 import central.starter.probe.core.Endpoint;
+import central.starter.probe.core.ProbeException;
+import central.validation.Label;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.BeanNameAware;
+
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * 主机探测
@@ -32,9 +45,37 @@ import central.starter.probe.core.Endpoint;
  * @author Alan Yeh
  * @since 2023/12/29
  */
-public class HostEndpoint implements Endpoint {
+@Slf4j
+public class HostEndpoint implements Endpoint, BeanNameAware {
+
+    @Setter
+    private String beanName;
+
+    @Setter
+    @NotBlank
+    @Size(max = 256)
+    @Label("主机名")
+    private String host;
+
     @Override
     public void perform() throws Exception {
+        InetAddress[] addresses;
+        try {
+            addresses = InetAddress.getAllByName(host);
+        } catch (UnknownHostException error) {
+            throw new ProbeException(Stringx.format("解析域名[{}]失败", this.host));
+        }
 
+        var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━ Probe ━━━━━━━━━━━━━━━━━━━\n");
+        builder.append("┣ Endpoint: ").append(this.beanName).append("\n");
+        builder.append("┣ Type: ").append("Host\n");
+        builder.append("┣ Params: \n");
+        builder.append("┣ - host: ").append(this.host).append("\n");
+        builder.append("┣ Result: \n");
+        for (var address : addresses) {
+            builder.append("┣ - ").append((address instanceof Inet4Address) ? "IPv4: " : "").append((address instanceof Inet6Address) ? "IPv6: " : "").append(address.getHostAddress()).append("\n");
+        }
+        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        log.info(builder.toString());
     }
 }

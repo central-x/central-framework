@@ -10,7 +10,6 @@ central:
         params:
           host: 127.0.0.1
           port: 6379
-          password: 123456
       - name: mysql
         type: datasource
         params:
@@ -18,3 +17,7 @@ central:
           url: jdbc:mysql://mysql:3306/centralx?useUnicode=true&characterEncoding=utf8&useSSL=false
           username: root
           password: root
+      - name: host
+        type: host
+        params:
+          host: www.baidu.com
