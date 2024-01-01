@@ -113,4 +113,45 @@ public class JavaExecutor implements HttpExecutor {
 
         return new JavaExecutor(client);
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private Duration connectTimeout = Duration.ofSeconds(60);
+
+        /**
+         * 连接超时时间（毫秒）
+         */
+        public Builder connectTimeout(long connectTimeout) {
+            this.connectTimeout = Duration.ofMillis(connectTimeout);
+            return this;
+        }
+
+        private HttpClient.Redirect followRedirects = HttpClient.Redirect.ALWAYS;
+
+        public Builder followRedirects(boolean followRedirects) {
+            if (followRedirects) {
+                this.followRedirects = HttpClient.Redirect.ALWAYS;
+            } else {
+                this.followRedirects = HttpClient.Redirect.NEVER;
+            }
+            return this;
+        }
+
+        @SneakyThrows
+        public JavaExecutor build() {
+            SSLContext context = SSLContext.getInstance("SSL");
+            context.init(null, new TrustManager[]{new X509TrustManagerImpl()}, null);
+
+            HttpClient client = HttpClient.newBuilder()
+                    .sslContext(context)
+                    .connectTimeout(this.connectTimeout)
+                    .followRedirects(this.followRedirects)
+                    .build();
+
+            return new JavaExecutor(client);
+        }
+    }
 }

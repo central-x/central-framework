@@ -61,7 +61,7 @@ public abstract class HttpResponse implements AutoCloseable {
      * 状态码在 [200, 300) 之间为成功
      */
     public boolean isSuccess() {
-        return this.getStatus().value() >= 200 && this.getStatus().value() < 300;
+        return HttpStatus.Series.SUCCESSFUL == HttpStatus.Series.resolve(this.getStatus().value());
     }
 
     /**

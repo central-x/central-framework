@@ -5,19 +5,32 @@ central:
   probe:
     enabled: true
     points:
-      - name: redis
-        type: redis
+#      - name: redis
+#        type: redis
+#        params:
+#          host: 127.0.0.1
+#          port: 6379
+#      - name: mysql
+#        type: datasource
+#        params:
+#          driver: com.mysql.cj.jdbc.Driver
+#          url: jdbc:mysql://mysql:3306/centralx?useUnicode=true&characterEncoding=utf8&useSSL=false
+#          username: root
+#          password: root
+#      - name: host
+#        type: host
+#        params:
+#          host: www.baidu.com
+      - name: githubGraphql
+        type: service
         params:
-          host: 127.0.0.1
-          port: 6379
-      - name: mysql
-        type: datasource
-        params:
-          driver: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://mysql:3306/centralx?useUnicode=true&characterEncoding=utf8&useSSL=false
-          username: root
-          password: root
-      - name: host
-        type: host
-        params:
-          host: www.baidu.com
+          url: https://api.github.com/graphql
+          timeout: 5000
+          headers:
+          - name: X-Forwarded-Tenant
+            value: test
+          expects:
+            status: [200, 403]
+#            content: |
+#              {"message": "API rate limit exceeded for 50.7.158.106. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)",
+#              "documentation_url": "https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}
