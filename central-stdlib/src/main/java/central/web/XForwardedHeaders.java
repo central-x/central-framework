@@ -55,7 +55,7 @@ public interface XForwardedHeaders {
     /**
      * 租户路径
      */
-    String PATH = "X-Forwarded-Path";
+    String PATH = "X-Forwarded-Prefix";
     /**
      * 凭证信息
      */
