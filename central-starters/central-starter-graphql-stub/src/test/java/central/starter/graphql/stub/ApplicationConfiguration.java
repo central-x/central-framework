@@ -33,6 +33,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 /**
+ * 应用配置
+ *
  * @author Alan Yeh
  * @since 2022/09/30
  */
