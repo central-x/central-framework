@@ -32,6 +32,7 @@ import central.sql.datasource.factory.druid.DruidDataSourceFactory;
 import central.sql.datasource.factory.hikari.HikariDataSourceFactory;
 import central.sql.impl.standard.StandardExecutor;
 import central.sql.impl.standard.StandardSource;
+import central.starter.orm.core.MapperRegistrar;
 import central.starter.orm.properties.MigrationProperties;
 import central.starter.orm.properties.OrmProperties;
 import central.util.Objectx;
@@ -41,6 +42,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
@@ -51,6 +53,7 @@ import javax.sql.DataSource;
  * @author Alan Yeh
  * @since 2022/09/22
  */
+@Import(MapperRegistrar.class)
 @EnableConfigurationProperties({OrmProperties.class, MigrationProperties.class, DataSourceProperties.class})
 public class StarterConfiguration {
 
