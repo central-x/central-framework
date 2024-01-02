@@ -26,7 +26,6 @@ package central.starter.probe.properties;
 
 import central.bean.OptionalEnum;
 import central.starter.probe.core.Endpoint;
-import central.starter.probe.core.bean.BeanEndpoint;
 import central.starter.probe.core.datasource.DataSourceEndpoint;
 import central.starter.probe.core.host.HostEndpoint;
 import central.starter.probe.core.redis.RedisEndpoint;
@@ -43,10 +42,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EndpointType implements OptionalEnum<Class<? extends Endpoint>> {
-    /**
-     * Bean 探测
-     */
-    BEAN("bean", BeanEndpoint.class),
     /**
      * 数据源探测
      */

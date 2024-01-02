@@ -176,7 +176,7 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
         builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append("\n");
         if (error != null) {
             // 探测失败
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(error.getCause().getLocalizedMessage().replace("\n", "\n┃ ")).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(error.getCause().getLocalizedMessage().replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append("\n");
         } else {
             // 探测成功
             if (Mapx.isNotEmpty(metadata)) {
@@ -199,8 +199,8 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
             builder.append("┣ ".wrap(Logx.Color.WHITE)).append(Stringx.paddingLeft("", title.length(), '-')).append("\n");
             builder.append("┣ ".wrap(Logx.Color.WHITE)).append(content).append("\n");
         }
-
         builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
+
         if (error != null) {
             log.error(builder.toString());
         } else {

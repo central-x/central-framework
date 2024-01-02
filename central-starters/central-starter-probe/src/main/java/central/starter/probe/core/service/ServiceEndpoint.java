@@ -34,10 +34,7 @@ import central.net.http.body.extractor.StringExtractor;
 import central.net.http.executor.java.JavaExecutor;
 import central.starter.probe.core.Endpoint;
 import central.starter.probe.core.ProbeException;
-import central.util.Jsonx;
-import central.util.Listx;
-import central.util.Mapx;
-import central.util.Range;
+import central.util.*;
 import central.validation.Label;
 import central.validation.Validatex;
 import jakarta.validation.constraints.NotBlank;
@@ -45,12 +42,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import lombok.experimental.ExtensionMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -68,6 +66,7 @@ import java.util.stream.Collectors;
  * @since 2023/12/29
  */
 @Slf4j
+@ExtensionMethod(Logx.class)
 public class ServiceEndpoint implements Endpoint, BeanNameAware, InitializingBean {
 
     @Setter
@@ -162,6 +161,10 @@ public class ServiceEndpoint implements Endpoint, BeanNameAware, InitializingBea
     @Override
     @SneakyThrows
     public void perform() throws ProbeException {
+        ProbeException error = null;
+        HttpResponse response = null;
+        String content = null;
+
         var request = HttpRequest.of(HttpMethod.valueOf(this.method.toUpperCase()), HttpUrl.of(this.url));
         if (Mapx.isNotEmpty(this.headers)) {
             for (var index : this.headers.entrySet()) {
@@ -169,110 +172,135 @@ public class ServiceEndpoint implements Endpoint, BeanNameAware, InitializingBea
             }
         }
 
-        HttpStatus status = null;
-        String error = null;
-        HttpResponse response = null;
-        String content = null;
-
         do {
             try {
                 response = this.client.execute(request);
-            } catch (TimeoutException ex) {
-                status = HttpStatus.REQUEST_TIMEOUT;
-                error = ex.getLocalizedMessage();
+            } catch (TimeoutException cause) {
+                error = new ProbeException(Stringx.format("请求[{} {}]超时: {}", request.getMethod().name(), this.url, cause.getLocalizedMessage()), cause);
                 break;
-            } catch (Exception ex) {
-                error = ex.getLocalizedMessage();
+            } catch (Exception cause) {
+                error = new ProbeException(Stringx.format("请求[{} {}]异常: {}", request.getMethod().name(), this.url, cause.getLocalizedMessage()), cause);
                 break;
             }
 
             // 如果有期望状态码，则以用户期望为准
             if (Listx.isNotEmpty(this.expectedStatus)) {
                 if (!this.expectedStatus.contains(response.getStatus().value())) {
-                    error = Stringx.format("执行请求 [GET {}] 失败: 返回非期望状态码[{} {}]", this.url, response.getStatus().value(), response.getStatus().getReasonPhrase());
+                    error = new ProbeException(Stringx.format("请求[{} {}]失败: 返回非期望状态码[{} {}]", request.getMethod().name(), this.url, response.getStatus().value(), response.getStatus().getReasonPhrase()), new ResponseStatusException(response.getStatus(), Stringx.format("Unexpected status '{}'", response.getStatus().value())));
                     break;
                 }
             } else {
                 // 否则以状态码是否在 200 ～ 299 的区间来判断是否成功
                 if (!response.isSuccess()) {
-                    error = Stringx.format("执行请求 [GET {}] 失败: 返回非成功状态码[{} {}]", this.url, response.getStatus().value(), response.getStatus().getReasonPhrase());
+                    error = new ProbeException(Stringx.format("请求[{} {}]失败: 返回非成功状态码[{} {}]", request.getMethod().name(), this.url, response.getStatus().value(), response.getStatus().getReasonPhrase()), new ResponseStatusException(response.getStatus(), Stringx.format("Unexpected status '{}'", response.getStatus().value())));
                     break;
                 }
             }
 
             // 如果有期望响应体，则以需要解析响应体，并匹配内容
             if (Stringx.isNotBlank(this.expectedContent)) {
+                // 读取响应体
+                content = response.getBody().extract(StringExtractor.of());
+
                 if (MediaType.APPLICATION_JSON.isCompatibleWith(response.getHeaders().getContentType())) {
-                    content = response.getBody().extract(StringExtractor.of());
                     // 如果响应是 application/json 的话，则解析后匹配
                     if (this.expectedContent.startsWith("[") && content.startsWith("[")) {
-                        // JSON 数组
-                        var expectedList = Jsonx.Default().deserialize(this.expectedContent, TypeRef.ofList(Object.class));
-                        var responseList = Jsonx.Default().deserialize(content, TypeRef.ofList(Object.class));
-                        content = Jsonx.Default().serialize(responseList, true);
+                        try {
+                            // JSON 数组
+                            var expectedList = Jsonx.Default().deserialize(this.expectedContent, TypeRef.ofList(Object.class));
+                            var responseList = Jsonx.Default().deserialize(content, TypeRef.ofList(Object.class));
+                            content = Jsonx.Default().serialize(responseList, true);
 
-                        if (!this.isDeepEquals(expectedList, responseList)) {
-                            error = Stringx.format("执行请求 [GET {}] 失败: 返回非期望响应体", this.url);
-                            break;
+                            if (!this.isDeepEquals(expectedList, responseList)) {
+                                error = new ProbeException(Stringx.format("请求[{} {}]失败: 返回非期望响应体", request.getMethod().name(), this.url));
+                                break;
+                            }
+                        } catch (Exception ignored) {
+                            // 如果解析异常，则不当 JSON 处理
                         }
+                    } else if (this.expectedContent.startsWith("{") && content.startsWith("{")) {
+                        try {
+                            // JSON 对象
+                            var expectedMap = Jsonx.Default().deserialize(this.expectedContent, TypeRef.ofMap(String.class, Object.class));
+                            var responseMap = Jsonx.Default().deserialize(content, TypeRef.ofMap(String.class, Object.class));
+                            content = Jsonx.Default().serialize(responseMap, true);
 
-                    }
-                    if (this.expectedContent.startsWith("{") && content.startsWith("{")) {
-                        // JSON 对象
-                        var expectedMap = Jsonx.Default().deserialize(this.expectedContent, TypeRef.ofMap(String.class, Object.class));
-                        var responseMap = Jsonx.Default().deserialize(content, TypeRef.ofMap(String.class, Object.class));
-                        content = Jsonx.Default().serialize(responseMap, true);
-
-                        if (!this.isDeepEquals(expectedMap, responseMap)) {
-                            error = Stringx.format("执行请求 [GET {}] 失败: 返回非期望响应体", this.url);
-                            break;
+                            if (!this.isDeepEquals(expectedMap, responseMap)) {
+                                error = new ProbeException(Stringx.format("请求[{} {}]失败: 返回非期望响应体", request.getMethod().name(), this.url));
+                                break;
+                            }
+                        } catch (Exception ignored) {
+                            // 如果解析异常，则不当 JSON 处理
                         }
                     }
+                }
+
+                // 直接匹配字符串
+                if (this.expectedContent.equals(content)) {
+                    error = new ProbeException(Stringx.format("请求[{} {}]失败: 返回非期望响应体", request.getMethod().name(), this.url));
+                    break;
                 }
             }
         } while (false);
 
 
-        var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━ Probe ━━━━━━━━━━━━━━━━━━━\n");
-        builder.append("┣ Endpoint: ").append(this.beanName).append("\n");
-        builder.append("┣ Type: ").append("Service\n");
-        builder.append("┣ Params:\n");
-        builder.append("┣ - url: ").append(this.url).append("\n");
-        builder.append("┣ - timeout: ").append(this.timeout).append("\n");
+        var builder = new StringBuilder("\n").append("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Probe Endpoint".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Endpoint".wrap(Logx.Color.BLUE)).append(": ").append(this.beanName).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Type".wrap(Logx.Color.BLUE)).append(": ").append("DataSource\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(": ").append("\n");
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- method: ").append(request.getMethod().name()).append("\n");
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- url: ").append(this.url).append("\n");
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- timeout: ").append(this.timeout).append("\n");
         if (Mapx.isNotEmpty(this.headers)) {
-            builder.append("┣ - headers:\n");
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- headers:\n");
             for (var index : this.headers.entrySet()) {
-                builder.append("┣    - ").append(index.getValue().get("name")).append(": ").append(index.getValue().get("value")).append("\n");
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - ").append(index.getValue().get("name")).append(": ").append(index.getValue().get("value")).append("\n");
             }
         }
         if (Mapx.isNotEmpty(this.expects)) {
-            builder.append("┣ - expected:\n");
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- expects:\n");
             if (Listx.isNotEmpty(this.expectedStatus)) {
-                builder.append("┣    - status: [").append(this.expectedStatus.stream().map(Object::toString).collect(Collectors.joining(", "))).append("]\n");
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - status: [").append(this.expectedStatus.stream().map(Object::toString).collect(Collectors.joining(", "))).append("]\n");
             }
             if (Stringx.isNotBlank(this.expectedContent)) {
-                builder.append("┣    - content: ").append(this.expectedContent.replace("\n", "").replace("\r\n", "")).append("\n");
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - content: ").append(this.expectedContent.replace("\n", "").replace("\r\n", "")).append("\n");
             }
         }
-        builder.append("┣ Result: \n");
-        builder.append("┣ - status: ").append(response.getStatus().value()).append("(").append(response.getStatus().getReasonPhrase()).append(")").append("\n");
-        if (Mapx.isNotEmpty(response.getHeaders())) {
-            builder.append("┣ - headers: \n");
-            for (var entry : response.getHeaders().entrySet()) {
-                for (var value : entry.getValue()) {
-                    builder.append("┣    - ").append(entry.getKey()).append(": ").append(value).append("\n");
+        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append("\n");
+        if (error != null) {
+            // 探测失败
+            var errorMessage = error.getLocalizedMessage();
+            if (error.getCause() != null) {
+                errorMessage = error.getCause().getLocalizedMessage();
+            }
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(errorMessage.replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append("\n");
+        }
+        if (response != null) {
+            // 打印响应
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Response".wrap(Logx.Color.BLUE)).append(": \n");
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- status: ").append(response.getStatus().value()).append("(").append(response.getStatus().getReasonPhrase()).append(")").append("\n");
+            if (Mapx.isNotEmpty(response.getHeaders())) {
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- headers: \n");
+                for (var entry : response.getHeaders().entrySet()) {
+                    for (var value : entry.getValue()) {
+                        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - ").append(entry.getKey()).append(": ").append(value).append("\n");
+                    }
                 }
             }
+            if (Stringx.isNotBlank(content)) {
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- content: \n").append("┃ ".wrap(Logx.Color.WHITE)).append(content.replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append("\n");
+            }
         }
-        if (Stringx.isNotBlank(content)) {
-            builder.append("┣ - content: \n").append("┣ ").append(content.replace("\n", "\n┣ ")).append("\n");
-        }
-        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        if (Stringx.isNotBlank(error)) {
+        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
+
+        if (error != null) {
             log.error(builder.toString());
-            throw new ProbeException(error);
         } else {
             log.info(builder.toString());
+        }
+        if (error != null) {
+            throw error;
         }
     }
 

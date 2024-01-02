@@ -75,20 +75,20 @@ public class HostEndpoint implements Endpoint, BeanNameAware {
         builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Endpoint".wrap(Logx.Color.BLUE)).append(": ").append(this.beanName).append("\n");
         builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Type".wrap(Logx.Color.BLUE)).append(": ").append("Host\n");
         builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(": ").append("\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- host: ").append(this.host).append("\n");
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- host: ").append(this.host).append("\n");
         builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
         builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append("\n");
         if (error != null) {
             // 探测失败
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(error.getCause().getLocalizedMessage().replace("\n", "\n┃ ")).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(error.getCause().getLocalizedMessage().replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append("\n");
         } else {
             builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Lookup Result".wrap(Logx.Color.BLUE)).append(":\n");
             for (var address : addresses) {
                 builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- ").append((address instanceof Inet4Address) ? "IPv4: " : "").append((address instanceof Inet6Address) ? "IPv6: " : "").append(address.getHostAddress()).append("\n");
             }
         }
-
         builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
+
         if (error != null) {
             log.error(builder.toString());
         } else {
