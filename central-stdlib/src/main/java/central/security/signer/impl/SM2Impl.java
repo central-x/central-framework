@@ -85,20 +85,20 @@ public class SM2Impl implements SignerImpl {
         keyPairGenerator.init(keyGenerationParams);
         AsymmetricCipherKeyPair keyPair = keyPairGenerator.generateKeyPair();
 
-        Key signKey = new SM2VerifyKey(((ECPrivateKeyParameters) keyPair.getPrivate()).getD().toByteArray());
-        Key verifyKey = new SM2SignKey(((ECPublicKeyParameters) keyPair.getPublic()).getQ().getEncoded(false));
+        Key signKey = new SM2PrivateKey(((ECPrivateKeyParameters) keyPair.getPrivate()).getD().toByteArray());
+        Key verifyKey = new SM2PublicKey(((ECPublicKeyParameters) keyPair.getPublic()).getQ().getEncoded(false));
 
         return new KeyPair(signKey, verifyKey);
     }
 
-    private static class SM2SignKey implements Key {
+    private static class SM2PublicKey implements Key {
         @Serial
         private static final long serialVersionUID = 7138366658809908375L;
 
         @Getter
         private final byte[] encoded;
 
-        public SM2SignKey(byte[] encoded) {
+        public SM2PublicKey(byte[] encoded) {
             this.encoded = encoded;
         }
 
@@ -116,7 +116,7 @@ public class SM2Impl implements SignerImpl {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            SM2SignKey that = (SM2SignKey) o;
+            SM2PublicKey that = (SM2PublicKey) o;
             return Arrays.equals(this.encoded, that.encoded);
         }
 
@@ -126,7 +126,7 @@ public class SM2Impl implements SignerImpl {
         }
     }
 
-    private static class SM2VerifyKey implements Key {
+    private static class SM2PrivateKey implements Key {
         @Serial
         private static final long serialVersionUID = 644493133111452334L;
         private static final int PRIVKEY_SIZE = 32;
@@ -134,7 +134,7 @@ public class SM2Impl implements SignerImpl {
         @Getter
         private final byte[] encoded;
 
-        public SM2VerifyKey(byte[] encoded) {
+        public SM2PrivateKey(byte[] encoded) {
             this.encoded = new byte[PRIVKEY_SIZE];
             if (encoded.length > PRIVKEY_SIZE) {
                 System.arraycopy(encoded, encoded.length - PRIVKEY_SIZE, this.encoded, 0, PRIVKEY_SIZE);
@@ -157,7 +157,7 @@ public class SM2Impl implements SignerImpl {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            SM2VerifyKey that = (SM2VerifyKey) o;
+            SM2PrivateKey that = (SM2PrivateKey) o;
             return Arrays.equals(encoded, that.encoded);
         }
 
@@ -169,12 +169,12 @@ public class SM2Impl implements SignerImpl {
 
     @Override
     public Key getSignKey(String keySpec) {
-        return new SM2SignKey(Base64.getDecoder().decode(keySpec));
+        return new SM2PrivateKey(Base64.getDecoder().decode(keySpec));
     }
 
     @Override
     public Key getVerifyKey(String keySpec) {
-        return new SM2VerifyKey(Base64.getDecoder().decode(keySpec));
+        return new SM2PublicKey(Base64.getDecoder().decode(keySpec));
     }
 
     private static final int BUFFER_SIZE = 8 * 1024;

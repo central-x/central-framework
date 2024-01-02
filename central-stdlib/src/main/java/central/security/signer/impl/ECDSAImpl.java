@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.ParseException;
 import java.util.Base64;
@@ -70,13 +71,13 @@ public abstract class ECDSAImpl implements SignerImpl {
     @Override
     @SneakyThrows({NoSuchAlgorithmException.class, NoSuchProviderException.class, InvalidKeySpecException.class})
     public Key getSignKey(String keySpec) {
-        return KeyFactory.getInstance("EC", "BC").generatePrivate(new X509EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
+        return KeyFactory.getInstance("EC", "BC").generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
     }
 
     @Override
-    @SneakyThrows({NoSuchAlgorithmException.class, NoSuchProviderException.class, InvalidKeySpecException.class})
+    @SneakyThrows({NoSuchAlgorithmException.class, InvalidKeySpecException.class})
     public Key getVerifyKey(String keySpec) {
-        return KeyFactory.getInstance("EC", "BC").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
+        return KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
     }
 
     @Override

@@ -27,6 +27,8 @@ package central.security;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Base64;
+
 /**
  * Signerx Test Cases
  *
@@ -41,6 +43,16 @@ public class TestSignerx {
     public void case1() throws Exception {
         var keys = Signerx.RSA_256.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedVerifyKey = Base64.getEncoder().encodeToString(keys.getVerifyKey().getEncoded());
+        var decodedVerifyKey = Signerx.RSA_256.getVerifyKey(encodedVerifyKey);
+        Assertions.assertEquals(decodedVerifyKey, keys.getVerifyKey());
+
+        var encodedSignKey = Base64.getEncoder().encodeToString(keys.getSignKey().getEncoded());
+        var decodedSignKey = Signerx.RSA_256.getSignKey(encodedSignKey);
+        Assertions.assertEquals(keys.getSignKey(), decodedSignKey);
+
+        // 测试签名与验签
         var signature = Signerx.RSA_256.sign(LICENSE, keys.getSignKey());
         Assertions.assertTrue(Signerx.RSA_256.verify(LICENSE, keys.getVerifyKey(), signature));
     }
@@ -51,6 +63,16 @@ public class TestSignerx {
     public void case2() throws Exception {
         var keys = Signerx.RSA_384.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedVerifyKey = Base64.getEncoder().encodeToString(keys.getVerifyKey().getEncoded());
+        var decodedVerifyKey = Signerx.RSA_384.getVerifyKey(encodedVerifyKey);
+        Assertions.assertEquals(decodedVerifyKey, keys.getVerifyKey());
+
+        var encodedSignKey = Base64.getEncoder().encodeToString(keys.getSignKey().getEncoded());
+        var decodedSignKey = Signerx.RSA_384.getSignKey(encodedSignKey);
+        Assertions.assertEquals(keys.getSignKey(), decodedSignKey);
+
+        // 测试签名与验签
         var signature = Signerx.RSA_384.sign(LICENSE, keys.getSignKey());
         Assertions.assertTrue(Signerx.RSA_384.verify(LICENSE, keys.getVerifyKey(), signature));
     }
@@ -61,6 +83,16 @@ public class TestSignerx {
     public void case3() throws Exception {
         var keys = Signerx.RSA_512.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedVerifyKey = Base64.getEncoder().encodeToString(keys.getVerifyKey().getEncoded());
+        var decodedVerifyKey = Signerx.RSA_512.getVerifyKey(encodedVerifyKey);
+        Assertions.assertEquals(decodedVerifyKey, keys.getVerifyKey());
+
+        var encodedSignKey = Base64.getEncoder().encodeToString(keys.getSignKey().getEncoded());
+        var decodedSignKey = Signerx.RSA_512.getSignKey(encodedSignKey);
+        Assertions.assertEquals(keys.getSignKey(), decodedSignKey);
+
+        // 测试签名与验签
         var signature = Signerx.RSA_512.sign(LICENSE, keys.getSignKey());
         Assertions.assertTrue(Signerx.RSA_512.verify(LICENSE, keys.getVerifyKey(), signature));
     }
@@ -72,6 +104,16 @@ public class TestSignerx {
     public void case4() throws Exception {
         var keys = Signerx.SM2.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedVerifyKey = Base64.getEncoder().encodeToString(keys.getVerifyKey().getEncoded());
+        var decodedVerifyKey = Signerx.SM2.getVerifyKey(encodedVerifyKey);
+        Assertions.assertEquals(keys.getVerifyKey(), decodedVerifyKey);
+
+        var encodedSignKey = Base64.getEncoder().encodeToString(keys.getSignKey().getEncoded());
+        var decodedSignKey = Signerx.SM2.getSignKey(encodedSignKey);
+        Assertions.assertEquals(keys.getSignKey(), decodedSignKey);
+
+        // 测试签名与验签
         var signature = Signerx.SM2.sign(LICENSE, keys.getSignKey());
         Assertions.assertTrue(Signerx.SM2.verify(LICENSE, keys.getVerifyKey(), signature));
     }
@@ -83,6 +125,16 @@ public class TestSignerx {
     public void case5() throws Exception {
         var keys = Signerx.ECDSA_256.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedVerifyKey = Base64.getEncoder().encodeToString(keys.getVerifyKey().getEncoded());
+        var decodedVerifyKey = Signerx.ECDSA_256.getVerifyKey(encodedVerifyKey);
+        Assertions.assertEquals(decodedVerifyKey, keys.getVerifyKey());
+
+        var encodedSignKey = Base64.getEncoder().encodeToString(keys.getSignKey().getEncoded());
+        var decodedSignKey = Signerx.ECDSA_256.getSignKey(encodedSignKey);
+        Assertions.assertEquals(keys.getSignKey(), decodedSignKey);
+
+        // 测试签名与验签
         var signature = Signerx.ECDSA_256.sign(LICENSE, keys.getSignKey());
         Assertions.assertTrue(Signerx.ECDSA_256.verify(LICENSE, keys.getVerifyKey(), signature));
     }
@@ -94,6 +146,16 @@ public class TestSignerx {
     public void case6() throws Exception {
         var keys = Signerx.ECDSA_384.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedVerifyKey = Base64.getEncoder().encodeToString(keys.getVerifyKey().getEncoded());
+        var decodedVerifyKey = Signerx.ECDSA_384.getVerifyKey(encodedVerifyKey);
+        Assertions.assertEquals(decodedVerifyKey, keys.getVerifyKey());
+
+        var encodedSignKey = Base64.getEncoder().encodeToString(keys.getSignKey().getEncoded());
+        var decodedSignKey = Signerx.ECDSA_384.getSignKey(encodedSignKey);
+        Assertions.assertEquals(keys.getSignKey(), decodedSignKey);
+
+        // 测试签名与验签
         var signature = Signerx.ECDSA_384.sign(LICENSE, keys.getSignKey());
         Assertions.assertTrue(Signerx.ECDSA_384.verify(LICENSE, keys.getVerifyKey(), signature));
     }
@@ -105,6 +167,16 @@ public class TestSignerx {
     public void case7() throws Exception {
         var keys = Signerx.ECDSA_512.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedVerifyKey = Base64.getEncoder().encodeToString(keys.getVerifyKey().getEncoded());
+        var decodedVerifyKey = Signerx.ECDSA_512.getVerifyKey(encodedVerifyKey);
+        Assertions.assertEquals(decodedVerifyKey, keys.getVerifyKey());
+
+        var encodedSignKey = Base64.getEncoder().encodeToString(keys.getSignKey().getEncoded());
+        var decodedSignKey = Signerx.ECDSA_512.getSignKey(encodedSignKey);
+        Assertions.assertEquals(keys.getSignKey(), decodedSignKey);
+
+        // 测试签名与验签
         var signature = Signerx.ECDSA_512.sign(LICENSE, keys.getSignKey());
         Assertions.assertTrue(Signerx.ECDSA_512.verify(LICENSE, keys.getVerifyKey(), signature));
     }

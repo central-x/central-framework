@@ -37,6 +37,7 @@ import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAKey;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
@@ -88,7 +89,7 @@ public class RSAImpl implements CipherImpl {
      */
     @Override
     public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
-        return KeyFactory.getInstance("RSA").generatePrivate(new X509EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
+        return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
     }
 
     @Override

@@ -27,6 +27,8 @@ package central.security;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Base64;
+
 /**
  * Cipherx Test Cases
  *
@@ -41,6 +43,16 @@ public class TestCipherx {
     public void case1() throws Exception{
         var keys = Cipherx.NONE.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedEncryptKey = Base64.getEncoder().encodeToString(keys.getEncryptKey().getEncoded());
+        var decodedEncryptKey = Cipherx.NONE.getEncryptKey(encodedEncryptKey);
+        Assertions.assertEquals(keys.getEncryptKey(), decodedEncryptKey);
+
+        var encodedDecryptKey = Base64.getEncoder().encodeToString(keys.getDecryptKey().getEncoded());
+        var decodedDecryptKey = Cipherx.NONE.getDecryptKey(encodedDecryptKey);
+        Assertions.assertEquals(keys.getDecryptKey(), decodedDecryptKey);
+
+        // 测试加密与解密
         String source = "Unencrypted text";
         String encrypted = Cipherx.NONE.encrypt(source, keys.getEncryptKey());
         Assertions.assertEquals(source, encrypted);
@@ -56,6 +68,16 @@ public class TestCipherx {
     public void case2() throws Exception {
         var keys = Cipherx.RSA.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedEncryptKey = Base64.getEncoder().encodeToString(keys.getEncryptKey().getEncoded());
+        var decodedEncryptKey = Cipherx.RSA.getEncryptKey(encodedEncryptKey);
+        Assertions.assertEquals(keys.getEncryptKey(), decodedEncryptKey);
+
+        var encodedDecryptKey = Base64.getEncoder().encodeToString(keys.getDecryptKey().getEncoded());
+        var decodedDecryptKey = Cipherx.RSA.getDecryptKey(encodedDecryptKey);
+        Assertions.assertEquals(keys.getDecryptKey(), decodedDecryptKey);
+
+        // 测试加密与解密
         String source = "Unencrypted text";
         String encrypted = Cipherx.RSA.encrypt(source, keys.getEncryptKey());
         Assertions.assertNotEquals(source, encrypted);
@@ -71,6 +93,16 @@ public class TestCipherx {
     public void case3() throws Exception {
         var keys = Cipherx.DES.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedEncryptKey = Base64.getEncoder().encodeToString(keys.getEncryptKey().getEncoded());
+        var decodedEncryptKey = Cipherx.DES.getEncryptKey(encodedEncryptKey);
+        Assertions.assertEquals(keys.getEncryptKey(), decodedEncryptKey);
+
+        var encodedDecryptKey = Base64.getEncoder().encodeToString(keys.getDecryptKey().getEncoded());
+        var decodedDecryptKey = Cipherx.DES.getDecryptKey(encodedDecryptKey);
+        Assertions.assertEquals(keys.getDecryptKey(), decodedDecryptKey);
+
+        // 测试加密与解密
         String source = "Unencrypted text";
         String encrypted = Cipherx.DES.encrypt(source, keys.getEncryptKey());
         Assertions.assertNotEquals(source, encrypted);
@@ -86,6 +118,16 @@ public class TestCipherx {
     public void case4() throws Exception {
         var keys = Cipherx.DESede.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedEncryptKey = Base64.getEncoder().encodeToString(keys.getEncryptKey().getEncoded());
+        var decodedEncryptKey = Cipherx.DESede.getEncryptKey(encodedEncryptKey);
+        Assertions.assertEquals(keys.getEncryptKey(), decodedEncryptKey);
+
+        var encodedDecryptKey = Base64.getEncoder().encodeToString(keys.getDecryptKey().getEncoded());
+        var decodedDecryptKey = Cipherx.DESede.getDecryptKey(encodedDecryptKey);
+        Assertions.assertEquals(keys.getDecryptKey(), decodedDecryptKey);
+
+        // 测试加密与解密
         String source = "Unencrypted text";
         String encrypted = Cipherx.DESede.encrypt(source, keys.getEncryptKey());
         Assertions.assertNotEquals(source, encrypted);
@@ -101,6 +143,16 @@ public class TestCipherx {
     public void case5() throws Exception {
         var keys = Cipherx.AES.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedEncryptKey = Base64.getEncoder().encodeToString(keys.getEncryptKey().getEncoded());
+        var decodedEncryptKey = Cipherx.AES.getEncryptKey(encodedEncryptKey);
+        Assertions.assertEquals(keys.getEncryptKey(), decodedEncryptKey);
+
+        var encodedDecryptKey = Base64.getEncoder().encodeToString(keys.getDecryptKey().getEncoded());
+        var decodedDecryptKey = Cipherx.AES.getDecryptKey(encodedDecryptKey);
+        Assertions.assertEquals(keys.getDecryptKey(), decodedDecryptKey);
+
+        // 测试加密与解密
         String source = "Unencrypted text";
         String encrypted = Cipherx.AES.encrypt(source, keys.getEncryptKey());
         Assertions.assertNotEquals(source, encrypted);
@@ -116,6 +168,16 @@ public class TestCipherx {
     public void case6() throws Exception {
         var keys = Cipherx.SM2.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedEncryptKey = Base64.getEncoder().encodeToString(keys.getEncryptKey().getEncoded());
+        var decodedEncryptKey = Cipherx.SM2.getEncryptKey(encodedEncryptKey);
+        Assertions.assertEquals(keys.getEncryptKey(), decodedEncryptKey);
+
+        var encodedDecryptKey = Base64.getEncoder().encodeToString(keys.getDecryptKey().getEncoded());
+        var decodedDecryptKey = Cipherx.SM2.getDecryptKey(encodedDecryptKey);
+        Assertions.assertEquals(keys.getDecryptKey(), decodedDecryptKey);
+
+        // 测试加密与解密
         String source = "Unencrypted text";
         String encrypted = Cipherx.SM2.encrypt(source, keys.getEncryptKey());
         Assertions.assertNotEquals(source, encrypted);
@@ -131,6 +193,16 @@ public class TestCipherx {
     public void case7() throws Exception {
         var keys = Cipherx.SM4.generateKeyPair();
 
+        // 测试 Key 是否能正常序列化与反序列化
+        var encodedEncryptKey = Base64.getEncoder().encodeToString(keys.getEncryptKey().getEncoded());
+        var decodedEncryptKey = Cipherx.SM4.getEncryptKey(encodedEncryptKey);
+        Assertions.assertEquals(keys.getEncryptKey(), decodedEncryptKey);
+
+        var encodedDecryptKey = Base64.getEncoder().encodeToString(keys.getDecryptKey().getEncoded());
+        var decodedDecryptKey = Cipherx.SM4.getDecryptKey(encodedDecryptKey);
+        Assertions.assertEquals(keys.getDecryptKey(), decodedDecryptKey);
+
+        // 测试加密与解密
         String source = "Unencrypted text";
         String encrypted = Cipherx.SM4.encrypt(source, keys.getEncryptKey());
         Assertions.assertNotEquals(source, encrypted);

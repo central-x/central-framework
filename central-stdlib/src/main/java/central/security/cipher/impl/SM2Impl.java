@@ -83,25 +83,25 @@ public class SM2Impl implements CipherImpl {
         keyPairGenerator.init(keyGenerationParams);
         AsymmetricCipherKeyPair keyPair = keyPairGenerator.generateKeyPair();
 
-        Key encryptKey = new SM2EncryptKey(((ECPublicKeyParameters) keyPair.getPublic()).getQ().getEncoded(false));
-        Key decryptKey = new SM2DecryptKey(((ECPrivateKeyParameters) keyPair.getPrivate()).getD().toByteArray());
+        Key encryptKey = new SM2PublicKey(((ECPublicKeyParameters) keyPair.getPublic()).getQ().getEncoded(false));
+        Key decryptKey = new SM2PrivateKey(((ECPrivateKeyParameters) keyPair.getPrivate()).getD().toByteArray());
 
         return new KeyPair(encryptKey, decryptKey);
     }
 
     @Override
     public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
-        return new SM2EncryptKey(Base64.getDecoder().decode(keySpec));
+        return new SM2PublicKey(Base64.getDecoder().decode(keySpec));
     }
 
-    private static class SM2EncryptKey implements Key {
+    private static class SM2PublicKey implements Key {
         @Serial
         private static final long serialVersionUID = 7138366658809908375L;
 
         @Getter
         private final byte[] encoded;
 
-        public SM2EncryptKey(byte[] encoded) {
+        public SM2PublicKey(byte[] encoded) {
             this.encoded = encoded;
         }
 
@@ -119,7 +119,7 @@ public class SM2Impl implements CipherImpl {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            SM2EncryptKey that = (SM2EncryptKey) o;
+            SM2PublicKey that = (SM2PublicKey) o;
             return Arrays.equals(this.encoded, that.encoded);
         }
 
@@ -131,10 +131,10 @@ public class SM2Impl implements CipherImpl {
 
     @Override
     public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
-        return new SM2DecryptKey(Base64.getDecoder().decode(keySpec));
+        return new SM2PrivateKey(Base64.getDecoder().decode(keySpec));
     }
 
-    private static class SM2DecryptKey implements Key {
+    private static class SM2PrivateKey implements Key {
         @Serial
         private static final long serialVersionUID = 644493133111452334L;
         private static final int PRIVKEY_SIZE = 32;
@@ -142,7 +142,7 @@ public class SM2Impl implements CipherImpl {
         @Getter
         private final byte[] encoded;
 
-        public SM2DecryptKey(byte[] encoded) {
+        public SM2PrivateKey(byte[] encoded) {
             this.encoded = new byte[PRIVKEY_SIZE];
             if (encoded.length > PRIVKEY_SIZE) {
                 System.arraycopy(encoded, encoded.length - PRIVKEY_SIZE, this.encoded, 0, PRIVKEY_SIZE);
@@ -165,7 +165,7 @@ public class SM2Impl implements CipherImpl {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            SM2DecryptKey that = (SM2DecryptKey) o;
+            SM2PrivateKey that = (SM2PrivateKey) o;
             return Arrays.equals(encoded, that.encoded);
         }
 

@@ -88,9 +88,10 @@ public class AESImpl implements CipherImpl {
 
     private @Nonnull Key getKey(@Nonnull String keySpec) {
         Assertx.mustNotBlank(keySpec, "Argument 'keySpec' must not blank");
-        Assertx.mustTrue((keySpec.length() - 16) % 8 == 0, "密钥必须是 16 + N * 8 位");
+        var bytes = Base64.getDecoder().decode(keySpec);
 
-        return new SecretKeySpec(Base64.getDecoder().decode(keySpec), ALGORITHM);
+        Assertx.mustTrue((bytes.length - 16) % 8 == 0, "密钥必须是 16 + N * 8 位");
+        return new SecretKeySpec(bytes, ALGORITHM);
     }
 
     @Override
