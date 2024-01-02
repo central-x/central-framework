@@ -58,7 +58,7 @@ public class HostEndpoint implements Endpoint, BeanNameAware {
     private String host;
 
     @Override
-    public void perform() throws Exception {
+    public void perform() throws ProbeException {
         InetAddress[] addresses;
         try {
             addresses = InetAddress.getAllByName(host);

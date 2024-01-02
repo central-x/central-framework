@@ -81,7 +81,7 @@ public class RedisEndpoint implements Endpoint, InitializingBean, BeanNameAware 
     }
 
     @Override
-    public void perform() throws Exception {
+    public void perform() throws ProbeException {
         try (var client = RedisClient.create()) {
             var uriBuilder = RedisURI.builder().withHost(this.host)
                     .withPort(this.port);

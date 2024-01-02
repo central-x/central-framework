@@ -30,6 +30,7 @@ import central.sql.SqlDialect;
 import central.sql.SqlType;
 import central.starter.probe.core.Endpoint;
 import central.starter.probe.core.ProbeException;
+import central.util.Mapx;
 import central.validation.Label;
 import central.validation.Validatex;
 import jakarta.validation.constraints.NotBlank;
@@ -46,6 +47,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 数据源探针
@@ -112,96 +114,75 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
     @Override
     public void afterPropertiesSet() throws Exception {
         Validatex.Default().validate(this);
+
+        // 数据库方言
+        this.dialect = Assertx.requireNotNull(SqlDialect.resolve(this.url), IllegalArgumentException::new, Stringx.format("不支持的数据库类型: {}", this.url));
+
+        // 如果未设定查询测试语句，则根据方言设定默认值
         if (Stringx.isNullOrBlank(this.query)) {
-            switch (SqlDialect.resolve(this.url)) {
-                case MySql, PostgreSql -> {
-                    this.query = "SELECT 1";
-                }
-                case Oracle, Kingbase, Oscar, H2, Vastbase, Dameng -> {
-                    this.query = "SELECT 1 FROM DUAL";
-                }
-                case HighGo -> {
-                    this.query = "select version()";
-                }
-                default -> {
-                    throw new IllegalArgumentException("不支持的数据库类型");
-                }
+            switch (this.dialect) {
+                case MySql, PostgreSql -> this.query = "SELECT 1";
+                case Oracle, Kingbase, Oscar, H2, Vastbase, Dameng -> this.query = "SELECT 1 FROM DUAL";
+                case HighGo -> this.query = "select version()";
+                default -> throw new IllegalArgumentException("不支持的数据库类型");
             }
         }
-        this.dialect = Assertx.requireNotNull(SqlDialect.resolve(this.url), IllegalArgumentException::new, Stringx.format("不支持的数据库类型"));
     }
 
     private final ThreadLocal<SimpleDateFormat> formatter = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
 
     @Override
-    public void perform() throws Exception {
-        Connection connection = null;
+    public void perform() throws ProbeException {
+        ProbeException error = null;
+
         try {
             // 加载驱动
             Class.forName(this.driver);
+        } catch (ClassNotFoundException ex) {
+            error = new ProbeException(Stringx.format("无法加载数据库驱动[{}]: {}", this.driver, ex.getLocalizedMessage()), ex);
+        }
 
-            // 建立数据库边接
-            connection = DriverManager.getConnection(this.url, this.username, this.password);
+        Map<String, String> metadata = null;
+        Map<String, String> data = null;
+        // 建立数据库边接
+        try (Connection connection = DriverManager.getConnection(this.url, this.username, this.password)) {
+            // 获取数据库元数据
+            metadata = this.queryMetadata(connection);
 
             // 执行查询
-            var data = new LinkedHashMap<String, String>(1);
-            try (var statement = connection.prepareStatement(this.query)) {
-                try (var resultSet = statement.executeQuery()) {
+            data = this.queryData(connection);
+        } catch (SQLException ex) {
+            error = new ProbeException(Stringx.format("数据库探测异常: " + ex.getLocalizedMessage()), ex);
+        }
 
-                    var metadata = resultSet.getMetaData();
-
-                    // 只取第一行结果
-                    if (!resultSet.next()) {
-                        throw new ProbeException(Stringx.format("执行 Sql [{}] 时没有返回结果", this.query));
-                    }
-
-                    // 取第一行结果
-                    for (int i = 1, cols = metadata.getColumnCount(); i <= cols; i++) {
-                        // 字段名
-                        var columnName = metadata.getColumnLabel(i);
-                        if (Stringx.isNullOrBlank(columnName)) {
-                            columnName = metadata.getColumnName(i);
-                        }
-
-                        // 值
-                        var columnType = metadata.getColumnType(i);
-                        var sqlType = Assertx.requireNotNull(SqlType.resolve(columnType), SQLException::new, Stringx.format("不支持的数据库字段类型[{}]", columnType));
-
-                        switch (sqlType) {
-                            case BLOB -> data.put(columnName, "<blob>");
-                            case CLOB -> data.put(columnName, "<clob>");
-                            case LONG -> {
-                                var value = (Long) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
-                                data.put(columnName, value.toString());
-                            }
-                            case BOOLEAN -> {
-                                var value = (Boolean) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
-                                data.put(columnName, value.toString());
-                            }
-                            case INTEGER -> {
-                                var value = (Integer) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
-                                data.put(columnName, value.toString());
-                            }
-                            case DATETIME -> {
-                                var value = (Timestamp) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
-                                data.put(columnName, formatter.get().format(value));
-                            }
-                            case BIG_DECIMAL -> {
-                                var value = (BigDecimal) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
-                                data.put(columnName, value.toString());
-                            }
-                            case STRING -> {
-                                var value = (String) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
-                                data.put(columnName, value);
-                            }
-                            case UNKNOWN -> {
-                                var value = sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
-                                data.put(columnName, value.toString());
-                            }
-                        }
-                    }
+        // 输出探测信息
+        var builder = new StringBuilder("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Probe Endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+        builder.append("┣ Endpoint: ").append(this.beanName).append("\n");
+        builder.append("┣ Type: ").append("DataSource\n");
+        builder.append("┣ Params: \n");
+        builder.append("┃ - driver: ").append(this.driver).append("\n");
+        builder.append("┃ - url: ").append(this.url).append("\n");
+        if (Stringx.isNotBlank(this.username)) {
+            builder.append("┃ - username: ").append(this.username.charAt(0)).append(Stringx.paddingLeft("", this.username.length() - 2, '*')).append(this.username.charAt(this.username.length() - 1)).append("\n");
+        }
+        if (Stringx.isNotBlank(this.password)) {
+            builder.append("┃ - password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append("\n");
+        }
+        builder.append("┃ - query: ").append(this.query).append("\n");
+        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+        builder.append("┣ Probe Status: ").append(error == null ? "SUCCESS" : "ERROR").append("\n");
+        if (error != null) {
+            // 探测失败
+            builder.append("┣ Error Message: ").append(error.getCause().getLocalizedMessage().replace("\n", "\n┃ ")).append("\n");
+        } else {
+            // 探测成功
+            if (Mapx.isNotEmpty(metadata)) {
+                builder.append("┣ Database Metadata:\n");
+                for (var entry : metadata.entrySet()) {
+                    builder.append("┃ - ").append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
                 }
             }
+            builder.append("┣ Query Result: \n");
 
             // 打印第一行结果
             var title = new StringBuilder("|");
@@ -211,28 +192,95 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
                 title.append(Stringx.paddingBoth(entry.getKey(), length, ' ')).append("|");
                 content.append(Stringx.paddingBoth(entry.getValue(), length, ' ')).append("|");
             }
-            var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━ Probe ━━━━━━━━━━━━━━━━━━━\n");
-            builder.append("┣ Endpoint: ").append(this.beanName).append("\n");
-            builder.append("┣ Type: ").append("DataSource\n");
-            builder.append("┣ Params: \n");
-            builder.append("┣ - driver: ").append(this.driver).append("\n");
-            builder.append("┣ - url: ").append(this.url).append("\n");
-            if (Stringx.isNotBlank(this.username)) {
-                builder.append("┣ - username: ").append(this.username.charAt(0)).append(Stringx.paddingLeft("", this.username.length() - 2, '*')).append(this.username.charAt(this.username.length() - 1)).append("\n");
-            }
-            if (Stringx.isNotBlank(this.password)) {
-                builder.append("┣ - password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append("\n");
-            }
-            builder.append("┣ - query: ").append(this.query).append("\n");
-            builder.append("┣ Result: \n");
-            builder.append("┣ ").append(title).append("\n");
-            builder.append("┣ ").append(Stringx.paddingLeft("", title.length(), '-')).append("\n");
-            builder.append("┣ ").append(content).append("\n");
-            builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            builder.append("┃ ").append(title).append("\n");
+            builder.append("┃ ").append(Stringx.paddingLeft("", title.length(), '-')).append("\n");
+            builder.append("┃ ").append(content).append("\n");
+        }
+
+        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        if (error != null) {
+            log.error(builder.toString());
+        } else {
             log.info(builder.toString());
-        } finally {
-            if (connection != null) {
-                connection.close();
+        }
+        if (error != null) {
+            throw error;
+        }
+    }
+
+    /**
+     * 获取数据库元数据
+     */
+    private Map<String, String> queryMetadata(Connection connection) throws SQLException {
+        var databaseMeta = connection.getMetaData();
+
+        var metadata = new LinkedHashMap<String, String>();
+        metadata.put("Product", Stringx.format("{} {}", databaseMeta.getDatabaseProductName(), databaseMeta.getDatabaseProductVersion()));
+        metadata.put("Driver", Stringx.format("{} {}", databaseMeta.getDriverName(), databaseMeta.getDriverVersion()));
+        return metadata;
+    }
+
+    /**
+     * 获取数据库测试查询结果
+     */
+    private Map<String, String> queryData(Connection connection) throws SQLException {
+        try (var statement = connection.prepareStatement(this.query)) {
+            try (var resultSet = statement.executeQuery()) {
+                var metadata = resultSet.getMetaData();
+
+                // 只取第一行结果
+                if (!resultSet.next()) {
+                    throw new ProbeException(Stringx.format("执行 Sql [{}] 时没有返回结果", this.query));
+                }
+                var data = new LinkedHashMap<String, String>(metadata.getColumnCount());
+
+                // 取第一行结果
+                for (int i = 1, cols = metadata.getColumnCount(); i <= cols; i++) {
+                    // 字段名
+                    var columnName = metadata.getColumnLabel(i);
+                    if (Stringx.isNullOrBlank(columnName)) {
+                        columnName = metadata.getColumnName(i);
+                    }
+
+                    // 值
+                    var columnType = metadata.getColumnType(i);
+                    var sqlType = Assertx.requireNotNull(SqlType.resolve(columnType), SQLException::new, Stringx.format("不支持的数据库字段类型[{}]", columnType));
+
+                    switch (sqlType) {
+                        case BLOB -> data.put(columnName, "<blob>");
+                        case CLOB -> data.put(columnName, "<clob>");
+                        case LONG -> {
+                            var value = (Long) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
+                            data.put(columnName, value.toString());
+                        }
+                        case BOOLEAN -> {
+                            var value = (Boolean) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
+                            data.put(columnName, value.toString());
+                        }
+                        case INTEGER -> {
+                            var value = (Integer) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
+                            data.put(columnName, value.toString());
+                        }
+                        case DATETIME -> {
+                            var value = (Timestamp) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
+                            data.put(columnName, formatter.get().format(value));
+                        }
+                        case BIG_DECIMAL -> {
+                            var value = (BigDecimal) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
+                            data.put(columnName, value.toString());
+                        }
+                        case STRING -> {
+                            var value = (String) sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
+                            data.put(columnName, value);
+                        }
+                        case UNKNOWN -> {
+                            var value = sqlType.getResolver().resolve(this.dialect, resultSet, metadata, i);
+                            data.put(columnName, value.toString());
+                        }
+                    }
+                }
+
+                return data;
             }
         }
     }

@@ -25,6 +25,7 @@
 package central.starter.probe.core.bean;
 
 import central.starter.probe.core.Endpoint;
+import central.starter.probe.core.ProbeException;
 
 /**
  * Spring Bean 探针
@@ -34,7 +35,7 @@ import central.starter.probe.core.Endpoint;
  */
 public class BeanEndpoint implements Endpoint {
     @Override
-    public void perform() throws Exception {
+    public void perform() throws ProbeException {
 
     }
 }

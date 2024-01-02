@@ -24,7 +24,6 @@
 
 package central.starter.probe.core;
 
-import central.lang.Stringx;
 import central.starter.probe.ProbeProperties;
 import central.util.Listx;
 import central.validation.Validatex;
@@ -66,6 +65,7 @@ public class EndpointRegistrar implements ImportBeanDefinitionRegistrar, Environ
             return;
         }
 
+        // 注册 Controller
         var controller = new GenericBeanDefinition();
         controller.setBeanClass(ProbeController.class);
         controller.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE | AbstractBeanDefinition.AUTOWIRE_BY_NAME);
@@ -75,12 +75,13 @@ public class EndpointRegistrar implements ImportBeanDefinitionRegistrar, Environ
             return;
         }
 
+        // 注册探测端
         for (var point : properties.getPoints()) {
             var definition = new GenericBeanDefinition();
             definition.setBeanClass(point.getType().getValue());
             definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE | AbstractBeanDefinition.AUTOWIRE_BY_NAME);
             definition.getPropertyValues().addPropertyValues(point.getParams());
-            registry.registerBeanDefinition(Stringx.addSuffix(point.getName(), "Endpoint"), definition);
+            registry.registerBeanDefinition(point.getName(), definition);
         }
     }
 }

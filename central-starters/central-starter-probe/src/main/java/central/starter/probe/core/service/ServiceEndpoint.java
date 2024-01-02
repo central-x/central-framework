@@ -44,6 +44,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.InitializingBean;
@@ -53,7 +54,10 @@ import org.springframework.http.MediaType;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
@@ -156,7 +160,8 @@ public class ServiceEndpoint implements Endpoint, BeanNameAware, InitializingBea
     }
 
     @Override
-    public void perform() throws Exception {
+    @SneakyThrows
+    public void perform() throws ProbeException {
         var request = HttpRequest.of(HttpMethod.valueOf(this.method.toUpperCase()), HttpUrl.of(this.url));
         if (Mapx.isNotEmpty(this.headers)) {
             for (var index : this.headers.entrySet()) {

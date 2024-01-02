@@ -34,5 +34,5 @@ public interface Endpoint {
     /**
      * 执行探测
      */
-    void perform() throws Exception;
+    void perform() throws ProbeException;
 }
