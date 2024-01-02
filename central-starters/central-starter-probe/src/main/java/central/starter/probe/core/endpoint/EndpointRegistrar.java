@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core;
+package central.starter.probe.core.endpoint;
 
 import central.starter.probe.ProbeProperties;
 import central.util.Listx;
@@ -64,12 +64,6 @@ public class EndpointRegistrar implements ImportBeanDefinitionRegistrar, Environ
         if (!properties.isEnabled()) {
             return;
         }
-
-        // 注册 Controller
-        var controller = new GenericBeanDefinition();
-        controller.setBeanClass(ProbeController.class);
-        controller.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE | AbstractBeanDefinition.AUTOWIRE_BY_NAME);
-        registry.registerBeanDefinition(importBeanNameGenerator.generateBeanName(controller, registry), controller);
 
         if (Listx.isNullOrEmpty(properties.getPoints())) {
             return;

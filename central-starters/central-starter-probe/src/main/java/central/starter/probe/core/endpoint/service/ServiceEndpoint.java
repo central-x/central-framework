@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core.service;
+package central.starter.probe.core.endpoint.service;
 
 import central.lang.Stringx;
 import central.lang.reflect.TypeRef;
@@ -32,7 +32,7 @@ import central.net.http.HttpResponse;
 import central.net.http.HttpUrl;
 import central.net.http.body.extractor.StringExtractor;
 import central.net.http.executor.java.JavaExecutor;
-import central.starter.probe.core.Endpoint;
+import central.starter.probe.core.endpoint.Endpoint;
 import central.starter.probe.core.ProbeException;
 import central.util.*;
 import central.validation.Label;

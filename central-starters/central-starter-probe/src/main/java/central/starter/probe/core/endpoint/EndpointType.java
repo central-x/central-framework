@@ -22,17 +22,42 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core;
+package central.starter.probe.core.endpoint;
+
+import central.bean.OptionalEnum;
+import central.starter.probe.core.endpoint.datasource.DataSourceEndpoint;
+import central.starter.probe.core.endpoint.host.HostEndpoint;
+import central.starter.probe.core.endpoint.redis.RedisEndpoint;
+import central.starter.probe.core.endpoint.service.ServiceEndpoint;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
- * 探针
+ * 端点类型
  *
  * @author Alan Yeh
- * @since 2023/12/29
+ * @since 2023/12/31
  */
-public interface Endpoint {
+@Getter
+@AllArgsConstructor
+public enum EndpointType implements OptionalEnum<Class<? extends Endpoint>> {
     /**
-     * 执行探测
+     * 数据源探测
      */
-    void perform() throws ProbeException;
+    DATASOURCE("datasource", DataSourceEndpoint.class),
+    /**
+     * 主机名探测
+     */
+    HOST("host", HostEndpoint.class),
+    /**
+     * Redis 探测
+     */
+    REDIS("redis", RedisEndpoint.class),
+    /**
+     * 服务探测
+     */
+    SERVICE("service", ServiceEndpoint.class);
+
+    private final String name;
+    private final Class<? extends Endpoint> value;
 }

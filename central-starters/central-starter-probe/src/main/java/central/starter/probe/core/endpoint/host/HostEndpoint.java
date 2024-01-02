@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core.host;
+package central.starter.probe.core.endpoint.host;
 
 import central.lang.Stringx;
-import central.starter.probe.core.Endpoint;
+import central.starter.probe.core.endpoint.Endpoint;
 import central.starter.probe.core.ProbeException;
 import central.util.Logx;
 import central.validation.Label;

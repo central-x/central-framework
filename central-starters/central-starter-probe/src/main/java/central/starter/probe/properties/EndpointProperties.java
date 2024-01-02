@@ -24,6 +24,7 @@
 
 package central.starter.probe.properties;
 
+import central.starter.probe.core.endpoint.EndpointType;
 import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

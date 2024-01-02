@@ -24,7 +24,8 @@
 
 package central.starter.probe;
 
-import central.starter.probe.core.EndpointRegistrar;
+import central.starter.probe.core.ProbeRegistrar;
+import central.starter.probe.core.endpoint.EndpointRegistrar;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -37,25 +38,9 @@ import org.springframework.context.annotation.Import;
  * @since 2023/12/27
  */
 @Configuration
-@Import(EndpointRegistrar.class)
+@Import({ProbeRegistrar.class, EndpointRegistrar.class})
 @EnableConfigurationProperties(ProbeProperties.class)
 @ConditionalOnProperty(name = "central.probe.enabled", havingValue = "true", matchIfMissing = true)
 public class StarterConfiguration {
 
-//    @Bean
-//    public Map<String, Endpoint> endpoints(ProbeProperties properties) {
-//        if (!properties.isEnabled()) {
-//            return Collections.emptyMap();
-//        }
-//
-//        if (Listx.isNullOrEmpty(properties.getPoints())) {
-//            return Collections.emptyMap();
-//        }
-//
-//        var points = new HashMap<String, Endpoint>();
-//        for (var point : properties.getPoints()) {
-//
-//        }
-//        return points;
-//    }
 }

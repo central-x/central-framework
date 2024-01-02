@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core.datasource;
+package central.starter.probe.core.endpoint.datasource;
 
 import central.lang.Assertx;
 import central.lang.Stringx;
 import central.sql.SqlDialect;
 import central.sql.SqlType;
-import central.starter.probe.core.Endpoint;
+import central.starter.probe.core.endpoint.Endpoint;
 import central.starter.probe.core.ProbeException;
 import central.util.Logx;
 import central.util.Mapx;
