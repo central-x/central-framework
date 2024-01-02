@@ -27,15 +27,18 @@ package central.starter.probe.core.redis;
 import central.lang.Stringx;
 import central.starter.probe.core.Endpoint;
 import central.starter.probe.core.ProbeException;
+import central.util.Logx;
 import central.validation.Label;
 import central.validation.Validatex;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.RedisCommandExecutionException;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.codec.StringCodec;
 import io.lettuce.core.masterreplica.MasterReplica;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Setter;
+import lombok.experimental.ExtensionMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.InitializingBean;
@@ -49,6 +52,7 @@ import java.time.Duration;
  * @since 2023/12/29
  */
 @Slf4j
+@ExtensionMethod(Logx.class)
 public class RedisEndpoint implements Endpoint, InitializingBean, BeanNameAware {
 
     @Setter
@@ -82,41 +86,65 @@ public class RedisEndpoint implements Endpoint, InitializingBean, BeanNameAware 
 
     @Override
     public void perform() throws ProbeException {
+        ProbeException error = null;
+
         try (var client = RedisClient.create()) {
-            var uriBuilder = RedisURI.builder().withHost(this.host)
-                    .withPort(this.port);
+            // 构建 Redis 链接
+            var uriBuilder = RedisURI.builder().withHost(this.host).withPort(this.port);
             if (Stringx.isNotBlank(this.username) && Stringx.isNotBlank(this.password)) {
                 uriBuilder.withAuthentication(this.username, this.password);
             } else if (Stringx.isNotBlank(this.password)) {
                 uriBuilder.withPassword(this.password.toCharArray());
             }
+
+            // 连接 Redis
             try (var connection = MasterReplica.connect(client, StringCodec.UTF8, uriBuilder.build())) {
                 connection.setTimeout(Duration.ofSeconds(3));
+                // 同步执行命令
                 var commands = connection.sync();
                 var pong = commands.ping();
 
                 if (!"PONG".equalsIgnoreCase(pong)) {
-                    throw new ProbeException("执行 PING 时没有返回正确的 PONG 结果");
+                    throw new RedisCommandExecutionException("执行 PING 时没有返回正确的 PONG 结果");
                 }
             }
             client.shutdown();
+        } catch (Exception cause) {
+            error = new ProbeException("Redis 探测异常: " + cause.getLocalizedMessage(), cause);
         }
 
-        var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━ Probe ━━━━━━━━━━━━━━━━━━━\n");
-        builder.append("┣ Endpoint: ").append(this.beanName).append("\n");
-        builder.append("┣ Type: ").append("Redis\n");
-        builder.append("┣ Params: \n");
-        builder.append("┣ - host: ").append(this.host).append("\n");
-        builder.append("┣ - port: ").append(this.port).append("\n");
+
+        var builder = new StringBuilder("\n").append("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Probe Endpoint".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Endpoint".wrap(Logx.Color.BLUE)).append(": ").append(this.beanName).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Type".wrap(Logx.Color.BLUE)).append(": ").append("Redis\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(": ").append("\n");
+
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- host: ").append(this.host).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- port: ").append(this.port).append("\n");
         if (Stringx.isNotBlank(this.username)) {
-            builder.append("┣ - username: ").append(this.username.charAt(0)).append(Stringx.paddingLeft("", this.username.length() - 2, '*')).append(this.username.charAt(this.username.length() - 1)).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- username: ").append(this.username).append("\n");
         }
         if (Stringx.isNotBlank(this.password)) {
-            builder.append("┣ - password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append("\n");
         }
-        builder.append("┣ - query: PING").append("\n");
-        builder.append("┣ Result: PONG\n");
-        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        log.info(builder.toString());
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- query: PING").append("\n");
+        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append("\n");
+        if (error != null) {
+            // 探测失败
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(error.getCause().getLocalizedMessage().replace("\n", "\n┃ ")).append("\n");
+        } else {
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Query Result".wrap(Logx.Color.BLUE)).append(": PONG\n");
+        }
+
+        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
+        if (error != null) {
+            log.error(builder.toString());
+        } else {
+            log.info(builder.toString());
+        }
+        if (error != null) {
+            throw error;
+        }
     }
 }

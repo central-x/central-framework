@@ -166,7 +166,7 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
         builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- driver: ").append(this.driver).append("\n");
         builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- url: ").append(this.url).append("\n");
         if (Stringx.isNotBlank(this.username)) {
-            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- username: ").append(this.username.charAt(0)).append(Stringx.paddingLeft("", this.username.length() - 2, '*')).append(this.username.charAt(this.username.length() - 1)).append("\n");
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- username: ").append(this.username).append("\n");
         }
         if (Stringx.isNotBlank(this.password)) {
             builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append("\n");
