@@ -30,12 +30,14 @@ import central.sql.SqlDialect;
 import central.sql.SqlType;
 import central.starter.probe.core.Endpoint;
 import central.starter.probe.core.ProbeException;
+import central.util.Logx;
 import central.util.Mapx;
 import central.validation.Label;
 import central.validation.Validatex;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Setter;
+import lombok.experimental.ExtensionMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.InitializingBean;
@@ -56,6 +58,7 @@ import java.util.Map;
  * @since 2023/12/29
  */
 @Slf4j
+@ExtensionMethod(Logx.class)
 public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameAware {
 
     @Setter
@@ -138,8 +141,8 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
         try {
             // 加载驱动
             Class.forName(this.driver);
-        } catch (ClassNotFoundException ex) {
-            error = new ProbeException(Stringx.format("无法加载数据库驱动[{}]: {}", this.driver, ex.getLocalizedMessage()), ex);
+        } catch (ClassNotFoundException cause) {
+            error = new ProbeException(Stringx.format("无法加载数据库驱动[{}]: {}", this.driver, cause.getLocalizedMessage()), cause);
         }
 
         Map<String, String> metadata = null;
@@ -151,38 +154,38 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
 
             // 执行查询
             data = this.queryData(connection);
-        } catch (SQLException ex) {
-            error = new ProbeException(Stringx.format("数据库探测异常: " + ex.getLocalizedMessage()), ex);
+        } catch (SQLException cause) {
+            error = new ProbeException(Stringx.format("数据库探测异常: " + cause.getLocalizedMessage()), cause);
         }
 
         // 输出探测信息
-        var builder = new StringBuilder("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Probe Endpoint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-        builder.append("┣ Endpoint: ").append(this.beanName).append("\n");
-        builder.append("┣ Type: ").append("DataSource\n");
-        builder.append("┣ Params: \n");
-        builder.append("┃ - driver: ").append(this.driver).append("\n");
-        builder.append("┃ - url: ").append(this.url).append("\n");
+        var builder = new StringBuilder("\n").append("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Probe Endpoint".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Endpoint".wrap(Logx.Color.BLUE)).append(": ").append(this.beanName).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Type".wrap(Logx.Color.BLUE)).append(": ").append("DataSource\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(": ").append("\n");
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- driver: ").append(this.driver).append("\n");
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- url: ").append(this.url).append("\n");
         if (Stringx.isNotBlank(this.username)) {
-            builder.append("┃ - username: ").append(this.username.charAt(0)).append(Stringx.paddingLeft("", this.username.length() - 2, '*')).append(this.username.charAt(this.username.length() - 1)).append("\n");
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- username: ").append(this.username.charAt(0)).append(Stringx.paddingLeft("", this.username.length() - 2, '*')).append(this.username.charAt(this.username.length() - 1)).append("\n");
         }
         if (Stringx.isNotBlank(this.password)) {
-            builder.append("┃ - password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append("\n");
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append("\n");
         }
-        builder.append("┃ - query: ").append(this.query).append("\n");
-        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-        builder.append("┣ Probe Status: ").append(error == null ? "SUCCESS" : "ERROR").append("\n");
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- query: ").append(this.query).append("\n");
+        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append("\n");
         if (error != null) {
             // 探测失败
-            builder.append("┣ Error Message: ").append(error.getCause().getLocalizedMessage().replace("\n", "\n┃ ")).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(error.getCause().getLocalizedMessage().replace("\n", "\n┃ ")).append("\n");
         } else {
             // 探测成功
             if (Mapx.isNotEmpty(metadata)) {
-                builder.append("┣ Database Metadata:\n");
+                builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Database Metadata".wrap(Logx.Color.BLUE)).append(":\n");
                 for (var entry : metadata.entrySet()) {
-                    builder.append("┃ - ").append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+                    builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- ").append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
                 }
             }
-            builder.append("┣ Query Result: \n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Query Result".wrap(Logx.Color.BLUE)).append(":\n");
 
             // 打印第一行结果
             var title = new StringBuilder("|");
@@ -192,12 +195,12 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
                 title.append(Stringx.paddingBoth(entry.getKey(), length, ' ')).append("|");
                 content.append(Stringx.paddingBoth(entry.getValue(), length, ' ')).append("|");
             }
-            builder.append("┃ ").append(title).append("\n");
-            builder.append("┃ ").append(Stringx.paddingLeft("", title.length(), '-')).append("\n");
-            builder.append("┃ ").append(content).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append(title).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append(Stringx.paddingLeft("", title.length(), '-')).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append(content).append("\n");
         }
 
-        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
         if (error != null) {
             log.error(builder.toString());
         } else {
