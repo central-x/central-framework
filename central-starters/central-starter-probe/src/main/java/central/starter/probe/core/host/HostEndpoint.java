@@ -27,10 +27,12 @@ package central.starter.probe.core.host;
 import central.lang.Stringx;
 import central.starter.probe.core.Endpoint;
 import central.starter.probe.core.ProbeException;
+import central.util.Logx;
 import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Setter;
+import lombok.experimental.ExtensionMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanNameAware;
 
@@ -46,6 +48,7 @@ import java.net.UnknownHostException;
  * @since 2023/12/29
  */
 @Slf4j
+@ExtensionMethod(Logx.class)
 public class HostEndpoint implements Endpoint, BeanNameAware {
 
     @Setter
@@ -59,23 +62,40 @@ public class HostEndpoint implements Endpoint, BeanNameAware {
 
     @Override
     public void perform() throws ProbeException {
-        InetAddress[] addresses;
+        ProbeException error = null;
+
+        InetAddress[] addresses = new InetAddress[0];
         try {
-            addresses = InetAddress.getAllByName(host);
-        } catch (UnknownHostException error) {
-            throw new ProbeException(Stringx.format("解析域名[{}]失败", this.host));
+            addresses = InetAddress.getAllByName(this.host);
+        } catch (UnknownHostException cause) {
+            error = new ProbeException(Stringx.format("域名[{}]解析失败: {}", this.host, cause.getLocalizedMessage()), cause);
         }
 
-        var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━ Probe ━━━━━━━━━━━━━━━━━━━\n");
-        builder.append("┣ Endpoint: ").append(this.beanName).append("\n");
-        builder.append("┣ Type: ").append("Host\n");
-        builder.append("┣ Params: \n");
-        builder.append("┣ - host: ").append(this.host).append("\n");
-        builder.append("┣ Result: \n");
-        for (var address : addresses) {
-            builder.append("┣ - ").append((address instanceof Inet4Address) ? "IPv4: " : "").append((address instanceof Inet6Address) ? "IPv6: " : "").append(address.getHostAddress()).append("\n");
+        var builder = new StringBuilder("\n").append("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Probe Endpoint".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Endpoint".wrap(Logx.Color.BLUE)).append(": ").append(this.beanName).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Type".wrap(Logx.Color.BLUE)).append(": ").append("Host\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(": ").append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- host: ").append(this.host).append("\n");
+        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append("\n");
+        if (error != null) {
+            // 探测失败
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(error.getCause().getLocalizedMessage().replace("\n", "\n┃ ")).append("\n");
+        } else {
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Lookup Result".wrap(Logx.Color.BLUE)).append(":\n");
+            for (var address : addresses) {
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- ").append((address instanceof Inet4Address) ? "IPv4: " : "").append((address instanceof Inet6Address) ? "IPv6: " : "").append(address.getHostAddress()).append("\n");
+            }
         }
-        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        log.info(builder.toString());
+
+        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
+        if (error != null) {
+            log.error(builder.toString());
+        } else {
+            log.info(builder.toString());
+        }
+        if (error != null) {
+            throw error;
+        }
     }
 }
