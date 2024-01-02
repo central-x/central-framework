@@ -35,25 +35,78 @@ import org.junit.jupiter.api.Test;
  */
 public class TestSignerx {
     /**
-     * RSA
+     * RSA 256
      */
     @Test
     public void case1() throws Exception {
-        var keys = Signerx.RSA.generateKeyPair();
+        var keys = Signerx.RSA_256.generateKeyPair();
 
-        var signature = Signerx.RSA.sign(LICENSE, keys.getSignKey());
-        Assertions.assertTrue(Signerx.RSA.verify(LICENSE, keys.getVerifyKey(), signature));
+        var signature = Signerx.RSA_256.sign(LICENSE, keys.getSignKey());
+        Assertions.assertTrue(Signerx.RSA_256.verify(LICENSE, keys.getVerifyKey(), signature));
+    }
+    /**
+     * RSA 384
+     */
+    @Test
+    public void case2() throws Exception {
+        var keys = Signerx.RSA_384.generateKeyPair();
+
+        var signature = Signerx.RSA_384.sign(LICENSE, keys.getSignKey());
+        Assertions.assertTrue(Signerx.RSA_384.verify(LICENSE, keys.getVerifyKey(), signature));
+    }
+    /**
+     * RSA 512
+     */
+    @Test
+    public void case3() throws Exception {
+        var keys = Signerx.RSA_512.generateKeyPair();
+
+        var signature = Signerx.RSA_512.sign(LICENSE, keys.getSignKey());
+        Assertions.assertTrue(Signerx.RSA_512.verify(LICENSE, keys.getVerifyKey(), signature));
     }
 
     /**
      * SM2
      */
     @Test
-    public void case2() throws Exception {
+    public void case4() throws Exception {
         var keys = Signerx.SM2.generateKeyPair();
 
         var signature = Signerx.SM2.sign(LICENSE, keys.getSignKey());
         Assertions.assertTrue(Signerx.SM2.verify(LICENSE, keys.getVerifyKey(), signature));
+    }
+
+    /**
+     * ECDSA 256
+     */
+    @Test
+    public void case5() throws Exception {
+        var keys = Signerx.ECDSA_256.generateKeyPair();
+
+        var signature = Signerx.ECDSA_256.sign(LICENSE, keys.getSignKey());
+        Assertions.assertTrue(Signerx.ECDSA_256.verify(LICENSE, keys.getVerifyKey(), signature));
+    }
+
+    /**
+     * ECDSA 384
+     */
+    @Test
+    public void case6() throws Exception {
+        var keys = Signerx.ECDSA_384.generateKeyPair();
+
+        var signature = Signerx.ECDSA_384.sign(LICENSE, keys.getSignKey());
+        Assertions.assertTrue(Signerx.ECDSA_384.verify(LICENSE, keys.getVerifyKey(), signature));
+    }
+
+    /**
+     * ECDSA 512
+     */
+    @Test
+    public void case7() throws Exception {
+        var keys = Signerx.ECDSA_512.generateKeyPair();
+
+        var signature = Signerx.ECDSA_512.sign(LICENSE, keys.getSignKey());
+        Assertions.assertTrue(Signerx.ECDSA_512.verify(LICENSE, keys.getVerifyKey(), signature));
     }
 
 

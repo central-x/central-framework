@@ -40,23 +40,24 @@ public class Cipherx {
      * 不加密
      */
     public static final CipherImpl NONE = new NoneImpl();
+
     /**
-     * RSA
+     * RSA（非对称加密）
      */
     public static final CipherImpl RSA = new RSAImpl();
 
     /**
-     * DES
+     * DES（对称加密）
      */
     public static final CipherImpl DES = new DESImpl();
 
     /**
-     * 3DES
+     * 3DES（对称加密）
      */
     public static final CipherImpl DESede = new DESedeImpl();
 
     /**
-     * AES
+     * AES（对称加密）
      */
     public static final CipherImpl AES = new AESImpl();
 

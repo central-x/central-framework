@@ -25,62 +25,69 @@
 package central.security.signer.impl;
 
 import central.lang.Stringx;
+import central.security.signer.KeyPair;
 import central.security.signer.SignerImpl;
 import lombok.SneakyThrows;
+import org.bouncycastle.jce.ECNamedCurveTable;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import java.text.ParseException;
 import java.util.Base64;
 
 /**
- * RSA 签名算法
+ * ECDSA 签名算法
  *
  * @author Alan Yeh
  * @since 2024/01/03
  */
-public abstract class RSAImpl  implements SignerImpl {
+public abstract class ECDSAImpl implements SignerImpl {
     private static final int BUFFER_SIZE = 8 * 1024;
-    // 密钥长度在 2048 或 4096 是比较安全的
-    private static final int KEY_SIZE = 2048;
 
     @Override
     public abstract String getName();
 
-    @Override
-    @SneakyThrows
-    public central.security.signer.KeyPair generateKeyPair() {
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-        generator.initialize(KEY_SIZE);
-
-        java.security.KeyPair keyPair = generator.generateKeyPair();
-
-        return new central.security.signer.KeyPair(keyPair.getPrivate(), keyPair.getPublic());
+    static {
+        Security.addProvider(new BouncyCastleProvider());
     }
 
     @Override
-    @SneakyThrows
+    @SneakyThrows({NoSuchAlgorithmException.class, NoSuchProviderException.class, InvalidAlgorithmParameterException.class})
+    public KeyPair generateKeyPair() {
+        var keyPairGenerator = KeyPairGenerator.getInstance("EC", "BC");
+        // 可以选择其他的曲线参数，如 "secp256r1" 等
+        var spec = ECNamedCurveTable.getParameterSpec("secp256k1");
+        keyPairGenerator.initialize(spec, new SecureRandom());
+        var keyPair = keyPairGenerator.generateKeyPair();
+        return new KeyPair(keyPair.getPrivate(), keyPair.getPublic());
+    }
+
+    @Override
+    @SneakyThrows({NoSuchAlgorithmException.class, NoSuchProviderException.class, InvalidKeySpecException.class})
     public Key getSignKey(String keySpec) {
-        return KeyFactory.getInstance("RSA").generatePrivate(new X509EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
+        return KeyFactory.getInstance("EC", "BC").generatePrivate(new X509EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
     }
 
     @Override
-    @SneakyThrows
+    @SneakyThrows({NoSuchAlgorithmException.class, NoSuchProviderException.class, InvalidKeySpecException.class})
     public Key getVerifyKey(String keySpec) {
-        return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
+        return KeyFactory.getInstance("EC", "BC").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
     }
 
     @Override
-    @SneakyThrows
+    @SneakyThrows({NoSuchAlgorithmException.class, NoSuchProviderException.class, InvalidKeyException.class})
     public String sign(InputStream input, Key signKey) throws IOException, SignatureException {
         if (!(signKey instanceof PrivateKey)) {
             throw new SignatureException("Invalid signKey");
         }
 
         SecureRandom random = new SecureRandom();
-        Signature signer = Signature.getInstance(this.getName());
+        Signature signer = Signature.getInstance(this.getName(), "BC");
         signer.initSign((PrivateKey) signKey, random);
 
         try (BufferedInputStream buffered = new BufferedInputStream(input, BUFFER_SIZE)) {
@@ -95,13 +102,14 @@ public abstract class RSAImpl  implements SignerImpl {
     }
 
     @Override
-    @SneakyThrows
+    @SneakyThrows({NoSuchAlgorithmException.class, NoSuchProviderException.class, ParseException.class, InvalidKeyException.class})
     public boolean verify(InputStream input, Key verifyKey, String signature) throws IOException, SignatureException {
+
         if (!(verifyKey instanceof PublicKey)) {
             throw new SignatureException("Invalid verifyKey");
         }
 
-        Signature signer = Signature.getInstance(this.getName());
+        Signature signer = Signature.getInstance(this.getName(), "BC");
         signer.initVerify((PublicKey) verifyKey);
 
         try (BufferedInputStream buffered = new BufferedInputStream(input, BUFFER_SIZE)) {
