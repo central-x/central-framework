@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core.secure.none;
+package central.starter.probe.core.authorizer.none;
 
-import central.starter.probe.core.secure.Authorizer;
+import central.starter.probe.core.authorizer.Authorizer;
 
 /**
  * 无监权

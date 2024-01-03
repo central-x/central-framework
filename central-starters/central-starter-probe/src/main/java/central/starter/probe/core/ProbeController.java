@@ -26,7 +26,7 @@ package central.starter.probe.core;
 
 import central.starter.probe.ProbeProperties;
 import central.starter.probe.core.endpoint.Endpoint;
-import central.starter.probe.core.secure.Authorizer;
+import central.starter.probe.core.authorizer.Authorizer;
 import central.util.Mapx;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/__probe")
 public class ProbeController {
     @Setter(onMethod_ = @Autowired)
-    private Authorizer secure;
+    private Authorizer authorizer;
 
     @Setter(onMethod_ = @Autowired(required = false))
     private Map<String, Endpoint> endpoints;
@@ -71,7 +71,7 @@ public class ProbeController {
     public ResponseEntity<Map<String, String>> index(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) throws InterruptedException {
         // 验证保护器
         try {
-            secure.authorize(authorization);
+            authorizer.authorize(authorization);
         } catch (ProbeException cause) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", cause.getLocalizedMessage()));
         }

@@ -26,7 +26,7 @@ package central.starter.probe;
 
 import central.starter.probe.core.ProbeRegistrar;
 import central.starter.probe.core.endpoint.EndpointRegistrar;
-import central.starter.probe.core.secure.AuthorizerRegistrar;
+import central.starter.probe.core.authorizer.AuthorizerRegistrar;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

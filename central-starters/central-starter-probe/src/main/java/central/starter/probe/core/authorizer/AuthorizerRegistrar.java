@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core.secure;
+package central.starter.probe.core.authorizer;
 
 import central.starter.probe.ProbeProperties;
-import central.starter.probe.core.secure.none.NoneAuthorizer;
+import central.starter.probe.core.authorizer.none.NoneAuthorizer;
 import central.validation.Validatex;
 import lombok.Setter;
 import org.springframework.beans.InvalidPropertyException;

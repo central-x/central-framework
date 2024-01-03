@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core.secure.jwt;
+package central.starter.probe.core.authorizer.jwt;
 
 import central.bean.OptionalEnum;
 import central.security.Signerx;

@@ -22,11 +22,11 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core.secure.jwt;
+package central.starter.probe.core.authorizer.jwt;
 
 import central.lang.Assertx;
 import central.starter.probe.core.ProbeException;
-import central.starter.probe.core.secure.Authorizer;
+import central.starter.probe.core.authorizer.Authorizer;
 import central.util.Collectionx;
 import central.util.Mapx;
 import central.validation.Label;

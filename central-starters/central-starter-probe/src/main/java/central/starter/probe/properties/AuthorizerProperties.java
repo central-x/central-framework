@@ -24,7 +24,7 @@
 
 package central.starter.probe.properties;
 
-import central.starter.probe.core.secure.AuthorizerType;
+import central.starter.probe.core.authorizer.AuthorizerType;
 import lombok.Data;
 
 import java.util.Map;

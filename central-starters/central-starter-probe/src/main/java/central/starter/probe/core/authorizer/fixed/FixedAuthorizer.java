@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core.secure.fixed;
+package central.starter.probe.core.authorizer.fixed;
 
 import central.starter.probe.core.ProbeException;
-import central.starter.probe.core.secure.Authorizer;
+import central.starter.probe.core.authorizer.Authorizer;
 import central.validation.Label;
 import central.validation.Validatex;
 import jakarta.validation.constraints.NotBlank;

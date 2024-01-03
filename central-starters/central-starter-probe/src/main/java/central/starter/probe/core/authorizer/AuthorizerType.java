@@ -22,22 +22,37 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core.secure;
+package central.starter.probe.core.authorizer;
 
-import central.starter.probe.core.ProbeException;
+import central.bean.OptionalEnum;
+import central.starter.probe.core.authorizer.fixed.FixedAuthorizer;
+import central.starter.probe.core.authorizer.jwt.JwtAuthorizer;
+import central.starter.probe.core.authorizer.none.NoneAuthorizer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
- * 探针监权
+ * 探针保护类型
  *
  * @author Alan Yeh
  * @since 2024/01/03
  */
-public interface Authorizer {
+@Getter
+@AllArgsConstructor
+public enum AuthorizerType implements OptionalEnum<Class<? extends Authorizer>> {
     /**
-     * 验证授权
-     *
-     * @param authorization 授权凭证
-     * @throws ProbeException 授权失败异常
+     * JWT 监权
      */
-    void authorize(String authorization) throws ProbeException;
+    JWT("jwt", JwtAuthorizer.class),
+    /**
+     * 固定监权
+     */
+    FIXED("fixed", FixedAuthorizer.class),
+    /**
+     * 无监权
+     */
+    NONE("none", NoneAuthorizer.class);
+
+    private final String name;
+    private final Class<? extends Authorizer> value;
 }
