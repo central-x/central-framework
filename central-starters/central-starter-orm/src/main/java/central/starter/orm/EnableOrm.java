@@ -24,6 +24,7 @@
 
 package central.starter.orm;
 
+import central.starter.orm.core.MapperRegistrar;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -37,7 +38,7 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(StarterConfiguration.class)
+@Import({StarterConfiguration.class, MapperRegistrar.class})
 public @interface EnableOrm {
 
     /**

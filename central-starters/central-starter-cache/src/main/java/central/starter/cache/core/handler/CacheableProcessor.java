@@ -67,7 +67,7 @@ public class CacheableProcessor extends CacheProcessor {
     private static final ThreadLocal<Map<String, Set<String>>> ANALYSIS_HOLDER = ThreadLocal.withInitial(HashMap::new);
 
     @Override
-    public Object process(MethodInvocation target, ProcessChain<MethodInvocation, Object> chain) throws Throwable {
+    public Object process(MethodInvocation target, ProcessChain<MethodInvocation, Object> chain) throws Exception {
         var cacheable = target.getMethod().getDeclaredAnnotation(Cacheable.class);
 
         var analysisKey = Guidx.nextID();

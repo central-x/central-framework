@@ -62,7 +62,7 @@ public class CacheEvictProcessor extends CacheProcessor {
     }
 
     @Override
-    public Object process(MethodInvocation target, ProcessChain<MethodInvocation, Object> chain) throws Throwable {
+    public Object process(MethodInvocation target, ProcessChain<MethodInvocation, Object> chain) throws Exception {
         this.evict(true, target, null);
 
         var result = chain.process(target);

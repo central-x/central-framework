@@ -26,6 +26,7 @@ package central.starter.cache.core.handler;
 
 import central.pattern.chain.ProcessChain;
 import central.starter.cache.core.CacheProcessor;
+import lombok.SneakyThrows;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -41,7 +42,8 @@ import org.springframework.stereotype.Component;
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class InvokeProcessor extends CacheProcessor {
     @Override
-    public Object process(MethodInvocation target, ProcessChain<MethodInvocation, Object> chain) throws Throwable {
+    @SneakyThrows(Throwable.class)
+    public Object process(MethodInvocation target, ProcessChain<MethodInvocation, Object> chain) throws Exception {
         return target.proceed();
     }
 }
