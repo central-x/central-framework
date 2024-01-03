@@ -24,13 +24,18 @@
 
 package central.starter.probe.core;
 
+import central.starter.probe.core.endpoint.Endpoint;
+import central.starter.probe.core.secure.Authorizer;
+import central.util.Mapx;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,26 +46,39 @@ import java.util.Map;
  * @author Alan Yeh
  * @since 2023/12/27
  */
-@RestController
+@Controller
 @RequestMapping("/__probe")
 public class ProbeController {
     @Setter(onMethod_ = @Autowired)
+    private Authorizer secure;
+
+    @Setter(onMethod_ = @Autowired(required = false))
     private Map<String, Endpoint> endpoints;
 
     /**
      * 探针入口地址
      */
     @GetMapping
-    public ResponseEntity<Map<String, String>> index() {
+    public ResponseEntity<Map<String, String>> index(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        // 验证保护器
+        try {
+            secure.authorize(authorization);
+        } catch (ProbeException cause) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", cause.getLocalizedMessage()));
+        }
+
+        // 读取探针内容
         var result = new HashMap<String, String>();
         var status = HttpStatus.OK;
-        for (var endpointEntry : this.endpoints.entrySet()) {
-            try {
-                endpointEntry.getValue().perform();
-                result.put(endpointEntry.getKey(), "OK");
-            } catch (Exception error) {
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
-                result.put(endpointEntry.getKey(), error.getLocalizedMessage());
+        if (Mapx.isNotEmpty(this.endpoints)) {
+            for (var endpointEntry : this.endpoints.entrySet()) {
+                try {
+                    endpointEntry.getValue().perform();
+                    result.put(endpointEntry.getKey(), "OK");
+                } catch (Exception error) {
+                    status = HttpStatus.INTERNAL_SERVER_ERROR;
+                    result.put(endpointEntry.getKey(), error.getLocalizedMessage());
+                }
             }
         }
         return ResponseEntity.status(status).body(result);

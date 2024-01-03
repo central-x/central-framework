@@ -22,26 +22,22 @@
  * SOFTWARE.
  */
 
-package central.starter.probe;
+package central.starter.probe.core.secure;
 
-import central.starter.probe.core.ProbeRegistrar;
-import central.starter.probe.core.endpoint.EndpointRegistrar;
-import central.starter.probe.core.secure.AuthorizerRegistrar;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import central.starter.probe.core.ProbeException;
 
 /**
- * 配置
+ * 探针监权
  *
  * @author Alan Yeh
- * @since 2023/12/27
+ * @since 2024/01/03
  */
-@Configuration
-@Import({ProbeRegistrar.class, AuthorizerRegistrar.class, EndpointRegistrar.class})
-@EnableConfigurationProperties(ProbeProperties.class)
-@ConditionalOnProperty(name = "central.probe.enabled", havingValue = "true", matchIfMissing = true)
-public class StarterConfiguration {
-
+public interface Authorizer {
+    /**
+     * 验证授权
+     *
+     * @param authorization 授权凭证
+     * @throws ProbeException 授权失败异常
+     */
+    void authorize(String authorization) throws ProbeException;
 }

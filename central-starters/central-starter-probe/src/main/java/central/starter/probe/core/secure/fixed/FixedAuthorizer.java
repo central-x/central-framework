@@ -22,26 +22,42 @@
  * SOFTWARE.
  */
 
-package central.starter.probe;
+package central.starter.probe.core.secure.fixed;
 
-import central.starter.probe.core.ProbeRegistrar;
-import central.starter.probe.core.endpoint.EndpointRegistrar;
-import central.starter.probe.core.secure.AuthorizerRegistrar;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import central.starter.probe.core.ProbeException;
+import central.starter.probe.core.secure.Authorizer;
+import central.validation.Label;
+import central.validation.Validatex;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Setter;
+import org.springframework.beans.factory.InitializingBean;
+
+import java.util.Objects;
 
 /**
- * 配置
+ * 固定凭证监权
  *
  * @author Alan Yeh
- * @since 2023/12/27
+ * @since 2024/01/03
  */
-@Configuration
-@Import({ProbeRegistrar.class, AuthorizerRegistrar.class, EndpointRegistrar.class})
-@EnableConfigurationProperties(ProbeProperties.class)
-@ConditionalOnProperty(name = "central.probe.enabled", havingValue = "true", matchIfMissing = true)
-public class StarterConfiguration {
+public class FixedAuthorizer implements Authorizer, InitializingBean {
 
+    @Setter
+    @NotBlank
+    @Size(max = 1024)
+    @Label("凭证")
+    private String secret;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Validatex.Default().validate(this);
+    }
+
+    @Override
+    public void authorize(String authorization) {
+        if (!Objects.equals(this.secret, authorization)) {
+            throw new ProbeException("凭证认证失败");
+        }
+    }
 }

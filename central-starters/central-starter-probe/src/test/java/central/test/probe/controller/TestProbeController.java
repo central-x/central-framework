@@ -27,13 +27,19 @@ package central.test.probe.controller;
 import central.lang.reflect.TypeRef;
 import central.test.probe.TestApplication;
 import central.util.Jsonx;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.time.Duration;
+import java.util.Date;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -53,8 +59,16 @@ public class TestProbeController {
      */
     @Test
     public void case1(@Autowired MockMvc mvc) throws Exception {
+        var authorization = JWT.create()
+                .withClaim("bb", "test")
+                .withArrayClaim("aa", new Integer[]{234, 123})
+                .withExpiresAt(new Date(System.currentTimeMillis() - Duration.ofSeconds(10).toMillis()))
+                .sign(Algorithm.HMAC256("cZlUdvgXkIEViQagLnPkgvxRXenisjZP"));
+
+//        var authorization = "yVynEftqCbCbIeVMXqVsGsNGztnbvOwcZZYmsQFXckaNnkVwTKbXiqHdRhEdmWWO";
+
         var request = MockMvcRequestBuilders.get("/__probe")
-                .header("Authentication", "");
+                .header(HttpHeaders.AUTHORIZATION, authorization);
 
         var response = mvc.perform(request)
                 .andExpect(status().isOk())

@@ -22,26 +22,31 @@
  * SOFTWARE.
  */
 
-package central.starter.probe;
+package central.starter.probe.properties;
 
-import central.starter.probe.core.ProbeRegistrar;
-import central.starter.probe.core.endpoint.EndpointRegistrar;
-import central.starter.probe.core.secure.AuthorizerRegistrar;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import central.starter.probe.core.secure.AuthorizerType;
+import lombok.Data;
+
+import java.util.Map;
 
 /**
- * 配置
+ * 探针安全
  *
  * @author Alan Yeh
- * @since 2023/12/27
+ * @since 2024/01/03
  */
-@Configuration
-@Import({ProbeRegistrar.class, AuthorizerRegistrar.class, EndpointRegistrar.class})
-@EnableConfigurationProperties(ProbeProperties.class)
-@ConditionalOnProperty(name = "central.probe.enabled", havingValue = "true", matchIfMissing = true)
-public class StarterConfiguration {
-
+@Data
+public class AuthorizerProperties {
+    /**
+     * 是否启用探针安全控制
+     */
+    private boolean enabled;
+    /**
+     * 保护类型
+     */
+    private AuthorizerType type = AuthorizerType.NONE;
+    /**
+     * 声明
+     */
+    private Map<String, Object> params;
 }

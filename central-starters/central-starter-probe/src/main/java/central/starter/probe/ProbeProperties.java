@@ -25,6 +25,7 @@
 package central.starter.probe;
 
 import central.starter.probe.properties.EndpointProperties;
+import central.starter.probe.properties.AuthorizerProperties;
 import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -45,6 +46,15 @@ public class ProbeProperties {
      * 是否启用探针服务
      */
     private boolean enabled = true;
+    /**
+     * 每个探针的执行超时时间（毫秒）
+     */
+    private long timeout = 5000;
+    /**
+     * 探测监权
+     */
+    @Valid
+    private AuthorizerProperties authorizer = new AuthorizerProperties();
     /**
      * 探测端点配置
      */
