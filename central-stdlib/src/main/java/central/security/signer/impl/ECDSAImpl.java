@@ -28,8 +28,6 @@ import central.lang.Stringx;
 import central.security.signer.KeyPair;
 import central.security.signer.SignerImpl;
 import lombok.SneakyThrows;
-import org.bouncycastle.jce.ECNamedCurveTable;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -49,29 +47,26 @@ import java.util.Base64;
  */
 public abstract class ECDSAImpl implements SignerImpl {
     private static final int BUFFER_SIZE = 8 * 1024;
+    // 密钥长度在 256、384 或 521 是比较安全的
+    // 目前没有任何已知的攻击能够有效地破解大于或等于 256 位的 ECDSA 密钥
+    private static final int KEY_SIZE = 256;
 
     @Override
     public abstract String getName();
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
-
     @Override
-    @SneakyThrows({NoSuchAlgorithmException.class, NoSuchProviderException.class, InvalidAlgorithmParameterException.class})
+    @SneakyThrows(NoSuchAlgorithmException.class)
     public KeyPair generateKeyPair() {
-        var keyPairGenerator = KeyPairGenerator.getInstance("EC", "BC");
-        // 可以选择其他的曲线参数，如 "secp256r1" 等
-        var spec = ECNamedCurveTable.getParameterSpec("secp256k1");
-        keyPairGenerator.initialize(spec, new SecureRandom());
+        var keyPairGenerator = KeyPairGenerator.getInstance("EC");
+        keyPairGenerator.initialize(KEY_SIZE);
         var keyPair = keyPairGenerator.generateKeyPair();
         return new KeyPair(keyPair.getPrivate(), keyPair.getPublic());
     }
 
     @Override
-    @SneakyThrows({NoSuchAlgorithmException.class, NoSuchProviderException.class, InvalidKeySpecException.class})
+    @SneakyThrows({NoSuchAlgorithmException.class, InvalidKeySpecException.class})
     public Key getSignKey(String keySpec) {
-        return KeyFactory.getInstance("EC", "BC").generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
+        return KeyFactory.getInstance("EC").generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
     }
 
     @Override
@@ -81,14 +76,14 @@ public abstract class ECDSAImpl implements SignerImpl {
     }
 
     @Override
-    @SneakyThrows({NoSuchAlgorithmException.class, NoSuchProviderException.class, InvalidKeyException.class})
+    @SneakyThrows({NoSuchAlgorithmException.class, InvalidKeyException.class})
     public String sign(InputStream input, Key signKey) throws IOException, SignatureException {
         if (!(signKey instanceof PrivateKey)) {
             throw new SignatureException("Invalid signKey");
         }
 
         SecureRandom random = new SecureRandom();
-        Signature signer = Signature.getInstance(this.getName(), "BC");
+        Signature signer = Signature.getInstance(this.getName());
         signer.initSign((PrivateKey) signKey, random);
 
         try (BufferedInputStream buffered = new BufferedInputStream(input, BUFFER_SIZE)) {
@@ -103,14 +98,13 @@ public abstract class ECDSAImpl implements SignerImpl {
     }
 
     @Override
-    @SneakyThrows({NoSuchAlgorithmException.class, NoSuchProviderException.class, ParseException.class, InvalidKeyException.class})
+    @SneakyThrows({NoSuchAlgorithmException.class, ParseException.class, InvalidKeyException.class})
     public boolean verify(InputStream input, Key verifyKey, String signature) throws IOException, SignatureException {
-
         if (!(verifyKey instanceof PublicKey)) {
             throw new SignatureException("Invalid verifyKey");
         }
 
-        Signature signer = Signature.getInstance(this.getName(), "BC");
+        Signature signer = Signature.getInstance(this.getName());
         signer.initVerify((PublicKey) verifyKey);
 
         try (BufferedInputStream buffered = new BufferedInputStream(input, BUFFER_SIZE)) {
