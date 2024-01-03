@@ -40,7 +40,7 @@ public class AuthorizerProperties {
     /**
      * 是否启用探针安全控制
      */
-    private boolean enabled;
+    private boolean enabled = true;
     /**
      * 保护类型
      */

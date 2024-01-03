@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package central.starter.probe.core.endpoint.service;
+package central.starter.probe.core.endpoint.http;
 
 import central.lang.Stringx;
 import central.lang.reflect.TypeRef;
@@ -60,14 +60,14 @@ import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 /**
- * 服务探针
+ * Http 探针
  *
  * @author Alan Yeh
  * @since 2023/12/29
  */
 @Slf4j
 @ExtensionMethod(Logx.class)
-public class ServiceEndpoint implements Endpoint, BeanNameAware, InitializingBean {
+public class HttpEndpoint implements Endpoint, BeanNameAware, InitializingBean {
 
     @Setter
     private String beanName;

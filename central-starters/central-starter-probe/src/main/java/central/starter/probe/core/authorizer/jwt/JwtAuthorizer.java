@@ -25,6 +25,7 @@
 package central.starter.probe.core.authorizer.jwt;
 
 import central.lang.Assertx;
+import central.lang.Stringx;
 import central.starter.probe.core.ProbeException;
 import central.starter.probe.core.authorizer.Authorizer;
 import central.util.Collectionx;
@@ -111,7 +112,11 @@ public class JwtAuthorizer implements Authorizer, InitializingBean {
                     } else if (claim.getValue() instanceof Long value) {
                         builder.withClaim(claim.getKey(), value);
                     } else if (claim.getValue() instanceof String value) {
-                        builder.withClaim(claim.getKey(), value);
+                        if (Stringx.isNullOrBlank(value)){
+                            builder.withClaimPresence(claim.getKey());
+                        } else {
+                            builder.withClaim(claim.getKey(), value);
+                        }
                     } else {
                         builder.withClaim(claim.getKey(), Objects.toString(claim.getValue()));
                     }

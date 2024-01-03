@@ -16,7 +16,7 @@ central:
         secret: cZlUdvgXkIEViQagLnPkgvxRXenisjZP
         claims:
           aa: [123, 234]
-          bb: test
+          bb: null
     points:
 #      - name: redis
 #        type: redis
@@ -36,7 +36,7 @@ central:
 #        params:
 #          host: www.github.com
 #      - name: githubGraphql
-#        type: service
+#        type: http
 #        params:
 #          method: post
 #          url: https://api.github.com/graphql

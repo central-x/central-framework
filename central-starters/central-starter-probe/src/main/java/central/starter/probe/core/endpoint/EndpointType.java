@@ -28,7 +28,7 @@ import central.bean.OptionalEnum;
 import central.starter.probe.core.endpoint.datasource.DataSourceEndpoint;
 import central.starter.probe.core.endpoint.host.HostEndpoint;
 import central.starter.probe.core.endpoint.redis.RedisEndpoint;
-import central.starter.probe.core.endpoint.service.ServiceEndpoint;
+import central.starter.probe.core.endpoint.http.HttpEndpoint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -54,9 +54,9 @@ public enum EndpointType implements OptionalEnum<Class<? extends Endpoint>> {
      */
     REDIS("redis", RedisEndpoint.class),
     /**
-     * 服务探测
+     * Http 探测
      */
-    SERVICE("service", ServiceEndpoint.class);
+    HTTP("http", HttpEndpoint.class);
 
     private final String name;
     private final Class<? extends Endpoint> value;

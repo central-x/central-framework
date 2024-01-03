@@ -37,7 +37,7 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 /**
- * 加密算法类型
+ * 签名算法类型
  *
  * @author Alan Yeh
  * @since 2024/01/03
