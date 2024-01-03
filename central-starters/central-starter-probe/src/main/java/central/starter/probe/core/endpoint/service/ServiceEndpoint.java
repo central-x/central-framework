@@ -297,7 +297,7 @@ public class ServiceEndpoint implements Endpoint, BeanNameAware, InitializingBea
         if (error != null) {
             log.error(builder.toString());
         } else {
-            log.info(builder.toString());
+            log.debug(builder.toString());
         }
         if (error != null) {
             throw error;
