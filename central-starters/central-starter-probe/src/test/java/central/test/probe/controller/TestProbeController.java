@@ -74,8 +74,15 @@ public class TestProbeController {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
-
         var content = response.getContentAsString();
         var body = Jsonx.Default().deserialize(content, TypeRef.ofMap(String.class, Object.class));
+
+        var response2 = mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        var content2 = response.getContentAsString();
+        var body2 = Jsonx.Default().deserialize(content, TypeRef.ofMap(String.class, Object.class));
+
     }
 }

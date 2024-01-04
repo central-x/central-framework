@@ -22,48 +22,28 @@
  * SOFTWARE.
  */
 
-package central.starter.probe;
+package central.starter.probe.core.cache.none;
 
-import central.starter.probe.properties.CacheProperties;
-import central.starter.probe.properties.EndpointProperties;
-import central.starter.probe.properties.AuthorizerProperties;
-import jakarta.validation.Valid;
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import central.starter.probe.core.cache.Cache;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
- * 探针配置属性
+ * 不缓存
  *
  * @author Alan Yeh
- * @since 2023/12/27
+ * @since 2024/01/04
  */
-@Data
-@ConfigurationProperties(prefix = "central.probe")
-public class ProbeProperties {
-    /**
-     * 是否启用探针服务
-     */
-    private boolean enabled = true;
-    /**
-     * 每个探针的执行超时时间（毫秒）
-     */
-    private long timeout = 5000;
-    /**
-     * 缓存
-     */
-    @Valid
-    private CacheProperties cache = new CacheProperties();
-    /**
-     * 探测监权
-     */
-    @Valid
-    private AuthorizerProperties authorizer = new AuthorizerProperties();
-    /**
-     * 探测端点配置
-     */
-    @Valid
-    private List<EndpointProperties> points = new ArrayList<>();
+@ConditionalOnProperty(value = "central.probe.cache.enabled", havingValue = "false", matchIfMissing = true)
+public class NoneCache implements Cache {
+    @Override
+    public Map<String, String> get() {
+        return null;
+    }
+
+    @Override
+    public void put(Map<String, String> data) {
+
+    }
 }

@@ -25,6 +25,7 @@
 package central.starter.probe.core;
 
 import central.starter.probe.ProbeProperties;
+import central.starter.probe.core.cache.Cache;
 import central.starter.probe.core.endpoint.Endpoint;
 import central.starter.probe.core.authorizer.Authorizer;
 import central.util.Mapx;
@@ -58,6 +59,9 @@ public class ProbeController {
     @Setter(onMethod_ = @Autowired)
     private Authorizer authorizer;
 
+    @Setter(onMethod_ = @Autowired)
+    private Cache cache;
+
     @Setter(onMethod_ = @Autowired(required = false))
     private Map<String, Endpoint> endpoints;
 
@@ -74,6 +78,18 @@ public class ProbeController {
             authorizer.authorize(authorization);
         } catch (ProbeException cause) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", cause.getLocalizedMessage()));
+        }
+
+        // 获取缓存
+        // 如果缓存存在，则直接返回缓存
+        //
+        // 由于探针之间可能会产生依赖，如 gateway、identity、logging、multicast、storage 等都依赖着 provider，因此这些微服务的探针都会探测 provider 的探针，
+        // 从而导致 provider 的探测探测过于频繁。
+        // 为了解决这个问题，可以通过缓存来解决。provider 设置一个略低于自身探测频率的缓存失效时间，其它服务在调用的过程中，就不再真实探测，而是返回最近一次探测结果
+        // 这样就既保证了 provider 探测正常，也保证了其余依赖探测过高频率产生负面影响了
+        var cached = this.cache.get();
+        if (Mapx.isNotEmpty(cached)) {
+            return toEntity(cached);
         }
 
         // 读取探针内容
@@ -115,8 +131,13 @@ public class ProbeController {
             }
         }
 
+        this.cache.put(result);
+        return toEntity(result);
+    }
+
+    private ResponseEntity<Map<String, String>> toEntity(Map<String, String> data) {
         // 如果任务状态里面有不是 OK 的，则认为探测失败
-        var isOK = result.values().stream().filter(it -> !"OK".equals(it)).findAny().isEmpty();
-        return ResponseEntity.status(isOK ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        var isOK = data.values().stream().filter(it -> !"OK".equals(it)).findAny().isEmpty();
+        return ResponseEntity.status(isOK ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR).body(data);
     }
 }

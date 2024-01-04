@@ -22,48 +22,24 @@
  * SOFTWARE.
  */
 
-package central.starter.probe;
+package central.starter.probe.core.cache;
 
-import central.starter.probe.properties.CacheProperties;
-import central.starter.probe.properties.EndpointProperties;
-import central.starter.probe.properties.AuthorizerProperties;
-import jakarta.validation.Valid;
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
- * 探针配置属性
+ * 探针缓存
  *
  * @author Alan Yeh
- * @since 2023/12/27
+ * @since 2024/01/04
  */
-@Data
-@ConfigurationProperties(prefix = "central.probe")
-public class ProbeProperties {
+public interface Cache {
     /**
-     * 是否启用探针服务
+     * 获取缓存
      */
-    private boolean enabled = true;
+    Map<String, String> get();
+
     /**
-     * 每个探针的执行超时时间（毫秒）
+     * 保存数据到缓存
      */
-    private long timeout = 5000;
-    /**
-     * 缓存
-     */
-    @Valid
-    private CacheProperties cache = new CacheProperties();
-    /**
-     * 探测监权
-     */
-    @Valid
-    private AuthorizerProperties authorizer = new AuthorizerProperties();
-    /**
-     * 探测端点配置
-     */
-    @Valid
-    private List<EndpointProperties> points = new ArrayList<>();
+    void put(Map<String, String> data);
 }

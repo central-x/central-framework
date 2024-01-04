@@ -5,6 +5,9 @@ central:
   probe:
     enabled: true
     timeout: 2000
+    cache:
+      enabled: true
+      timeout: 9000
     authorizer:
       enabled: true
 #      type: fixed
