@@ -30,6 +30,8 @@ import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
 import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.ReactiveHttpProcessor;
+import central.util.Logx;
+import lombok.experimental.ExtensionMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -44,6 +46,7 @@ import java.util.Map;
  * @author Alan Yeh
  * @since 2022/07/14
  */
+@ExtensionMethod(Logx.class)
 public class LoggerProcessor implements HttpProcessor, ReactiveHttpProcessor {
 
     private final Logger logger;
@@ -66,45 +69,49 @@ public class LoggerProcessor implements HttpProcessor, ReactiveHttpProcessor {
     }
 
     private void log(HttpResponse response) {
-        var builder = new StringBuilder("\n┏━━━━━━━━━━━━━━━━━━ Request ━━━━━━━━━━━━━━━━━━━\n");
+        String lineSeparator = System.getProperty("line.separator", "\n");
+
+        var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Request".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
+
         // 打印 HttpRequest 日志
         var request = response.getRequest();
-        builder.append("┣ Method: ").append(request.getMethod().name()).append("\n");
-        builder.append("┣ URL: ").append(request.getUrl().toString()).append("\n");
-        builder.append("┣ Headers: (").append(request.getHeaders().size()).append(")\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Method".wrap(Logx.Color.BLUE)).append(": ").append(request.getMethod().name()).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("URL".wrap(Logx.Color.BLUE)).append(": ").append(request.getUrl().toString()).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Headers".wrap(Logx.Color.BLUE)).append(": (").append(request.getHeaders().size()).append(")").append(lineSeparator);
+
         for (Map.Entry<String, List<String>> header : request.getHeaders().entrySet()) {
             for (String value : header.getValue()) {
-                builder.append("┣ - ").append(header.getKey()).append(": ").append(value).append("\n");
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- ").append(header.getKey()).append(": ").append(value).append(lineSeparator);
             }
         }
-        builder.append("┣ Attributes: (").append(request.getAttributes().size()).append(")\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Attributes".wrap(Logx.Color.BLUE)).append(": (").append(request.getAttributes().size()).append(")").append(lineSeparator);
 
         for (Map.Entry<String, Object> attribute : request.getAttributes().entrySet()) {
-            builder.append("┣ - ").append(attribute.getKey()).append(": ").append(attribute.getValue()).append("\n");
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- ").append(attribute.getKey()).append(": ").append(attribute.getValue()).append(lineSeparator);
         }
 
         if (request.getBody() != null) {
-            builder.append("┣ Body: ").append(request.getBody().description()).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Body".wrap(Logx.Color.BLUE)).append(": ").append(request.getBody().description()).append(lineSeparator);
         } else {
-            builder.append("┣ Body: (NULL)\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Body".wrap(Logx.Color.BLUE)).append(": <null>").append(lineSeparator);
         }
-        builder.append("┣━━━━━━━━━━━━━━━━━━ Response ━━━━━━━━━━━━━━━━━━\n");
 
         // 打印 HttpResponse 日志
-        builder.append("┣ Duration: ").append(response.getTimestamp() - response.getRequest().getTimestamp()).append("ms\n");
-        builder.append("┣ Status: ").append(response.getStatus().value()).append("(").append(response.getStatus().name()).append(")\n");
-        builder.append("┣ Headers: (").append(response.getHeaders().size()).append(")\n");
+        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Response".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Duration".wrap(Logx.Color.BLUE)).append(": ").append(response.getTimestamp() - response.getRequest().getTimestamp()).append("ms").append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Status".wrap(Logx.Color.BLUE)).append(": ").append(response.getStatus().value()).append("(").append(response.getStatus().name()).append(")").append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Headers".wrap(Logx.Color.BLUE)).append(": (").append(response.getHeaders().size()).append(")").append(lineSeparator);
         for (Map.Entry<String, List<String>> header : response.getHeaders().entrySet()) {
             for (String value : header.getValue()) {
-                builder.append("┣ - ").append(header.getKey()).append(": ").append(value).append("\n");
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- ").append(header.getKey()).append(": ").append(value).append(lineSeparator);
             }
         }
         if (response.getBody() != null) {
-            builder.append("┣ Body: ").append(response.getBody().description()).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Body".wrap(Logx.Color.BLUE)).append(": ").append(response.getBody().description()).append(lineSeparator);
         } else {
-            builder.append("┣ Body: (NULL)\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Body".wrap(Logx.Color.BLUE)).append(": <null>").append(lineSeparator);
         }
-        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
 
         try {
             MDC.put("type", "network");

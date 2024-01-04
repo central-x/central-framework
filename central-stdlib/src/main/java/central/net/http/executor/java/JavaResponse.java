@@ -88,7 +88,7 @@ public class JavaResponse extends central.net.http.HttpResponse {
 
         @Override
         public String description() {
-            return "(binary)";
+            return "<binary>";
         }
 
         @Override

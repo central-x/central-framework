@@ -73,6 +73,6 @@ public class FileBody implements Body {
 
     @Override
     public String description() {
-        return Stringx.format("(File: {})", this.body.getName());
+        return Stringx.format("<File: {}>", this.body.getName());
     }
 }

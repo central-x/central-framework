@@ -158,34 +158,36 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
             error = new ProbeException(Stringx.format("数据库探测异常: " + cause.getLocalizedMessage()), cause);
         }
 
+        String lineSeparator = System.getProperty("line.separator", "\n");
+
         // 输出探测信息
-        var builder = new StringBuilder("\n").append("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Probe Endpoint".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Endpoint".wrap(Logx.Color.BLUE)).append(": ").append(this.beanName).append("\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Type".wrap(Logx.Color.BLUE)).append(": ").append("DataSource\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(": ").append("\n");
-        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- driver: ").append(this.driver).append("\n");
-        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- url: ").append(this.url).append("\n");
+        var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Probe Endpoint".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Endpoint".wrap(Logx.Color.BLUE)).append(": ").append(this.beanName).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Type".wrap(Logx.Color.BLUE)).append(": ").append("DataSource").append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(": ").append(lineSeparator);
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- driver: ").append(this.driver).append(lineSeparator);
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- url: ").append(this.url).append(lineSeparator);
         if (Stringx.isNotBlank(this.username)) {
-            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- username: ").append(this.username).append("\n");
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- username: ").append(this.username).append(lineSeparator);
         }
         if (Stringx.isNotBlank(this.password)) {
-            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append("\n");
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append(lineSeparator);
         }
-        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- query: ").append(this.query).append("\n");
-        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append("\n");
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- query: ").append(this.query).append(lineSeparator);
+        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append(lineSeparator);
         if (error != null) {
             // 探测失败
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(error.getCause().getLocalizedMessage().replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(error.getCause().getLocalizedMessage().replace("\n", lineSeparator + "┃ ".wrap(Logx.Color.WHITE))).append(lineSeparator);
         } else {
             // 探测成功
             if (Mapx.isNotEmpty(metadata)) {
-                builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Database Metadata".wrap(Logx.Color.BLUE)).append(":\n");
+                builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Database Metadata".wrap(Logx.Color.BLUE)).append(":").append(lineSeparator);
                 for (var entry : metadata.entrySet()) {
-                    builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- ").append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+                    builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- ").append(entry.getKey()).append(": ").append(entry.getValue()).append(lineSeparator);
                 }
             }
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Query Result".wrap(Logx.Color.BLUE)).append(":\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Query Result".wrap(Logx.Color.BLUE)).append(":").append(lineSeparator);
 
             // 打印第一行结果
             var title = new StringBuilder("|");
@@ -195,9 +197,9 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
                 title.append(Stringx.paddingBoth(entry.getKey(), length, ' ')).append("|");
                 content.append(Stringx.paddingBoth(entry.getValue(), length, ' ')).append("|");
             }
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append(title).append("\n");
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append(Stringx.paddingLeft("", title.length(), '-')).append("\n");
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append(content).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append(title).append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append(Stringx.paddingLeft("", title.length(), '-')).append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append(content).append(lineSeparator);
         }
         builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
 

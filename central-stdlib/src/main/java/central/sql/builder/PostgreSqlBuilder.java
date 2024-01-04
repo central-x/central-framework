@@ -74,7 +74,7 @@ public class PostgreSqlBuilder extends StandardSqlBuilder {
         // UPDATE ${TABLE} AS a set a.col = ? where id = ? and condition1 = ?
         Assertx.mustInstanceOf(meta.getType(), entity, SQLSyntaxErrorException::new, "entity 必须是 {} 类型", meta.getType().getName());
 
-        var sql = new StringBuilder(Stringx.format("UPDATE {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+        var sql = new StringBuilder(Stringx.format("UPDATE\n  {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
         var whereSql = new StringBuilder();
         var whereArgs = Listx.newArrayList();

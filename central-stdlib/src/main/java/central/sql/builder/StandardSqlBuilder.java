@@ -80,7 +80,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         conditions = Conditions.of(conditions);
         // SELECT COUNT( DISTINCT a.ID ) FROM ${TABLE} AS a
 
-        var sql = new StringBuilder(Stringx.format("SELECT COUNT( DISTINCT a.{} ) FROM {} AS a\n", processColumn(meta.getId().getColumnName(executor.getSource().getConversion())), processTable(meta.getTableName(executor.getSource().getConversion()))));
+        var sql = new StringBuilder(Stringx.format("SELECT\n  COUNT( DISTINCT a.{} )\nFROM\n  {} AS a\n", processColumn(meta.getId().getColumnName(executor.getSource().getConversion())), processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
 
         var whereSql = new StringBuilder();
@@ -136,7 +136,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
             colSql = columns.stream().map(it -> meta.getProperty(it.getProperty())).filter(Objects::nonNull)
                     .map(it -> "a." + this.processColumn(it.getColumnName(executor.getSource().getConversion()))).distinct().collect(Collectors.joining(", "));
         }
-        var sql = new StringBuilder(Stringx.format("SELECT {} FROM {} AS a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+        var sql = new StringBuilder(Stringx.format("SELECT\n  {}\nFROM\n  {} AS a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
         var whereSql = new StringBuilder();
 
@@ -147,7 +147,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         if (!aliases.isEmpty()) {
             if (aliases.size() > 1 || !"a".equals(Setx.getAnyOrNull(aliases))) {
                 // 存在关联查询，会有重复数据，需要去重
-                sql = new StringBuilder(Stringx.format("SELECT DISTINCT {} FROM {} AS a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+                sql = new StringBuilder(Stringx.format("SELECT\n  DISTINCT {}\nFROM\n  {} AS a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
             }
         }
 
@@ -201,8 +201,8 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         // INSERT INTO ${TABLE}(ID, COL1, COL2, ...) VALUES (?, ?, ?, ...)
 
         // 构建 Sql
-        var sql = new StringBuilder(Stringx.format("INSERT INTO {}(", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
-        var valueSql = new StringBuilder(") VALUES (");
+        var sql = new StringBuilder(Stringx.format("INSERT INTO {}\n  (", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+        var valueSql = new StringBuilder(")\nVALUES\n  (");
 
         var properties = meta.getProperties();
         for (var property : properties) {
@@ -238,7 +238,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         conditions = Conditions.of(conditions);
         // DELETE FROM ${TABLE} AS a
 
-        var sql = new StringBuilder(Stringx.format("DELETE FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+        var sql = new StringBuilder(Stringx.format("DELETE FROM\n  {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
 
         if (Collectionx.isNotEmpty(conditions)) {
@@ -284,7 +284,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         // UPDATE ${TABLE} AS a set a.col = ? where id = ? and condition1 = ?
         Assertx.mustInstanceOf(meta.getType(), entity, SQLSyntaxErrorException::new, "entity 必须是 {} 类型", meta.getType().getName());
 
-        var sql = new StringBuilder(Stringx.format("UPDATE {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+        var sql = new StringBuilder(Stringx.format("UPDATE\n  {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
         var whereSql = new StringBuilder();
         var whereArgs = Listx.newArrayList();

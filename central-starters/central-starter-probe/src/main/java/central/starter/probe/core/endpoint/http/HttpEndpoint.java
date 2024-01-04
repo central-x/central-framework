@@ -32,6 +32,7 @@ import central.net.http.HttpResponse;
 import central.net.http.HttpUrl;
 import central.net.http.body.extractor.StringExtractor;
 import central.net.http.executor.java.JavaExecutor;
+import central.net.http.processor.impl.LoggerProcessor;
 import central.starter.probe.core.endpoint.Endpoint;
 import central.starter.probe.core.ProbeException;
 import central.util.*;
@@ -156,6 +157,7 @@ public class HttpEndpoint implements Endpoint, BeanNameAware, InitializingBean {
 
         // 构建 Client
         this.client = new HttpClient(JavaExecutor.builder().connectTimeout(this.timeout).build());
+        this.client.addProcessor(new LoggerProcessor());
     }
 
     @Override
@@ -243,53 +245,54 @@ public class HttpEndpoint implements Endpoint, BeanNameAware, InitializingBean {
             }
         } while (false);
 
+        String lineSeparator = System.getProperty("line.separator", "\n");
 
-        var builder = new StringBuilder("\n").append("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Probe Endpoint".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Endpoint".wrap(Logx.Color.BLUE)).append(": ").append(this.beanName).append("\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Type".wrap(Logx.Color.BLUE)).append(": ").append("DataSource\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(": ").append("\n");
-        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- method: ").append(request.getMethod().name()).append("\n");
-        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- url: ").append(this.url).append("\n");
-        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- timeout: ").append(this.timeout).append("\n");
+        var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Probe Endpoint".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Endpoint".wrap(Logx.Color.BLUE)).append(": ").append(this.beanName).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Type".wrap(Logx.Color.BLUE)).append(": ").append("Http").append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(": ").append(lineSeparator);
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- method: ").append(request.getMethod().name()).append(lineSeparator);
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- url: ").append(this.url).append(lineSeparator);
+        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- timeout: ").append(this.timeout).append(lineSeparator);
         if (Mapx.isNotEmpty(this.headers)) {
-            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- headers:\n");
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- headers:").append(lineSeparator);
             for (var index : this.headers.entrySet()) {
-                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - ").append(index.getValue().get("name")).append(": ").append(index.getValue().get("value")).append("\n");
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - ").append(index.getValue().get("name")).append(": ").append(index.getValue().get("value")).append(lineSeparator);
             }
         }
         if (Mapx.isNotEmpty(this.expects)) {
-            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- expects:\n");
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- expects:").append(lineSeparator);
             if (Listx.isNotEmpty(this.expectedStatus)) {
-                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - status: [").append(this.expectedStatus.stream().map(Object::toString).collect(Collectors.joining(", "))).append("]\n");
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - status: [").append(this.expectedStatus.stream().map(Object::toString).collect(Collectors.joining(", "))).append("]").append(lineSeparator);
             }
             if (Stringx.isNotBlank(this.expectedContent)) {
-                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - content: ").append(this.expectedContent.replace("\n", "").replace("\r\n", "")).append("\n");
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - content: ").append(this.expectedContent.replace("\n", "").replace("\r\n", "")).append(lineSeparator);
             }
         }
-        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append("\n");
+        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append(lineSeparator);
         if (error != null) {
             // 探测失败
             var errorMessage = error.getLocalizedMessage();
             if (error.getCause() != null) {
                 errorMessage = error.getCause().getLocalizedMessage();
             }
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(errorMessage.replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(errorMessage.replace("\n", lineSeparator + "┃ ".wrap(Logx.Color.WHITE))).append(lineSeparator);
         }
         if (response != null) {
             // 打印响应
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Response".wrap(Logx.Color.BLUE)).append(": \n");
-            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- status: ").append(response.getStatus().value()).append("(").append(response.getStatus().getReasonPhrase()).append(")").append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Response".wrap(Logx.Color.BLUE)).append(": ").append(lineSeparator);
+            builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- status: ").append(response.getStatus().value()).append("(").append(response.getStatus().getReasonPhrase()).append(")").append(lineSeparator);
             if (Mapx.isNotEmpty(response.getHeaders())) {
-                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- headers: \n");
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- headers:").append(lineSeparator);
                 for (var entry : response.getHeaders().entrySet()) {
                     for (var value : entry.getValue()) {
-                        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - ").append(entry.getKey()).append(": ").append(value).append("\n");
+                        builder.append("┃ ".wrap(Logx.Color.WHITE)).append("  - ").append(entry.getKey()).append(": ").append(value).append(lineSeparator);
                     }
                 }
             }
             if (Stringx.isNotBlank(content)) {
-                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- content: \n").append("┃ ".wrap(Logx.Color.WHITE)).append(content.replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append("\n");
+                builder.append("┃ ".wrap(Logx.Color.WHITE)).append("- content:").append(lineSeparator).append("┃ ".wrap(Logx.Color.WHITE)).append(content.replace("\n", lineSeparator + "┃ ".wrap(Logx.Color.WHITE))).append(lineSeparator);
             }
         }
         builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));

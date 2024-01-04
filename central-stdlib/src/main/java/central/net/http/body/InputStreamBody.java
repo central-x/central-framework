@@ -64,7 +64,7 @@ public class InputStreamBody implements Body {
 
     @Override
     public String description() {
-        return "(InputStream)";
+        return "<InputStream>";
     }
 
     @Override

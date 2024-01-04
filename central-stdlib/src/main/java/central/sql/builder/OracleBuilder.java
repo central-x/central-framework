@@ -71,7 +71,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         conditions = Conditions.of(conditions);
         // SELECT COUNT( DISTINCT a.ID ) FROM ${TABLE} a
 
-        var sql = new StringBuilder(Stringx.format("SELECT COUNT( DISTINCT a.{} ) FROM {} a\n", processColumn(meta.getId().getColumnName(executor.getSource().getConversion()))));
+        var sql = new StringBuilder(Stringx.format("SELECT\n  COUNT( DISTINCT a.{} )\nFROM\n  {} a\n", processColumn(meta.getId().getColumnName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
 
         var whereSql = new StringBuilder();
@@ -130,7 +130,7 @@ public class OracleBuilder extends StandardSqlBuilder {
             colSql = columns.stream().map(it -> meta.getProperty(it.getProperty())).filter(Objects::nonNull)
                     .map(it -> "a." + this.processColumn(it.getColumnName(executor.getSource().getConversion()))).distinct().collect(Collectors.joining(", "));
         }
-        var sql = new StringBuilder(Stringx.format("SELECT {} FROM {} a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+        var sql = new StringBuilder(Stringx.format("SELECT\n  {}\nFROM\n  {} a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
         var whereSql = new StringBuilder();
 
@@ -141,7 +141,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         if (aliases.size() >= 1) {
             if (aliases.size() > 1 || !"a".equals(Setx.getAnyOrNull(aliases))) {
                 // 存在关联查询，会有重复数据，需要去重
-                sql = new StringBuilder(Stringx.format("SELECT DISTINCT {} FROM {} a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+                sql = new StringBuilder(Stringx.format("SELECT\n  DISTINCT {}\nFROM\n  {} a\n", colSql, this.processTable(meta.getTableName(executor.getSource().getConversion()))));
             }
         }
 
@@ -190,7 +190,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         conditions = Conditions.of(conditions);
         // DELETE FROM ${TABLE} a WHERE
 
-        var sql = new StringBuilder(Stringx.format("DELETE FROM {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+        var sql = new StringBuilder(Stringx.format("DELETE FROM\n  {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = new LinkedList<>();
 
         if (Collectionx.isNotEmpty(conditions)) {
@@ -223,7 +223,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         // UPDATE ${TABLE} a set a.col = ? where id = ? and condition1 = ?
         Assertx.mustInstanceOf(meta.getType(), entity, SQLSyntaxErrorException::new, "entity 必须是 {} 类型", meta.getType().getName());
 
-        var sql = new StringBuilder(Stringx.format("UPDATE {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+        var sql = new StringBuilder(Stringx.format("UPDATE\n  {} a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
         var whereSql = new StringBuilder();
         var whereArgs = Listx.newArrayList();

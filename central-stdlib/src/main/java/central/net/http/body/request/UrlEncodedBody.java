@@ -190,6 +190,6 @@ public class UrlEncodedBody implements Body {
 
     @Override
     public String description() {
-        return Stringx.format("(UrlEncodedBody: {})", getContent());
+        return Stringx.format("<UrlEncodedBody: {}>", getContent());
     }
 }

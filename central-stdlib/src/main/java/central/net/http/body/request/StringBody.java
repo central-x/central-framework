@@ -72,6 +72,6 @@ public class StringBody implements Body {
 
     @Override
     public String description() {
-        return Stringx.format("(String: {})", new String(this.body, StandardCharsets.UTF_8));
+        return Stringx.format("<String: {}>", new String(this.body, StandardCharsets.UTF_8));
     }
 }

@@ -29,6 +29,8 @@ import central.sql.SqlContext;
 import central.sql.SqlInterceptor;
 import central.lang.Arrayx;
 import central.util.Listx;
+import central.util.Logx;
+import lombok.experimental.ExtensionMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +47,7 @@ import java.util.stream.Collectors;
  * @author Alan Yeh
  * @since 2022/08/05
  */
+@ExtensionMethod(Logx.class)
 public class LogInterceptor implements SqlInterceptor {
     private final Logger logger;
 
@@ -67,15 +70,15 @@ public class LogInterceptor implements SqlInterceptor {
         long begin = context.get(LogInterceptor.class.getName() + ".begin");
 
         String lineSeparator = System.getProperty("line.separator", "\n");
-        var log = new StringBuilder(lineSeparator).append("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").append(lineSeparator);
-        log.append("┣ SQL: ").append(Arrayx.asStream(context.getSql().split("[\n]")).collect(Collectors.joining(lineSeparator + "┃      "))).append(lineSeparator);
+
+        var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Sql".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("SQL".wrap(Logx.Color.BLUE)).append("    : ").append(Arrayx.asStream(context.getSql().split("[\n]")).collect(Collectors.joining(lineSeparator + "┃".wrap(Logx.Color.WHITE) + "          "))).append(lineSeparator);
         if (Listx.isNotEmpty(context.getArgs())) {
-            log.append("┣ 参数: ").append(this.formatArgs(context.getArgs(), lineSeparator)).append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(" : ").append(this.formatArgs(context.getArgs(), lineSeparator)).append(lineSeparator);
         }
-        log.append("┣ 耗时: ").append(end - begin).append("ms").append(lineSeparator);
-        log.append("┣ 结果: ").append(context.getResult()).append(lineSeparator);
-        log.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        logger.info(log.toString());
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Cost".wrap(Logx.Color.BLUE)).append("   : ").append(end - begin).append("ms").append(lineSeparator);
+        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
+        logger.info(builder.toString());
     }
 
     @Override
@@ -84,22 +87,23 @@ public class LogInterceptor implements SqlInterceptor {
         long begin = context.get(LogInterceptor.class.getName() + ".begin");
 
         String lineSeparator = System.getProperty("line.separator", "\n");
-        var log = new StringBuilder(lineSeparator).append("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").append(lineSeparator);
-        log.append("┣ SQL: ").append(Arrayx.asStream(context.getSql().split("[\n]")).collect(Collectors.joining(lineSeparator + "┃      "))).append(lineSeparator);
+
+        var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Sql".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("SQL".wrap(Logx.Color.BLUE)).append("    : ").append(Arrayx.asStream(context.getSql().split("[\n]")).collect(Collectors.joining(lineSeparator + "┃".wrap(Logx.Color.WHITE) + "          "))).append(lineSeparator);
         if (Listx.isNotEmpty(context.getArgs())) {
-            log.append("┣ 参数: ").append(this.formatArgs(context.getArgs(), lineSeparator)).append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(" : ").append(this.formatArgs(context.getArgs(), lineSeparator)).append(lineSeparator);
         }
-        log.append("┣ 耗时: ").append(end - begin).append("ms").append(lineSeparator);
-        log.append("┣ 异常: ");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Cost".wrap(Logx.Color.BLUE)).append("   : ").append(end - begin).append("ms").append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error".wrap(Logx.Color.BLUE)).append("  : ").append(context.getResult()).append(lineSeparator);
 
         StringWriter writer = new StringWriter();
         throwable.printStackTrace(new PrintWriter(writer));
         Arrayx.asStream(writer.toString().split("[\n]"))
-                .map(it -> it.replaceFirst("[\t]", lineSeparator + "┃      "))
-                .forEach(log::append);
+                .map(it -> it.replaceFirst("[\t]", lineSeparator + "┃".wrap(Logx.Color.WHITE) + "      "))
+                .forEach(builder::append);
 
-        log.append(lineSeparator).append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        logger.error(log.toString());
+        builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
+        logger.info(builder.toString());
     }
 
     private String formatArgs(List<List<Object>> args, String lineSeparator) {
@@ -111,7 +115,7 @@ public class LogInterceptor implements SqlInterceptor {
             var builder = new StringBuilder();
             for (var it : args) {
                 if (!builder.isEmpty()){
-                    builder.append(lineSeparator).append("┃      ");
+                    builder.append(lineSeparator).append("┃".wrap(Logx.Color.WHITE)).append("      ");
                 }
                 builder.append(this.formatArgs(it));
             }
@@ -130,7 +134,7 @@ public class LogInterceptor implements SqlInterceptor {
             }
 
             if (arg == null) {
-                builder.append("null");
+                builder.append("<null>");
             } else if (arg instanceof Number) {
                 builder.append(arg);
             } else if (arg instanceof Timestamp timestamp) {
@@ -139,14 +143,16 @@ public class LogInterceptor implements SqlInterceptor {
                 builder.append(optional.getValue());
             } else if (arg instanceof String string) {
                 if (string.isEmpty()) {
-                    builder.append("(empty)");
+                    builder.append("<empty>");
                 } else if (string.isBlank()) {
-                    builder.append("(blank)");
+                    builder.append("<blank>");
                 } else if (string.length() <= 64) {
                     builder.append(string);
                 } else {
                     builder.append(string, 0, 10).append("...");
                 }
+            } else if (arg instanceof byte[]){
+                builder.append("<bytes>");
             } else {
                 builder.append(arg);
             }

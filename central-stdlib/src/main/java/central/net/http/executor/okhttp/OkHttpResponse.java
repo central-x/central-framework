@@ -93,7 +93,7 @@ public class OkHttpResponse extends HttpResponse {
 
         @Override
         public String description() {
-            return "(binary)";
+            return "<binary>";
         }
 
         @Override

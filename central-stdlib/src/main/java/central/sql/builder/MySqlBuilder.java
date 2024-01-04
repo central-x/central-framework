@@ -83,7 +83,7 @@ public class MySqlBuilder extends StandardSqlBuilder {
         conditions = Conditions.of(conditions);
         // DELETE a FROM ${TABLE} AS a
 
-        var sql = new StringBuilder(Stringx.format("DELETE a FROM {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
+        var sql = new StringBuilder(Stringx.format("DELETE a FROM\n  {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
         var args = Listx.newArrayList();
 
         if (Collectionx.isNotEmpty(conditions)) {

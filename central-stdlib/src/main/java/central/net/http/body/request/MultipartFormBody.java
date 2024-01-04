@@ -184,7 +184,7 @@ public class MultipartFormBody implements Body {
             }
             builder.append(part.description());
         }
-        return Stringx.format("(MultipartForm: {})", builder);
+        return Stringx.format("<MultipartForm: {}>", builder);
     }
 
     @Override

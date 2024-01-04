@@ -71,6 +71,6 @@ public class RawBody implements Body {
 
     @Override
     public String description() {
-        return Stringx.format("(Raw: binary)");
+        return Stringx.format("<Raw: binary>");
     }
 }

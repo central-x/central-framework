@@ -24,11 +24,13 @@
 
 package central.starter.webmvc.interceptor;
 
+import central.util.Logx;
 import central.web.XForwardedHeaders;
 import central.lang.Stringx;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.experimental.ExtensionMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
@@ -47,6 +49,7 @@ import java.util.Date;
  * @since 2022/07/16
  */
 @Slf4j
+@ExtensionMethod(Logx.class)
 public class ActionReportInterceptor implements HandlerInterceptor {
 
     private static final String ACCEPT_TIME = ActionReportInterceptor.class.getName() + ".AcceptTime";
@@ -82,21 +85,25 @@ public class ActionReportInterceptor implements HandlerInterceptor {
                 MDC.remove("source");
             }
 
-            StringBuilder builder = new StringBuilder("---------------------------------------------------------------------------------\r\n");
-            builder.append("Tenant          : ").append(request.getHeader(XForwardedHeaders.TENANT)).append("\r\n");
-            String tenantPath = request.getHeader(XForwardedHeaders.PATH);
-            if (Stringx.isNotBlank(tenantPath)) {
-                builder.append("Tenant Path     : ").append(tenantPath).append("\r\n");
+            String lineSeparator = System.getProperty("line.separator", "\n");
+
+            var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Request Handler".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Tenant".wrap(Logx.Color.BLUE)).append("          : ").append(request.getHeader(XForwardedHeaders.TENANT)).append(lineSeparator);
+
+            String prefixPath = request.getHeader(XForwardedHeaders.PATH);
+            if (Stringx.isNotBlank(prefixPath)) {
+                builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Prefix Path".wrap(Logx.Color.BLUE)).append("     : ").append(prefixPath).append(lineSeparator);
             }
-            builder.append("Action          : ").append(request.getMethod()).append(" ").append(request.getRequestURI()).append("\r\n");
-            builder.append("Controller      : ").append(method.getBeanType().getName()).append(".(").append(method.getBeanType().getSimpleName()).append(".java:1)\r\n");
-            builder.append("Method          : ").append(method.getMethod().getName()).append("\r\n");
-            builder.append("Response Status : ").append(response.getStatus()).append("(").append(HttpStatus.valueOf(response.getStatus()).name()).append(")\r\n");
-            builder.append("AcceptTime      : ").append(sdf.get().format(acceptTime)).append("\r\n");
-            builder.append("Cost            : ").append(execTime).append("ms\r\n");
+
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Action".wrap(Logx.Color.BLUE)).append("          : ").append(request.getMethod()).append(" ").append(request.getRequestURI()).append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Handler".wrap(Logx.Color.BLUE)).append("         : ").append(method.getBeanType().getName()).append("#").append(method.getMethod().getName()).append("(").append(method.getBeanType().getSimpleName()).append(".java:1)").append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Response Status".wrap(Logx.Color.BLUE)).append(" : ").append(response.getStatus()).append("(").append(HttpStatus.valueOf(response.getStatus()).name()).append(")").append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Accept Time".wrap(Logx.Color.BLUE)).append("     : ").append(sdf.get().format(acceptTime)).append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Cost".wrap(Logx.Color.BLUE)).append("            : ").append(execTime).append("ms").append(lineSeparator);;
 
             if (request.getParameterNames() != null && request.getParameterNames().hasMoreElements()) {
-                builder.append("Parameter       : ");
+                builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Parameter".wrap(Logx.Color.BLUE)).append("       : ");
+
                 var names = request.getParameterNames();
                 while (names.hasMoreElements()){
                     String name = names.nextElement();
@@ -108,18 +115,18 @@ public class ActionReportInterceptor implements HandlerInterceptor {
                     }
                     builder.append("  ");
                 }
-                builder.append("\r\n");
+                builder.append(lineSeparator);
             }
 
             if (ex != null) {
-                builder.append("Exception   : ").append("\r\n");
+                builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Exception".wrap(Logx.Color.BLUE)).append("   : ").append(lineSeparator);
 
                 StringWriter writer = new StringWriter();
                 ex.printStackTrace(new PrintWriter(writer));
-                builder.append(writer.toString()).append("\r\n");
+                builder.append(writer).append(lineSeparator);
             }
+            builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
 
-            builder.append("---------------------------------------------------------------------------------");
             log.info(builder.toString());
         }
     }

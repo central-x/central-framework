@@ -119,30 +119,31 @@ public class RedisEndpoint implements Endpoint, InitializingBean, BeanNameAware 
             error = new ProbeException("Redis 探测异常: " + cause.getLocalizedMessage(), cause);
         }
 
+        String lineSeparator = System.getProperty("line.separator", "\n");
 
-        var builder = new StringBuilder("\n").append("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Probe Endpoint".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Endpoint".wrap(Logx.Color.BLUE)).append(": ").append(this.beanName).append("\n");
+        var builder = new StringBuilder("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Probe Endpoint".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Endpoint".wrap(Logx.Color.BLUE)).append(": ").append(this.beanName).append(lineSeparator);
         builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Type".wrap(Logx.Color.BLUE)).append(": ").append("Redis\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(": ").append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Params".wrap(Logx.Color.BLUE)).append(": ").append(lineSeparator);
 
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- host: ").append(this.host).append("\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- port: ").append(this.port).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- host: ").append(this.host).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- port: ").append(this.port).append(lineSeparator);
 
         if (Stringx.isNotBlank(this.password)) {
             if (Stringx.isNotBlank(this.username)) {
-                builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- username: ").append(this.username).append("\n");
+                builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- username: ").append(this.username).append(lineSeparator);
             }
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- password: ").append(Stringx.paddingLeft("", this.password.length(), '*')).append(lineSeparator);
         }
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- query: PING").append("\n");
-        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append("\n");
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append("\n");
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("- query: PING").append(lineSeparator);
+        builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Probe Status".wrap(Logx.Color.BLUE)).append(": ").append(error == null ? "SUCCESS".wrap(Logx.Color.GREEN) : "ERROR".wrap(Logx.Color.RED)).append(lineSeparator);
         if (error != null) {
             // 探测失败
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(error.getCause().getLocalizedMessage().replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Error Message".wrap(Logx.Color.BLUE)).append(": ").append(error.getCause().getLocalizedMessage().replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append(lineSeparator);
         } else {
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Server Info".wrap(Logx.Color.BLUE)).append(": \n").append("┃ ".wrap(Logx.Color.WHITE)).append(info.trim().replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append("\n");
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Query Result".wrap(Logx.Color.BLUE)).append(": ").append(response).append("\n");
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Server Info".wrap(Logx.Color.BLUE)).append(": \n").append("┃ ".wrap(Logx.Color.WHITE)).append(info.trim().replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Query Result".wrap(Logx.Color.BLUE)).append(": ").append(response).append(lineSeparator);
         }
         builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
 

@@ -95,6 +95,6 @@ public class JsonBody implements Body {
 
     @Override
     public String description() {
-        return Stringx.format("(Json: {})", Jsonx.Default().serialize(this.json));
+        return Stringx.format("<Json: {}>", Jsonx.Default().serialize(this.json));
     }
 }

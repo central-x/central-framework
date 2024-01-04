@@ -69,6 +69,6 @@ public class ByteArrayBody implements Body {
 
     @Override
     public String description() {
-        return "(ByteArray: binary)";
+        return "<ByteArray: binary>";
     }
 }
