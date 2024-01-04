@@ -26,6 +26,7 @@ package central.starter.probe.core.authorizer;
 
 import central.starter.probe.ProbeProperties;
 import central.starter.probe.core.authorizer.none.NoneAuthorizer;
+import central.util.Mapx;
 import central.validation.Validatex;
 import lombok.Setter;
 import org.springframework.beans.InvalidPropertyException;
@@ -76,7 +77,9 @@ public class AuthorizerRegistrar implements ImportBeanDefinitionRegistrar, Envir
             var definition = new GenericBeanDefinition();
             definition.setBeanClass(properties.getAuthorizer().getType().getValue());
             definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
-            definition.getPropertyValues().addPropertyValues(properties.getAuthorizer().getParams());
+            if (Mapx.isNotEmpty(properties.getAuthorizer().getParams())) {
+                definition.getPropertyValues().addPropertyValues(properties.getAuthorizer().getParams());
+            }
             registry.registerBeanDefinition(importBeanNameGenerator.generateBeanName(definition, registry), definition);
         }
     }

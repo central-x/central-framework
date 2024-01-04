@@ -26,6 +26,7 @@ package central.starter.probe.core.endpoint;
 
 import central.starter.probe.ProbeProperties;
 import central.util.Listx;
+import central.util.Mapx;
 import central.validation.Validatex;
 import lombok.Setter;
 import org.springframework.beans.InvalidPropertyException;
@@ -74,7 +75,9 @@ public class EndpointRegistrar implements ImportBeanDefinitionRegistrar, Environ
             var definition = new GenericBeanDefinition();
             definition.setBeanClass(point.getType().getValue());
             definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE | AbstractBeanDefinition.AUTOWIRE_BY_NAME);
-            definition.getPropertyValues().addPropertyValues(point.getParams());
+            if (Mapx.isNotEmpty(point.getParams())) {
+                definition.getPropertyValues().addPropertyValues(point.getParams());
+            }
             registry.registerBeanDefinition(point.getName(), definition);
         }
     }
