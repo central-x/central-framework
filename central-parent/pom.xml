@@ -63,6 +63,8 @@
         <jakarta-annotation-api.version>2.1.1</jakarta-annotation-api.version>
         <jakarta-validation-api.version>3.0.2</jakarta-validation-api.version>
         <jakarta-persistence-api.version>3.1.0</jakarta-persistence-api.version>
+        <jakarta-el-api.version>5.0.1</jakarta-el-api.version>
+        <jakarta-el.version>5.0.0-M1</jakarta-el.version>
     </properties>
 
     <!-- 依赖版本管理 -->
@@ -164,6 +166,16 @@
                 <groupId>jakarta.persistence</groupId>
                 <artifactId>jakarta.persistence-api</artifactId>
                 <version>${jakarta-persistence-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.el</groupId>
+                <artifactId>jakarta.el-api</artifactId>
+                <version>${jakarta-el-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>jakarta.el</artifactId>
+                <version>${jakarta-el.version}</version>
             </dependency>
 
             <!-- 基础工具包 -->
@@ -309,6 +321,16 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+        </dependency>
+
+        <!-- 参数校验 -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
 
         <!-- Unit test -->
