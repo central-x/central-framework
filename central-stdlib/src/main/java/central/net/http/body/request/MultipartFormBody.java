@@ -179,7 +179,7 @@ public class MultipartFormBody implements Body {
     public String description() {
         StringBuilder builder = new StringBuilder();
         for (MultipartFormPart part : this.body) {
-            if (builder.length() > 0) {
+            if (!builder.isEmpty()) {
                 builder.append("&");
             }
             builder.append(part.description());

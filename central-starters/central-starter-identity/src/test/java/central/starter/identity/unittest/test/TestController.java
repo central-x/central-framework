@@ -26,7 +26,7 @@ package central.starter.identity.unittest.test;
 
 import central.net.http.exception.ForbiddenHttpException;
 import central.net.http.exception.UnauthorizedHttpException;
-import central.net.http.executor.java.JavaExecutor;
+import central.net.http.executor.apache.ApacheHttpClientExecutor;
 import central.net.http.processor.impl.AddHeaderProcessor;
 import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
@@ -66,7 +66,7 @@ public class TestController {
                 .withClaim("permissions", permissions)
                 .sign(Algorithm.HMAC256("test"));
 
-        var client = HttpProxyFactory.builder(JavaExecutor.Default())
+        var client = HttpProxyFactory.builder(ApacheHttpClientExecutor.Default())
                 .baseUrl("http://127.0.0.1:" + port)
                 .contact(new SpringContract())
                 .processor(new AddHeaderProcessor("Authorization", jwt))
@@ -89,7 +89,7 @@ public class TestController {
                 // 密钥错了
                 .sign(Algorithm.HMAC256("test1"));
 
-        var client = HttpProxyFactory.builder(JavaExecutor.Default())
+        var client = HttpProxyFactory.builder(ApacheHttpClientExecutor.Default())
                 .baseUrl("http://127.0.0.1:" + port)
                 .contact(new SpringContract())
                 .processor(new AddHeaderProcessor("Authorization", jwt))
@@ -109,7 +109,7 @@ public class TestController {
                 .withClaim("permissions", permissions)
                 .sign(Algorithm.HMAC256("test"));
 
-        var client = HttpProxyFactory.builder(JavaExecutor.Default())
+        var client = HttpProxyFactory.builder(ApacheHttpClientExecutor.Default())
                 .baseUrl("http://127.0.0.1:" + port)
                 .contact(new SpringContract())
                 .processor(new AddHeaderProcessor("Authorization", jwt))
@@ -130,7 +130,7 @@ public class TestController {
                 // 密钥错了
                 .sign(Algorithm.HMAC256("test1"));
 
-        var client = HttpProxyFactory.builder(JavaExecutor.Default())
+        var client = HttpProxyFactory.builder(ApacheHttpClientExecutor.Default())
                 .baseUrl("http://127.0.0.1:" + port)
                 .contact(new SpringContract())
                 .processor(new AddHeaderProcessor("Authorization", jwt))

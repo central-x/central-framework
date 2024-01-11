@@ -29,7 +29,7 @@ import central.io.IOStreamx;
 import central.lang.Arrayx;
 import central.lang.Stringx;
 import central.net.http.body.request.FileBody;
-import central.net.http.executor.okhttp.OkHttpExecutor;
+import central.net.http.executor.apache.ApacheHttpClientExecutor;
 import central.net.http.processor.impl.AddHeaderProcessor;
 import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
@@ -84,7 +84,7 @@ public class LogSender implements Runnable, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        var builder = HttpProxyFactory.builder(OkHttpExecutor.Default())
+        var builder = HttpProxyFactory.builder(ApacheHttpClientExecutor.Default())
                 .contact(new SpringContract())
                 .processor(new AddHeaderProcessor(HttpHeaders.CONTENT_ENCODING, "gzip"));
         if (Stringx.isNotBlank(code) && Stringx.isNotBlank(secret)) {

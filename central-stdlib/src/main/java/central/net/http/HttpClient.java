@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.AccessDeniedException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class HttpClient {
      * 缓存目录
      */
     @Getter
-    private File tmp = new File("./tmp");
+    private File tmp = Path.of("cache", "http").toFile();
 
     public void setTmp(File tmp) throws IOException {
         if (!tmp.exists()) {

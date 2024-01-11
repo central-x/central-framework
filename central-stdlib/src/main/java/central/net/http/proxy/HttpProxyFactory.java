@@ -36,6 +36,7 @@ import lombok.SneakyThrows;
 
 import java.io.File;
 import java.lang.reflect.Proxy;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class HttpProxyFactory {
             return (T) this;
         }
 
-        protected File tmp = new File("./tmp");
+        protected File tmp = Path.of("cache", "http").toFile();
 
         /**
          * 设置缓存目录

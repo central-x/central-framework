@@ -34,6 +34,7 @@ import central.net.http.executor.okhttp.body.EmptyBody;
 import central.net.http.executor.okhttp.body.WrapperBody;
 import central.net.http.ssl.HostnameVerifierImpl;
 import central.net.http.ssl.X509TrustManagerImpl;
+import central.util.Mapx;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
@@ -76,7 +77,9 @@ public class OkHttpExecutor implements HttpExecutor {
             request.getHeaders().forEach((key, values) -> values.forEach(it -> builder.addHeader(key, it)));
 
             // 处理 Cookie
-            builder.header(HttpHeaders.COOKIE, request.getCookieHeader());
+            if (Mapx.isNotEmpty(request.getCookies())) {
+                builder.header(HttpHeaders.COOKIE, request.getCookieHeader());
+            }
 
             // 执行请求
             try {

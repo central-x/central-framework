@@ -24,7 +24,7 @@
 
 package central.starter.graphql.test;
 
-import central.net.http.executor.java.JavaExecutor;
+import central.net.http.executor.apache.ApacheHttpClientExecutor;
 import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
 import central.sql.query.Conditions;
@@ -57,7 +57,7 @@ public class TestGraphQL {
 
     @BeforeEach
     public void before() {
-        this.client = HttpProxyFactory.builder(JavaExecutor.Default())
+        this.client = HttpProxyFactory.builder(ApacheHttpClientExecutor.Default())
                 .baseUrl("http://127.0.0.1:" + port)
                 .contact(new SpringContract())
                 .log()

@@ -27,6 +27,7 @@ package central.net.http.body;
 import central.io.Filex;
 import central.io.IOStreamx;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import java.io.*;
@@ -47,11 +48,11 @@ public class ReusableBody implements Body {
         this.cache = cache;
         this.body = body;
 
-        if (this.getContentLength() > 0 && this.getContentLength() < 5 * 1024 * 1024) {
-            // 如果 ContentLength < 5M，就缓存在内存里
+        if (this.getContentLength() > 0 && this.getContentLength() < 8 * 1024 * 1024) {
+            // 如果 ContentLength < 8M，就缓存在内存里
             this.bytes = IOStreamx.readBytes(body.getInputStream());
         } else {
-            // 如果 ContentLength 为 -1（未知），或大于 5M，就缓存到文件里
+            // 如果 ContentLength 为 -1（未知），或大于 8M，就缓存到文件里
             if (this.cache.exists()) {
                 Filex.delete(this.cache);
             }
@@ -75,6 +76,11 @@ public class ReusableBody implements Body {
     @Override
     public Long getContentLength() {
         return this.body.getContentLength();
+    }
+
+    @Override
+    public HttpHeaders getHeaders() {
+        return this.body.getHeaders();
     }
 
     @Override

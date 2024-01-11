@@ -22,31 +22,19 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql.stub;
+package central.net.http;
 
 import central.net.http.executor.apache.ApacheHttpClientExecutor;
-import central.net.http.proxy.HttpProxyFactory;
-import central.net.http.proxy.contract.spring.SpringContract;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 /**
- * 应用配置
+ * Apache HttpClient Test Cases
  *
  * @author Alan Yeh
- * @since 2022/09/30
+ * @since 2024/01/11
  */
-@Configuration
-public class ApplicationConfiguration {
-
-    @Bean
-    @Primary
-    public ProviderClient httpClient(@Value("${server.port}") int port) {
-        return HttpProxyFactory.builder(ApacheHttpClientExecutor.Default())
-                .contact(new SpringContract())
-                .baseUrl("http://127.0.0.1:" + port)
-                .target(ProviderClient.class);
+public class TestApache extends TestHttp{
+    @Override
+    protected HttpExecutor getExecutor() {
+        return ApacheHttpClientExecutor.Default();
     }
 }

@@ -25,7 +25,7 @@
 package central.net.http;
 
 import central.io.Filex;
-import central.net.http.executor.java.JavaExecutor;
+import central.net.http.executor.apache.ApacheHttpClientExecutor;
 import central.net.http.processor.impl.AddHeaderProcessor;
 import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
@@ -45,6 +45,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -67,9 +68,9 @@ public class TestSpringContract {
 
     @BeforeEach
     public void before() {
-        this.server = HttpProxyFactory.builder(JavaExecutor.Default())
+        this.server = HttpProxyFactory.builder(ApacheHttpClientExecutor.Default())
                 .baseUrl("http://127.0.0.1:" + serverPort)
-                .tmp(new File("./.tmp"))
+                .tmp(Path.of("cache").toFile())
                 .contact(new SpringContract())
                 .processor(new AddHeaderProcessor("X-Forwarded-Proto", "https"))
                 .processor(new AddHeaderProcessor("X-Forwarded-Port", "443"))
@@ -79,7 +80,7 @@ public class TestSpringContract {
     @AfterEach
     public void after() throws Exception {
         // 删除缓存目录
-        Filex.delete(new File("./.tmp"));
+        Filex.delete(Path.of("cache").toFile());
     }
 
     /**

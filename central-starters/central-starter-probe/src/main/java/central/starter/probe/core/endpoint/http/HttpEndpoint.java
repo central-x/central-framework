@@ -31,10 +31,10 @@ import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
 import central.net.http.HttpUrl;
 import central.net.http.body.extractor.StringExtractor;
-import central.net.http.executor.java.JavaExecutor;
+import central.net.http.executor.apache.ApacheHttpClientExecutor;
 import central.net.http.processor.impl.LoggerProcessor;
-import central.starter.probe.core.endpoint.Endpoint;
 import central.starter.probe.core.ProbeException;
+import central.starter.probe.core.endpoint.Endpoint;
 import central.util.*;
 import central.validation.Label;
 import central.validation.Validatex;
@@ -156,7 +156,7 @@ public class HttpEndpoint implements Endpoint, BeanNameAware, InitializingBean {
         }
 
         // 构建 Client
-        this.client = new HttpClient(JavaExecutor.builder().connectTimeout(this.timeout).build());
+        this.client = new HttpClient(ApacheHttpClientExecutor.builder().connectTimeout(this.timeout).build());
         this.client.addProcessor(new LoggerProcessor());
     }
 

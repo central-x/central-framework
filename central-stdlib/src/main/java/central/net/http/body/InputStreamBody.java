@@ -24,7 +24,9 @@
 
 package central.net.http.body;
 
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
@@ -45,16 +47,35 @@ public class InputStreamBody implements Body {
     @Getter
     private final MediaType contentType;
 
+    private final HttpHeaders headers;
+
     private final InputStream body;
 
     public InputStreamBody(InputStream body) {
         this(body, -1, MediaType.APPLICATION_OCTET_STREAM);
     }
 
-    public InputStreamBody(InputStream body, long contentLength, MediaType contentType) {
+    public InputStreamBody(@Nonnull InputStream body, long contentLength, MediaType contentType) {
         this.body = body;
         this.contentLength = contentLength;
         this.contentType = contentType;
+        this.headers = null;
+    }
+
+    public InputStreamBody(@Nonnull InputStream body, @Nonnull HttpHeaders headers) {
+        this.body = body;
+        this.headers = headers;
+        this.contentLength = headers.getContentLength();
+        this.contentType = headers.getContentType();
+    }
+
+    @Override
+    public HttpHeaders getHeaders() {
+        if (this.headers == null) {
+            return Body.super.getHeaders();
+        } else {
+            return this.headers;
+        }
     }
 
     @Override

@@ -29,6 +29,7 @@ import central.net.http.body.Body;
 import central.net.http.exception.IOHttpException;
 import central.net.http.exception.TimeoutHttpRequest;
 import central.net.http.ssl.X509TrustManagerImpl;
+import central.util.Mapx;
 import central.util.function.ThrowableSupplier;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -70,7 +71,9 @@ public class JavaExecutor implements HttpExecutor {
             request.getHeaders().forEach((name, values) -> values.forEach(value -> builder.header(name, value)));
 
             // 处理 Cookie
-            builder.header(HttpHeaders.COOKIE, request.getCookieHeader());
+            if (Mapx.isNotEmpty(request.getCookies())) {
+                builder.header(HttpHeaders.COOKIE, request.getCookieHeader());
+            }
 
             // 执行请求
             try {
@@ -102,10 +105,10 @@ public class JavaExecutor implements HttpExecutor {
      */
     @SneakyThrows
     public static JavaExecutor Default() {
-        SSLContext context = SSLContext.getInstance("SSL");
+        var context = SSLContext.getInstance("SSL");
         context.init(null, new TrustManager[]{new X509TrustManagerImpl()}, null);
 
-        HttpClient client = HttpClient.newBuilder()
+        var client = HttpClient.newBuilder()
                 .sslContext(context)
                 .connectTimeout(Duration.ofSeconds(60))
                 .followRedirects(HttpClient.Redirect.ALWAYS)
@@ -142,7 +145,7 @@ public class JavaExecutor implements HttpExecutor {
 
         @SneakyThrows
         public JavaExecutor build() {
-            SSLContext context = SSLContext.getInstance("SSL");
+            var context = SSLContext.getInstance("SSL");
             context.init(null, new TrustManager[]{new X509TrustManagerImpl()}, null);
 
             HttpClient client = HttpClient.newBuilder()

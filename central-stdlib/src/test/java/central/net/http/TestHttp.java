@@ -74,13 +74,14 @@ public abstract class TestHttp {
     public void case1() throws Throwable {
         String accountId = Guidx.nextID();
         try (var request = HttpRequest.get(HttpUrl.of("/api/accounts").setQuery("id", accountId))) {
-            var response = this.client.execute(request);
-            Assertions.assertEquals(HttpStatus.OK, response.getStatus());
+            try (var response = this.client.execute(request)) {
+                Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var account = response.getBody().extract(JsonExtractor.of(TypeRef.of(Account.class)));
-            Assertions.assertNotNull(account);
-            Assertions.assertEquals(accountId, account.getId());
-            Assertions.assertNotNull(account.getDept());
+                var account = response.getBody().extract(JsonExtractor.of(TypeRef.of(Account.class)));
+                Assertions.assertNotNull(account);
+                Assertions.assertEquals(accountId, account.getId());
+                Assertions.assertNotNull(account.getDept());
+            }
         }
     }
 
@@ -95,14 +96,15 @@ public abstract class TestHttp {
             body.put("name", "张三");
             request.setBody(new JsonBody(body));
 
-            var response = this.client.execute(request);
-            Assertions.assertEquals(HttpStatus.OK, response.getStatus());
+            try (var response = this.client.execute(request)) {
+                Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var account = response.getBody().extract(JsonExtractor.of(TypeRef.of(Account.class)));
-            Assertions.assertNotNull(account);
-            Assertions.assertNotNull(account.getId());
-            Assertions.assertEquals(Integer.valueOf(18), account.getAge());
-            Assertions.assertEquals("张三", account.getName());
+                var account = response.getBody().extract(JsonExtractor.of(TypeRef.of(Account.class)));
+                Assertions.assertNotNull(account);
+                Assertions.assertNotNull(account.getId());
+                Assertions.assertEquals(Integer.valueOf(18), account.getAge());
+                Assertions.assertEquals("张三", account.getName());
+            }
         }
     }
 
@@ -118,14 +120,15 @@ public abstract class TestHttp {
             body.put("name", "张三");
             request.setBody(new JsonBody(body));
 
-            var response = this.client.execute(request);
-            Assertions.assertEquals(HttpStatus.OK, response.getStatus());
+            try (var response = this.client.execute(request)) {
+                Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            var account = response.getBody().extract(JsonExtractor.of(TypeRef.of(Account.class)));
-            Assertions.assertNotNull(account);
-            Assertions.assertEquals(body.get("id"), account.getId());
-            Assertions.assertEquals(Integer.valueOf(18), account.getAge());
-            Assertions.assertEquals("张三", account.getName());
+                var account = response.getBody().extract(JsonExtractor.of(TypeRef.of(Account.class)));
+                Assertions.assertNotNull(account);
+                Assertions.assertEquals(body.get("id"), account.getId());
+                Assertions.assertEquals(Integer.valueOf(18), account.getAge());
+                Assertions.assertEquals("张三", account.getName());
+            }
         }
     }
 
@@ -135,13 +138,13 @@ public abstract class TestHttp {
     @Test
     public void case4() throws Throwable {
         try (var request = HttpRequest.delete(HttpUrl.of("/api/accounts").addQuery("ids", Guidx.nextID()).addQuery("ids", Guidx.nextID()))) {
-            var response = this.client.execute(request);
+            try (var response = this.client.execute(request)) {
+                Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            Assertions.assertEquals(HttpStatus.OK, response.getStatus());
-
-            var count = response.getBody().extract(JsonExtractor.of(TypeRef.of(Integer.class)));
-            Assertions.assertNotNull(count);
-            Assertions.assertEquals(Integer.valueOf(2), count);
+                var count = response.getBody().extract(JsonExtractor.of(TypeRef.of(Integer.class)));
+                Assertions.assertNotNull(count);
+                Assertions.assertEquals(Integer.valueOf(2), count);
+            }
         }
     }
 
@@ -154,15 +157,16 @@ public abstract class TestHttp {
             this.client.addProcessor(new AddHeaderProcessor("X-Forwarded-Proto", "https"));
             this.client.addProcessor(new AddHeaderProcessor("X-Forwarded-Port", "443"));
 
-            var response = this.client.execute(request);
+            try (var response = this.client.execute(request)) {
+                Assertions.assertEquals(HttpStatus.OK, response.getStatus());
 
-            Assertions.assertEquals(HttpStatus.OK, response.getStatus());
+                var info = response.getBody().extract(JsonExtractor.of(TypeRef.ofMap(String.class, Object.class)));
+                Assertions.assertNotNull(info.get("headers"));
+                var headers = Mapx.caseInsensitive((Map<String, Object>) info.get("headers"));
+                Assertions.assertEquals("https", headers.get("X-Forwarded-Proto"));
+                Assertions.assertEquals("443", headers.get("X-Forwarded-Port"));
 
-            var info = response.getBody().extract(JsonExtractor.of(TypeRef.ofMap(String.class, Object.class)));
-            Assertions.assertNotNull(info.get("headers"));
-            var headers = Mapx.caseInsensitive((Map<String, Object>) info.get("headers"));
-            Assertions.assertEquals("https", headers.get("X-Forwarded-Proto"));
-            Assertions.assertEquals("443", headers.get("X-Forwarded-Port"));
+            }
         }
     }
 
@@ -176,14 +180,14 @@ public abstract class TestHttp {
             body.add(MultipartFormPart.create("file", "test.txt", "Hello World".getBytes(StandardCharsets.UTF_8), MediaType.TEXT_PLAIN));
             request.setBody(body);
 
-            var response = this.client.execute(request);
-
-            Assertions.assertEquals(HttpStatus.OK, response.getStatus());
-            var upload = response.getBody().extract(JsonExtractor.of(TypeRef.of(Upload.class)));
-            Assertions.assertEquals("file", upload.getName());
-            Assertions.assertEquals("test.txt", upload.getOriginalFilename());
-            Assertions.assertEquals("Hello World".getBytes(StandardCharsets.UTF_8).length, upload.getSize());
-            Assertions.assertEquals(MediaType.TEXT_PLAIN.toString(), upload.getContentType());
+            try (var response = this.client.execute(request)) {
+                Assertions.assertEquals(HttpStatus.OK, response.getStatus());
+                var upload = response.getBody().extract(JsonExtractor.of(TypeRef.of(Upload.class)));
+                Assertions.assertEquals("file", upload.getName());
+                Assertions.assertEquals("test.txt", upload.getOriginalFilename());
+                Assertions.assertEquals("Hello World".getBytes(StandardCharsets.UTF_8).length, upload.getSize());
+                Assertions.assertEquals(MediaType.TEXT_PLAIN.toString(), upload.getContentType());
+            }
         }
     }
 }
