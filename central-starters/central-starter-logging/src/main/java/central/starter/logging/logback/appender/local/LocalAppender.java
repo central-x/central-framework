@@ -22,24 +22,42 @@
  * SOFTWARE.
  */
 
-package central.starter.logging.logback.appender.http.client;
+package central.starter.logging.logback.appender.local;
 
-import central.net.http.body.Body;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import central.starter.logging.logback.appender.CentralAppender;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * 日志收集器客户端
+ * 将日志写入到本地
  *
  * @author Alan Yeh
- * @since 2022/10/24
+ * @since 2024/01/21
  */
-public interface CollectClient {
+public class LocalAppender extends CentralAppender {
     /**
-     * 上传日志
+     * 应用标识（应用服务名）
      */
-    @PostMapping(value = "/logging/api/collect/http/{path}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    void collect(@PathVariable String path, @RequestBody Body body);
+    @Getter
+    @Setter
+    private String applicationCode;
+
+    /**
+     * 最大批量发送大小
+     */
+    @Getter
+    @Setter
+    private int batchSize = 100000;
+
+    /**
+     * 最大批量发送时间
+     */
+    @Getter
+    @Setter
+    private int batchTime = 2000;
+
+    @Override
+    public String getTmpPath() {
+        return "log_tmp";
+    }
 }

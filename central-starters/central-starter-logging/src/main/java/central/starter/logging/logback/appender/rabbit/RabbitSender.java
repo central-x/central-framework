@@ -22,24 +22,13 @@
  * SOFTWARE.
  */
 
-package central.starter.logging.logback.appender.http.client;
-
-import central.net.http.body.Body;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+package central.starter.logging.logback.appender.rabbit;
 
 /**
- * 日志收集器客户端
+ * Rabbit Sender
  *
  * @author Alan Yeh
- * @since 2022/10/24
+ * @since 2024/01/21
  */
-public interface CollectClient {
-    /**
-     * 上传日志
-     */
-    @PostMapping(value = "/logging/api/collect/http/{path}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    void collect(@PathVariable String path, @RequestBody Body body);
+public class RabbitSender {
 }

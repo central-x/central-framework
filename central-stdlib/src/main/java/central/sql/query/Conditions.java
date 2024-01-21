@@ -813,7 +813,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
                 return false;
             }
             Condition<T> condition = (Condition<T>) o;
-            return property.equals(condition.property) &&
+            return Objects.equals(this.property, condition.property) &&
                     operator == condition.operator &&
                     Arrays.equals(values, condition.values);
         }

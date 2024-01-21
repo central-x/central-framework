@@ -84,6 +84,9 @@ public class HttpAppender extends CentralAppender {
     @Setter
     private String applicationCode;
 
+    /**
+     * 应用密钥
+     */
     @Getter
     @Setter
     private String applicationSecret;
@@ -113,7 +116,7 @@ public class HttpAppender extends CentralAppender {
     public void start() {
         super.start();
 
-        var sender = new LogSender(new File(this.getTmpPath(), this.getApplicationCode()), this.applicationCode, this.applicationSecret, this.collectorServer, this.collectorPath);
+        var sender = new HttpSender(new File(this.getTmpPath(), this.getApplicationCode()), this.applicationCode, this.applicationSecret, this.collectorServer, this.collectorPath);
         this.executor = Executors.newCachedThreadPool(new CustomizableThreadFactory("central.logging.http.appender.sender"));
         this.executor.submit(() -> {
             try {

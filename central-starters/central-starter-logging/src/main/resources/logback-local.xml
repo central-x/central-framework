@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Http Appender 需要的属性 -->
+    <springProperty scope="context" name="COLLECTOR_SERVER" source="central.logging.http.server" defaultValue="ws://central-logging/logging"/>
+    <springProperty scope="context" name="COLLECTOR_PATH" source="central.logging.http.path" defaultValue="/api/ws"/>
+
+    <!-- 日志需要的属性 -->
+    <springProperty scope="context" name="APPLICATION_CODE" source="central.logging.http.code" defaultValue=""/>
+    <springProperty scope="context" name="LOG_HOME" source="central.logging.path" defaultValue="./logs"/>
+
+    <!-- 定义属性 -->
+    <property name="LOG_PATTERN"
+              value="%n[${SERVICE_NAME}] %space(%X{traceId}){}%d{HH:mm:ss.SSS}${LOG_LEVEL_PATTERN:-%p} ${PID:- } [%thread] %logger:%n%msg%n"/>
+    <property name="LOG_CONSOLE_PATTERN"
+              value="%n%clr([${SERVICE_NAME}]){green} %space(%X{traceId}){}%clr(%d{HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%p}) %clr(${PID:- }){magenta} %clr([%thread]){magenta} %clr(%logger){cyan}:%n%msg%n"/>
+
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <!-- 去空格 -->
+    <conversionRule conversionWord="space"
+                    converterClass="central.starter.logging.logback.converter.SpaceCompositeConverter"/>
+    <!-- 控制台日志 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_CONSOLE_PATTERN}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${LOG_LEVEL}</level>
+        </filter>
+    </appender>
+
+    <!-- Http 日志 -->
+    <appender name="WS" class="central.starter.logging.logback.appender.local.LocalAppender">
+        <applicationCode>${APPLICATION_CODE}</applicationCode>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="HTTP"/>
+    </root>
+</configuration>

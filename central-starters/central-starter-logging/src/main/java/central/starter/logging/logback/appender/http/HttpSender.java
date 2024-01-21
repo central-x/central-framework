@@ -58,7 +58,7 @@ import java.util.Date;
  * @since 2022/10/24
  */
 @RequiredArgsConstructor
-public class LogSender implements Runnable, InitializingBean {
+public class HttpSender implements Runnable, InitializingBean {
     /**
      * 日志目录
      */
@@ -120,66 +120,68 @@ public class LogSender implements Runnable, InitializingBean {
                     // 记录最后一次发送时间
                     lastSend = System.currentTimeMillis();
 
-                    // 查询指定目录下是否存在需要发送的文件
-                    if (this.dir.exists()) {
-                        // 有可能多个线程去处理遗留的日志时，可能会导致冲突
-                        // 这里使用文件作为锁
-                        var lock = new File(this.dir, ".lock");
+                    // 查询指定目录是否存在
+                    if (!this.dir.exists()) {
+                        continue;
+                    }
 
-                        if (lock.exists()) {
-                            // 锁已经存在，则检查锁的时间
-                            var dateStr = IOStreamx.readText(Files.newInputStream(lock.toPath(), StandardOpenOption.READ), StandardCharsets.UTF_8);
-                            if (Stringx.isNullOrBlank(dateStr)) {
-                                // 锁里面没有内容
-                                Filex.delete(lock);
-                            } else {
-                                try {
-                                    // 如果文件锁存在，检查一下锁的创建时间
-                                    var date = OffsetDateTime.parse(dateStr, DateTimeFormatter.ISO_DATE_TIME);
-                                    var now = OffsetDateTime.now();
+                    // 有可能多个线程去处理遗留的日志时，可能会导致冲突
+                    // 这里使用文件作为锁
+                    var lock = new File(this.dir, ".lock");
 
-                                    if (date.plusMinutes(10).isBefore(now)) {
-                                        // 锁创建时间超过 10 分钟了，删除该锁
-                                        Filex.delete(lock);
-                                    }
-                                    if (date.isAfter(now)) {
-                                        // 这个创建时间比当前时间还晚，说明锁无效
-                                        Filex.delete(lock);
-                                    }
-                                } catch (IOException ignored) {
-                                    // 解析日志异常
+                    if (lock.exists()) {
+                        // 锁已经存在，则检查锁的时间
+                        var dateStr = IOStreamx.readText(Files.newInputStream(lock.toPath(), StandardOpenOption.READ), StandardCharsets.UTF_8);
+                        if (Stringx.isNullOrBlank(dateStr)) {
+                            // 锁里面没有内容
+                            Filex.delete(lock);
+                        } else {
+                            try {
+                                // 如果文件锁存在，检查一下锁的创建时间
+                                var date = OffsetDateTime.parse(dateStr, DateTimeFormatter.ISO_DATE_TIME);
+                                var now = OffsetDateTime.now();
+
+                                if (date.plusMinutes(10).isBefore(now)) {
+                                    // 锁创建时间超过 10 分钟了，删除该锁
                                     Filex.delete(lock);
                                 }
+                                if (date.isAfter(now)) {
+                                    // 这个创建时间比当前时间还晚，说明锁无效
+                                    Filex.delete(lock);
+                                }
+                            } catch (IOException ignored) {
+                                // 解析日志异常
+                                Filex.delete(lock);
                             }
                         }
+                    }
 
-                        if (!lock.exists()) {
-                            boolean obtained = false;
+                    if (!lock.exists()) {
+                        boolean obtained = false;
 
-                            try {
-                                obtained = lock.createNewFile();
-                                if (obtained) {
-                                    Filex.writeText(lock, OffsetDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+                        try {
+                            obtained = lock.createNewFile();
+                            if (obtained) {
+                                Filex.writeText(lock, OffsetDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
 
-                                    var tmps = Arrayx.asStream(this.dir.listFiles()).filter(it -> it.getName().endsWith(".logtmp")).toList();
+                                var tmps = Arrayx.asStream(this.dir.listFiles()).filter(it -> it.getName().endsWith(".logtmp")).toList();
 
-                                    for (var tmp : tmps) {
-                                        if (tmp.length() > 0) {
-                                            // 文件有内容才发送
-                                            this.client.collect(this.path, new FileBody(tmp));
-                                        }
-                                        Filex.delete(tmp);
-                                        // 稍微卡一下再发送，避免一下子涌入日志中心
-                                        Thread.sleep(100);
+                                for (var tmp : tmps) {
+                                    if (tmp.length() > 0) {
+                                        // 文件有内容才发送
+                                        this.client.collect(this.path, new FileBody(tmp));
                                     }
+                                    Filex.delete(tmp);
+                                    // 稍微卡一下再发送，避免一下子涌入日志中心
+                                    Thread.sleep(100);
+                                }
 
-                                    // 执行成功，将失败次数置为 0
-                                    failTimes = 0;
-                                }
-                            } finally {
-                                if (obtained) {
-                                    Filex.delete(lock);
-                                }
+                                // 执行成功，将失败次数置为 0
+                                failTimes = 0;
+                            }
+                        } finally {
+                            if (obtained) {
+                                Filex.delete(lock);
                             }
                         }
                     }
