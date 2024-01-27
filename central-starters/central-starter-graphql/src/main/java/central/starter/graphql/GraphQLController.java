@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022/09/09
  */
 @RestController
-@RequestMapping("/api/graphql")
+@RequestMapping({"/*/api/graphql", "/api/graphql"})
 public class GraphQLController implements ApplicationContextAware {
 
     @Setter

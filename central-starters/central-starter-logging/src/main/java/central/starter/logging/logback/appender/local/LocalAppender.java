@@ -58,6 +58,6 @@ public class LocalAppender extends CentralAppender {
 
     @Override
     public String getTmpPath() {
-        return "log_tmp";
+        return "./logs/tmp";
     }
 }

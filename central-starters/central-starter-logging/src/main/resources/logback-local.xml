@@ -7,6 +7,9 @@
     <!-- 日志需要的属性 -->
     <springProperty scope="context" name="APPLICATION_CODE" source="central.logging.http.code" defaultValue=""/>
     <springProperty scope="context" name="LOG_HOME" source="central.logging.path" defaultValue="./logs"/>
+    <springProperty scope="context" name="SERVICE_NAME" source="spring.application.name" defaultValue=""/>
+    <springProperty scope="context" name="SERVICE_VERSION" source="spring.application.version" defaultValue="unknown"/>
+    <springProperty scope="context" name="SERVER_PORT" source="server.port" defaultValue="8080"/>
 
     <!-- 定义属性 -->
     <property name="LOG_PATTERN"
@@ -30,13 +33,13 @@
         </filter>
     </appender>
 
-    <!-- Http 日志 -->
-    <appender name="WS" class="central.starter.logging.logback.appender.local.LocalAppender">
+    <!-- 本地日志 -->
+    <appender name="LOCAL" class="central.starter.logging.logback.appender.local.LocalAppender">
         <applicationCode>${APPLICATION_CODE}</applicationCode>
     </appender>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="HTTP"/>
+        <appender-ref ref="LOCAL"/>
     </root>
 </configuration>

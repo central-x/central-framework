@@ -107,7 +107,7 @@ public class HttpAppender extends CentralAppender {
 
     @Override
     public String getTmpPath() {
-        return "log_tmp";
+        return "./logs/tmp";
     }
 
     private ExecutorService executor;
