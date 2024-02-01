@@ -24,7 +24,13 @@
 
 package central.starter.web;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.ApplicationEventMulticaster;
+import org.springframework.context.event.SimpleApplicationEventMulticaster;
+import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
+
+import java.util.concurrent.Executors;
 
 /**
  * Starter Configuration
@@ -34,4 +40,15 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class StarterConfiguration {
+    /**
+     * 异步事件发布
+     */
+    @Bean
+    public ApplicationEventMulticaster applicationEventMulticaster() {
+        var multicaster = new SimpleApplicationEventMulticaster();
+
+        var service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new CustomizableThreadFactory("central-logging.multicaster"));
+        multicaster.setTaskExecutor(service);
+        return multicaster;
+    }
 }
