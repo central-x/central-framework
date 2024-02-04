@@ -22,59 +22,31 @@
  * SOFTWARE.
  */
 
-package central.web;
+package central.starter.ability;
+
+import central.pluglet.PlugletFactory;
+import central.pluglet.binder.SpringBeanFieldBinder;
+import central.pluglet.lifecycle.SpringLifeCycleProcess;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * X-Forwarded-*
- * 这些请求头用于在微服务端流转
+ * 插件工厂配置
  *
  * @author Alan Yeh
- * @since 2022/07/16
+ * @since 2024/02/04
  */
-public interface XForwardedHeaders {
+@Configuration
+public class PlugletConfiguration {
     /**
-     * 被代理的主机信息
+     * 插件工厂
      */
-    String HOST = "X-Forwarded-Host";
-    /**
-     * 被代理的端口信息
-     */
-    String PORT = "X-Forwarded-Port";
-    /**
-     * 被代理的协议信息
-     */
-    String SCHEMA = "X-Forwarded-Proto";
-    /**
-     * 代理客户端信息
-     */
-    String FOR = "X-Forwarded-For";
-    /**
-     * 租户标识
-     */
-    String TENANT = "X-Forwarded-Tenant";
-    /**
-     * 租户路径
-     */
-    String PATH = "X-Forwarded-Prefix";
-    /**
-     * 凭证信息
-     */
-    String TOKEN = "X-Forwarded-Token";
-    /**
-     * 原始请求信息
-     */
-    String ORIGIN_URI = "X-Forwarded-OriginUri";
-    /**
-     * 原始请求方法
-     */
-    String METHOD = "X-Forwarded-OriginMethod";
-    /**
-     * 请求版本信息
-     * 用于控制后端微服务的灰度版本信息，让请求在指定版本的微服务中流转
-     */
-    String VERSION = "X-Forwarded-Version";
-    /**
-     * 追踪信息
-     */
-    String TRACE = "X-Forwarded-Trace";
+    @Bean
+    public PlugletFactory plugletFactory(ApplicationContext applicationContext) {
+        var factory = new PlugletFactory();
+        factory.registerBinder(new SpringBeanFieldBinder(applicationContext));
+        factory.registerLifeCycleProcessor(new SpringLifeCycleProcess(applicationContext));
+        return factory;
+    }
 }
