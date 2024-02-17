@@ -89,9 +89,10 @@ public class ErrorView implements View {
                 writer.write(Jsonx.Default().serialize(Map.of("message", this.message)));
             }
         } else {
-            response.setContentType(new MediaType(MediaType.APPLICATION_XML, StandardCharsets.UTF_8).toString());
+            response.setContentType(new MediaType(MediaType.TEXT_HTML, StandardCharsets.UTF_8).toString());
             try (var writer = response.getWriter()) {
-                var content = Stringx.format("<html><body><h2>{} ({})</h2><p>{}</p><div id='created'>{}</div></body></html>", Objectx.getOrDefault(HttpStatus.resolve(this.getStatus().value()), HttpStatus.INTERNAL_SERVER_ERROR).getReasonPhrase(), this.getStatus().value(), this.message, OffsetDateTime.now().toString());
+                var reason = Objectx.getOrDefault(HttpStatus.resolve(this.getStatus().value()), HttpStatus.INTERNAL_SERVER_ERROR).getReasonPhrase();
+                var content = Stringx.format("<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>{}</title></head><body><h2>{} ({})</h2><p>{}</p><div id='created'>{}</div></body></html>", reason, reason, this.getStatus().value(), this.message, OffsetDateTime.now().toString());
                 writer.write(content);
             }
 
