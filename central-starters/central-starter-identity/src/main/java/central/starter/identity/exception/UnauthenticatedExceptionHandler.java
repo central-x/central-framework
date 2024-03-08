@@ -28,6 +28,7 @@ import central.lang.Stringx;
 import central.starter.identity.IdentityProperties;
 import central.starter.webmvc.exception.ExceptionHandler;
 import central.starter.webmvc.view.ErrorView;
+import central.util.Listx;
 import central.web.XForwardedHeaders;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -85,10 +86,14 @@ public class UnauthenticatedExceptionHandler implements ExceptionHandler {
         if (!returnJson) {
             var acceptContentTypes = MediaType.parseMediaTypes(request.getHeader(HttpHeaders.ACCEPT));
             boolean returnHtml = false;
-            for (var type : acceptContentTypes) {
-                if (MediaType.ALL.equalsTypeAndSubtype(type) || MediaType.TEXT_HTML.equalsTypeAndSubtype(type)) {
-                    returnHtml = true;
-                    break;
+            if (Listx.isNullOrEmpty(acceptContentTypes)) {
+                returnHtml = true;
+            } else {
+                for (var type : acceptContentTypes) {
+                    if (MediaType.ALL.equalsTypeAndSubtype(type) || MediaType.TEXT_HTML.equalsTypeAndSubtype(type)) {
+                        returnHtml = true;
+                        break;
+                    }
                 }
             }
 
@@ -105,7 +110,7 @@ public class UnauthenticatedExceptionHandler implements ExceptionHandler {
                     log.info("[central-starter-identity] 未登录，重定向到 " + unauthorizedUrl);
 
                     var requestUrl = request.getHeader(XForwardedHeaders.ORIGIN_URI);
-                    if (Stringx.isNotBlank(requestUrl)) {
+                    if (Stringx.isNullOrBlank(requestUrl)) {
                         requestUrl = request.getRequestURL().toString();
                     }
 

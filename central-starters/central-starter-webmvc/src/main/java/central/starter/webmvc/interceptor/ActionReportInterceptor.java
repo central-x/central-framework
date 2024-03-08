@@ -99,13 +99,14 @@ public class ActionReportInterceptor implements HandlerInterceptor {
             builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Handler".wrap(Logx.Color.BLUE)).append("         : ").append(method.getBeanType().getName()).append("#").append(method.getMethod().getName()).append("(").append(method.getBeanType().getSimpleName()).append(".java:1)").append(lineSeparator);
             builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Response Status".wrap(Logx.Color.BLUE)).append(" : ").append(response.getStatus()).append("(").append(HttpStatus.valueOf(response.getStatus()).name()).append(")").append(lineSeparator);
             builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Accept Time".wrap(Logx.Color.BLUE)).append("     : ").append(sdf.get().format(acceptTime)).append(lineSeparator);
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Cost".wrap(Logx.Color.BLUE)).append("            : ").append(execTime).append("ms").append(lineSeparator);;
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Cost".wrap(Logx.Color.BLUE)).append("            : ").append(execTime).append("ms").append(lineSeparator);
+            ;
 
             if (request.getParameterNames() != null && request.getParameterNames().hasMoreElements()) {
                 builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Parameter".wrap(Logx.Color.BLUE)).append("       : ");
 
                 var names = request.getParameterNames();
-                while (names.hasMoreElements()){
+                while (names.hasMoreElements()) {
                     String name = names.nextElement();
                     String[] values = request.getParameterValues(name);
                     if (values.length == 1) {
@@ -127,7 +128,11 @@ public class ActionReportInterceptor implements HandlerInterceptor {
             }
             builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
 
-            log.info(builder.toString());
+            if (ex != null) {
+                log.error(builder.toString());
+            } else {
+                log.info(builder.toString());
+            }
         }
     }
 }

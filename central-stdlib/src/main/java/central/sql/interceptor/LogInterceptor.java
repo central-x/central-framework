@@ -78,7 +78,7 @@ public class LogInterceptor implements SqlInterceptor {
         }
         builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Cost".wrap(Logx.Color.BLUE)).append("   : ").append(end - begin).append("ms").append(lineSeparator);
         builder.append("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE));
-        logger.info(builder.toString());
+        logger.debug(builder.toString());
     }
 
     @Override
