@@ -11,7 +11,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.central-x</groupId>
+    <groupId>com.central-x.framework</groupId>
     <artifactId>central-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.x-SNAPSHOT</version>
@@ -81,67 +81,67 @@
 
             <!-- Central -->
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-stdlib</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-cache</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-graphql</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-graphql-stub</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-identity</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-logging</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-orm</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-probe</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-template</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-web</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-web-reactive</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.central-x</groupId>
+                <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-webmvc</artifactId>
                 <version>1.0.x-SNAPSHOT</version>
             </dependency>

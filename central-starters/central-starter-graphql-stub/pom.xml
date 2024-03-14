@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.central-x</groupId>
+        <groupId>com.central-x.framework</groupId>
         <artifactId>central-parent</artifactId>
         <version>1.0.x-SNAPSHOT</version>
         <relativePath>../../central-parent</relativePath>
@@ -17,7 +17,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.central-x</groupId>
+            <groupId>com.central-x.framework</groupId>
             <artifactId>central-starter</artifactId>
         </dependency>
 
@@ -38,12 +38,12 @@
 
         <!-- Test -->
         <dependency>
-            <groupId>com.central-x</groupId>
+            <groupId>com.central-x.framework</groupId>
             <artifactId>central-starter-orm</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.central-x</groupId>
+            <groupId>com.central-x.framework</groupId>
             <artifactId>central-starter-graphql</artifactId>
             <scope>test</scope>
         </dependency>
