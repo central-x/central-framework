@@ -142,7 +142,7 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
     /**
      * 执行退出登录操作
      */
-    protected boolean executeLogout(ServletRequest request, ServletResponse response) throws Exception {
+    protected void executeLogout(ServletRequest request, ServletResponse response) throws Exception {
         var servletRequest = (HttpServletRequest) request;
         var servletResponse = (HttpServletResponse) response;
 
@@ -160,9 +160,8 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
         if (this.isAccept(servletRequest, MediaType.APPLICATION_JSON)) {
             new JsonRender(servletRequest, servletResponse).set("message", "注销成功").render();
         } else {
-            new RedirectRender(servletRequest, servletResponse).redirect(URI.create(((HttpServletRequest) request).getContextPath())).render();
+            new RedirectRender(servletRequest, servletResponse).redirect(URI.create(Objectx.getOrDefault(((HttpServletRequest) request).getContextPath(), "/"))).render();
         }
-        return true;
     }
 
     private boolean isAccept(HttpServletRequest request, MediaType type) {
@@ -203,7 +202,7 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
         if (this.isLogoutAttempt(request, response)) {
             try {
                 executeLogout(request, response);
-                return true;
+                return false;
             } catch (Exception ignored) {
                 // 退出失败也没关系
             }
