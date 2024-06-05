@@ -24,16 +24,22 @@
 
 package central.starter.webmvc.filter;
 
+import central.lang.Stringx;
 import central.starter.webmvc.servlet.WebMvcRequest;
 import central.starter.webmvc.servlet.WebMvcResponse;
+import central.web.XForwardedHeaders;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * WebMvcRequest Wrap Filter
@@ -46,6 +52,28 @@ import java.io.IOException;
 public class WebMvcWrapFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain filterChain) throws ServletException, IOException {
-        filterChain.doFilter(WebMvcRequest.of(request), WebMvcResponse.of(response));
+        filterChain.doFilter(WebMvcRequest.of(new HttpServletRequestWrapper(request) {
+            @Override
+            public String getHeader(String name) {
+                var header = super.getHeader(name);
+                if (Stringx.isNullOrBlank(header)) {
+                    if (XForwardedHeaders.TENANT.equalsIgnoreCase(name)) {
+                        return "master";
+                    }
+                }
+                return header;
+            }
+
+            @Override
+            public Enumeration<String> getHeaders(String name) {
+                var headers = super.getHeaders(name);
+                if (!headers.hasMoreElements()) {
+                    if (XForwardedHeaders.TENANT.equalsIgnoreCase(name)) {
+                        return Collections.enumeration(List.of("master"));
+                    }
+                }
+                return headers;
+            }
+        }), WebMvcResponse.of(response));
     }
 }
