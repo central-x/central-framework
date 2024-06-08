@@ -28,6 +28,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+import org.slf4j.helpers.MessageFormatter;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -383,36 +384,37 @@ public class Stringx {
      * </pre>
      */
     public static @Nonnull String format(@Nonnull String format, Object... args) {
-        if (args == null || args.length < 1) {
-            return format;
-        }
-
-        var result = new StringBuilder(format.length() + 50);
-
-        int i = 0;
-        for (int l = 0; l < args.length; l++) {
-            var j = format.indexOf("{}", i);
-            if (j == -1) {
-                // 没有找到
-                if (i == 0) {
-                    // format 是一个普通的字符串
-                    return format;
-                } else {
-                    result.append(format, i, format.length());
-                    i = format.length();
-                }
-            } else {
-                result.append(format, i, j);
-                result.append(args[l] == null ? "" : args[l]);
-                i = j + 2;
-            }
-        }
-
-        if (i < format.length()) {
-            result.append(format, i, format.length());
-        }
-
-        return result.toString();
+        return MessageFormatter.arrayFormat(format, args).getMessage();
+//        if (args == null || args.length < 1) {
+//            return format;
+//        }
+//
+//        var result = new StringBuilder(format.length() + 50);
+//
+//        int i = 0;
+//        for (int l = 0; l < args.length; l++) {
+//            var j = format.indexOf("{}", i);
+//            if (j == -1) {
+//                // 没有找到
+//                if (i == 0) {
+//                    // format 是一个普通的字符串
+//                    return format;
+//                } else {
+//                    result.append(format, i, format.length());
+//                    i = format.length();
+//                }
+//            } else {
+//                result.append(format, i, j);
+//                result.append(args[l] == null ? "" : args[l]);
+//                i = j + 2;
+//            }
+//        }
+//
+//        if (i < format.length()) {
+//            result.append(format, i, format.length());
+//        }
+//
+//        return result.toString();
     }
 
     /**
