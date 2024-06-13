@@ -27,18 +27,16 @@ package central.starter.graphql.core.fetcher;
 import central.lang.Stringx;
 import central.lang.reflect.invoke.Invocation;
 import central.lang.reflect.invoke.ParameterResolver;
+import central.starter.graphql.core.ExceptionHandleChain;
 import central.starter.graphql.core.source.Source;
 import central.util.Context;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,18 +67,21 @@ public class SourceFetcher implements DataFetcher<Object> {
     @Setter
     private List<ParameterResolver> resolvers = new ArrayList<>();
 
-    private SourceFetcher(Source source, String name, Method method) {
+    private ExceptionHandleChain handler;
+
+    private SourceFetcher(Source source, String name, Method method, ExceptionHandleChain handler) {
         this.source = source;
-        this.method = method;
         this.name = name;
+        this.method = method;
+        this.handler = handler;
     }
 
-    public static SourceFetcher of(Source source, Method method) {
-        return new SourceFetcher(source, method.getName(), method);
+    public static SourceFetcher of(Source source, Method method, ExceptionHandleChain handler) {
+        return new SourceFetcher(source, method.getName(), method, handler);
     }
 
-    public static SourceFetcher ofGetter(Source source, Method method) {
-        return new SourceFetcher(source, Stringx.lowerCaseFirstLetter(Stringx.removePrefix(method.getName(), "get")), method);
+    public static SourceFetcher ofGetter(Source source, Method method, ExceptionHandleChain handler) {
+        return new SourceFetcher(source, Stringx.lowerCaseFirstLetter(Stringx.removePrefix(method.getName(), "get")), method, handler);
     }
 
     @Override
@@ -90,11 +91,7 @@ public class SourceFetcher implements DataFetcher<Object> {
         try {
             return Invocation.of(this.method).resolvers(this.resolvers).invoke(this.source.getSource(context), context);
         } catch (InvocationTargetException | IllegalAccessException ex) {
-            if (ex.getCause() instanceof UndeclaredThrowableException throwable) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + throwable.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), throwable.getCause());
-            } else {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + ex.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), ex.getCause());
-            }
+            throw handler.handle(this.method, ex);
         }
     }
 }

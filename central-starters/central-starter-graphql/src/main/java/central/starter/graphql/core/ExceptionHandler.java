@@ -22,50 +22,36 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql;
+package central.starter.graphql.core;
 
-import central.lang.reflect.invoke.ParameterResolver;
-import central.starter.graphql.core.ExceptionHandler;
-import graphql.schema.GraphQLScalarType;
+import jakarta.annotation.Nonnull;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
-import java.util.List;
+import java.lang.reflect.Method;
 
 /**
- * GraphQL 配置
+ * GraphQL 异常处理器
+ * <p>
+ * 用于将 GraphQL 执行过程中发生的异常转化为 ResponseStatusException，处理后的异常将会被直接抛出
  *
  * @author Alan Yeh
- * @since 2022/09/09
+ * @see ResponseStatusException
+ * @since 2024/06/13
  */
-public interface GraphQLConfigurer {
+public interface ExceptionHandler {
     /**
-     * 添加标量
+     * 是否可以处理该异常
+     *
+     * @param throwable 待处理的异常
      */
-    default List<GraphQLScalarType> getScalars() {
-        return Collections.emptyList();
-    }
+    boolean support(Throwable throwable);
 
     /**
-     * 添加参数解析器
+     * 处理异常
+     *
+     * @param throwable 待处理的异常
+     * @return 处理后的异常
      */
-    default List<ParameterResolver> getParameterResolvers() {
-        return Collections.emptyList();
-    }
-
-    /**
-     * 添加异常处理器
-     */
-    default List<ExceptionHandler> getExceptionHandlers() {
-        return Collections.emptyList();
-    }
-
-    /**
-     * 获取 Query 对象
-     */
-    Object getQuery();
-
-    /**
-     * 获取 Mutation 对象
-     */
-    Object getMutation();
+    @Nonnull
+    ResponseStatusException handle(@Nonnull Method method, @Nonnull Throwable throwable);
 }

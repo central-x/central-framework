@@ -84,6 +84,11 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
     private GraphQL graphQL;
 
     /**
+     * 异常处理
+     */
+    private ExceptionHandleChain handler;
+
+    /**
      * 批量数据加载注册中心
      * 此功能用于解决 N + 1 查询性能问题
      */
@@ -101,6 +106,9 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
 
         // 初始化参数解析器
         initParameterResolvers();
+
+        // 初始化异常处理链
+        initExceptionHandleChain();
 
         // 初始化 graphql schemes
         initRootSchema(registry, wiring);
@@ -138,6 +146,13 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
 
         // 添加开发者指定的参数解析器
         this.resolvers.addAll(Objectx.getOrDefault(configurer.getParameterResolvers(), Collections.emptyList()));
+    }
+
+    /**
+     * 初始化异常处理链
+     */
+    private void initExceptionHandleChain() {
+        this.handler = new ExceptionHandleChain(this.configurer.getExceptionHandlers());
     }
 
     /**
@@ -254,11 +269,11 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
                 if (fetcher != null) {
                     SourceFetcher dataFetcher;
                     if ("Query".equals(name)) {
-                        dataFetcher = SourceFetcher.of(StaticSource.of(this.configurer.getQuery()), method);
+                        dataFetcher = SourceFetcher.of(StaticSource.of(this.configurer.getQuery()), method, this.handler);
                     } else if ("Mutation".equals(name)) {
-                        dataFetcher = SourceFetcher.of(StaticSource.of(this.configurer.getMutation()), method);
+                        dataFetcher = SourceFetcher.of(StaticSource.of(this.configurer.getMutation()), method, this.handler);
                     } else {
-                        dataFetcher = SourceFetcher.of(new GraphQLSource(), method);
+                        dataFetcher = SourceFetcher.of(new GraphQLSource(), method, this.handler);
                     }
                     dataFetcher.setResolvers(this.resolvers);
                     wiring.type(TypeRuntimeWiring.newTypeWiring(name).dataFetcher(dataFetcher.getName(), dataFetcher));
@@ -268,11 +283,11 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
                 if (getter != null) {
                     SourceFetcher dataFetcher;
                     if ("Query".equals(name)) {
-                        dataFetcher = SourceFetcher.ofGetter(StaticSource.of(this.configurer.getQuery()), method);
+                        dataFetcher = SourceFetcher.ofGetter(StaticSource.of(this.configurer.getQuery()), method, this.handler);
                     } else if ("Mutation".equals(name)) {
-                        dataFetcher = SourceFetcher.ofGetter(StaticSource.of(this.configurer.getMutation()), method);
+                        dataFetcher = SourceFetcher.ofGetter(StaticSource.of(this.configurer.getMutation()), method, this.handler);
                     } else {
-                        dataFetcher = SourceFetcher.ofGetter(new GraphQLSource(), method);
+                        dataFetcher = SourceFetcher.ofGetter(new GraphQLSource(), method, this.handler);
                     }
                     dataFetcher.setResolvers(this.resolvers);
                     wiring.type(TypeRuntimeWiring.newTypeWiring(name).dataFetcher(dataFetcher.getName(), dataFetcher));

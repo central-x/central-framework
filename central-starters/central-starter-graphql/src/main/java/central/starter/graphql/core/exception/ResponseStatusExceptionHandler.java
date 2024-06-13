@@ -22,50 +22,32 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql;
+package central.starter.graphql.core.exception;
 
-import central.lang.reflect.invoke.ParameterResolver;
+import central.lang.Stringx;
 import central.starter.graphql.core.ExceptionHandler;
-import graphql.schema.GraphQLScalarType;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
-import java.util.List;
+import java.lang.reflect.Method;
 
 /**
- * GraphQL 配置
+ * ResponseStatusException Handler
  *
  * @author Alan Yeh
- * @since 2022/09/09
+ * @see ResponseStatusException
+ * @since 2024/06/13
  */
-public interface GraphQLConfigurer {
-    /**
-     * 添加标量
-     */
-    default List<GraphQLScalarType> getScalars() {
-        return Collections.emptyList();
+public class ResponseStatusExceptionHandler implements ExceptionHandler {
+    @Override
+    public boolean support(Throwable throwable) {
+        return throwable instanceof ResponseStatusException;
     }
 
-    /**
-     * 添加参数解析器
-     */
-    default List<ParameterResolver> getParameterResolvers() {
-        return Collections.emptyList();
+    @NotNull
+    @Override
+    public ResponseStatusException handle(@NotNull Method method, @NotNull Throwable throwable) {
+        ResponseStatusException exception = (ResponseStatusException) throwable;
+        return new ResponseStatusException(exception.getStatusCode(), Stringx.format("执行 {}.{} 出现异常: {}", method.getDeclaringClass().getSimpleName(), method.getName(), throwable.getMessage()), exception);
     }
-
-    /**
-     * 添加异常处理器
-     */
-    default List<ExceptionHandler> getExceptionHandlers() {
-        return Collections.emptyList();
-    }
-
-    /**
-     * 获取 Query 对象
-     */
-    Object getQuery();
-
-    /**
-     * 获取 Mutation 对象
-     */
-    Object getMutation();
 }

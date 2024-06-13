@@ -29,13 +29,12 @@ import central.starter.cache.core.annotation.CacheEvict;
 import central.starter.cache.core.annotation.CachePut;
 import central.starter.cache.core.annotation.Cacheable;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.AbstractPointcutAdvisor;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
@@ -72,7 +71,7 @@ public class CacheAdvisor extends AbstractPointcutAdvisor implements Initializin
 
     @Nullable
     @Override
-    public Object invoke(@NotNull MethodInvocation invocation) throws Throwable {
+    public Object invoke(@Nonnull MethodInvocation invocation) throws Throwable {
         return new ProcessChain<>(this.handlers).process(invocation);
     }
 
