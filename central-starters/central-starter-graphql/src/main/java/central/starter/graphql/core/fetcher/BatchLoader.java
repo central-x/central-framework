@@ -26,23 +26,20 @@ package central.starter.graphql.core.fetcher;
 
 import central.lang.reflect.invoke.Invocation;
 import central.lang.reflect.invoke.ParameterResolver;
+import central.starter.graphql.core.ExceptionHandleChain;
 import central.starter.graphql.core.source.Source;
 import central.util.Context;
 import central.util.Listx;
-import central.lang.Stringx;
 import com.alibaba.ttl.threadpool.TtlExecutors;
 import lombok.Getter;
 import lombok.Setter;
 import org.dataloader.BatchLoaderEnvironment;
 import org.dataloader.BatchLoaderWithContext;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -79,19 +76,25 @@ public class BatchLoader implements BatchLoaderWithContext<String, Object> {
      */
     private final Method method;
 
+    /**
+     * 异常处理链
+     */
+    private final ExceptionHandleChain handler;
+
     @Setter
     private List<ParameterResolver> resolvers = Listx.newArrayList();
 
-    public BatchLoader(Source source, Method method) {
+    public BatchLoader(Source source, Method method, ExceptionHandleChain handler) {
         var returnType = (ParameterizedType) method.getGenericReturnType();
 
         this.name = returnType.getActualTypeArguments()[1].getTypeName();
         this.source = source;
         this.method = method;
+        this.handler = handler;
     }
 
-    public static BatchLoader of(Source source, Method method) {
-        return new BatchLoader(source, method);
+    public static BatchLoader of(Source source, Method method, ExceptionHandleChain handler) {
+        return new BatchLoader(source, method, handler);
     }
 
     @Override
@@ -106,12 +109,8 @@ public class BatchLoader implements BatchLoaderWithContext<String, Object> {
                 var data = (Map<String, Object>) Invocation.of(method).resolvers(this.resolvers).invoke(this.source.getSource(context), context);
                 // 根据 keys 的顺序返回结果
                 return keys.stream().map(data::get).toList();
-            } catch (InvocationTargetException | IllegalAccessException ex) {
-                if (ex.getCause() instanceof UndeclaredThrowableException throwable) {
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + throwable.getCause().getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), throwable.getCause());
-                } else {
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Stringx.format("执行 {}.{} 出现异常: " + ex.getLocalizedMessage(), this.method.getDeclaringClass().getSimpleName(), this.method.getName()), ex.getCause());
-                }
+            } catch (InvocationTargetException | IllegalAccessException throwable) {
+                throw handler.handle(method, throwable);
             }
         }, executor);
     }

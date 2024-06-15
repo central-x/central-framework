@@ -64,10 +64,13 @@ public class SourceFetcher implements DataFetcher<Object> {
      */
     private final Method method;
 
+    /**
+     * 异常处理链
+     */
+    private final ExceptionHandleChain handler;
+
     @Setter
     private List<ParameterResolver> resolvers = new ArrayList<>();
-
-    private ExceptionHandleChain handler;
 
     private SourceFetcher(Source source, String name, Method method, ExceptionHandleChain handler) {
         this.source = source;
@@ -90,8 +93,8 @@ public class SourceFetcher implements DataFetcher<Object> {
         context.set(DataFetchingEnvironment.class, environment);
         try {
             return Invocation.of(this.method).resolvers(this.resolvers).invoke(this.source.getSource(context), context);
-        } catch (InvocationTargetException | IllegalAccessException ex) {
-            throw handler.handle(this.method, ex);
+        } catch (InvocationTargetException | IllegalAccessException throwable) {
+            throw handler.handle(this.method, throwable);
         }
     }
 }

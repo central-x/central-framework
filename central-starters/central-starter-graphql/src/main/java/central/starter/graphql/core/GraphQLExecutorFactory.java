@@ -308,7 +308,7 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
                         throw new GraphQLException(Stringx.format("BatchLoader[{}.{}] 注册失败: 方法的返回值必须是 Map<String, ?> 类型", clazz.getCanonicalName(), method.getName()));
                     }
 
-                    BatchLoader loader = new BatchLoader(SpringSource.of(clazz), method);
+                    BatchLoader loader = new BatchLoader(SpringSource.of(clazz), method, this.handler);
                     if (this.loaderRegistry.isRegistered(loader.getName())) {
                         throw new GraphQLException(Stringx.format("BatchLoader[{}.{}] 注册失败: 无法为类型[{}]注册多个 Loader", clazz.getCanonicalName(), method.getName(), loader.getName()));
                     }
