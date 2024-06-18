@@ -26,10 +26,11 @@ package central.starter.graphql.core;
 
 import central.starter.graphql.core.exception.FallbackHandler;
 import central.starter.graphql.core.exception.ResponseStatusExceptionHandler;
-import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +39,6 @@ import java.util.List;
  * @author Alan Yeh
  * @since 2024/06/13
  */
-@RequiredArgsConstructor
 public class ExceptionHandleChain {
     // 用户自定义异常处理器
     private final List<ExceptionHandler> handlers;
@@ -46,6 +46,11 @@ public class ExceptionHandleChain {
     private final List<ExceptionHandler> internalHandlers = List.of(new ResponseStatusExceptionHandler());
     // 默认异常处理器
     private final FallbackHandler fallbackHandler = new FallbackHandler();
+
+    public ExceptionHandleChain(List<ExceptionHandler> handlers) {
+        this.handlers = new ArrayList<>(handlers);
+        AnnotationAwareOrderComparator.sort(this.handlers);
+    }
 
     /**
      * 处理异常

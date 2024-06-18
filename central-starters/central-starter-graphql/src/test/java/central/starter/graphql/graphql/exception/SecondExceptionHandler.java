@@ -22,45 +22,32 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql.graphql;
+package central.starter.graphql.graphql.exception;
 
-import central.starter.graphql.GraphQLConfigurer;
 import central.starter.graphql.core.ExceptionHandler;
-import central.starter.graphql.graphql.exception.FirstExceptionHandler;
-import central.starter.graphql.graphql.exception.SecondExceptionHandler;
-import central.starter.graphql.graphql.exception.ThirdExceptionHandler;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import java.lang.reflect.Method;
 
 /**
- * GraphQL 配置
+ * 测试异常处理器排序
  *
  * @author Alan Yeh
- * @since 2022/09/30
+ * @since 2024/06/18
  */
-@Component
-public class Configurer implements GraphQLConfigurer {
-    @Setter(onMethod_ = @Autowired)
-    private Query query;
-
-    @Setter(onMethod_ = @Autowired)
-    private Mutation mutation;
-
+@Order(0)
+public class SecondExceptionHandler implements ExceptionHandler {
     @Override
-    public Object getQuery() {
-        return this.query;
+    public boolean support(Throwable throwable) {
+        return true;
     }
 
+    @NotNull
     @Override
-    public Object getMutation() {
-        return this.mutation;
-    }
-
-    @Override
-    public List<ExceptionHandler> getExceptionHandlers() {
-        return List.of(new SecondExceptionHandler(), new ThirdExceptionHandler(), new FirstExceptionHandler());
+    public ResponseStatusException handle(@NotNull Method method, @NotNull Throwable throwable) {
+        return new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
     }
 }
