@@ -27,6 +27,7 @@ package central.starter.webmvc.exception;
 import central.lang.Stringx;
 import central.starter.webmvc.exception.handlers.FallbackHandler;
 import central.util.Listx;
+import central.web.XTraceHeaders;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -76,7 +77,7 @@ public class JsonExceptionResolver extends ExceptionHandlerExceptionResolver {
         }
 
         if (Stringx.isNotEmpty(this.applicationName)) {
-            response.addHeader("X-", applicationName);
+            response.addHeader(XTraceHeaders.APPLICATION, applicationName);
         }
         return result;
     }
