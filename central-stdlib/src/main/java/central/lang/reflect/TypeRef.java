@@ -25,6 +25,7 @@
 package central.lang.reflect;
 
 import central.bean.InitializeException;
+import central.bean.Page;
 import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.Stringx;
@@ -35,6 +36,7 @@ import lombok.SneakyThrows;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.Supplier;
@@ -371,6 +373,16 @@ public abstract class TypeRef<T> {
      */
     public static <T extends Map<K, V>, K, V> TypeRef<T> ofMap(Class<? extends K> keyType, Class<? extends V> valueType) {
         return new TypeRef<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType, valueType})) {
+        };
+    }
+
+    /**
+     * 构建 Page 类型
+     *
+     * @param valueType Value 类型
+     */
+    public static <T extends Serializable> TypeRef<Page<T>> ofPage(Class<T> valueType) {
+        return new TypeRef<>(new ParameterizedTypeImpl(Page.class, new Type[]{valueType})) {
         };
     }
 
