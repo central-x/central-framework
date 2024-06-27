@@ -26,6 +26,7 @@ package central.starter.web.query;
 
 import central.lang.Arrayx;
 import central.lang.Stringx;
+import central.sql.data.Entity;
 import jakarta.annotation.Nonnull;
 import lombok.Data;
 
@@ -41,7 +42,7 @@ import java.util.List;
  * @since 2022/07/15
  */
 @Data
-public class KeywordQuery implements Serializable {
+public abstract class KeywordQuery<E extends Entity> implements Query<E> {
     @Serial
     private static final long serialVersionUID = -1863820286887438610L;
 

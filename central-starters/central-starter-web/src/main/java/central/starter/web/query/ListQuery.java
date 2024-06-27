@@ -24,6 +24,7 @@
 
 package central.starter.web.query;
 
+import central.sql.data.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -37,7 +38,7 @@ import java.io.Serial;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ListQuery extends KeywordQuery {
+public abstract class ListQuery<E extends Entity> extends KeywordQuery<E> {
     @Serial
     private static final long serialVersionUID = 3411599472644011096L;
 

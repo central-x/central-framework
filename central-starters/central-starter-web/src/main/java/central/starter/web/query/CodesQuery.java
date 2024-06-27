@@ -24,12 +24,12 @@
 
 package central.starter.web.query;
 
+import central.sql.data.Entity;
 import central.validation.Label;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -39,7 +39,7 @@ import java.util.List;
  * @since 2022/07/15
  */
 @Data
-public class CodesQuery implements Serializable {
+public abstract class CodesQuery<E extends Entity> implements Query<E> {
     @Serial
     private static final long serialVersionUID = -6439623074180542011L;
 

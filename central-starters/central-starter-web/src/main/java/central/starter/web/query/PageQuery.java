@@ -24,6 +24,7 @@
 
 package central.starter.web.query;
 
+import central.sql.data.Entity;
 import central.util.Objectx;
 import central.validation.Label;
 import jakarta.validation.constraints.Min;
@@ -40,7 +41,7 @@ import java.io.Serial;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PageQuery extends KeywordQuery {
+public abstract class PageQuery<E extends Entity> extends KeywordQuery<E> {
     @Serial
     private static final long serialVersionUID = 3818802335415736151L;
 

@@ -24,12 +24,12 @@
 
 package central.starter.web.query;
 
+import central.sql.data.Entity;
 import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.io.Serial;
-import java.io.Serializable;
 
 /**
  * 主键查询
@@ -38,7 +38,7 @@ import java.io.Serializable;
  * @since 2022/07/15
  */
 @Data
-public class IdQuery implements Serializable {
+public abstract class IdQuery<E extends Entity> implements Query<E> {
 
     @Serial
     private static final long serialVersionUID = 4029804593817481197L;

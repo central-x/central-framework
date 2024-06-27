@@ -25,24 +25,19 @@
 package central.starter.web.query;
 
 import central.sql.data.Entity;
-import central.validation.Label;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import central.sql.query.Conditions;
 
-import java.io.Serial;
+import java.io.Serializable;
 
 /**
- * 根据标识查询
+ * 查询
  *
  * @author Alan Yeh
- * @since 2022/07/15
+ * @since 2024/06/28
  */
-@Data
-public abstract class CodeQuery<E extends Entity> implements Query<E> {
-    @Serial
-    private static final long serialVersionUID = 3138572266790126537L;
-
-    @NotBlank
-    @Label("标识")
-    private String code;
+public interface Query<T extends Entity> extends Serializable {
+    /**
+     * 构建查询条件
+     */
+    Conditions<T> build();
 }
