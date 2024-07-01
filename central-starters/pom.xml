@@ -18,6 +18,7 @@
         <module>central-starter-orm</module>
         <module>central-starter-probe</module>
         <module>central-starter-template</module>
+        <module>central-starter-test</module>
         <module>central-starter-web</module>
         <module>central-starter-web-reactive</module>
         <module>central-starter-webmvc</module>

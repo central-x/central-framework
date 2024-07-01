@@ -1,0 +1,8 @@
+# Compiling
+/target
+
+# Running
+/cache
+/data
+/logs
+/tmp
