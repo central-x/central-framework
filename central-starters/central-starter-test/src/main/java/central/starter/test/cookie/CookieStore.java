@@ -24,6 +24,8 @@
 
 package central.starter.test.cookie;
 
+import central.lang.Arrayx;
+import central.util.Listx;
 import central.util.Mapx;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -76,6 +78,16 @@ public class CookieStore {
     /**
      * 从响应头里抓到需要保存的 Cookie
      *
+     * @param uriString 请求地址
+     * @param response  请求响应
+     */
+    public void put(String uriString, HttpServletResponse response) throws IOException {
+        this.put(URI.create(uriString), response);
+    }
+
+    /**
+     * 从响应头里抓到需要保存的 Cookie
+     *
      * @param uri     请求地址
      * @param headers 响应头
      */
@@ -87,6 +99,16 @@ public class CookieStore {
                 .build().toUri();
 
         this.manager.put(targetUri, headers);
+    }
+
+    /**
+     * 从响应头里抓到需要保存的 Cookie
+     *
+     * @param uriString 请求地址
+     * @param headers   响应头
+     */
+    public void put(String uriString, HttpHeaders headers) throws IOException {
+        this.put(URI.create(uriString), headers);
     }
 
     /**
@@ -106,6 +128,16 @@ public class CookieStore {
     }
 
     /**
+     * 获取请求指定 URI 时需要提供的请求头（Cookie 请求头）
+     *
+     * @param uriString 待访问地址
+     * @return 请求头
+     */
+    public HttpHeaders get(String uriString) throws IOException {
+        return this.get(URI.create(uriString));
+    }
+
+    /**
      * 根据待访问地址获取需要的 Cookie
      *
      * @param uri 待访问地址
@@ -118,7 +150,23 @@ public class CookieStore {
                 .port(this.uri.getPort())
                 .build().toUri();
 
-        var cookies = this.manager.getCookieStore().get(targetUri);
-        return cookies.stream().map(it -> new Cookie(it.getName(), it.getValue())).toArray(Cookie[]::new);
+        var cookies = Listx.asStream(this.manager.getCookieStore().get(targetUri))
+                .map(it -> new Cookie(it.getName(), it.getValue()))
+                .toArray(Cookie[]::new);
+
+        if (Arrayx.isNullOrEmpty(cookies)) {
+            return new Cookie[]{new Cookie("__cookie_store", "IgnoreMe")};
+        }
+        return cookies;
+    }
+
+    /**
+     * 根据待访问地址获取需要的 Cookie
+     *
+     * @param uriString 待访问地址
+     * @return Cookie
+     */
+    public Cookie[] getCookies(String uriString) throws IOException {
+        return this.getCookies(URI.create(uriString));
     }
 }
