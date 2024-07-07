@@ -75,7 +75,7 @@ public class HttpProxyFactory {
             return (T) this;
         }
 
-        protected File tmp = Path.of("cache", "http").toFile();
+        protected File tmp = Path.of("tmp", "http").toFile();
 
         /**
          * 设置缓存目录

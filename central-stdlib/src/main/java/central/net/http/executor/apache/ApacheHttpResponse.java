@@ -63,7 +63,7 @@ public class ApacheHttpResponse extends HttpResponse {
         for (var header : response.getHeaders()){
             this.headers.add(header.getName(), header.getValue());
         }
-        var cache = Files.createDirectories(Path.of("cache", "http"));
+        var cache = Files.createDirectories(Path.of("tmp", "http"));
         this.body = new ReusableBody(new File(cache.toFile(), UUID.randomUUID() + ".tmp"),
                 new InputStreamBody(response.getEntity().getContent(), this.headers));
     }

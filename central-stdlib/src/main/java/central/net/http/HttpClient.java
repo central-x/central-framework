@@ -81,7 +81,7 @@ public class HttpClient {
      * 缓存目录
      */
     @Getter
-    private File tmp = Path.of("cache", "http").toFile();
+    private File tmp = Path.of("tmp", "http").toFile();
 
     public void setTmp(File tmp) throws IOException {
         if (!tmp.exists()) {
