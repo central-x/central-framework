@@ -27,6 +27,8 @@ package central.starter.webmvc.servlet;
 import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.Attribute;
+import central.lang.Stringx;
+import central.util.Mapx;
 import central.util.Objectx;
 import central.web.XForwardedHeaders;
 import jakarta.annotation.Nonnull;
@@ -37,6 +39,7 @@ import jakarta.servlet.http.HttpServletRequestWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Map;
@@ -66,7 +69,26 @@ class DefaultWebMvcRequest extends HttpServletRequestWrapper implements WebMvcRe
         if (originUri != null) {
             return URI.create(originUri);
         } else {
-            return URI.create(this.getRequestURI());
+            var parameters = this.getParameterMap();
+            var builder = UriComponentsBuilder.fromUriString(this.getRequestURI())
+                    .scheme(this.getScheme())
+                    .host(this.getServerName());
+
+            // 处理默认端口
+            if ("http".equalsIgnoreCase(this.getScheme()) && 80 != this.getServerPort()) {
+                builder.port(this.getServerPort());
+            } else if ("https".equalsIgnoreCase(this.getScheme()) && 443 != this.getServerPort()) {
+                builder.port(this.getServerPort());
+            }
+
+            // 处理参数
+            if (Mapx.isNotEmpty(parameters)) {
+                for (var entry : parameters.entrySet()) {
+                    builder.queryParam(entry.getKey(), Arrayx.asStream(entry.getValue()).map(Stringx::encodeUrl).toList());
+                }
+            }
+
+            return builder.build(true).toUri();
         }
     }
 
