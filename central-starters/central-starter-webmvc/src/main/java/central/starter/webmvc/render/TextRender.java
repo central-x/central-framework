@@ -24,6 +24,7 @@
 
 package central.starter.webmvc.render;
 
+import central.lang.Stringx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
@@ -60,7 +61,9 @@ public class TextRender extends Render<TextRender> {
         response.setHeader(HttpHeaders.PRAGMA, "no-cache");
         response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
         response.setDateHeader(HttpHeaders.EXPIRES, 0);
-        response.setContentType("text/html; charset=utf-8");
+        if (Stringx.isNullOrEmpty(response.getContentType())) {
+            response.setContentType("text/html; charset=utf-8");
+        }
         PrintWriter writer = response.getWriter();
         writer.write(text);
     }
