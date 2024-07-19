@@ -51,13 +51,21 @@ public class TextView implements View {
     @Setter
     private String content;
 
+    private MediaType contentType;
+
     public TextView(@Nonnull String content) {
         this.content = content;
+        this.contentType = new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8);
+    }
+
+    public TextView(@Nonnull MediaType contentType, @Nonnull String content) {
+        this.content = content;
+        this.contentType = contentType;
     }
 
     @Override
     public String getContentType() {
-        return new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8).toString();
+        return this.contentType.toString();
     }
 
     @Override
@@ -65,6 +73,8 @@ public class TextView implements View {
         response.setHeader(HttpHeaders.PRAGMA, "no-cache");
         response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
         response.setDateHeader(HttpHeaders.EXPIRES, 0);
+
+        response.setContentType(this.getContentType());
         try (PrintWriter writer = response.getWriter()) {
             writer.write(this.content);
         }

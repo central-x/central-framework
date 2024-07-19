@@ -36,12 +36,9 @@ import java.nio.charset.StandardCharsets;
  * @since 2023/11/04
  */
 public class XmlView extends TextView {
-    public XmlView(@Nonnull String content) {
-        super(content);
-    }
+    private static final MediaType contentType = new MediaType(MediaType.APPLICATION_XML, StandardCharsets.UTF_8);
 
-    @Override
-    public String getContentType() {
-        return new MediaType(MediaType.APPLICATION_XML, StandardCharsets.UTF_8).toString();
+    public XmlView(@Nonnull String content) {
+        super(contentType, content);
     }
 }

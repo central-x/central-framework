@@ -26,6 +26,8 @@ package central.starter.web.reactive.render;
 
 import central.lang.Stringx;
 import central.util.Jsonx;
+import central.util.Objectx;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -126,7 +128,7 @@ public class ErrorRender extends Render<ErrorRender> {
     @Override
     public Mono<Void> render() {
         String body;
-        if (isAcceptJson()) {
+        if (MediaType.APPLICATION_JSON.includes(MediaType.parseMediaType(Objectx.getOrDefault(this.getRequest().getHeaders().getFirst(HttpHeaders.ACCEPT), MediaType.ALL_VALUE)))) {
             // 返回 JSON
             response.getHeaders().setContentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8));
 
@@ -148,21 +150,5 @@ public class ErrorRender extends Render<ErrorRender> {
         }
 
         return this.writeString(body, StandardCharsets.UTF_8);
-    }
-
-    private boolean isAcceptJson() {
-        var accepts = this.getRequest().getHeaders().getAccept();
-
-        for (var accept : accepts) {
-            if ("*".equals(accept.getType()) && "*".equals(accept.getSubtype())) {
-                // accept */*
-                continue;
-            }
-
-            if (accept.isCompatibleWith(MediaType.APPLICATION_JSON)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

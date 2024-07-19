@@ -38,16 +38,13 @@ import java.util.Map;
  * @since 2023/11/04
  */
 public class JsonView extends TextView {
+    private static final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8);
+
     public JsonView(@Nonnull Map<String, Object> map) {
-        super(Jsonx.Default().serialize(map));
+        super(contentType, Jsonx.Default().serialize(map));
     }
 
     public JsonView(@Nonnull Object obj) {
-        super(Jsonx.Default().serialize(obj));
-    }
-
-    @Override
-    public String getContentType() {
-        return new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8).toString();
+        super(contentType, Jsonx.Default().serialize(obj));
     }
 }

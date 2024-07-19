@@ -24,9 +24,9 @@
 
 package central.starter.webmvc.render;
 
+import central.lang.Stringx;
 import central.util.Mapx;
 import central.util.Objectx;
-import central.lang.Stringx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
@@ -37,8 +37,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
-import java.util.List;
 
 /**
  * @author Alan Yeh
@@ -87,7 +87,7 @@ public class ErrorRender extends Render<ErrorRender> {
 
     @Override
     public void render() throws IOException {
-        if (isAccept(MediaType.APPLICATION_JSON)) {
+        if (MediaType.APPLICATION_JSON.includes(MediaType.parseMediaType(Objectx.getOrDefault(request.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE)))) {
             // 需要返回 JSON 格式的数据
             new JsonRender(this.getRequest(), this.getResponse()).render(Mapx.newHashMap("message", this.message));
         } else {
@@ -96,26 +96,10 @@ public class ErrorRender extends Render<ErrorRender> {
             response.setHeader(HttpHeaders.PRAGMA, "no-cache");
             response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
             response.setDateHeader(HttpHeaders.EXPIRES, 0);
-            response.setContentType("text/html; charset=utf-8");
+            response.setContentType(new MediaType(MediaType.TEXT_HTML, StandardCharsets.UTF_8).toString());
             try (PrintWriter writer = response.getWriter()) {
                 writer.write(body);
             }
         }
-    }
-
-    private boolean isAccept(MediaType type) {
-        List<MediaType> accepts = MediaType.parseMediaTypes(this.getRequest().getHeader(HttpHeaders.ACCEPT));
-
-        for (MediaType accept : accepts) {
-            if ("*".equals(accept.getType()) && "*".equals(accept.getSubtype())) {
-                continue;
-            }
-
-            if (accept.isCompatibleWith(type)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -26,7 +26,6 @@ package central.starter.webmvc.view;
 
 import central.lang.Stringx;
 import central.util.Jsonx;
-import central.util.Listx;
 import central.util.Objectx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,7 +40,6 @@ import org.springframework.web.servlet.View;
 
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -83,7 +81,7 @@ public class ErrorView implements View {
         response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
         response.setDateHeader(HttpHeaders.EXPIRES, 0);
 
-        if (isAcceptJson(MediaType.parseMediaTypes(request.getHeader(HttpHeaders.ACCEPT)))) {
+        if (MediaType.APPLICATION_JSON.includes(MediaType.parseMediaType(Objectx.getOrDefault(request.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE)))) {
             response.setContentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8).toString());
             try (var writer = response.getWriter()) {
                 writer.write(Jsonx.Default().serialize(Map.of("message", this.message)));
@@ -95,14 +93,6 @@ public class ErrorView implements View {
                 var content = Stringx.format("<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>{}</title></head><body><h2>{} ({})</h2><p>{}</p><div id='created'>{}</div></body></html>", reason, reason, this.getStatus().value(), this.message, OffsetDateTime.now().toString());
                 writer.write(content);
             }
-
         }
-    }
-
-    private boolean isAcceptJson(List<MediaType> types) {
-        if (Listx.isNullOrEmpty(types)) {
-            return false;
-        }
-        return types.size() == 1 && MediaType.APPLICATION_JSON.equalsTypeAndSubtype(Listx.getFirstOrNull(types));
     }
 }

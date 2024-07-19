@@ -103,16 +103,8 @@ class DefaultWebMvcRequest extends HttpServletRequestWrapper implements WebMvcRe
 
     @Override
     public boolean isAcceptContentType(MediaType contentType) {
-        var accepts = MediaType.parseMediaTypes(this.getHeader(HttpHeaders.ACCEPT));
-        for (var accept : accepts) {
-            if ("*".equals(accept.getType()) && "*".equals(accept.getSubtype())) {
-                continue;
-            }
-            if (accept.isCompatibleWith(contentType)) {
-                return true;
-            }
-        }
-        return false;
+        var accept = MediaType.parseMediaType(Objectx.getOrDefault(this.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE));
+        return contentType.includes(accept);
     }
 
     @Override
@@ -127,6 +119,7 @@ class DefaultWebMvcRequest extends HttpServletRequestWrapper implements WebMvcRe
 
     private final Map<String, Object> attributes = new ConcurrentHashMap<>();
 
+    @SuppressWarnings("unchecked")
     public <T> @Nullable T getAttribute(@Nonnull Attribute<T> attribute) {
         return (T) attributes.computeIfAbsent(attribute.getCode(), code -> attribute.getValue());
     }
@@ -135,6 +128,7 @@ class DefaultWebMvcRequest extends HttpServletRequestWrapper implements WebMvcRe
         return Assertx.requireNotNull(getAttribute(attribute), "Require nonnull value for key '{}'", attribute.getCode());
     }
 
+    @SuppressWarnings("unchecked")
     public <T> @Nonnull T getAttributeOrDefault(@Nonnull Attribute<T> attribute, @Nonnull T defaultValue) {
         return (T) this.attributes.getOrDefault(attribute.getCode(), defaultValue);
     }

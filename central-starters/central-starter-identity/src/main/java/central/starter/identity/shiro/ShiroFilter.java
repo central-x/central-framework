@@ -157,30 +157,11 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
         cookie.setMaxAge(0);
         servletResponse.addCookie(cookie);
 
-        if (this.isAccept(servletRequest, MediaType.APPLICATION_JSON)) {
+        if (MediaType.APPLICATION_JSON.includes(MediaType.parseMediaType(Objectx.getOrDefault(servletRequest.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE)))) {
             new JsonRender(servletRequest, servletResponse).set("message", "注销成功").render();
         } else {
             new RedirectRender(servletRequest, servletResponse).redirect(URI.create(Objectx.getOrDefault(((HttpServletRequest) request).getContextPath(), "/"))).render();
         }
-    }
-
-    private boolean isAccept(HttpServletRequest request, MediaType type) {
-        var accepts = request.getHeaders(HttpHeaders.ACCEPT);
-
-        while (accepts.hasMoreElements()) {
-            var accept = accepts.nextElement();
-            var medias = MediaType.parseMediaTypes(accept);
-
-            for (var media : medias) {
-                if ("*".equals(media.getType()) && "*".equals(media.getSubtype())) {
-                    continue;
-                }
-                if (media.isCompatibleWith(type)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     /**
