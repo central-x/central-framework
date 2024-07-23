@@ -33,14 +33,17 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.View;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Error View
@@ -52,28 +55,33 @@ import java.util.Map;
  */
 public class ErrorView implements View {
 
+    /**
+     * 异常
+     */
     @Getter
     @Setter
-    private HttpStatusCode status;
+    private Throwable throwable;
 
+    /**
+     * 是否输出详细异常信息
+     */
     @Getter
     @Setter
-    private String message;
+    private boolean print;
 
     public ErrorView(Throwable throwable) {
-        if (throwable instanceof ResponseStatusException error) {
-            this.status = error.getStatusCode();
-            this.message = error.getReason();
-        } else {
-            this.status = HttpStatus.INTERNAL_SERVER_ERROR;
-            this.message = throwable.getMessage();
-        }
+        this(throwable, false);
     }
 
-    public ErrorView(HttpStatusCode status, String message) {
-        this.status = status;
-        this.message = message;
+    public ErrorView(Throwable throwable, boolean print) {
+        this.throwable = throwable;
+        this.print = print;
     }
+
+    public ErrorView(String message) {
+        this(new RuntimeException(message), false);
+    }
+
 
     @Override
     public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -81,17 +89,63 @@ public class ErrorView implements View {
         response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
         response.setDateHeader(HttpHeaders.EXPIRES, 0);
 
-        if (MediaType.APPLICATION_JSON.includes(MediaType.parseMediaType(Objectx.getOrDefault(request.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE)))) {
+        // 渲染响应体
+        var accepts = MediaType.parseMediaTypes(Objectx.getOrDefault(request.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE));
+
+        if (accepts.stream().anyMatch(MediaType.APPLICATION_JSON::includes)) {
+            // 客户端要求返回 JSON 格式
             response.setContentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8).toString());
+            var body = new HashMap<String, Object>();
+            body.put("message", this.throwable.getLocalizedMessage());
+            body.put("timestamp", System.currentTimeMillis());
+
+            if (this.print) {
+                // 输出异常信息
+                var writer = new StringWriter();
+                throwable.printStackTrace(new PrintWriter(writer));
+                var reason = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toList();
+                body.put("stacks", reason);
+            }
+
+            // 写入响应体
             try (var writer = response.getWriter()) {
-                writer.write(Jsonx.Default().serialize(Map.of("message", this.message)));
+                writer.write(Jsonx.Default().serialize(body));
             }
         } else {
+            // 返回 HTML 异常信息
             response.setContentType(new MediaType(MediaType.TEXT_HTML, StandardCharsets.UTF_8).toString());
+
+            var content = """
+                    <!DOCTYPE html>
+                    <html lang="en">
+                      <head>
+                        <meta charset="UTF-8">
+                        <title>{}</title>
+                      </head>
+                      <body>
+                        <h2>{} ({})</h2>
+                        <p>{}</p>
+                        {}
+                        <p>
+                          <div id='created'>{}</div>
+                        </p>
+                      </body>
+                    </html>
+                    """;
+
+            String stack = "";
+
+            if (this.print) {
+                // 输出异常信息
+                var writer = new StringWriter();
+                throwable.printStackTrace(new PrintWriter(writer));
+                stack = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "&nbsp;&nbsp;&nbsp;")).collect(Collectors.joining("<br/>"));
+            }
+
             try (var writer = response.getWriter()) {
-                var reason = Objectx.getOrDefault(HttpStatus.resolve(this.getStatus().value()), HttpStatus.INTERNAL_SERVER_ERROR).getReasonPhrase();
-                var content = Stringx.format("<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>{}</title></head><body><h2>{} ({})</h2><p>{}</p><div id='created'>{}</div></body></html>", reason, reason, this.getStatus().value(), this.message, OffsetDateTime.now().toString());
-                writer.write(content);
+                var status = Objectx.getOrDefault(HttpStatus.resolve(response.getStatus()), HttpStatus.INTERNAL_SERVER_ERROR);
+
+                writer.write(Stringx.format(content, status.getReasonPhrase(), status.getReasonPhrase(), status.value(), throwable.getLocalizedMessage(), stack, OffsetDateTime.now().toString()));
             }
         }
     }
