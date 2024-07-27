@@ -25,13 +25,16 @@
 package central.starter.webmvc.render;
 
 import central.lang.Stringx;
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 文本响应
@@ -43,28 +46,40 @@ public class TextRender extends Render<TextRender> {
     @Getter
     private String text;
 
-    public TextRender(HttpServletRequest request, HttpServletResponse response) {
+    public TextRender(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
         super(request, response);
     }
 
+    /**
+     * 设置文本
+     *
+     * @param text 响应文本
+     */
     public TextRender setText(String text) {
         this.text = text;
         return this;
     }
 
+    /**
+     * 渲染文本
+     *
+     * @param text 响应文本
+     */
     public void render(String text) throws IOException {
         this.setText(text).render();
     }
 
     @Override
     public void render() throws IOException {
-        response.setHeader(HttpHeaders.PRAGMA, "no-cache");
-        response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
-        response.setDateHeader(HttpHeaders.EXPIRES, 0);
-        if (Stringx.isNullOrEmpty(response.getContentType())) {
-            response.setContentType("text/html; charset=utf-8");
+        this.getResponse().setHeader(HttpHeaders.PRAGMA, "no-cache");
+        this.getResponse().setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
+        this.getResponse().setDateHeader(HttpHeaders.EXPIRES, 0);
+        if (Stringx.isNullOrEmpty(this.getResponse().getContentType())) {
+            this.getResponse().setContentType(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8).toString());
         }
-        PrintWriter writer = response.getWriter();
-        writer.write(text);
+
+        try (PrintWriter writer = this.getResponse().getWriter()) {
+            writer.write(text);
+        }
     }
 }

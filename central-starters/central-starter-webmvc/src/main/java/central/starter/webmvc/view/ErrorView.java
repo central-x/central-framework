@@ -125,7 +125,9 @@ public class ErrorView implements View {
                       <body>
                         <h2>{} ({})</h2>
                         <p>{}</p>
+                        <p>
                         {}
+                        </p>
                         <p>
                           <div id='created'>{}</div>
                         </p>
@@ -139,7 +141,7 @@ public class ErrorView implements View {
                 // 输出异常信息
                 var writer = new StringWriter();
                 throwable.printStackTrace(new PrintWriter(writer));
-                stack = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "&nbsp;&nbsp;&nbsp;")).collect(Collectors.joining("<br/>"));
+                stack = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "&nbsp;&nbsp;&nbsp;")).collect(Collectors.joining("<br/>\n"));
             }
 
             try (var writer = response.getWriter()) {

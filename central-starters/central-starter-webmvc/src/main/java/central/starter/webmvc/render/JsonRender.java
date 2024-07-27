@@ -25,17 +25,22 @@
 package central.starter.webmvc.render;
 
 import central.util.Jsonx;
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Json Render
+ *
  * @author Alan Yeh
  * @since 2022/07/16
  */
@@ -43,21 +48,21 @@ public class JsonRender extends Render<JsonRender> {
     @Getter
     private Map<String, Object> json = new HashMap<>();
 
-    public JsonRender(HttpServletRequest request, HttpServletResponse response){
+    public JsonRender(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
         super(request, response);
     }
 
-    public JsonRender set(String name, Object value){
+    public JsonRender set(String name, Object value) {
         this.json.put(name, value);
         return this;
     }
 
-    public JsonRender remove(String name){
+    public JsonRender remove(String name) {
         this.json.remove(name);
         return this;
     }
 
-    public JsonRender clear(){
+    public JsonRender clear() {
         this.json.clear();
         return this;
     }
@@ -71,19 +76,18 @@ public class JsonRender extends Render<JsonRender> {
         this.setJson(json).render();
     }
 
+    private static final String contentType = new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8).toString();
+
     @Override
     public void render() throws IOException {
-        HttpServletResponse response = getResponse();
-        if (response == null){
-            throw new IllegalStateException("请先通过 setContext 设置 HttpServletRequest 和 HttpServletResponse 上下文");
-        }
-
         String text = Jsonx.Default().serialize(this.json);
-        response.setHeader("Pragma", "no-cache");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setDateHeader("Expires", 0);
-        response.setContentType("application/json; charset=utf-8");
-        PrintWriter writer = response.getWriter();
-        writer.write(text);
+        this.getResponse().setHeader(HttpHeaders.PRAGMA, "no-cache");
+        this.getResponse().setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
+        this.getResponse().setDateHeader(HttpHeaders.EXPIRES, 0);
+
+        this.getResponse().setContentType(contentType);
+        try (PrintWriter writer = this.getResponse().getWriter()) {
+            writer.write(text);
+        }
     }
 }

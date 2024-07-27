@@ -27,6 +27,7 @@ package central.starter.webmvc.render;
 import central.io.IOStreamx;
 import central.util.Range;
 import central.lang.Stringx;
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
@@ -42,7 +43,7 @@ import java.nio.charset.StandardCharsets;
  * @since 2022/07/16
  */
 public class ResumableFileRender extends Render<ResumableFileRender> {
-    public ResumableFileRender(HttpServletRequest request, HttpServletResponse response) {
+    public ResumableFileRender(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
         super(request, response);
     }
 

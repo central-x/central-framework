@@ -24,6 +24,7 @@
 
 package central.starter.webmvc.render;
 
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,12 +44,12 @@ import java.util.Objects;
  */
 public abstract class Render<T extends Render<?>> {
     @Getter
-    protected HttpServletRequest request;
+    private final HttpServletRequest request;
     @Getter
-    protected HttpServletResponse response;
+    private final HttpServletResponse response;
 
     @Getter
-    protected HttpStatusCode status;
+    private HttpStatusCode status;
 
     /**
      * 设置请求上下文
@@ -56,7 +57,7 @@ public abstract class Render<T extends Render<?>> {
      * @param request  HttpServletRequest
      * @param response HttpServletResponse
      */
-    public Render(HttpServletRequest request, HttpServletResponse response) {
+    public Render(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
         this.request = Objects.requireNonNull(request);
         this.response = Objects.requireNonNull(response);
     }
@@ -64,6 +65,7 @@ public abstract class Render<T extends Render<?>> {
     /**
      * 设置响应头
      */
+    @SuppressWarnings("unchecked")
     public T setHeader(String name, String value) {
         response.setHeader(name, value);
         return (T) this;
@@ -72,6 +74,7 @@ public abstract class Render<T extends Render<?>> {
     /**
      * 设置响应体类型
      */
+    @SuppressWarnings("unchecked")
     public T setContentType(MediaType contentType) {
         response.setHeader(HttpHeaders.CONTENT_TYPE, contentType.toString());
         return (T) this;
@@ -80,6 +83,7 @@ public abstract class Render<T extends Render<?>> {
     /**
      * 添加 Cookie
      */
+    @SuppressWarnings("unchecked")
     public T addCookie(Cookie cookie) {
         response.addCookie(cookie);
         return (T) this;
@@ -88,6 +92,7 @@ public abstract class Render<T extends Render<?>> {
     /**
      * 添加 Cookie
      */
+    @SuppressWarnings("unchecked")
     public T addCookie(String name, String value) {
         response.addCookie(new Cookie(name, value));
         return (T) this;
@@ -96,6 +101,7 @@ public abstract class Render<T extends Render<?>> {
     /**
      * 设置状态码
      */
+    @SuppressWarnings("unchecked")
     public T setStatus(HttpStatusCode status) {
         this.status = status;
         response.setStatus(status.value());

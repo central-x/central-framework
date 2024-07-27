@@ -25,6 +25,7 @@
 package central.starter.webmvc.render;
 
 import central.lang.Stringx;
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -45,23 +46,23 @@ public class RedirectRender extends Render<RedirectRender> {
      * @param request  HttpServletRequest
      * @param response HttpServletResponse
      */
-    public RedirectRender(HttpServletRequest request, HttpServletResponse response) {
+    public RedirectRender(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
         super(request, response);
     }
 
     private URI location;
 
-    public RedirectRender redirect(URI location){
+    public RedirectRender redirect(URI location) {
         this.location = location;
         return this;
     }
 
-    private URI getLocation(){
-        if (this.location == null){
+    private URI getLocation() {
+        if (this.location == null) {
             throw new IllegalArgumentException("location cannot be null");
         }
 
-        if (this.location.toString().startsWith("/")){
+        if (this.location.toString().startsWith("/")) {
             // 如果不是完整的 HTTP 协议的，就补充为完整的 http uri
             URI requestUri = URI.create(this.getRequest().getRequestURL().toString());
 

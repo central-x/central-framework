@@ -26,6 +26,7 @@ package central.starter.webmvc.render;
 
 import central.io.IOStreamx;
 import central.lang.Stringx;
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
@@ -47,7 +48,7 @@ import java.nio.charset.StandardCharsets;
 public class FileRender extends Render<FileRender> {
     private InputStream input;
 
-    public FileRender(HttpServletRequest request, HttpServletResponse response) {
+    public FileRender(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
         super(request, response);
     }
 
