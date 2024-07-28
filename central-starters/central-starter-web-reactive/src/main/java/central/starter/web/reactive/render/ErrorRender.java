@@ -26,9 +26,10 @@ package central.starter.web.reactive.render;
 
 import central.lang.Stringx;
 import central.util.Jsonx;
+import central.util.Listx;
 import central.util.Objectx;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -42,6 +43,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 异常响应
@@ -67,36 +71,105 @@ public class ErrorRender extends Render<ErrorRender> {
     }
 
     /**
-     * 是否 DEBUG 模块
-     * 如果为 true，则在响应体中返回 stacks
+     * 调试模式
      */
     private boolean debug = false;
 
     /**
-     * 异常信息
+     * 打开调试模式
+     * <p>
+     * 输出异常栈
      */
-    private String message;
+    public ErrorRender debug() {
+        this.debug = true;
+        return this;
+    }
+
+    /**
+     * 设置是否为调试模式
+     * <p>
+     * 是否输出异常栈
+     */
+    public ErrorRender debug(boolean debug) {
+        this.debug = debug;
+        return this;
+    }
 
     /**
      * 异常
      */
     private Throwable throwable;
 
-    public ErrorRender setDebug(boolean debug) {
-        this.debug = debug;
+    /**
+     * 设置异常
+     *
+     * @param throwable 异常
+     */
+    public ErrorRender setError(Throwable throwable) {
+        if (throwable instanceof ResponseStatusException exception) {
+            return setError(exception.getStatusCode(), throwable);
+        } else {
+            return setError(HttpStatus.INTERNAL_SERVER_ERROR, throwable);
+        }
+    }
+
+    /**
+     * 设置状态码和异常
+     *
+     * @param status    状态码
+     * @param throwable 异常
+     */
+    public ErrorRender setError(HttpStatusCode status, Throwable throwable) {
+        this.setStatus(status);
+        this.throwable = throwable;
         return this;
     }
 
     /**
-     * 返回文本异常
+     * 设置错误信息
+     *
+     * @param message 错误信息
+     */
+    public ErrorRender setError(String message) {
+        return this.setError(HttpStatus.INTERNAL_SERVER_ERROR, message);
+    }
+
+    /**
+     * 设置错误信息和状态码
      *
      * @param status  状态码
-     * @param message 异常信息
+     * @param message 错误信息
+     */
+    public ErrorRender setError(HttpStatus status, String message) {
+        return this.setError(status, new RuntimeException(message));
+    }
+
+    /**
+     * 执行渲染
+     *
+     * @param message 错误信息
+     */
+    public Mono<Void> render(String message) {
+        return this.setError(message).render();
+    }
+
+    /**
+     * 执行渲染
+     *
+     * @param status  状态码
+     * @param message 错误信息
      */
     public Mono<Void> render(HttpStatus status, String message) {
-        this.setStatus(status);
-        this.message = message;
-        return this.render();
+        return this.setError(status, message).render();
+    }
+
+    /**
+     * 返回异常
+     *
+     * @param throwable 异常
+     */
+    public Mono<Void> render(Throwable throwable) {
+        return this.setError(throwable).render();
     }
 
     /**
@@ -106,48 +179,91 @@ public class ErrorRender extends Render<ErrorRender> {
      * @param throwable 异常
      */
     public Mono<Void> render(HttpStatus status, Throwable throwable) {
-        this.setStatus(status);
-        this.message = throwable.getLocalizedMessage();
-        this.throwable = throwable;
-        return this.render();
-    }
-
-    /**
-     * 返回异常
-     *
-     * @param throwable 异常
-     */
-    public Mono<Void> render(Throwable throwable) {
-        if (throwable instanceof ResponseStatusException ex) {
-            return render(HttpStatus.resolve(ex.getStatusCode().value()), ex);
-        } else {
-            return render(HttpStatus.INTERNAL_SERVER_ERROR, throwable);
-        }
+        return this.setError(status, throwable).render();
     }
 
     @Override
     public Mono<Void> render() {
-        String body;
-        if (MediaType.APPLICATION_JSON.includes(MediaType.parseMediaType(Objectx.getOrDefault(this.getRequest().getHeaders().getFirst(HttpHeaders.ACCEPT), MediaType.ALL_VALUE)))) {
-            // 返回 JSON
-            response.getHeaders().setContentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8));
+        response.getHeaders().setPragma("no-cache");
+        response.getHeaders().setCacheControl("no-cache");
+        response.getHeaders().setExpires(0);
 
-            var json = new HashMap<String, Object>();
-            json.put("message", this.message);
-            if (this.debug && this.throwable != null) {
-                var writer = new StringWriter();
-                this.throwable.printStackTrace(new PrintWriter(writer));
-                var stacks = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toList();
-                json.put("stacks", stacks);
-            }
+        var accepts = this.getRequest().getHeaders().getAccept();
 
-            body = Jsonx.Default().serialize(json);
-
-        } else {
-            // 返回 html
-            this.getResponse().getHeaders().setContentType(new MediaType(MediaType.TEXT_HTML, StandardCharsets.UTF_8));
-            body = Stringx.format("<html><body><h2>{} ({})</h2><p>{}</p><div id='created'>{}</div></body></html>", HttpStatus.resolve(this.response.getStatusCode().value()).getReasonPhrase(), this.response.getStatusCode().value(), this.message, OffsetDateTime.now().toString());
+        if (Listx.isNullOrEmpty(accepts)) {
+            accepts = List.of(MediaType.ALL);
         }
+
+        if (accepts.stream().anyMatch(MediaType.APPLICATION_JSON::includes)) {
+            return this.renderJson();
+        } else {
+            return this.renderHtml();
+        }
+    }
+
+    private static final MediaType JSON_CONTENT_TYPE = new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8);
+
+    /**
+     * 渲染 JSON
+     */
+    private Mono<Void> renderJson() {
+        // 返回 JSON
+        response.getHeaders().setContentType(JSON_CONTENT_TYPE);
+
+        var json = new HashMap<String, Object>();
+        json.put("message", this.throwable.getLocalizedMessage());
+        json.put("timestamp", System.currentTimeMillis());
+
+        if (this.debug && this.throwable != null) {
+            var writer = new StringWriter();
+            throwable.printStackTrace(new PrintWriter(writer));
+            var stacks = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toList();
+            json.put("stacks", stacks);
+        }
+
+        var body = Jsonx.Default().serialize(json);
+
+        return this.writeString(body, StandardCharsets.UTF_8);
+    }
+
+    private static final MediaType HTML_CONTENT_TYPE = new MediaType(MediaType.TEXT_HTML, StandardCharsets.UTF_8);
+
+    /**
+     * 渲染 HTML
+     */
+    private Mono<Void> renderHtml() {
+        this.getResponse().getHeaders().setContentType(HTML_CONTENT_TYPE);
+
+        var content = """
+                <!DOCTYPE html>
+                <html lang="en">
+                  <head>
+                    <meta charset="UTF-8">
+                    <title>{}</title>
+                  </head>
+                  <body>
+                    <h2>{} ({})</h2>
+                    <p>{}</p>
+                    <p>
+                    {}
+                    </p>
+                    <p>
+                      <div id='created'>{}</div>
+                    </p>
+                  </body>
+                </html>
+                """;
+        String stack = "";
+
+        if (this.debug) {
+            // 输出异常信息
+            var writer = new StringWriter();
+            throwable.printStackTrace(new PrintWriter(writer));
+            stack = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "&nbsp;&nbsp;&nbsp;")).collect(Collectors.joining("<br/>\n"));
+        }
+
+        var status = Objectx.getOrDefault(HttpStatus.resolve(Objects.requireNonNull(this.getResponse().getStatusCode()).value()), HttpStatus.INTERNAL_SERVER_ERROR);
+        var body = Stringx.format(content, status.getReasonPhrase(), status.getReasonPhrase(), status.value(), throwable.getLocalizedMessage(), stack, OffsetDateTime.now().toString());
 
         return this.writeString(body, StandardCharsets.UTF_8);
     }

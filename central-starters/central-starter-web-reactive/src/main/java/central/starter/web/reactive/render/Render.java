@@ -28,7 +28,7 @@ import central.io.IOStreamx;
 import lombok.Getter;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -67,6 +67,7 @@ public abstract class Render<T extends Render<?>> {
      * @param name  名
      * @param value 值
      */
+    @SuppressWarnings("unchecked")
     public T setHeader(String name, String value) {
         this.response.getHeaders().set(name, value);
         return (T) this;
@@ -77,6 +78,7 @@ public abstract class Render<T extends Render<?>> {
      *
      * @param cookie cookie
      */
+    @SuppressWarnings("unchecked")
     public T addCookie(ResponseCookie cookie) {
         response.addCookie(cookie);
         return (T) this;
@@ -88,6 +90,7 @@ public abstract class Render<T extends Render<?>> {
      * @param name  名
      * @param value 值
      */
+    @SuppressWarnings("unchecked")
     public T addCookie(String name, String value) {
         response.addCookie(ResponseCookie.from(name, value).build());
         return (T) this;
@@ -98,7 +101,8 @@ public abstract class Render<T extends Render<?>> {
      *
      * @param status 状态码
      */
-    public T setStatus(HttpStatus status) {
+    @SuppressWarnings("unchecked")
+    public T setStatus(HttpStatusCode status) {
         response.setStatusCode(status);
         return (T) this;
     }

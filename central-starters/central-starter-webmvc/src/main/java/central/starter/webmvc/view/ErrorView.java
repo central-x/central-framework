@@ -82,7 +82,6 @@ public class ErrorView implements View {
         this(new RuntimeException(message), false);
     }
 
-
     @Override
     public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         response.setHeader(HttpHeaders.PRAGMA, "no-cache");
@@ -93,62 +92,80 @@ public class ErrorView implements View {
         var accepts = MediaType.parseMediaTypes(Objectx.getOrDefault(request.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE));
 
         if (accepts.stream().anyMatch(MediaType.APPLICATION_JSON::includes)) {
-            // 客户端要求返回 JSON 格式
-            response.setContentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8).toString());
-            var body = new HashMap<String, Object>();
-            body.put("message", this.throwable.getLocalizedMessage());
-            body.put("timestamp", System.currentTimeMillis());
-
-            if (this.print) {
-                // 输出异常信息
-                var writer = new StringWriter();
-                throwable.printStackTrace(new PrintWriter(writer));
-                var reason = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toList();
-                body.put("stacks", reason);
-            }
-
-            // 写入响应体
-            try (var writer = response.getWriter()) {
-                writer.write(Jsonx.Default().serialize(body));
-            }
+            this.renderJson(request, response);
         } else {
-            // 返回 HTML 异常信息
-            response.setContentType(new MediaType(MediaType.TEXT_HTML, StandardCharsets.UTF_8).toString());
+            this.renderHtml(request, response);
+        }
+    }
 
-            var content = """
-                    <!DOCTYPE html>
-                    <html lang="en">
-                      <head>
-                        <meta charset="UTF-8">
-                        <title>{}</title>
-                      </head>
-                      <body>
-                        <h2>{} ({})</h2>
-                        <p>{}</p>
-                        <p>
-                        {}
-                        </p>
-                        <p>
-                          <div id='created'>{}</div>
-                        </p>
-                      </body>
-                    </html>
-                    """;
+    private static final String JSON_CONTENT_TYPE = new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8).toString();
 
-            String stack = "";
+    /**
+     * 渲染 JSON
+     */
+    private void renderJson(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // 客户端要求返回 JSON 格式
+        response.setContentType(JSON_CONTENT_TYPE);
+        var body = new HashMap<String, Object>();
+        body.put("message", this.throwable.getLocalizedMessage());
+        body.put("timestamp", System.currentTimeMillis());
 
-            if (this.print) {
-                // 输出异常信息
-                var writer = new StringWriter();
-                throwable.printStackTrace(new PrintWriter(writer));
-                stack = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "&nbsp;&nbsp;&nbsp;")).collect(Collectors.joining("<br/>\n"));
-            }
+        if (this.print) {
+            // 输出异常信息
+            var writer = new StringWriter();
+            throwable.printStackTrace(new PrintWriter(writer));
+            var reason = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toList();
+            body.put("stacks", reason);
+        }
 
-            try (var writer = response.getWriter()) {
-                var status = Objectx.getOrDefault(HttpStatus.resolve(response.getStatus()), HttpStatus.INTERNAL_SERVER_ERROR);
+        // 写入响应体
+        try (var writer = response.getWriter()) {
+            writer.write(Jsonx.Default().serialize(body));
+        }
+    }
 
-                writer.write(Stringx.format(content, status.getReasonPhrase(), status.getReasonPhrase(), status.value(), throwable.getLocalizedMessage(), stack, OffsetDateTime.now().toString()));
-            }
+    private static final String HTML_CONTENT_TYPE = new MediaType(MediaType.TEXT_HTML, StandardCharsets.UTF_8).toString();
+
+    /**
+     * 渲染 HTML
+     */
+    private void renderHtml(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // 返回 HTML 异常信息
+        response.setContentType(HTML_CONTENT_TYPE);
+
+        var content = """
+                <!DOCTYPE html>
+                <html lang="en">
+                  <head>
+                    <meta charset="UTF-8">
+                    <title>{}</title>
+                  </head>
+                  <body>
+                    <h2>{} ({})</h2>
+                    <p>{}</p>
+                    <p>
+                    {}
+                    </p>
+                    <p>
+                      <div id='created'>{}</div>
+                    </p>
+                  </body>
+                </html>
+                """;
+
+        String stack = "";
+
+        if (this.print) {
+            // 输出异常信息
+            var writer = new StringWriter();
+            throwable.printStackTrace(new PrintWriter(writer));
+            stack = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "&nbsp;&nbsp;&nbsp;")).collect(Collectors.joining("<br/>\n"));
+        }
+
+        try (var writer = response.getWriter()) {
+            var status = Objectx.getOrDefault(HttpStatus.resolve(response.getStatus()), HttpStatus.INTERNAL_SERVER_ERROR);
+
+            writer.write(Stringx.format(content, status.getReasonPhrase(), status.getReasonPhrase(), status.value(), throwable.getLocalizedMessage(), stack, OffsetDateTime.now().toString()));
         }
     }
 }
