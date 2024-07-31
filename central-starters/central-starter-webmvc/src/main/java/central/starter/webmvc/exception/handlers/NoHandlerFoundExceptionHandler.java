@@ -25,7 +25,7 @@
 package central.starter.webmvc.exception.handlers;
 
 import central.starter.webmvc.exception.ExceptionHandler;
-import central.util.Mapx;
+import central.starter.webmvc.view.ErrorView;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,7 +34,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 /**
  * NoHandlerFoundException Handler
@@ -54,8 +53,7 @@ public class NoHandlerFoundExceptionHandler implements ExceptionHandler {
     @Nullable
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
-        var body = Mapx.newHashMap("message", "Not Found");
-        var mv = new ModelAndView(new MappingJackson2JsonView(), body);
+        var mv = new ModelAndView(new ErrorView("Handler Not Found"));
         mv.setStatus(HttpStatus.NOT_FOUND);
         return mv;
     }

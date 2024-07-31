@@ -25,6 +25,7 @@
 package central.starter.webmvc.exception.handlers;
 
 import central.starter.webmvc.exception.ExceptionHandler;
+import central.starter.webmvc.view.ErrorView;
 import central.util.Mapx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -54,8 +55,7 @@ public class ResponseStatusExceptionHandler implements ExceptionHandler {
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
         var ex = (ResponseStatusException) throwable;
 
-        var body = Mapx.newHashMap("message", ex.getReason());
-        var mv = new ModelAndView(new MappingJackson2JsonView(), body);
+        var mv = new ModelAndView(new ErrorView(ex));
         mv.setStatus(ex.getStatusCode());
         return mv;
     }

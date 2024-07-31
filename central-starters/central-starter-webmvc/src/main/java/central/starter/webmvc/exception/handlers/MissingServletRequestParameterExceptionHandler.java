@@ -26,7 +26,7 @@ package central.starter.webmvc.exception.handlers;
 
 import central.lang.Stringx;
 import central.starter.webmvc.exception.ExceptionHandler;
-import central.util.Mapx;
+import central.starter.webmvc.view.ErrorView;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,7 +35,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 /**
  * MissingServletRequestParameterException Handler
@@ -57,8 +56,7 @@ public class MissingServletRequestParameterExceptionHandler implements Exception
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
         var ex = (MissingServletRequestParameterException) throwable;
 
-        var body = Mapx.newHashMap("message", Stringx.format("参数[{}]必须不为空", ex.getParameterName()));
-        var mv = new ModelAndView(new MappingJackson2JsonView(), body);
+        var mv = new ModelAndView(new ErrorView(Stringx.format("参数[{}]必须不为空", ex.getParameterName())));
         mv.setStatus(HttpStatus.BAD_REQUEST);
         return mv;
     }

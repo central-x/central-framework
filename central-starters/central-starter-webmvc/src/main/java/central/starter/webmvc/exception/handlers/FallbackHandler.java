@@ -25,7 +25,7 @@
 package central.starter.webmvc.exception.handlers;
 
 import central.starter.webmvc.exception.ExceptionHandler;
-import central.util.Mapx;
+import central.starter.webmvc.view.ErrorView;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,12 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.Map;
 
 /**
  * 最后
@@ -60,15 +54,7 @@ public class FallbackHandler implements ExceptionHandler {
         // 输出异常日志
         log.error(throwable.getLocalizedMessage(), throwable);
 
-        Map<String, Object> map = Mapx.newHashMap("message", throwable.getMessage());
-
-        // 如果是在 debug 模式下，输出完整的错误信息到前端
-        var writer = new StringWriter();
-        throwable.printStackTrace(new PrintWriter(writer));
-        var reason = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toArray();
-        map.put("stack", reason);
-
-        var mv = new ModelAndView(new MappingJackson2JsonView(), map);
+        var mv = new ModelAndView(new ErrorView(throwable, true));
         mv.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         return mv;
     }

@@ -26,6 +26,7 @@ package central.starter.webmvc.exception.handlers;
 
 import central.lang.Stringx;
 import central.starter.webmvc.exception.ExceptionHandler;
+import central.starter.webmvc.view.ErrorView;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,9 +36,6 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-
-import java.util.HashMap;
 
 /**
  * 参数校验错误异常处理
@@ -61,19 +59,19 @@ public class BindExceptionHandler implements ExceptionHandler {
 
         var error = ex.getBindingResult().getAllErrors().get(0);
 
-        var body = new HashMap<String, String>(1);
+        String message;
 
         if (error instanceof FieldError fieldError) {
             if (Stringx.isNullOrBlank(fieldError.getDefaultMessage())) {
-                body.put("message", Stringx.format("参数[{}]类型不匹配", fieldError.getField()));
+                message = Stringx.format("参数[{}]类型不匹配", fieldError.getField());
             } else {
-                body.put("message", fieldError.getDefaultMessage());
+                message = fieldError.getDefaultMessage();
             }
         } else {
-            body.put("message", error.getDefaultMessage());
+            message = error.getDefaultMessage();
         }
 
-        var mv = new ModelAndView(new MappingJackson2JsonView(), body);
+        var mv = new ModelAndView(new ErrorView(message));
         mv.setStatus(HttpStatus.BAD_REQUEST);
         return mv;
     }

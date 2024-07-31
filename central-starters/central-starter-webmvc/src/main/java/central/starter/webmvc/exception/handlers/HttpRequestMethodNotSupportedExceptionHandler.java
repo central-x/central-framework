@@ -25,7 +25,7 @@
 package central.starter.webmvc.exception.handlers;
 
 import central.starter.webmvc.exception.ExceptionHandler;
-import central.util.Mapx;
+import central.starter.webmvc.view.ErrorView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +34,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 /**
  * 请求方法不支持异常
@@ -52,7 +51,7 @@ public class HttpRequestMethodNotSupportedExceptionHandler implements ExceptionH
     @Nullable
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
-        var mv = new ModelAndView(new MappingJackson2JsonView(), Mapx.newHashMap("message", throwable.getMessage()));
+        var mv = new ModelAndView(new ErrorView(throwable));
         mv.setStatus(HttpStatus.METHOD_NOT_ALLOWED);
         return mv;
     }

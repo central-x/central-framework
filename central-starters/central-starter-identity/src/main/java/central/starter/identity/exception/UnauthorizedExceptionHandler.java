@@ -28,7 +28,7 @@ import central.lang.Stringx;
 import central.starter.identity.IdentityProperties;
 import central.starter.webmvc.exception.ExceptionHandler;
 import central.starter.webmvc.view.ErrorView;
-import central.util.Listx;
+import central.util.Objectx;
 import central.web.XForwardedHeaders;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,7 +46,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -73,6 +72,7 @@ public class UnauthorizedExceptionHandler implements ExceptionHandler {
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
         boolean returnJson = false;
+        var accepts = MediaType.parseMediaTypes(Objectx.getOrDefault(request.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE));
 
         if (handlerMethod.getMethodAnnotation(ResponseBody.class) != null) {
             // 如果方法本身要求返回 Json
@@ -82,23 +82,12 @@ public class UnauthorizedExceptionHandler implements ExceptionHandler {
             // 如果 Controller 需要返回 Json
             returnJson = true;
         }
-        if (!returnJson && MediaType.APPLICATION_JSON.isCompatibleWith(MediaType.parseMediaType(request.getHeader(HttpHeaders.ACCEPT)))) {
+        if (!returnJson && accepts.stream().anyMatch(MediaType.APPLICATION_JSON::includes)) {
             // 如果客户端要求返回 Json
             returnJson = true;
         }
         if (!returnJson) {
-            var acceptContentTypes = MediaType.parseMediaTypes(request.getHeader(HttpHeaders.ACCEPT));
-            boolean returnHtml = false;
-            if (Listx.isNullOrEmpty(acceptContentTypes)) {
-                returnHtml = true;
-            } else {
-                for (var type : acceptContentTypes) {
-                    if (MediaType.ALL.equalsTypeAndSubtype(type) || MediaType.TEXT_HTML.equalsTypeAndSubtype(type)) {
-                        returnHtml = true;
-                        break;
-                    }
-                }
-            }
+            boolean returnHtml = accepts.stream().anyMatch(it -> MediaType.ALL.equalsTypeAndSubtype(it) || MediaType.TEXT_HTML.includes(it));
 
             if (returnHtml) {
                 var forbiddenUrl = properties.getForbiddenUrl();
@@ -124,7 +113,7 @@ public class UnauthorizedExceptionHandler implements ExceptionHandler {
         }
 
         // 如果没有配置未授权地址，由于不知道要重定向到什么地方，只能返回错误信息
-        var mv = new ModelAndView(new ErrorView(new ResponseStatusException(HttpStatus.FORBIDDEN, "未授权")));
+        var mv = new ModelAndView(new ErrorView("未授权"));
         mv.setStatus(HttpStatus.FORBIDDEN);
         return mv;
     }

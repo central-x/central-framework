@@ -26,7 +26,7 @@ package central.starter.webmvc.exception.handlers;
 
 import central.lang.Stringx;
 import central.starter.webmvc.exception.ExceptionHandler;
-import central.util.Mapx;
+import central.starter.webmvc.view.ErrorView;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.annotation.Nullable;
@@ -37,7 +37,6 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import java.util.stream.Collectors;
 
@@ -76,7 +75,7 @@ public class HttpMessageNotReadableExceptionHandler implements ExceptionHandler 
             message = "消息序列化异常: " + ex.getMessage();
         }
 
-        var mv = new ModelAndView(new MappingJackson2JsonView(), Mapx.newHashMap("message", message));
+        var mv = new ModelAndView(new ErrorView(message));
         mv.setStatus(HttpStatus.BAD_REQUEST);
         return mv;
     }

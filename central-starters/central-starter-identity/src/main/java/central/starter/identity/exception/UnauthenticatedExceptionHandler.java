@@ -28,7 +28,7 @@ import central.lang.Stringx;
 import central.starter.identity.IdentityProperties;
 import central.starter.webmvc.exception.ExceptionHandler;
 import central.starter.webmvc.view.ErrorView;
-import central.util.Listx;
+import central.util.Objectx;
 import central.web.XForwardedHeaders;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,7 +46,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -84,18 +83,9 @@ public class UnauthenticatedExceptionHandler implements ExceptionHandler {
         }
 
         if (!returnJson) {
-            var acceptContentTypes = MediaType.parseMediaTypes(request.getHeader(HttpHeaders.ACCEPT));
-            boolean returnHtml = false;
-            if (Listx.isNullOrEmpty(acceptContentTypes)) {
-                returnHtml = true;
-            } else {
-                for (var type : acceptContentTypes) {
-                    if (MediaType.ALL.equalsTypeAndSubtype(type) || MediaType.TEXT_HTML.equalsTypeAndSubtype(type)) {
-                        returnHtml = true;
-                        break;
-                    }
-                }
-            }
+            var accepts = MediaType.parseMediaTypes(Objectx.getOrDefault(request.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE));
+
+            boolean returnHtml = accepts.stream().anyMatch(it -> MediaType.ALL.equalsTypeAndSubtype(it) || MediaType.TEXT_HTML.includes(it));
 
             if (returnHtml) {
                 // 如果客户端没有指定返回类型，一般就是浏览器请求
@@ -122,7 +112,7 @@ public class UnauthenticatedExceptionHandler implements ExceptionHandler {
         }
 
         // 如果客户端要求返回 JSON，或业务系统没有配置登录地址，由于不知道要重定向到什么地方，只能返回错误信息
-        var mv = new ModelAndView(new ErrorView(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "未登录")));
+        var mv = new ModelAndView(new ErrorView("未登录"));
         mv.setStatus(HttpStatus.UNAUTHORIZED);
         return mv;
     }

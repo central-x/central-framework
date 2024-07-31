@@ -25,6 +25,7 @@
 package central.starter.webmvc.exception.handlers;
 
 import central.starter.webmvc.exception.ExceptionHandler;
+import central.starter.webmvc.view.ErrorView;
 import central.util.Mapx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,7 +35,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 /**
  * ServletRequestBindingException Handler
@@ -52,8 +52,7 @@ public class ServletRequestBindingExceptionHandler implements ExceptionHandler {
     @Nullable
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
-        var body = Mapx.newHashMap("message", throwable.getMessage());
-        var mv = new ModelAndView(new MappingJackson2JsonView(), body);
+        var mv = new ModelAndView(new ErrorView(throwable));
         mv.setStatus(HttpStatus.BAD_REQUEST);
         return mv;
     }

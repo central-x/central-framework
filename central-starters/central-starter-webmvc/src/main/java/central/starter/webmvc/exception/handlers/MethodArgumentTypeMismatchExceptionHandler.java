@@ -26,7 +26,7 @@ package central.starter.webmvc.exception.handlers;
 
 import central.lang.Stringx;
 import central.starter.webmvc.exception.ExceptionHandler;
-import central.util.Mapx;
+import central.starter.webmvc.view.ErrorView;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,7 +35,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 /**
  * MethodArgumentTypeMismatchException Handler
@@ -57,8 +56,7 @@ public class MethodArgumentTypeMismatchExceptionHandler implements ExceptionHand
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod, Throwable throwable) {
         var ex = (MethodArgumentTypeMismatchException) throwable;
 
-        var body = Mapx.newHashMap("message", Stringx.format("参数[{}]类型不匹配", ex.getParameter().getParameterName()));
-        var mv = new ModelAndView(new MappingJackson2JsonView(), body);
+        var mv = new ModelAndView(new ErrorView(Stringx.format("参数[{}]类型不匹配", ex.getParameter().getParameterName())));
         mv.setStatus(HttpStatus.BAD_REQUEST);
         return mv;
     }
