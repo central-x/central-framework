@@ -157,7 +157,8 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
         cookie.setMaxAge(0);
         servletResponse.addCookie(cookie);
 
-        if (MediaType.APPLICATION_JSON.includes(MediaType.parseMediaType(Objectx.getOrDefault(servletRequest.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE)))) {
+        var accepts = MediaType.parseMediaTypes(Objectx.getOrDefault(servletRequest.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE));
+        if (accepts.stream().anyMatch(MediaType.APPLICATION_JSON::includes)) {
             new JsonRender(servletRequest, servletResponse).set("message", "注销成功").render();
         } else {
             new RedirectRender(servletRequest, servletResponse).redirect(URI.create(Objectx.getOrDefault(((HttpServletRequest) request).getContextPath(), "/"))).render();

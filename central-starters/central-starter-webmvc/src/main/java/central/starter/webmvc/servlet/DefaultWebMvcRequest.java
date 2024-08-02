@@ -103,8 +103,8 @@ class DefaultWebMvcRequest extends HttpServletRequestWrapper implements WebMvcRe
 
     @Override
     public boolean isAcceptContentType(MediaType contentType) {
-        var accept = MediaType.parseMediaType(Objectx.getOrDefault(this.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE));
-        return contentType.includes(accept);
+        return MediaType.parseMediaTypes(Objectx.getOrDefault(this.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE))
+                .stream().anyMatch(contentType::includes);
     }
 
     @Override

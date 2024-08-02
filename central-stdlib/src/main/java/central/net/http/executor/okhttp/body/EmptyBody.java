@@ -50,7 +50,6 @@ public class EmptyBody extends RequestBody {
     public EmptyBody(String contentType) {
         if (Stringx.isNullOrBlank(contentType)) {
             this.contentType = MediaType.parse("application/octet-stream");
-            ;
         } else {
             this.contentType = MediaType.parse(contentType);
         }
