@@ -142,10 +142,7 @@ public class ErrorView implements View {
                   </head>
                   <body>
                     <h2>{} ({})</h2>
-                    <p>{}</p>
-                    <p>
-                    {}
-                    </p>
+                    <p>{}</p>{}
                     <p>
                       <div id='created'>{}</div>
                     </p>
@@ -160,6 +157,7 @@ public class ErrorView implements View {
             var writer = new StringWriter();
             throwable.printStackTrace(new PrintWriter(writer));
             stack = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "&nbsp;&nbsp;&nbsp;")).collect(Collectors.joining("<br/>\n"));
+            stack = "\n    <p>\n" + stack + "\n    </p>";
         }
 
         try (var writer = response.getWriter()) {

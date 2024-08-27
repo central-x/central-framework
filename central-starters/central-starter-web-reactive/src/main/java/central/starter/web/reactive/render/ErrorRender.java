@@ -243,10 +243,7 @@ public class ErrorRender extends Render<ErrorRender> {
                   </head>
                   <body>
                     <h2>{} ({})</h2>
-                    <p>{}</p>
-                    <p>
-                    {}
-                    </p>
+                    <p>{}</p>{}
                     <p>
                       <div id='created'>{}</div>
                     </p>
@@ -260,6 +257,7 @@ public class ErrorRender extends Render<ErrorRender> {
             var writer = new StringWriter();
             throwable.printStackTrace(new PrintWriter(writer));
             stack = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "&nbsp;&nbsp;&nbsp;")).collect(Collectors.joining("<br/>\n"));
+            stack = "\n    <p>\n" + stack + "\n    </p>";
         }
 
         var status = Objectx.getOrDefault(HttpStatus.resolve(Objects.requireNonNull(this.getResponse().getStatusCode()).value()), HttpStatus.INTERNAL_SERVER_ERROR);
