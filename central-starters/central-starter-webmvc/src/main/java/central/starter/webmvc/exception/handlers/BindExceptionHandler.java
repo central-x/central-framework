@@ -62,10 +62,10 @@ public class BindExceptionHandler implements ExceptionHandler {
         String message;
 
         if (error instanceof FieldError fieldError) {
-            if (Stringx.isNullOrBlank(fieldError.getDefaultMessage())) {
+            message = fieldError.getDefaultMessage();
+
+            if (Stringx.isNullOrBlank(message)) {
                 message = Stringx.format("参数[{}]类型不匹配", fieldError.getField());
-            } else {
-                message = fieldError.getDefaultMessage();
             }
         } else {
             message = error.getDefaultMessage();
