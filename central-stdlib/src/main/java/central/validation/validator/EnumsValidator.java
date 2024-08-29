@@ -29,6 +29,9 @@ import central.validation.Enums;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 /**
  * 枚举校验器
  *
@@ -49,13 +52,19 @@ public class EnumsValidator implements ConstraintValidator<Enums, Object> {
         if (value == null) {
             return true;
         }
-
+        // 待校验的枚举常量
         var constants = enumType.getEnumConstants();
-        for (var constant : constants) {
-            if (constant.isCompatibleWith(value)) {
-                return true;
+
+        if (value instanceof Collection<?> collection) {
+            // 校验集合里面的元素
+            for (var item : collection) {
+                if (Arrays.stream(constants).noneMatch(constant -> constant.isCompatibleWith(item))) {
+                    return false;
+                }
             }
+            return true;
+        } else {
+            return Arrays.stream(constants).anyMatch(constant -> constant.isCompatibleWith(value));
         }
-        return false;
     }
 }
