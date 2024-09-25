@@ -25,6 +25,7 @@
 package central.starter.web.query;
 
 import central.sql.data.Entity;
+import central.sql.query.Conditions;
 import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -38,7 +39,7 @@ import java.io.Serial;
  * @since 2022/07/15
  */
 @Data
-public abstract class IdQuery<E extends Entity> implements Query<E> {
+public class IdQuery<E extends Entity> implements Query<E> {
 
     @Serial
     private static final long serialVersionUID = 4029804593817481197L;
@@ -46,4 +47,9 @@ public abstract class IdQuery<E extends Entity> implements Query<E> {
     @NotBlank
     @Label("主键")
     private String id;
+
+    @Override
+    public Conditions<E> build() {
+        return new Conditions<E>().eq(E::getId, this.getId());
+    }
 }
