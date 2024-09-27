@@ -29,6 +29,7 @@ import central.starter.graphql.core.exception.ResponseStatusExceptionHandler;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,10 @@ public class ExceptionHandleChain {
      * @return 已处理的异常
      */
     public ResponseStatusException handle(Method method, Throwable throwable) {
+        if (throwable instanceof InvocationTargetException exception) {
+            throwable = exception.getTargetException();
+        }
+
         for (ExceptionHandler handler : handlers) {
             if (handler.support(throwable)) {
                 return handler.handle(method, throwable);
@@ -67,7 +72,9 @@ public class ExceptionHandleChain {
         }
 
         for (ExceptionHandler handler : internalHandlers) {
-            return handler.handle(method, throwable);
+            if (handler.support(throwable)) {
+                return handler.handle(method, throwable);
+            }
         }
 
         return fallbackHandler.handle(method, throwable);
