@@ -488,7 +488,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 
@@ -539,16 +538,15 @@
             </activation>
             <build>
                 <plugins>
-                    <!-- Sonatype 发布 -->
+                    <!-- Sonatype Maven Central -->
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.13</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.6.0</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>sonatype</serverId>
-                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <publishingServerId>sonatype</publishingServerId>
+                            <autoPublish>true</autoPublish>
                         </configuration>
                     </plugin>
                 </plugins>
