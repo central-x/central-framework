@@ -1,0 +1,39 @@
+name: Release to Github Packages
+on:
+  push:
+    branches:
+      - master
+      - '*.x'
+jobs:
+  release-to-github-packages:
+    name: Release to Github Packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Cache maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Set up java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: zulu
+          server-id: github
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+      - name: Echo settings.xml
+        run: cat ~/.m2/settings.xml
+      - name: Publish packages
+        run: mvn -P github --batch-mode clean deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.GHPKG_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.GHPKG_TOKEN }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
