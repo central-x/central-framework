@@ -25,6 +25,7 @@
 package central.starter.web.query;
 
 import central.sql.data.Entity;
+import central.sql.query.Conditions;
 import central.validation.Label;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -39,11 +40,16 @@ import java.util.List;
  * @since 2022/07/15
  */
 @Data
-public abstract class IdsQuery<E extends Entity> implements Query<E> {
+public class IdsQuery<E extends Entity> implements Query<E> {
     @Serial
     private static final long serialVersionUID = -4904725290170815070L;
 
     @NotEmpty
     @Label("主键集合")
     private List<String> ids;
+
+    @Override
+    public Conditions<E> build() {
+        return new Conditions<E>().in(Entity::getId, this.getIds());
+    }
 }

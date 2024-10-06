@@ -25,6 +25,8 @@
 package central.starter.web.query;
 
 import central.sql.data.Entity;
+import central.validation.Label;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -42,4 +44,11 @@ public abstract class ListQuery<E extends Entity> extends KeywordQuery<E> {
     @Serial
     private static final long serialVersionUID = 3411599472644011096L;
 
+    @Min(0)
+    @Label("限制数量")
+    private Long limit;
+
+    @Min(0)
+    @Label("偏移量")
+    private Long offset;
 }

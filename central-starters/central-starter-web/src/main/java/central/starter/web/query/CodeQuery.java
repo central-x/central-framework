@@ -24,7 +24,9 @@
 
 package central.starter.web.query;
 
+import central.bean.Codeable;
 import central.sql.data.Entity;
+import central.sql.query.Conditions;
 import central.validation.Label;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -38,11 +40,16 @@ import java.io.Serial;
  * @since 2022/07/15
  */
 @Data
-public abstract class CodeQuery<E extends Entity> implements Query<E> {
+public class CodeQuery<E extends Entity & Codeable> implements Query<E> {
     @Serial
     private static final long serialVersionUID = 3138572266790126537L;
 
     @NotBlank
     @Label("标识")
     private String code;
+
+    @Override
+    public Conditions<E> build() {
+        return new Conditions<E>().eq(Codeable::getCode, this.getCode());
+    }
 }
