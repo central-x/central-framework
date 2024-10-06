@@ -16,6 +16,7 @@
 
     <build>
         <plugins>
+            <!-- 本 pom 文件用于管理 Maven 项目，不需要上传到 Maven 仓库 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
