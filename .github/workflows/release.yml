@@ -33,7 +33,7 @@ jobs:
           gpg-passphrase: GPG_PASSPHRASE
       - name: Echo settings.xml
         run: cat ~/.m2/settings.xml
-      - name: Publish packages
+      - name: Release packages
         run: mvn -P sonatype --batch-mode clean deploy
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
