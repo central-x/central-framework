@@ -26,6 +26,7 @@ package central.starter.webmvc.render;
 
 import central.lang.Stringx;
 import central.util.Jsonx;
+import central.util.Mapx;
 import central.util.Objectx;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +37,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
@@ -180,6 +182,13 @@ public class ErrorRender extends Render<ErrorRender> {
         this.getResponse().setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
         this.getResponse().setDateHeader(HttpHeaders.EXPIRES, 0);
 
+        if (this.throwable instanceof ErrorResponse error) {
+            var headers = error.getHeaders();
+            if (Mapx.isNotEmpty(headers)) {
+                headers.forEach((name, values) -> values.forEach(value -> this.getResponse().setHeader(name, value)));
+            }
+        }
+
         var accepts = MediaType.parseMediaTypes(Objectx.getOrDefault(this.getRequest().getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE));
 
         if (accepts.stream().anyMatch(MediaType.APPLICATION_JSON::includes)) {
@@ -199,13 +208,17 @@ public class ErrorRender extends Render<ErrorRender> {
 
         // 需要返回 JSON 格式的数据
         var json = new HashMap<String, Object>();
-        json.put("message", throwable.getLocalizedMessage());
+        if (this.throwable instanceof ErrorResponse error) {
+            json.put("message", error.updateAndGetBody(null, this.getRequest().getLocale()).getDetail());
+        } else {
+            json.put("message", this.throwable.getLocalizedMessage());
+        }
         json.put("timestamp", System.currentTimeMillis());
 
         if (this.debug) {
             // 输出异常信息
             var writer = new StringWriter();
-            throwable.printStackTrace(new PrintWriter(writer));
+            this.throwable.printStackTrace(new PrintWriter(writer));
             var stacks = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toList();
             json.put("stacks", stacks);
         }
@@ -247,13 +260,17 @@ public class ErrorRender extends Render<ErrorRender> {
         if (this.debug) {
             // 输出异常信息
             var writer = new StringWriter();
-            throwable.printStackTrace(new PrintWriter(writer));
+            this.throwable.printStackTrace(new PrintWriter(writer));
             stack = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "&nbsp;&nbsp;&nbsp;")).collect(Collectors.joining("<br/>\n"));
             stack = "\n    <p>\n" + stack + "\n    </p>";
         }
 
         var status = Objectx.getOrDefault(HttpStatus.resolve(this.getResponse().getStatus()), HttpStatus.INTERNAL_SERVER_ERROR);
-        var body = Stringx.format(content, status.getReasonPhrase(), status.getReasonPhrase(), status.value(), throwable.getLocalizedMessage(), stack, OffsetDateTime.now().toString());
+        var message = this.throwable.getLocalizedMessage();
+        if (this.throwable instanceof ErrorResponse error) {
+            message = error.updateAndGetBody(null, this.getRequest().getLocale()).getDetail();
+        }
+        var body = Stringx.format(content, status.getReasonPhrase(), status.getReasonPhrase(), status.value(), message, stack, OffsetDateTime.now().toString());
 
         try (var writer = this.getResponse().getWriter()) {
             writer.write(body);

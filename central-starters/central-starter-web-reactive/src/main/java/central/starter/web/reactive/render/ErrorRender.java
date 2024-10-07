@@ -28,11 +28,13 @@ import central.lang.Stringx;
 import central.util.Jsonx;
 import central.util.Listx;
 import central.util.Objectx;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -41,10 +43,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -184,9 +183,13 @@ public class ErrorRender extends Render<ErrorRender> {
 
     @Override
     public Mono<Void> render() {
-        response.getHeaders().setPragma("no-cache");
-        response.getHeaders().setCacheControl("no-cache");
-        response.getHeaders().setExpires(0);
+        this.response.getHeaders().setPragma("no-cache");
+        this.response.getHeaders().setCacheControl("no-cache");
+        this.response.getHeaders().setExpires(0);
+
+        if (this.throwable instanceof ErrorResponse error) {
+            Objectx.getOrDefault(error.getHeaders(), new HttpHeaders()).forEach(this.response.getHeaders()::put);
+        }
 
         var accepts = this.getRequest().getHeaders().getAccept();
 
@@ -208,15 +211,19 @@ public class ErrorRender extends Render<ErrorRender> {
      */
     private Mono<Void> renderJson() {
         // 返回 JSON
-        response.getHeaders().setContentType(JSON_CONTENT_TYPE);
+        this.response.getHeaders().setContentType(JSON_CONTENT_TYPE);
 
         var json = new HashMap<String, Object>();
-        json.put("message", this.throwable.getLocalizedMessage());
+        if (this.throwable instanceof ErrorResponse error) {
+            json.put("message", error.updateAndGetBody(null, Objectx.getOrDefault(this.getRequest().getHeaders().getContentLanguage(), Locale.getDefault())));
+        } else {
+            json.put("message", this.throwable.getLocalizedMessage());
+        }
         json.put("timestamp", System.currentTimeMillis());
 
         if (this.debug && this.throwable != null) {
             var writer = new StringWriter();
-            throwable.printStackTrace(new PrintWriter(writer));
+            this.throwable.printStackTrace(new PrintWriter(writer));
             var stacks = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toList();
             json.put("stacks", stacks);
         }
@@ -255,13 +262,17 @@ public class ErrorRender extends Render<ErrorRender> {
         if (this.debug) {
             // 输出异常信息
             var writer = new StringWriter();
-            throwable.printStackTrace(new PrintWriter(writer));
+            this.throwable.printStackTrace(new PrintWriter(writer));
             stack = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "&nbsp;&nbsp;&nbsp;")).collect(Collectors.joining("<br/>\n"));
             stack = "\n    <p>\n" + stack + "\n    </p>";
         }
 
         var status = Objectx.getOrDefault(HttpStatus.resolve(Objects.requireNonNull(this.getResponse().getStatusCode()).value()), HttpStatus.INTERNAL_SERVER_ERROR);
-        var body = Stringx.format(content, status.getReasonPhrase(), status.getReasonPhrase(), status.value(), throwable.getLocalizedMessage(), stack, OffsetDateTime.now().toString());
+        var message = this.throwable.getLocalizedMessage();
+        if (this.throwable instanceof ErrorResponse error) {
+            message = error.updateAndGetBody(null, Objectx.getOrDefault(this.getRequest().getHeaders().getContentLanguage(), Locale.getDefault())).getDetail();
+        }
+        var body = Stringx.format(content, status.getReasonPhrase(), status.getReasonPhrase(), status.value(), message, stack, OffsetDateTime.now().toString());
 
         return this.writeString(body, StandardCharsets.UTF_8);
     }

@@ -26,6 +26,7 @@ package central.starter.webmvc.view;
 
 import central.lang.Stringx;
 import central.util.Jsonx;
+import central.util.Mapx;
 import central.util.Objectx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,6 +35,7 @@ import lombok.Setter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.servlet.View;
 
 import java.io.PrintWriter;
@@ -88,6 +90,13 @@ public class ErrorView implements View {
         response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
         response.setDateHeader(HttpHeaders.EXPIRES, 0);
 
+        if (this.throwable instanceof ErrorResponse error) {
+            var headers = error.getHeaders();
+            if (Mapx.isNotEmpty(headers)) {
+                headers.forEach((name, values) -> values.forEach(value -> response.setHeader(name, value)));
+            }
+        }
+
         // 渲染响应体
         var accepts = MediaType.parseMediaTypes(Objectx.getOrDefault(request.getHeader(HttpHeaders.ACCEPT), MediaType.ALL_VALUE));
 
@@ -107,13 +116,17 @@ public class ErrorView implements View {
         // 客户端要求返回 JSON 格式
         response.setContentType(JSON_CONTENT_TYPE);
         var body = new HashMap<String, Object>();
-        body.put("message", this.throwable.getLocalizedMessage());
+        if (this.throwable instanceof ErrorResponse error) {
+            body.put("message", error.updateAndGetBody(null, request.getLocale()).getDetail());
+        } else {
+            body.put("message", this.throwable.getLocalizedMessage());
+        }
         body.put("timestamp", System.currentTimeMillis());
 
         if (this.print) {
             // 输出异常信息
             var writer = new StringWriter();
-            throwable.printStackTrace(new PrintWriter(writer));
+            this.throwable.printStackTrace(new PrintWriter(writer));
             var reason = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "   ")).toList();
             body.put("stacks", reason);
         }
@@ -155,7 +168,7 @@ public class ErrorView implements View {
         if (this.print) {
             // 输出异常信息
             var writer = new StringWriter();
-            throwable.printStackTrace(new PrintWriter(writer));
+            this.throwable.printStackTrace(new PrintWriter(writer));
             stack = Arrays.stream(writer.toString().split("[\n]")).map(it -> it.replaceFirst("[\t]", "&nbsp;&nbsp;&nbsp;")).collect(Collectors.joining("<br/>\n"));
             stack = "\n    <p>\n" + stack + "\n    </p>";
         }
@@ -163,7 +176,12 @@ public class ErrorView implements View {
         try (var writer = response.getWriter()) {
             var status = Objectx.getOrDefault(HttpStatus.resolve(response.getStatus()), HttpStatus.INTERNAL_SERVER_ERROR);
 
-            writer.write(Stringx.format(content, status.getReasonPhrase(), status.getReasonPhrase(), status.value(), throwable.getLocalizedMessage(), stack, OffsetDateTime.now().toString()));
+            var message = this.throwable.getLocalizedMessage();
+            if (this.throwable instanceof ErrorResponse error) {
+                message = error.updateAndGetBody(null, request.getLocale()).getDetail();
+            }
+
+            writer.write(Stringx.format(content, status.getReasonPhrase(), status.getReasonPhrase(), status.value(), message, stack, OffsetDateTime.now().toString()));
         }
     }
 }
