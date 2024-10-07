@@ -60,12 +60,13 @@ public class TestCaching {
     private DepartmentService departments;
 
     @Test
-    public void case1() {
+    public void case1() throws Exception {
         var id = Guidx.nextID();
         var account1 = accounts.findById(id);
 
         assertEquals(id, account1.getId());
 
+        Thread.sleep(5); // 等待 5 毫秒，避免执行过快，导致测试结果不准确
         // cached
         // 重复查询，会返回缓存
         var account2 = accounts.findById(id);
@@ -85,6 +86,7 @@ public class TestCaching {
         assertEquals(account1.getDepartment().getModifyDate(), account2.getDepartment().getModifyDate());
         assertEquals(account1.getDepartment().getModifierId(), account2.getDepartment().getModifierId());
 
+        Thread.sleep(5); // 等待 5 毫秒，避免执行过快，导致测试结果不准确
         // clean other cache
         // 删除其它帐户的主键，不会对当前缓存产生影响
         accounts.deleteByIds(List.of(Guidx.nextID()));
@@ -104,6 +106,8 @@ public class TestCaching {
         assertEquals(account1.getDepartment().getModifyDate(), account3.getDepartment().getModifyDate());
         assertEquals(account1.getDepartment().getModifierId(), account3.getDepartment().getModifierId());
 
+
+        Thread.sleep(5); // 等待 5 毫秒，避免执行过快，导致测试结果不准确
         // clean cache
         // 删除本主键的缓存，则会重新生成新的数据
         // 新生成的数据的 createDate、modifyDate、name是不一样的
@@ -128,7 +132,7 @@ public class TestCaching {
     }
 
     @Test
-    public void case2() {
+    public void case2() throws Exception {
         var id = Guidx.nextID();
         // 查询帐户
         // 帐户又会去查询部门，因此这个帐户的缓存会自动依赖部门的缓存
@@ -136,6 +140,7 @@ public class TestCaching {
 
         assertEquals(id, account1.getId());
 
+        Thread.sleep(5); // 等待 5 毫秒，避免执行过快，导致测试结果不准确
         // cached
         // 重复查询，会返回缓存
         var account2 = accounts.findById(id);
@@ -153,6 +158,8 @@ public class TestCaching {
         assertEquals(account1.getDepartment().getModifyDate(), account2.getDepartment().getModifyDate());
         assertEquals(account1.getDepartment().getModifierId(), account2.getDepartment().getModifierId());
 
+
+        Thread.sleep(5); // 等待 5 毫秒，避免执行过快，导致测试结果不准确
         // clean department cache
         // 清除部门的缓存，会自动级联删除帐户缓存
         departments.deleteByIds(List.of(account1.getDepartment().getId()));
@@ -176,15 +183,16 @@ public class TestCaching {
     }
 
     @Test
-    public void case3() {
+    public void case3() throws Exception {
         // 查找列表
         var list = this.accounts.findBy(5L, 10L, Conditions.of(Account.class).like(Account::getName, "帐号%"), null);
 
+        Thread.sleep(5); // 等待 5 毫秒，避免执行过快，导致测试结果不准确
         // 参数不变，因此查询结果相同
         var list2 = this.accounts.findBy(5L, 10L, Conditions.of(Account.class).like(Account::getName, "帐号%"), null);
 
         assertEquals(list.size(), list2.size());
-        for (int i = 0; i < list.size(); i ++){
+        for (int i = 0; i < list.size(); i++) {
             var account1 = list.get(i);
             var account2 = list2.get(i);
 
@@ -203,13 +211,14 @@ public class TestCaching {
             assertEquals(account1.getDepartment().getModifierId(), account2.getDepartment().getModifierId());
         }
 
+        Thread.sleep(5); // 等待 5 毫秒，避免执行过快，导致测试结果不准确
         // 任意一个元数的变更，都有可能对列表产生变更，因此需要清缓存
         this.accounts.deleteByIds(List.of(Guidx.nextID()));
 
         var list3 = this.accounts.findBy(5L, 10L, Conditions.of(Account.class).like(Account::getName, "帐号%"), null);
 
         assertEquals(list.size(), list3.size());
-        for (int i = 0; i < list.size(); i ++){
+        for (int i = 0; i < list.size(); i++) {
             var account1 = list.get(i);
             var account2 = list3.get(i);
 
@@ -230,15 +239,16 @@ public class TestCaching {
     }
 
     @Test
-    public void case4() {
+    public void case4() throws Exception {
         // 查找列表
         var list = this.accounts.findBy(5L, 10L, Conditions.of(Account.class).like(Account::getName, "帐号%"), null);
 
+        Thread.sleep(5); // 等待 5 毫秒，避免执行过快，导致测试结果不准确
         // 参数不变，因此查询结果相同
         var list2 = this.accounts.findBy(5L, 10L, Conditions.of(Account.class).like(Account::getName, "帐号%"), null);
 
         assertEquals(list.size(), list2.size());
-        for (int i = 0; i < list.size(); i ++){
+        for (int i = 0; i < list.size(); i++) {
             var account1 = list.get(i);
             var account2 = list2.get(i);
 
@@ -257,11 +267,12 @@ public class TestCaching {
             assertEquals(account1.getDepartment().getModifierId(), account2.getDepartment().getModifierId());
         }
 
+        Thread.sleep(5); // 等待 5 毫秒，避免执行过快，导致测试结果不准确
         // 参数变了，因此返回回来的结果也是不一样
         var list3 = this.accounts.findBy(5L, 10L, Conditions.of(Account.class).like(Account::getName, "帐号%"), Orders.empty());
 
         assertEquals(list.size(), list3.size());
-        for (int i = 0; i < list.size(); i ++){
+        for (int i = 0; i < list.size(); i++) {
             var account1 = list.get(i);
             var account2 = list3.get(i);
 
