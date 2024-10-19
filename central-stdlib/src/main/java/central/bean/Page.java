@@ -83,15 +83,34 @@ public class Page<T extends Serializable> implements Serializable {
     /**
      * 创建空分页
      */
-    public static <T extends Serializable> Page<T> empty() {
-        return new Page<>(Collections.emptyList(), Pager.empty());
+    public static <T extends Serializable> Page<T> ofEmpty() {
+        return new Page<>(Collections.emptyList(), Pager.ofEmpty());
     }
 
-    public static  <T extends Serializable> Page<T> of(List<T> data, Pager pager) {
+    /**
+     * 创建空分页
+     *
+     * @param pager 分页信息
+     */
+    public static <T extends Serializable> Page<T> ofEmpty(Pager pager) {
+        return new Page<>(Collections.emptyList(), pager);
+    }
+
+    /**
+     * 创建空分页
+     *
+     * @param pageIndex 分页下标
+     * @param pageSize  分页大小
+     */
+    public static <T extends Serializable> Page<T> ofEmpty(long pageIndex, long pageSize) {
+        return new Page<>(List.of(), Pager.ofEmpty(pageIndex, pageSize));
+    }
+
+    public static <T extends Serializable> Page<T> of(List<T> data, Pager pager) {
         return new Page<>(data, pager);
     }
 
-    public static  <T extends Serializable> Page<T> of(List<T> data, long pageIndex, long pageSize, long pageCount, long itemCount) {
+    public static <T extends Serializable> Page<T> of(List<T> data, long pageIndex, long pageSize, long pageCount, long itemCount) {
         return new Page<>(data, pageIndex, pageSize, pageCount, itemCount);
     }
 
@@ -121,8 +140,16 @@ public class Page<T extends Serializable> implements Serializable {
          */
         private long itemCount;
 
-        public static Pager empty() {
+        public static Pager ofEmpty() {
             return new Pager(0, 0, 0, 0);
+        }
+
+        public static Pager ofEmpty(long pageIndex, long pageSize) {
+            return new Pager(pageIndex, pageSize, 0, 0);
+        }
+
+        public static Pager of(long pageIndex, long pageSize, long pageCount, long itemCount) {
+            return new Pager(pageIndex, pageSize, pageCount, itemCount);
         }
     }
 }

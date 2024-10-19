@@ -26,18 +26,18 @@ package central.sql.proxy.mapper;
 
 import central.bean.MethodNotImplementedException;
 import central.bean.Page;
+import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.reflect.MethodSignature;
-import central.sql.query.Columns;
-import central.sql.query.Conditions;
-import central.sql.query.Orders;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.lang.Arrayx;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -79,7 +79,7 @@ public class FindPageByHandler implements MapperHandler {
         Long count = executor.selectSingle(countScript, Long.class);
 
         if (count == null || count.equals(0L)) {
-            return Page.empty();
+            return Page.ofEmpty(pageIndex, pageSize);
         } else {
             var selectScript = builder.forFindBy(executor, meta, pageSize, (pageIndex - 1) * pageSize, columns, conditions, orders);
             var data = executor.select(selectScript, meta.getType());
