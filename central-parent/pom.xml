@@ -446,6 +446,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Java Doc -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -471,7 +473,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.7</version>
                 <configuration>
                     <gpgArguments>
                         <arg>--pinentry-mode</arg>
@@ -540,13 +542,14 @@
                 <plugins>
                     <!-- Sonatype Maven Central -->
                     <plugin>
-                        <groupId>org.sonatype.central</groupId>
-                        <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.6.0</version>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <publishingServerId>sonatype</publishingServerId>
-                            <autoPublish>true</autoPublish>
+                            <serverId>sonatype</serverId>
+                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -599,7 +602,7 @@
                 <snapshotRepository>
                     <id>sonatype</id>
                     <name>Sonatype Snapshot Repository</name>
-                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
                 </snapshotRepository>
             </distributionManagement>
         </profile>
