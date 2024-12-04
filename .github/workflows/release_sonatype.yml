@@ -29,8 +29,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          key: ${{ runner.os }}-sonatype-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-sonatype-m2
       - name: Echo settings.xml
         run: cat /home/runner/.m2/settings.xml
       - name: Publish packages
