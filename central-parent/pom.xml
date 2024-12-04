@@ -14,7 +14,7 @@
     <groupId>com.central-x.framework</groupId>
     <artifactId>central-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.x-SNAPSHOT</version>
+    <version>1.0.x</version>
     <description>Central Framework Parent</description>
     <url>https://central-x.com</url>
 
@@ -84,72 +84,72 @@
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-stdlib</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-cache</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-graphql</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-graphql-stub</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-identity</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-logging</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-orm</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-probe</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-template</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-test</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-web</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-web-reactive</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
             <dependency>
                 <groupId>com.central-x.framework</groupId>
                 <artifactId>central-starter-webmvc</artifactId>
-                <version>1.0.x-SNAPSHOT</version>
+                <version>1.0.x</version>
             </dependency>
 
             <!-- jakarta 规范 -->
@@ -542,6 +542,16 @@
                 <plugins>
                     <!-- Sonatype Maven Central -->
                     <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.6.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>sonatype</publishingServerId>
+<!--                            <autoPublish>true</autoPublish>-->
+                        </configuration>
+                    </plugin>
+                    <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
                         <version>1.7.0</version>
@@ -549,7 +559,6 @@
                         <configuration>
                             <serverId>sonatype</serverId>
                             <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -599,11 +608,6 @@
                     <name>Sonatype Release Repository</name>
                     <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
-                <snapshotRepository>
-                    <id>sonatype</id>
-                    <name>Sonatype Snapshot Repository</name>
-                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-                </snapshotRepository>
             </distributionManagement>
         </profile>
 

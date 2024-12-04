@@ -6,12 +6,12 @@
     <parent>
         <groupId>com.central-x.framework</groupId>
         <artifactId>central-parent</artifactId>
-        <version>1.0.x-SNAPSHOT</version>
+        <version>1.0.x</version>
         <relativePath>../central-parent</relativePath>
     </parent>
 
     <artifactId>central-stdlib</artifactId>
-    <version>1.0.x-SNAPSHOT</version>
+    <version>1.0.x</version>
     <description>Central Standard Library</description>
     <packaging>jar</packaging>
 
