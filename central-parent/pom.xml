@@ -446,6 +446,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Java Doc -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -471,7 +473,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.7</version>
                 <configuration>
                     <gpgArguments>
                         <arg>--pinentry-mode</arg>
@@ -488,7 +490,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 
@@ -539,11 +540,21 @@
             </activation>
             <build>
                 <plugins>
-                    <!-- Sonatype 发布 -->
+                    <!-- Sonatype Maven Central -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.6.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>sonatype</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.13</version>
+                        <version>1.7.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>sonatype</serverId>
@@ -598,11 +609,6 @@
                     <name>Sonatype Release Repository</name>
                     <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
-                <snapshotRepository>
-                    <id>sonatype</id>
-                    <name>Sonatype Snapshot Repository</name>
-                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
             </distributionManagement>
         </profile>
 
