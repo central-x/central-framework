@@ -37,7 +37,6 @@ import org.dataloader.BatchLoaderEnvironment;
 import org.dataloader.BatchLoaderWithContext;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -109,7 +108,7 @@ public class BatchLoader implements BatchLoaderWithContext<String, Object> {
                 var data = (Map<String, Object>) Invocation.of(method).resolvers(this.resolvers).invoke(this.source.getSource(context), context);
                 // 根据 keys 的顺序返回结果
                 return keys.stream().map(data::get).toList();
-            } catch (InvocationTargetException | IllegalAccessException throwable) {
+            } catch (Exception throwable) {
                 throw handler.handle(method, throwable);
             }
         }, executor);

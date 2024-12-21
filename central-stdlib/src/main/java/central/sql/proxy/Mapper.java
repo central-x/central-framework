@@ -200,7 +200,7 @@ public interface Mapper<E extends Entity> {
      * @return 实体数据
      */
     @Nullable
-    E findFirstBy(@Nullable Columns<? extends E> columns, @Nullable Conditions<? extends E> conditions, @Nullable Orders<E> orders);
+    E findFirstBy(@Nullable Columns<? extends E> columns, @Nullable Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
     /**
      * 根据条件获取第一条数据

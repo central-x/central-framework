@@ -35,7 +35,6 @@ import graphql.schema.DataFetchingEnvironment;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +92,7 @@ public class SourceFetcher implements DataFetcher<Object> {
         context.set(DataFetchingEnvironment.class, environment);
         try {
             return Invocation.of(this.method).resolvers(this.resolvers).invoke(this.source.getSource(context), context);
-        } catch (InvocationTargetException | IllegalAccessException throwable) {
+        } catch (Exception throwable) {
             throw handler.handle(this.method, throwable);
         }
     }
