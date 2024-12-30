@@ -22,45 +22,18 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql.stub.graphql.entity;
+package central.starter.graphql.database.persistence.mapper;
 
-import central.sql.data.ModifiableEntity;
-import central.starter.graphql.stub.test.input.GroupInput;
-import central.validation.Label;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.*;
-
-import java.io.Serial;
+import central.sql.proxy.Mapper;
+import central.starter.graphql.database.persistence.entity.PersonEntity;
+import org.springframework.stereotype.Repository;
 
 /**
- * Group
- * 项目组
+ * Person
  *
  * @author Alan Yeh
- * @since 2022/10/04
+ * @since 2022/09/28
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@Table(name = "XT_GROUP")
-public class GroupEntity extends ModifiableEntity {
-    @Serial
-    private static final long serialVersionUID = 4305706235174306342L;
-
-    @Id
-    @Override
-    public String getId() {
-        return super.getId();
-    }
-
-    @Label("名称")
-    private String name;
-
-    public void fromInput(GroupInput input) {
-        this.setId(input.getId());
-        this.setName(input.getName());
-    }
+@Repository
+public interface PersonMapper extends Mapper<PersonEntity> {
 }

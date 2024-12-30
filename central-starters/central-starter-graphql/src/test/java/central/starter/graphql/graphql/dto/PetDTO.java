@@ -26,7 +26,7 @@ package central.starter.graphql.graphql.dto;
 
 import central.starter.graphql.annotation.GraphQLGetter;
 import central.starter.graphql.annotation.GraphQLType;
-import central.starter.graphql.graphql.entity.PetEntity;
+import central.starter.graphql.database.persistence.entity.PetEntity;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

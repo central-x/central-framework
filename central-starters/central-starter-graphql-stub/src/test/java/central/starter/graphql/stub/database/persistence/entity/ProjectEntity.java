@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql.stub.graphql.entity;
+package central.starter.graphql.stub.database.persistence.entity;
 
 import central.sql.data.ModifiableEntity;
 import central.starter.graphql.stub.test.input.ProjectInput;

@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql.graphql.entity;
+package central.starter.graphql.stub.database.persistence.entity;
 
 import central.sql.data.ModifiableEntity;
-import central.starter.graphql.test.input.PetInput;
+import central.starter.graphql.stub.test.input.GroupInput;
 import central.validation.Label;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -34,20 +34,21 @@ import lombok.*;
 import java.io.Serial;
 
 /**
- * Pet Entity
+ * Group
+ * 项目组
  *
  * @author Alan Yeh
- * @since 2022/09/09
+ * @since 2022/10/04
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "XT_PET")
-public class PetEntity extends ModifiableEntity {
+@Table(name = "XT_GROUP")
+public class GroupEntity extends ModifiableEntity {
     @Serial
-    private static final long serialVersionUID = 4812908107435190562L;
+    private static final long serialVersionUID = 4305706235174306342L;
 
     @Id
     @Override
@@ -55,14 +56,11 @@ public class PetEntity extends ModifiableEntity {
         return super.getId();
     }
 
-    @Label("主人主键")
-    private String masterId;
-
     @Label("名称")
     private String name;
 
-    public void fromInput(PetInput input) {
-        this.setMasterId(input.getMasterId());
+    public void fromInput(GroupInput input) {
+        this.setId(input.getId());
         this.setName(input.getName());
     }
 }

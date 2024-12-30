@@ -24,27 +24,23 @@
 
 package central.starter.graphql.graphql.mutation;
 
-import central.lang.Stringx;
 import central.sql.query.Conditions;
 import central.starter.graphql.annotation.GraphQLFetcher;
 import central.starter.graphql.annotation.GraphQLSchema;
+import central.starter.graphql.database.persistence.PersonPersistence;
+import central.starter.graphql.database.persistence.entity.PersonEntity;
 import central.starter.graphql.graphql.dto.DTO;
 import central.starter.graphql.graphql.dto.PersonDTO;
-import central.starter.graphql.graphql.entity.PersonEntity;
-import central.starter.graphql.graphql.mapper.PersonMapper;
 import central.starter.graphql.test.input.PersonInput;
-import central.util.Listx;
 import central.validation.group.Insert;
 import central.validation.group.Update;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.groups.Default;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -59,7 +55,7 @@ import java.util.List;
 public class PersonMutation {
 
     @Setter(onMethod_ = @Autowired)
-    private PersonMapper mapper;
+    private PersonPersistence persistence;
 
     /**
      * 保存数据
@@ -70,12 +66,8 @@ public class PersonMutation {
     @GraphQLFetcher
     public @Nonnull PersonDTO insert(@RequestParam @Validated({Insert.class, Default.class}) PersonInput input,
                                      @RequestParam String operator) {
-        var entity = new PersonEntity();
-        entity.fromInput(input);
-        entity.updateCreator(operator);
-        this.mapper.insert(entity);
-
-        return DTO.wrap(entity, PersonDTO.class);
+        var data = this.persistence.insert(input, operator);
+        return DTO.wrap(data, PersonDTO.class);
     }
 
     /**
@@ -87,7 +79,8 @@ public class PersonMutation {
     @GraphQLFetcher
     public @Nonnull List<PersonDTO> insertBatch(@RequestParam @Validated({Insert.class, Default.class}) List<PersonInput> inputs,
                                                 @RequestParam String operator) {
-        return Listx.asStream(inputs).map(it -> this.insert(it, operator)).toList();
+        var data = this.persistence.insertBatch(inputs, operator);
+        return DTO.wrap(data, PersonDTO.class);
     }
 
     /**
@@ -99,16 +92,8 @@ public class PersonMutation {
     @GraphQLFetcher
     public @Nonnull PersonDTO update(@RequestParam @Validated({Update.class, Default.class}) PersonInput input,
                                      @RequestParam String operator) {
-        var entity = this.mapper.findFirstBy(Conditions.of(PersonEntity.class).eq(PersonEntity::getId, input.getId()));
-        if (entity == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Stringx.format("数据[id={}]不存在", input.getId()));
-        }
-
-        entity.fromInput(input);
-        entity.updateModifier(operator);
-        this.mapper.update(entity);
-
-        return DTO.wrap(entity, PersonDTO.class);
+        var data = this.persistence.update(input, operator);
+        return DTO.wrap(data, PersonDTO.class);
     }
 
     /**
@@ -120,7 +105,8 @@ public class PersonMutation {
     @GraphQLFetcher
     public @Nonnull List<PersonDTO> updateBatch(@RequestParam @Validated({Update.class, Default.class}) List<PersonInput> inputs,
                                                 @RequestParam String operator) {
-        return Listx.asStream(inputs).map(it -> this.update(it, operator)).toList();
+        var data = this.persistence.updateBatch(inputs, operator);
+        return DTO.wrap(data, PersonDTO.class);
     }
 
     /**
@@ -130,11 +116,7 @@ public class PersonMutation {
      */
     @GraphQLFetcher
     public long deleteByIds(@RequestParam List<String> ids) {
-        if (Listx.isNullOrEmpty(ids)) {
-            return 0;
-        }
-
-        return this.mapper.deleteBy(Conditions.of(PersonEntity.class).in(PersonEntity::getId, ids));
+        return this.persistence.deleteByIds(ids);
     }
 
     /**
@@ -144,6 +126,6 @@ public class PersonMutation {
      */
     @GraphQLFetcher
     public long deleteBy(@RequestParam Conditions<PersonEntity> conditions) {
-        return this.mapper.deleteBy(conditions);
+        return this.persistence.deleteBy(conditions);
     }
 }

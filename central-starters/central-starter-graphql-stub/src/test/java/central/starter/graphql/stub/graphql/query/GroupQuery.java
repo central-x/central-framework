@@ -25,15 +25,17 @@
 package central.starter.graphql.stub.graphql.query;
 
 import central.bean.Page;
+import central.sql.data.Entity;
+import central.sql.query.Columns;
 import central.sql.query.Conditions;
 import central.sql.query.Orders;
 import central.starter.graphql.annotation.GraphQLBatchLoader;
 import central.starter.graphql.annotation.GraphQLFetcher;
 import central.starter.graphql.annotation.GraphQLSchema;
+import central.starter.graphql.stub.database.persistence.GroupPersistence;
+import central.starter.graphql.stub.database.persistence.entity.GroupEntity;
 import central.starter.graphql.stub.graphql.dto.DTO;
 import central.starter.graphql.stub.graphql.dto.GroupDTO;
-import central.starter.graphql.stub.graphql.entity.GroupEntity;
-import central.starter.graphql.stub.graphql.mapper.GroupMapper;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.Setter;
@@ -43,10 +45,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * Group Query
+ * <p>
  * 项目组查询
  *
  * @author Alan Yeh
@@ -57,7 +61,7 @@ import java.util.stream.Collectors;
 public class GroupQuery {
 
     @Setter(onMethod_ = @Autowired)
-    private GroupMapper mapper;
+    private GroupPersistence persistence;
 
     /**
      * 批量数据加载器
@@ -66,10 +70,9 @@ public class GroupQuery {
      */
     @GraphQLBatchLoader
     public @Nonnull Map<String, GroupDTO> batchLoader(@RequestParam List<String> ids) {
-        return this.mapper.findBy(Conditions.of(GroupEntity.class).in(GroupEntity::getId, ids))
-                .stream()
-                .map(it -> DTO.wrap(it, GroupDTO.class))
-                .collect(Collectors.toMap(GroupDTO::getId, it -> it));
+        var data = this.persistence.findByIds(ids);
+        return DTO.wrap(data, GroupDTO.class).stream()
+                .collect(Collectors.toMap(Entity::getId, Function.identity()));
     }
 
     /**
@@ -79,8 +82,8 @@ public class GroupQuery {
      */
     @GraphQLFetcher
     public @Nullable GroupDTO findById(@RequestParam String id) {
-        var entity = this.mapper.findFirstBy(Conditions.of(GroupEntity.class).eq(GroupEntity::getId, id));
-        return DTO.wrap(entity, GroupDTO.class);
+        var data = this.persistence.findById(id);
+        return DTO.wrap(data, GroupDTO.class);
     }
 
 
@@ -91,9 +94,8 @@ public class GroupQuery {
      */
     @GraphQLFetcher
     public @Nonnull List<GroupDTO> findByIds(@RequestParam List<String> ids) {
-        var entities = this.mapper.findBy(Conditions.of(GroupEntity.class).in(GroupEntity::getId, ids));
-
-        return DTO.wrap(entities, GroupDTO.class);
+        var data = this.persistence.findByIds(ids);
+        return DTO.wrap(data, GroupDTO.class);
     }
 
     /**
@@ -106,11 +108,11 @@ public class GroupQuery {
      */
     @GraphQLFetcher
     public @Nonnull List<GroupDTO> findBy(@RequestParam(required = false) Long limit,
-                                           @RequestParam(required = false) Long offset,
-                                           @RequestParam Conditions<GroupEntity> conditions,
-                                           @RequestParam Orders<GroupEntity> orders) {
-        var list = this.mapper.findBy(limit, offset, conditions, orders);
-        return DTO.wrap(list, GroupDTO.class);
+                                          @RequestParam(required = false) Long offset,
+                                          @RequestParam Conditions<GroupEntity> conditions,
+                                          @RequestParam Orders<GroupEntity> orders) {
+        var data = this.persistence.findBy(limit, offset, Columns.all(), conditions, orders);
+        return DTO.wrap(data, GroupDTO.class);
     }
 
     /**
@@ -123,11 +125,11 @@ public class GroupQuery {
      */
     @GraphQLFetcher
     public @Nonnull Page<GroupDTO> pageBy(@RequestParam long pageIndex,
-                                           @RequestParam long pageSize,
-                                           @RequestParam Conditions<GroupEntity> conditions,
-                                           @RequestParam Orders<GroupEntity> orders) {
-        var page = this.mapper.findPageBy(pageIndex, pageSize, conditions, orders);
-        return DTO.wrap(page, GroupDTO.class);
+                                          @RequestParam long pageSize,
+                                          @RequestParam Conditions<GroupEntity> conditions,
+                                          @RequestParam Orders<GroupEntity> orders) {
+        var data = this.persistence.pageBy(pageIndex, pageSize, Columns.all(), conditions, orders);
+        return DTO.wrap(data, GroupDTO.class);
     }
 
     /**
@@ -137,6 +139,6 @@ public class GroupQuery {
      */
     @GraphQLFetcher
     public Long countBy(@RequestParam Conditions<GroupEntity> conditions) {
-        return this.mapper.countBy(conditions);
+        return this.persistence.countBy(conditions);
     }
 }

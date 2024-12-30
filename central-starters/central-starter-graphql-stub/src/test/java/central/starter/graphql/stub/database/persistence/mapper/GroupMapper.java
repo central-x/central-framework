@@ -22,18 +22,19 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql.graphql.mapper;
+package central.starter.graphql.stub.database.persistence.mapper;
 
 import central.sql.proxy.Mapper;
-import central.starter.graphql.graphql.entity.PersonEntity;
+import central.starter.graphql.stub.database.persistence.entity.GroupEntity;
 import org.springframework.stereotype.Repository;
 
 /**
- * Person
+ * Group
+ * 项目组
  *
  * @author Alan Yeh
- * @since 2022/09/28
+ * @since 2022/10/04
  */
 @Repository
-public interface PersonMapper extends Mapper<PersonEntity> {
+public interface GroupMapper extends Mapper<GroupEntity> {
 }

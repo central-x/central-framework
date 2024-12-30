@@ -25,15 +25,17 @@
 package central.starter.graphql.graphql.query;
 
 import central.bean.Page;
+import central.sql.data.Entity;
+import central.sql.query.Columns;
 import central.sql.query.Conditions;
 import central.sql.query.Orders;
 import central.starter.graphql.annotation.GraphQLBatchLoader;
 import central.starter.graphql.annotation.GraphQLFetcher;
 import central.starter.graphql.annotation.GraphQLSchema;
+import central.starter.graphql.database.persistence.PersonPersistence;
+import central.starter.graphql.database.persistence.entity.PersonEntity;
 import central.starter.graphql.graphql.dto.DTO;
 import central.starter.graphql.graphql.dto.PersonDTO;
-import central.starter.graphql.graphql.entity.PersonEntity;
-import central.starter.graphql.graphql.mapper.PersonMapper;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.Setter;
@@ -43,6 +45,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -56,7 +59,7 @@ import java.util.stream.Collectors;
 public class PersonQuery {
 
     @Setter(onMethod_ = @Autowired)
-    private PersonMapper mapper;
+    private PersonPersistence persistence;
 
     /**
      * 批量数据加载器
@@ -65,10 +68,9 @@ public class PersonQuery {
      */
     @GraphQLBatchLoader
     public @Nonnull Map<String, PersonDTO> batchLoader(@RequestParam List<String> ids) {
-        return this.mapper.findBy(Conditions.of(PersonEntity.class).in(PersonEntity::getId, ids))
-                .stream()
-                .map(it -> DTO.wrap(it, PersonDTO.class))
-                .collect(Collectors.toMap(PersonDTO::getId, it -> it));
+        var data = this.persistence.findByIds(ids);
+        return DTO.wrap(data, PersonDTO.class).stream()
+                .collect(Collectors.toMap(Entity::getId, Function.identity()));
     }
 
     /**
@@ -78,10 +80,9 @@ public class PersonQuery {
      */
     @GraphQLFetcher
     public @Nullable PersonDTO findById(@RequestParam String id) {
-        var entity = this.mapper.findFirstBy(Conditions.of(PersonEntity.class).eq(PersonEntity::getId, id));
-        return DTO.wrap(entity, PersonDTO.class);
+        var data = this.persistence.findById(id);
+        return DTO.wrap(data, PersonDTO.class);
     }
-
 
     /**
      * 查询数据
@@ -90,9 +91,8 @@ public class PersonQuery {
      */
     @GraphQLFetcher
     public @Nonnull List<PersonDTO> findByIds(@RequestParam List<String> ids) {
-        var entities = this.mapper.findBy(Conditions.of(PersonEntity.class).in(PersonEntity::getId, ids));
-
-        return DTO.wrap(entities, PersonDTO.class);
+        var data = this.persistence.findByIds(ids);
+        return DTO.wrap(data, PersonDTO.class);
     }
 
     /**
@@ -108,8 +108,8 @@ public class PersonQuery {
                                            @RequestParam(required = false) Long offset,
                                            @RequestParam Conditions<PersonEntity> conditions,
                                            @RequestParam Orders<PersonEntity> orders) {
-        var list = this.mapper.findBy(limit, offset, conditions, orders);
-        return DTO.wrap(list, PersonDTO.class);
+        var data = this.persistence.findBy(limit, offset, Columns.all(), conditions, orders);
+        return DTO.wrap(data, PersonDTO.class);
     }
 
     /**
@@ -125,8 +125,8 @@ public class PersonQuery {
                                            @RequestParam long pageSize,
                                            @RequestParam Conditions<PersonEntity> conditions,
                                            @RequestParam Orders<PersonEntity> orders) {
-        var page = this.mapper.findPageBy(pageIndex, pageSize, conditions, orders);
-        return DTO.wrap(page, PersonDTO.class);
+        var data = this.persistence.pageBy(pageIndex, pageSize, Columns.all(), conditions, orders);
+        return DTO.wrap(data, PersonDTO.class);
     }
 
     /**
@@ -136,6 +136,6 @@ public class PersonQuery {
      */
     @GraphQLFetcher
     public Long countBy(@RequestParam Conditions<PersonEntity> conditions) {
-        return this.mapper.countBy(conditions);
+        return this.persistence.countBy(conditions);
     }
 }

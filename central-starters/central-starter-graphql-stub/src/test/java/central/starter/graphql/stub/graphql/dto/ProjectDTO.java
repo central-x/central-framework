@@ -26,7 +26,7 @@ package central.starter.graphql.stub.graphql.dto;
 
 import central.starter.graphql.annotation.GraphQLGetter;
 import central.starter.graphql.annotation.GraphQLType;
-import central.starter.graphql.stub.graphql.entity.ProjectEntity;
+import central.starter.graphql.stub.database.persistence.entity.ProjectEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.dataloader.DataLoader;

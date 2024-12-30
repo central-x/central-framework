@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql.stub.graphql.mapper;
+package central.starter.graphql.stub.database.persistence.mapper;
 
 import central.sql.proxy.Mapper;
-import central.starter.graphql.stub.graphql.entity.ProjectEntity;
+import central.starter.graphql.stub.database.persistence.entity.ProjectEntity;
 import org.springframework.stereotype.Repository;
 
 /**

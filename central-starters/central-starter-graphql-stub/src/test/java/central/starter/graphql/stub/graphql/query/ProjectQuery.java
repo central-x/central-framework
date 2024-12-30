@@ -25,15 +25,17 @@
 package central.starter.graphql.stub.graphql.query;
 
 import central.bean.Page;
+import central.sql.data.Entity;
+import central.sql.query.Columns;
 import central.sql.query.Conditions;
 import central.sql.query.Orders;
 import central.starter.graphql.annotation.GraphQLBatchLoader;
 import central.starter.graphql.annotation.GraphQLFetcher;
 import central.starter.graphql.annotation.GraphQLSchema;
+import central.starter.graphql.stub.database.persistence.ProjectPersistence;
+import central.starter.graphql.stub.database.persistence.entity.ProjectEntity;
 import central.starter.graphql.stub.graphql.dto.DTO;
 import central.starter.graphql.stub.graphql.dto.ProjectDTO;
-import central.starter.graphql.stub.graphql.entity.ProjectEntity;
-import central.starter.graphql.stub.graphql.mapper.ProjectMapper;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.Setter;
@@ -43,10 +45,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * Project Query
+ * <p>
  * 项目查询
  *
  * @author Alan Yeh
@@ -55,8 +59,9 @@ import java.util.stream.Collectors;
 @Component
 @GraphQLSchema(path = "query", types = ProjectDTO.class)
 public class ProjectQuery {
+
     @Setter(onMethod_ = @Autowired)
-    private ProjectMapper mapper;
+    private ProjectPersistence persistence;
 
     /**
      * 批量数据加载器
@@ -65,10 +70,9 @@ public class ProjectQuery {
      */
     @GraphQLBatchLoader
     public @Nonnull Map<String, ProjectDTO> batchLoader(@RequestParam List<String> ids) {
-        return this.mapper.findBy(Conditions.of(ProjectEntity.class).in(ProjectEntity::getId, ids))
-                .stream()
-                .map(it -> DTO.wrap(it, ProjectDTO.class))
-                .collect(Collectors.toMap(ProjectDTO::getId, it -> it));
+        var data = this.persistence.findByIds(ids);
+        return DTO.wrap(data, ProjectDTO.class).stream()
+                .collect(Collectors.toMap(Entity::getId, Function.identity()));
     }
 
     /**
@@ -78,8 +82,8 @@ public class ProjectQuery {
      */
     @GraphQLFetcher
     public @Nullable ProjectDTO findById(@RequestParam String id) {
-        var entity = this.mapper.findFirstBy(Conditions.of(ProjectEntity.class).eq(ProjectEntity::getId, id));
-        return DTO.wrap(entity, ProjectDTO.class);
+        var data = this.persistence.findById(id);
+        return DTO.wrap(data, ProjectDTO.class);
     }
 
 
@@ -90,9 +94,8 @@ public class ProjectQuery {
      */
     @GraphQLFetcher
     public @Nonnull List<ProjectDTO> findByIds(@RequestParam List<String> ids) {
-        var entities = this.mapper.findBy(Conditions.of(ProjectEntity.class).in(ProjectEntity::getId, ids));
-
-        return DTO.wrap(entities, ProjectDTO.class);
+        var data = this.persistence.findByIds(ids);
+        return DTO.wrap(data, ProjectDTO.class);
     }
 
     /**
@@ -108,8 +111,8 @@ public class ProjectQuery {
                                             @RequestParam(required = false) Long offset,
                                             @RequestParam Conditions<ProjectEntity> conditions,
                                             @RequestParam Orders<ProjectEntity> orders) {
-        var list = this.mapper.findBy(limit, offset, conditions, orders);
-        return DTO.wrap(list, ProjectDTO.class);
+        var data = this.persistence.findBy(limit, offset, Columns.all(), conditions, orders);
+        return DTO.wrap(data, ProjectDTO.class);
     }
 
     /**
@@ -125,8 +128,8 @@ public class ProjectQuery {
                                             @RequestParam long pageSize,
                                             @RequestParam Conditions<ProjectEntity> conditions,
                                             @RequestParam Orders<ProjectEntity> orders) {
-        var page = this.mapper.findPageBy(pageIndex, pageSize, conditions, orders);
-        return DTO.wrap(page, ProjectDTO.class);
+        var data = this.persistence.pageBy(pageIndex, pageSize, Columns.all(), conditions, orders);
+        return DTO.wrap(data, ProjectDTO.class);
     }
 
     /**
@@ -136,6 +139,6 @@ public class ProjectQuery {
      */
     @GraphQLFetcher
     public Long countBy(@RequestParam Conditions<ProjectEntity> conditions) {
-        return this.mapper.countBy(conditions);
+        return this.persistence.countBy(conditions);
     }
 }

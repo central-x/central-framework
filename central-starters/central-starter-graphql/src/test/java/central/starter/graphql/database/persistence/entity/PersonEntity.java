@@ -22,18 +22,45 @@
  * SOFTWARE.
  */
 
-package central.starter.graphql.graphql.mapper;
+package central.starter.graphql.database.persistence.entity;
 
-import central.sql.proxy.Mapper;
-import central.starter.graphql.graphql.entity.PetEntity;
-import org.springframework.stereotype.Repository;
+import central.sql.data.ModifiableEntity;
+import central.starter.graphql.test.input.PersonInput;
+import central.validation.Label;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.*;
+
+import java.io.Serial;
 
 /**
- * Pet
+ * Person
  *
  * @author Alan Yeh
- * @since 2022/09/28
+ * @since 2022/09/09
  */
-@Repository
-public interface PetMapper extends Mapper<PetEntity> {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "XT_PERSON")
+public class PersonEntity extends ModifiableEntity {
+
+    @Serial
+    private static final long serialVersionUID = -5964977448099457238L;
+
+    @Id
+    @Override
+    public String getId() {
+        return super.getId();
+    }
+
+    @Label("姓名")
+    private String name;
+
+    public void fromInput(PersonInput input){
+        this.setId(input.getId());
+        this.setName(input.getName());
+    }
 }

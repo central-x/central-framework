@@ -30,10 +30,10 @@ import central.sql.datasource.migration.Column;
 import central.sql.datasource.migration.Database;
 import central.sql.datasource.migration.Migration;
 import central.sql.datasource.migration.Table;
-import central.starter.graphql.graphql.entity.PersonEntity;
-import central.starter.graphql.graphql.entity.PetEntity;
-import central.starter.graphql.graphql.mapper.PersonMapper;
-import central.starter.graphql.graphql.mapper.PetMapper;
+import central.starter.graphql.database.persistence.entity.PersonEntity;
+import central.starter.graphql.database.persistence.entity.PetEntity;
+import central.starter.graphql.database.persistence.mapper.PersonMapper;
+import central.starter.graphql.database.persistence.mapper.PetMapper;
 import central.util.Version;
 
 import java.sql.SQLException;

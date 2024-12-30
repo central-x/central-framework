@@ -25,15 +25,17 @@
 package central.starter.graphql.graphql.query;
 
 import central.bean.Page;
+import central.sql.data.Entity;
+import central.sql.query.Columns;
 import central.sql.query.Conditions;
 import central.sql.query.Orders;
 import central.starter.graphql.annotation.GraphQLBatchLoader;
 import central.starter.graphql.annotation.GraphQLFetcher;
 import central.starter.graphql.annotation.GraphQLSchema;
+import central.starter.graphql.database.persistence.PetPersistence;
+import central.starter.graphql.database.persistence.entity.PetEntity;
 import central.starter.graphql.graphql.dto.DTO;
 import central.starter.graphql.graphql.dto.PetDTO;
-import central.starter.graphql.graphql.entity.PetEntity;
-import central.starter.graphql.graphql.mapper.PetMapper;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.Setter;
@@ -43,6 +45,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -56,7 +59,7 @@ import java.util.stream.Collectors;
 public class PetQuery {
 
     @Setter(onMethod_ = @Autowired)
-    private PetMapper mapper;
+    private PetPersistence persistence;
 
     /**
      * 批量数据加载器
@@ -65,10 +68,9 @@ public class PetQuery {
      */
     @GraphQLBatchLoader
     public @Nonnull Map<String, PetDTO> batchLoader(@RequestParam List<String> ids) {
-        return this.mapper.findBy(Conditions.of(PetEntity.class).in(PetEntity::getId, ids))
-                .stream()
-                .map(it -> DTO.wrap(it, PetDTO.class))
-                .collect(Collectors.toMap(PetDTO::getId, it -> it));
+        var data = this.persistence.findByIds(ids);
+        return DTO.wrap(data, PetDTO.class).stream()
+                .collect(Collectors.toMap(Entity::getId, Function.identity()));
     }
 
     /**
@@ -78,8 +80,8 @@ public class PetQuery {
      */
     @GraphQLFetcher
     public @Nullable PetDTO findById(@RequestParam String id) {
-        var entity = this.mapper.findFirstBy(Conditions.of(PetEntity.class).eq(PetEntity::getId, id));
-        return DTO.wrap(entity, PetDTO.class);
+        var data = this.persistence.findById(id);
+        return DTO.wrap(data, PetDTO.class);
     }
 
 
@@ -90,9 +92,8 @@ public class PetQuery {
      */
     @GraphQLFetcher
     public @Nonnull List<PetDTO> findByIds(@RequestParam List<String> ids) {
-        var entities = this.mapper.findBy(Conditions.of(PetEntity.class).in(PetEntity::getId, ids));
-
-        return DTO.wrap(entities, PetDTO.class);
+        var data = this.persistence.findByIds(ids);
+        return DTO.wrap(data, PetDTO.class);
     }
 
     /**
@@ -108,8 +109,8 @@ public class PetQuery {
                                         @RequestParam(required = false) Long offset,
                                         @RequestParam Conditions<PetEntity> conditions,
                                         @RequestParam Orders<PetEntity> orders) {
-        var list = this.mapper.findBy(limit, offset, conditions, orders);
-        return DTO.wrap(list, PetDTO.class);
+        var data = this.persistence.findBy(limit, offset, Columns.all(), conditions, orders);
+        return DTO.wrap(data, PetDTO.class);
     }
 
     /**
@@ -125,8 +126,8 @@ public class PetQuery {
                                         @RequestParam long pageSize,
                                         @RequestParam Conditions<PetEntity> conditions,
                                         @RequestParam Orders<PetEntity> orders) {
-        var page = this.mapper.findPageBy(pageIndex, pageSize, conditions, orders);
-        return DTO.wrap(page, PetDTO.class);
+        var data = this.persistence.pageBy(pageIndex, pageSize, Columns.all(), conditions, orders);
+        return DTO.wrap(data, PetDTO.class);
     }
 
     /**
@@ -136,6 +137,6 @@ public class PetQuery {
      */
     @GraphQLFetcher
     public Long countBy(@RequestParam Conditions<PetEntity> conditions) {
-        return this.mapper.countBy(conditions);
+        return this.persistence.countBy(conditions);
     }
 }
