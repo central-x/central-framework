@@ -71,7 +71,7 @@ public class PostgreSqlBuilder extends StandardSqlBuilder {
     @SneakyThrows({IllegalAccessException.class, InvocationTargetException.class})
     protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions, boolean includeNull) throws SQLSyntaxErrorException {
         conditions = Conditions.of(conditions);
-        // UPDATE ${TABLE} AS a set a.col = ? where id = ? and condition1 = ?
+        // UPDATE ${TABLE} AS a SET a.col = ? WHERE id = ? AND condition1 = ?
         Assertx.mustInstanceOf(meta.getType(), entity, SQLSyntaxErrorException::new, "entity 必须是 {} 类型", meta.getType().getName());
 
         var sql = new StringBuilder(Stringx.format("UPDATE\n  {} AS a\n", this.processTable(meta.getTableName(executor.getSource().getConversion()))));
@@ -148,7 +148,7 @@ public class PostgreSqlBuilder extends StandardSqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forDropIndex(@Nonnull DropIndexScript script) throws SQLSyntaxErrorException {
-        // DROP INDEX `IDX_MC_AUTH_CREDENTIAL_ACCOUNTID`;
+        // DROP INDEX `IDX_X_ACCOUNT_USERNAME`;
 
         var result = new SqlScript(Stringx.format("DROP INDEX {}", this.processIndex(script.getName())));
         return Collections.singletonList(result);

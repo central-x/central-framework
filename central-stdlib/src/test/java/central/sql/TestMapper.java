@@ -53,6 +53,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -105,7 +106,11 @@ public class TestMapper {
                 .migrator(StandardDataSourceMigrator.builder().name("test").target(Version.of("1.0.1")).add(new V1()).build())
                 .build();
 
+        var properties = new Properties();
+        properties.setProperty("sql.in.limit", "20");
+
         var executor = StandardExecutor.builder()
+                .properties(properties)
                 .source(this.source)
                 .metaManager(new StandardMetaManager(name -> name.startsWith("XT_")))
                 .addInterceptor(new LogInterceptor())
@@ -215,7 +220,7 @@ public class TestMapper {
         assertTrue(entities.stream().noneMatch(it -> Stringx.isNullOrEmpty(it.getId())));
 
         var records = accountMapper.findByIds(List.of(zhangs.getId(), lis.getId()));
-        assertEquals(records.size(), 2);
+        assertEquals(2, records.size());
         var zhangsR = records.stream().filter(it -> Objects.equals(zhangs.getId(), it.getId())).findFirst().orElse(null);
         assertNotNull(zhangsR);
         assertEquals(zhangs.getId(), zhangsR.getId());
@@ -247,7 +252,6 @@ public class TestMapper {
         assertEquals(lis.getModifierId(), lisR.getModifierId());
         assertEquals(lis.getModifyDate(), lisR.getModifyDate());
     }
-
 
     /**
      * @see Mapper#insertBatch
@@ -448,7 +452,7 @@ public class TestMapper {
         assertEquals(100L, page.getPager().getItemCount());
         assertNotNull(page.getData());
         assertEquals(20, page.getData().size());
-        assertEquals(page.getData().get(0).getName(), "张1");
+        assertEquals("张1", page.getData().get(0).getName());
 
         page = this.accountMapper.findPageBy(2L, 15L, Conditions.of(AccountEntity.class).like(AccountEntity::getName, "张%"), Orders.of(AccountEntity.class).asc(AccountEntity::getAge));
         assertNotNull(page);
@@ -458,7 +462,7 @@ public class TestMapper {
         assertEquals(100L, page.getPager().getItemCount());
         assertNotNull(page.getData());
         assertEquals(15, page.getData().size());
-        assertEquals(page.getData().get(0).getName(), "张16");
+        assertEquals("张16", page.getData().get(0).getName());
     }
 
     /**

@@ -51,7 +51,9 @@ import java.util.List;
  * @since 2022/08/11
  */
 public class FindByIdsHandler implements MapperHandler {
+
     @Override
+    @SuppressWarnings("unchecked")
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {
         List<String> ids = null;
         Columns<?> columns = null;

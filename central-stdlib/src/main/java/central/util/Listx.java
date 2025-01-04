@@ -147,6 +147,27 @@ public class Listx {
     }
 
     /**
+     * 将列表拆分成多个小的列表
+     *
+     * @param source 原列表
+     * @param limit  每个子列表最大长度
+     * @return 拆分后的列表
+     */
+    public static <T> @Nonnull List<List<T>> partition(@Nullable List<T> source, int limit) {
+        if (Collectionx.isNullOrEmpty(source)) {
+            return new ArrayList<>();
+        } else {
+            var result = new ArrayList<List<T>>();
+            var size = source.size();
+            for (int i = 0; i < size; i += limit) {
+                var end = Math.min(i + limit, size);
+                result.add(source.subList(i, end));
+            }
+            return result;
+        }
+    }
+
+    /**
      * 快速创建不可修改类型集合
      *
      * @param elements 元素

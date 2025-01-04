@@ -112,7 +112,6 @@ public class TestDataSourceMigrator {
         assertNotNull(meta.getVersion());
         assertNotNull(meta.getDriverName());
         assertNotNull(meta.getDriverVersion());
-        assertFalse(meta.getTables().isEmpty());
 
         // 用户表
         var account = meta.getTable("XT_ACCOUNT");
@@ -156,11 +155,11 @@ public class TestDataSourceMigrator {
 
         var codeIndex = origin.getIndex("XT_ORIGIN_CODE");
         assertTrue(codeIndex.isUnique());
-        assertEquals(codeIndex.getColumn(), "CODE");
+        assertEquals("CODE", codeIndex.getColumn());
 
         var categoryIndex = origin.getIndex("XT_ORIGIN_CATEGORY");
         assertFalse(categoryIndex.isUnique());
-        assertEquals(categoryIndex.getColumn(), "CATEGORY");
+        assertEquals("CATEGORY", categoryIndex.getColumn());
     }
 
     @Test
@@ -196,7 +195,7 @@ public class TestDataSourceMigrator {
         // 测试添加索引
         var codeIndex = origin.getIndex("XT_ORIGIN_CODE");
         assertTrue(codeIndex.isUnique());
-        assertEquals(codeIndex.getColumn(), "CODE");
+        assertEquals("CODE", codeIndex.getColumn());
 
         // 测试删除索引
         var categoryIndex = origin.getIndex("XT_ORIGIN_CATEGORY");

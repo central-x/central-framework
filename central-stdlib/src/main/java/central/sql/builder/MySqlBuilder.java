@@ -110,19 +110,19 @@ public class MySqlBuilder extends StandardSqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forAddTable(@Nonnull AddTableScript script) throws SQLSyntaxErrorException {
-        // CREATE TABLE `MC_AUTH_CREDENTIAL` (
+        // CREATE TABLE `X_ACCOUNT` (
         //    `ID`                   VARCHAR(36)               NOT NULL     COMMENT '主键',
-        //    `ACCOUNT_ID`           VARCHAR(36)               DEFAULT NULL COMMENT '所属账户主键',
-        //    `TYPE`                 VARCHAR(255)              DEFAULT NULL COMMENT '凭证类型，参考字典表[mc_dic_credential_type]',
-        //    `CREDENTIAL`           VARCHAR(255)              DEFAULT NULL COMMENT '凭证，通常是第三方授权系统的标识',
-        //    `ENABLED`              VARCHAR(2)                DEFAULT NULL COMMENT '禁用状态(0:禁用，1:启用)',
+        //    `USERNAME`             VARCHAR(128)              DEFAULT NULL COMMENT '用户名',
+        //    `EMAIL`                VARCHAR(255)              DEFAULT NULL COMMENT '邮箱',
+        //    `MOBILE`               VARCHAR(255)              DEFAULT NULL COMMENT '手机号',
+        //    `NAME`                 VARCHAR(255)              DEFAULT NULL COMMENT '姓名',
         //    `CREATE_DATE`          DATETIME(3)               DEFAULT NULL COMMENT '创建时间',
         //    `CREATOR_ID`           VARCHAR(36)               DEFAULT NULL COMMENT '创建人主键',
         //    `MODIFY_DATE`          DATETIME(3)               DEFAULT NULL COMMENT '修改时间',
         //    `MODIFIER_ID`          VARCHAR(36)               DEFAULT NULL COMMENT '修改人主键',
         //    `TENANT_CODE`          VARCHAR(36)               DEFAULT NULL COMMENT '租户标识',
         //  PRIMARY KEY (`ID`)
-        // ) COMMENT='第三方应用登录授权';
+        // ) COMMENT='帐户信息';
 
         var result = new StringBuilder("CREATE TABLE ").append(this.processTable(script.getName())).append(" (\n");
         AddTableScript.Column primaryKey = null;
@@ -153,14 +153,14 @@ public class MySqlBuilder extends StandardSqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forRenameTable(@Nonnull RenameTableScript script) throws SQLSyntaxErrorException {
-        // RENAME TABLE `MC_REL_DEPT_PARENT` TO `MC_REL_DEPT_FUNCTION`;
+        // RENAME TABLE `X_ACCOUNT` TO `X_ORG_ACCOUNT`;
         var result = new SqlScript(Stringx.format("RENAME TABLE {} TO {}", this.processTable(script.getName()), this.processTable(script.getNewName())));
         return Collections.singletonList(result);
     }
 
     @Override
     public @Nonnull List<SqlScript> forAddColumn(@Nonnull AddColumnScript script) throws SQLSyntaxErrorException {
-        // ALTER TABLE `MC_ORG_DEPT` ADD COLUMN `LEADER_ID` VARCHAR(36) DEFAULT NULL COMMENT '负责人主键' AFTER `SORT_NO`;
+        // ALTER TABLE `X_ACCOUNT` ADD COLUMN `GENDER` VARCHAR(36) DEFAULT NULL COMMENT '性别' AFTER `NAME`;
         var sql = new StringBuilder(Stringx.format("ALTER TABLE {} ADD COLUMN {} {} NOT NULL", this.processTable(script.getTable()), this.processColumn(script.getName()), this.handleSqlType(script.getType(), script.getLength())));
 
         sql.append(Stringx.format(" COMMENT '{}'", script.getComment()));
@@ -174,7 +174,7 @@ public class MySqlBuilder extends StandardSqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forRenameColumn(@Nonnull RenameColumnScript script) throws SQLSyntaxErrorException {
-        // ALTER TABLE `MC_ATT_ATTACHMENT` CHANGE COLUMN `CODE` `KEY` VARCHAR(1024) DEFAULT NULL COMMENT '文件在网盘的存储标识'
+        // ALTER TABLE `X_ACCOUNT` CHANGE COLUMN `USERNAME` `CODE` VARCHAR(128) DEFAULT NULL COMMENT '用户名'
         var result = new SqlScript(Stringx.format("ALTER TABLE {} CHANGE COLUMN {} {} {} DEFAULT NULL COMMENT '{}'", this.processTable(script.getTable()), this.processColumn(script.getName()), this.processColumn(script.getNewName()), this.handleSqlType(script.getType(), script.getLength()), script.getRemarks()));
 
         return Collections.singletonList(result);

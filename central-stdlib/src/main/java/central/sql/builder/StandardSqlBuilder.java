@@ -24,10 +24,10 @@
 
 package central.sql.builder;
 
+import central.bean.Treeable;
+import central.lang.Assertx;
 import central.lang.Stringx;
-import central.sql.query.Columns;
-import central.sql.query.Conditions;
-import central.sql.query.Orders;
+import central.sql.*;
 import central.sql.builder.script.column.AddColumnScript;
 import central.sql.builder.script.column.DropColumnScript;
 import central.sql.builder.script.column.RenameColumnScript;
@@ -36,16 +36,17 @@ import central.sql.builder.script.index.DropIndexScript;
 import central.sql.builder.script.table.AddTableScript;
 import central.sql.builder.script.table.DropTableScript;
 import central.sql.builder.script.table.RenameTableScript;
-import central.bean.Treeable;
-import central.lang.Assertx;
-import central.sql.*;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.meta.entity.ForeignMeta;
 import central.sql.meta.entity.ForeignTableMeta;
 import central.sql.meta.entity.PropertyMeta;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 import central.util.*;
 import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLSyntaxErrorException;
@@ -59,6 +60,7 @@ import java.util.stream.IntStream;
  * @author Alan Yeh
  * @since 2022/08/01
  */
+@Slf4j
 public abstract class StandardSqlBuilder implements SqlBuilder {
     @Override
     public String processTable(String table) {
@@ -526,7 +528,31 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
                     where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getSource().getConversion()))));
                 }
                 case IN, NOT_IN -> {
-                    where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getSource().getConversion())), IntStream.range(0, condition.getValues().length).mapToObj(i -> "?").collect(Collectors.joining(", "))));
+                    var limitStr = executor.getProperties().getProperty("sql.in.limit", "200");
+                    int limit = 200;
+                    try {
+                        limit = Integer.parseInt(limitStr);
+                    } catch (Exception ex) {
+                        log.warn("[SqlBuilder] 配置 sql.in.limit 异常，使用默认配置值 200");
+                    }
+
+                    var values = condition.getValues();
+                    if (values.length > limit) {
+                        // in 参数过多，拆分成多个 in
+                        var partitions = Listx.partition(Arrays.asList(values), limit);
+                        where.append("(");
+                        for (int i = 0, length = partitions.size(); i < length; i++) {
+                            var partition = partitions.get(i);
+                            if (i != 0) {
+                                where.append(" OR ");
+                            }
+                            where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getSource().getConversion())), IntStream.range(0, partition.size()).mapToObj(j ->"?").collect(Collectors.joining(", "))));
+                        }
+                        where.append(")");
+                    } else {
+                        // 直接拼 in 条件
+                        where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getSource().getConversion())), IntStream.range(0, condition.getValues().length).mapToObj(i -> "?").collect(Collectors.joining(", "))));
+                    }
                     args.addAll(Arrays.stream(condition.getValues()).map(it -> convertValue(executor, target, property, it)).toList());
                 }
             }
@@ -573,30 +599,30 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forAddTable(@Nonnull AddTableScript script) throws SQLSyntaxErrorException {
-        // CREATE TABLE MC_AUTH_CREDENTIAL (
+        // CREATE TABLE X_ACCOUNT (
         //     "ID"             VARCHAR(36)    PRIMARY KEY NOT NULL,
-        //     "ACCOUNT_ID"     VARCHAR(36)    NOT NULL,
-        //     "TYPE"           VARCHAR(255)   NOT NULL,
-        //     "CREDENTIAL"     VARCHAR(255)   NOT NULL,
-        //     "ENABLED"        VARCHAR(2)     NOT NULL,
+        //     "USERNAME"       VARCHAR(128)   NOT NULL,
+        //     "EMAIL"          VARCHAR(255)   NOT NULL,
+        //     "MOBILE"         VARCHAR(255)   NOT NULL,
+        //     "NAME"           VARCHAR(255)   NOT NULL,
         //     "CREATE_DATE"    DATETIME       NOT NULL,
         //     "CREATOR_ID"     VARCHAR(36)    NOT NULL,
         //     "MODIFY_DATE"    DATETIME       NOT NULL,
         //     "MODIFIER_ID"    VARCHAR(36)    NOT NULL,
         //     "TENANT_CODE"    VARCHAR(36)    NOT NULL
-        //);
+        // );
         //
-        // COMMENT ON TABLE MC_AUTH_CREDENTIAL IS '第三方应用登录授权';
-        // COMMENT ON COLUMN MC_AUTH_CREDENTIAL."ID" IS '主键';
-        // COMMENT ON COLUMN MC_AUTH_CREDENTIAL."ACCOUNT_ID" IS '所属账户主键';
-        // COMMENT ON COLUMN MC_AUTH_CREDENTIAL."TYPE" IS '凭证类型，参考字典表[mc_dic_credential_type]';
-        // COMMENT ON COLUMN MC_AUTH_CREDENTIAL."CREDENTIAL" IS '凭证，通常是第三方授权系统的标识';
-        // COMMENT ON COLUMN MC_AUTH_CREDENTIAL."ENABLED" IS '禁用状态(0:禁用，1:启用)';
-        // COMMENT ON COLUMN MC_AUTH_CREDENTIAL."CREATE_DATE" IS '创建时间';
-        // COMMENT ON COLUMN MC_AUTH_CREDENTIAL."CREATOR_ID" IS '创建人主键';
-        // COMMENT ON COLUMN MC_AUTH_CREDENTIAL."MODIFY_DATE" IS '修改时间';
-        // COMMENT ON COLUMN MC_AUTH_CREDENTIAL."MODIFIER_ID" IS '修改人主键';
-        // COMMENT ON COLUMN MC_AUTH_CREDENTIAL."TENANT_CODE" IS '租户标识';
+        // COMMENT ON TABLE X_ACCOUNT IS '帐户信息';
+        // COMMENT ON COLUMN X_ACCOUNT."ID" IS '主键';
+        // COMMENT ON COLUMN X_ACCOUNT."USERNAME" IS '用户名';
+        // COMMENT ON COLUMN X_ACCOUNT."EMAIL" IS '邮箱';
+        // COMMENT ON COLUMN X_ACCOUNT."MOBILE" IS '手机号';
+        // COMMENT ON COLUMN X_ACCOUNT."NAME" IS '姓名';
+        // COMMENT ON COLUMN X_ACCOUNT."CREATE_DATE" IS '创建时间';
+        // COMMENT ON COLUMN X_ACCOUNT."CREATOR_ID" IS '创建人主键';
+        // COMMENT ON COLUMN X_ACCOUNT."MODIFY_DATE" IS '修改时间';
+        // COMMENT ON COLUMN X_ACCOUNT."MODIFIER_ID" IS '修改人主键';
+        // COMMENT ON COLUMN X_ACCOUNT."TENANT_CODE" IS '租户标识';
 
         var result = new ArrayList<SqlScript>(script.getColumns().size() + 1);
         var builder = new StringBuilder("CREATE TABLE ").append(this.processTable(script.getName())).append(" (\n");
@@ -628,7 +654,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forDropTable(@Nonnull DropTableScript script) throws SQLSyntaxErrorException {
-        // DROP TABLE "MC_API";
+        // DROP TABLE "X_ACCOUNT";
 
         var result = new SqlScript(Stringx.format("DROP TABLE {}", this.processTable(script.getName())));
         return Collections.singletonList(result);
@@ -636,7 +662,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forRenameTable(@Nonnull RenameTableScript script) throws SQLSyntaxErrorException {
-        // ALTER TABLE "MC_REL_DEPT_PARENT" RENAME TO "MC_REL_DEPT_FUNCTION";
+        // ALTER TABLE "X_ACCOUNT" RENAME TO "X_ORG_ACCOUNT";
 
         var result = new SqlScript(Stringx.format("ALTER TABLE {} RENAME TO {}", this.processTable(script.getName()), this.processColumn(script.getNewName())));
         return Collections.singletonList(result);
@@ -644,8 +670,8 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forAddColumn(@Nonnull AddColumnScript script) throws SQLSyntaxErrorException {
-        // ALTER TABLE "MC_ORG_DEPT" ADD COLUMN "LEADER_ID" VARCHAR(36);
-        // COMMENT ON COLUMN "MC_ORG_DEPT"."LEADER_ID" IS '负责人主键';
+        // ALTER TABLE "X_ACCOUNT" ADD COLUMN "GENDER" VARCHAR(36);
+        // COMMENT ON COLUMN "X_ACCOUNT"."GENDER" IS '性别';
 
         var result = new ArrayList<SqlScript>(2);
         result.add(new SqlScript(Stringx.format("ALTER TABLE {} ADD COLUMN {} {} NOT NULL", this.processTable(script.getTable()), this.processColumn(script.getName()), this.handleSqlType(script.getType(), script.getLength()))));
@@ -655,7 +681,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forDropColumn(@Nonnull DropColumnScript script) throws SQLSyntaxErrorException {
-        // ALTER TABLE "MC_ORG_DEPT" DROP COLUMN "LEADER";
+        // ALTER TABLE "X_ACCOUNT" DROP COLUMN "GENDER";
 
         var result = new SqlScript(Stringx.format("ALTER TABLE {} DROP COLUMN {}", this.processTable(script.getTable()), this.processColumn(script.getName())));
         return Collections.singletonList(result);
@@ -663,8 +689,8 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forRenameColumn(@Nonnull RenameColumnScript script) throws SQLSyntaxErrorException {
-        // ALTER TABLE "MC_ATT_ATTACHMENT" RENAME COLUMN "CODE" TO "KEY";
-        // COMMENT ON COLUMN "MC_ATT_ATTACHMENT"."KEY" IS '文件在网盘的存储标识';
+        // ALTER TABLE "X_ACCOUNT" RENAME COLUMN "USERNAME" TO "CODE";
+        // COMMENT ON COLUMN "X_ACCOUNT"."CODE" IS '用户名';
 
         var result = new ArrayList<SqlScript>(2);
         result.add(new SqlScript(Stringx.format("ALTER TABLE {} RENAME COLUMN {} TO {}", this.processTable(script.getTable()), this.processColumn(script.getName()), this.processColumn(script.getNewName()))));
@@ -674,7 +700,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forAddIndex(@Nonnull AddIndexScript script) throws SQLSyntaxErrorException {
-        // CREATE [UNIQUE] INDEX `IDX_MC_API_CODE` ON `MC_API` ( `CODE` );
+        // CREATE [UNIQUE] INDEX `IDX_X_ACCOUNT_USERNAME` ON `X_ACCOUNT` (`USERNAME`);
 
         var builder = new StringBuilder("CREATE ");
         if (script.isUnique()) {
@@ -688,7 +714,7 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
 
     @Override
     public @Nonnull List<SqlScript> forDropIndex(@Nonnull DropIndexScript script) throws SQLSyntaxErrorException {
-        // DROP INDEX `IDX_MC_AUTH_CREDENTIAL_ACCOUNTID` ON `MC_AUTH_CREDENTIAL`;
+        // DROP INDEX `IDX_X_ACCOUNT_USERNAME` ON `X_ACCOUNT`;
 
         var result = new SqlScript(Stringx.format("DROP INDEX {} ON {}", this.processIndex(script.getName()), this.processTable(script.getTable())));
         return Collections.singletonList(result);

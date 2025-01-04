@@ -24,6 +24,7 @@
 
 package central.sql.impl.standard;
 
+import central.bean.Nonnull;
 import central.bean.OptionalEnum;
 import central.lang.Assertx;
 import central.security.Cipherx;
@@ -53,6 +54,10 @@ import java.util.List;
 @ExtensionMethod({Mapx.class, Stringx.class})
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class StandardExecutor implements SqlExecutor {
+
+    @Getter
+    @Label("配置信息")
+    private final Properties properties;
 
     @Getter
     @Label("数据源")
@@ -255,6 +260,10 @@ public class StandardExecutor implements SqlExecutor {
     @Setter
     @Accessors(chain = true, fluent = true)
     public static class Builder {
+        @Nonnull
+        @Label("配置信息")
+        private Properties properties = new Properties();
+
         @NotNull
         @Label("数据源")
         private SqlSource source;
@@ -284,7 +293,7 @@ public class StandardExecutor implements SqlExecutor {
 
         public StandardExecutor build() {
             Validatex.Default().validateBean(this);
-            var executor = new StandardExecutor(this.source, this.converter, this.metaManager, this.cipher, this.transformer);
+            var executor = new StandardExecutor(this.properties, this.source, this.converter, this.metaManager, this.cipher, this.transformer);
             executor.interceptors.addAll(this.interceptors);
             return executor;
         }

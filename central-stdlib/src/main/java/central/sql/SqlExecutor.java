@@ -40,6 +40,7 @@ import java.net.URI;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Sql Executor
@@ -78,6 +79,11 @@ public interface SqlExecutor {
     default <E extends Entity, T extends Mapper<E>> T getMapper(@Nonnull Class<T> mapper) {
         return this.getMapper(mapper, null, null);
     }
+
+    /**
+     * 获取配置信息
+     */
+    Properties getProperties();
 
     /**
      * 获取数据源
