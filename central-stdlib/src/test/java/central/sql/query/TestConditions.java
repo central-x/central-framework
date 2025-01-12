@@ -25,13 +25,12 @@
 package central.sql.query;
 
 import central.sql.data.AccountEntity;
-import central.sql.query.Conditions;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Conditions Test Cases
@@ -47,40 +46,40 @@ public class TestConditions {
     @Test
     public void case1(){
         var conditions = Conditions.of(AccountEntity.class).eq(AccountEntity::getAge, 18);
-        assertEquals(conditions.toSql(), "age = 18");
+        assertEquals("age = 18", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).ne(AccountEntity::getAge, 18);
-        assertEquals(conditions.toSql(), "age <> 18");
+        assertEquals("age <> 18", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).gt(AccountEntity::getAge, 18);
-        assertEquals(conditions.toSql(), "age > 18");
+        assertEquals("age > 18", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).ge(AccountEntity::getAge, 18);
-        assertEquals(conditions.toSql(), "age >= 18");
+        assertEquals("age >= 18", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).lt(AccountEntity::getAge, 18);
-        assertEquals(conditions.toSql(), "age < 18");
+        assertEquals("age < 18", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).le(AccountEntity::getAge, 18);
-        assertEquals(conditions.toSql(), "age <= 18");
+        assertEquals("age <= 18", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).between(AccountEntity::getAge, 18, 28);
-        assertEquals(conditions.toSql(), "age BETWEEN 18 AND 28");
+        assertEquals("age BETWEEN 18 AND 28", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).notBetween(AccountEntity::getAge, 18, 28);
-        assertEquals(conditions.toSql(), "age NOT BETWEEN 18 AND 28");
+        assertEquals("age NOT BETWEEN 18 AND 28", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).like(AccountEntity::getName, "%Yeh");
-        assertEquals(conditions.toSql(), "name LIKE %Yeh");
+        assertEquals("name LIKE %Yeh", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).notLike(AccountEntity::getName, "%Yeh");
-        assertEquals(conditions.toSql(), "name NOT LIKE %Yeh");
+        assertEquals("name NOT LIKE %Yeh", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).isNull(AccountEntity::getName);
-        assertEquals(conditions.toSql(), "name IS NULL");
+        assertEquals("name IS NULL", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).isNotNull(AccountEntity::getName);
-        assertEquals(conditions.toSql(), "name IS NOT NULL");
+        assertEquals("name IS NOT NULL", conditions.toSql());
 
         conditions = Conditions.of(AccountEntity.class).in(AccountEntity::getAge, 18, 19, 20, 21);
         assertEquals(conditions.toSql(), "age IN (" + Stream.of(18, 19, 20, 21).map(String::valueOf).collect(Collectors.joining(", ")) + ")");
@@ -96,7 +95,7 @@ public class TestConditions {
     public void case2(){
         var conditions = Conditions.of(AccountEntity.class).eq(AccountEntity::getAge, 18).eq(AccountEntity::getName, "张三");
 
-        assertEquals(conditions.toSql(), "age = 18 AND name = 张三");
+        assertEquals("age = 18 AND name = 张三", conditions.toSql());
     }
 
     /**
@@ -106,7 +105,7 @@ public class TestConditions {
     public void case3(){
         var conditions = Conditions.of(AccountEntity.class).eq(AccountEntity::getAge, 18).or().eq(AccountEntity::getAge, 19);
 
-        assertEquals(conditions.toSql(), "age = 18 OR age = 19");
+        assertEquals("age = 18 OR age = 19", conditions.toSql());
     }
 
     /**
@@ -118,6 +117,6 @@ public class TestConditions {
             filter.eq(AccountEntity::getName, "张三").or().eq(AccountEntity::getName, "李四");
         });
 
-        assertEquals(conditions.toSql(), "age = 18 AND (name = 张三 OR name = 李四)");
+        assertEquals("age = 18 AND (name = 张三 OR name = 李四)", conditions.toSql());
     }
 }
