@@ -40,9 +40,7 @@ import central.sql.meta.entity.EntityMeta;
 import central.sql.meta.entity.ForeignMeta;
 import central.sql.meta.entity.ForeignTableMeta;
 import central.sql.meta.entity.PropertyMeta;
-import central.sql.query.Columns;
-import central.sql.query.Conditions;
-import central.sql.query.Orders;
+import central.sql.query.*;
 import central.util.*;
 import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
@@ -544,9 +542,9 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
                         for (int i = 0, length = partitions.size(); i < length; i++) {
                             var partition = partitions.get(i);
                             if (i != 0) {
-                                where.append(" OR ");
+                                where.append(" ").append(condition.getOperator() == Operators.IN ? Connectors.OR.getValue() : Connectors.AND.getValue()).append(" ");
                             }
-                            where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getSource().getConversion())), IntStream.range(0, partition.size()).mapToObj(j ->"?").collect(Collectors.joining(", "))));
+                            where.append(Stringx.format(condition.getOperator().getValue(), alias + this.processColumn(property.getColumnName(executor.getSource().getConversion())), IntStream.range(0, partition.size()).mapToObj(j -> "?").collect(Collectors.joining(", "))));
                         }
                         where.append(")");
                     } else {
