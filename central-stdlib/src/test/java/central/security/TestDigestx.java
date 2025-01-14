@@ -45,9 +45,10 @@ public class TestDigestx {
         var license = """
                 Apache License
                 Version 2.0, January 2004
-                https://www.apache.org/licenses/""";
+                https://www.apache.org/licenses/
+                """.trim();
         var md5 = Digestx.MD5.digest(license, StandardCharsets.UTF_8);
-        Assertions.assertEquals("e559488e7e6921b99a332eccdc1df651", md5);
+        Assertions.assertEquals("f47b4a6c4dfad9403f3887ee23bc92a5", md5);
     }
 
     /**
@@ -58,9 +59,10 @@ public class TestDigestx {
         var license = """
                 Apache License
                 Version 2.0, January 2004
-                https://www.apache.org/licenses/""";
+                https://www.apache.org/licenses/
+                """.trim();
         var sha1 = Digestx.SHA1.digest(license, StandardCharsets.UTF_8);
-        Assertions.assertEquals("579a853498e568818965f24db5ca8eed437e65a8", sha1);
+        Assertions.assertEquals("bb58cd273ae5891b8cdf8489beccc4ecea74e69d", sha1);
     }
 
     /**
@@ -71,9 +73,10 @@ public class TestDigestx {
         var license = """
                 Apache License
                 Version 2.0, January 2004
-                https://www.apache.org/licenses/""";
+                https://www.apache.org/licenses/
+                """.trim();
         var sha224 = Digestx.SHA224.digest(license, StandardCharsets.UTF_8);
-        Assertions.assertEquals("2f6cf8007e537319b85bec812da0724bbdc414fb8b1eaec610fa851d", sha224);
+        Assertions.assertEquals("dc9431186457bafb669ea65b64e7d940b9bfa18e63d86f6916c8a999", sha224);
     }
 
     /**
@@ -84,9 +87,10 @@ public class TestDigestx {
         var license = """
                 Apache License
                 Version 2.0, January 2004
-                https://www.apache.org/licenses/""";
+                https://www.apache.org/licenses/
+                """.trim();
         var sha256 = Digestx.SHA256.digest(license, StandardCharsets.UTF_8);
-        Assertions.assertEquals("b8f382ba452e7a924f0eb9b8a48ed63065b5e6305fa88b89a93763c8e6a76ea5", sha256);
+        Assertions.assertEquals("3a51db0133a4765c48cafd109dad00187fa5066d5a9fd8ca6fc81a2fc6c18f20", sha256);
     }
 
     /**
@@ -97,9 +101,10 @@ public class TestDigestx {
         var license = """
                 Apache License
                 Version 2.0, January 2004
-                https://www.apache.org/licenses/""";
+                https://www.apache.org/licenses/
+                """.trim();
         var sha384 = Digestx.SHA384.digest(license, StandardCharsets.UTF_8);
-        Assertions.assertEquals("6cf14672cb9d55841a2a650c3f7c86aa0c39ed7d5ed1e58126f787dffdce7efa46cd0f685df35d8184365a42365cc7a9", sha384);
+        Assertions.assertEquals("7ee3b84c3b10e3e7c00820c39e9b0facaf252af202b5e6c9ddbb77298c9d1a7daebefb2096198d208d21151de347208f", sha384);
     }
 
     /**
@@ -110,9 +115,10 @@ public class TestDigestx {
         var license = """
                 Apache License
                 Version 2.0, January 2004
-                https://www.apache.org/licenses/""";
+                https://www.apache.org/licenses/
+                """.trim();
         var sha512 = Digestx.SHA512.digest(license, StandardCharsets.UTF_8);
-        Assertions.assertEquals("1bddeb510f5db83fea436371999f265c625faa1c554270bc22ed5e27f1a3ea753ae8849c24454c82786dc481a65736f535de16becc68d9bcb44b560ad227cfac", sha512);
+        Assertions.assertEquals("5028e08da96818a4fabb774e47af78251c7eced6115a5657fffcb83df606db9e1bfccb91a8450c1fc9b4bec527faebe11927b458c1349c130f4e545471302a3b", sha512);
     }
 
     @Test
@@ -120,8 +126,9 @@ public class TestDigestx {
         var license = """
                 Apache License
                 Version 2.0, January 2004
-                https://www.apache.org/licenses/""";
+                https://www.apache.org/licenses/
+                """.trim();
         var sm3 = Digestx.SM3.digest(license, StandardCharsets.UTF_8);
-        Assertions.assertEquals("2213e92e1a7d3e11f6c267127f1d72f844414eedd8709ad50aca0520295562da", sm3);
+        Assertions.assertEquals("5979c256bcdfa4b3764ffb70afa22298ac514cb426a2852151120309ee78c4a5", sm3);
     }
 }
