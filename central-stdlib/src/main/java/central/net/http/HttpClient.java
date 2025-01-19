@@ -39,7 +39,9 @@ import java.net.URI;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * HttpClient
@@ -50,14 +52,30 @@ import java.util.List;
 public class HttpClient {
 
     /**
-     * Http 请求执行器
-     * 可以由各类第三方框架提供请求执行能力
+     * 已注册的 Http 请求执行器
+     * <p>
+     * 由各类第三方框架为指定的协议提供请求执行能力
      */
-    @Getter
-    private final HttpExecutor executor;
+    private final Map<String, HttpExecutor> executors;
 
-    public HttpClient(HttpExecutor executor) {
-        this.executor = executor;
+    private final HttpExecutor defaultExecutor;
+
+    /**
+     * @param defaultExecutor 默认的 HttpExecutor
+     */
+    public HttpClient(HttpExecutor defaultExecutor) {
+        this.executors = new HashMap<>();
+        this.defaultExecutor = defaultExecutor;
+    }
+
+    /**
+     * 为指定协议指定 Executor
+     *
+     * @param scheme   请求协议
+     * @param executor 请求执行器
+     */
+    public void registerExecutor(String scheme, HttpExecutor executor) {
+        this.executors.put(scheme, executor);
     }
 
     /**
@@ -145,5 +163,11 @@ public class HttpClient {
         return chain.process(request);
     }
 
-    private final HttpProcessor executeProcessor = (target, chain) -> getExecutor().execute(target);
+    protected HttpExecutor getExecutor(HttpRequest request) {
+        var scheme = request.getUrl().toURI().getScheme();
+        var executor = this.executors.get(scheme);
+        return executor != null ? executor : this.defaultExecutor;
+    }
+
+    private final HttpProcessor executeProcessor = (target, chain) -> getExecutor(target).execute(target);
 }
