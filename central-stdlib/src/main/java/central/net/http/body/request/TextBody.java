@@ -34,23 +34,24 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
- * String Body
- * 用于传输字符串
+ * Text Body
+ * <p>
+ * 用于传输文本
  *
  * @author Alan Yeh
  * @since 2022/07/14
  */
-public class StringBody implements Body {
+public class TextBody implements Body {
 
     private final byte[] body;
 
     private final MediaType contentType;
 
-    public StringBody(String body) {
+    public TextBody(String body) {
         this(body, MediaType.TEXT_PLAIN);
     }
 
-    public StringBody(String body, MediaType contentType) {
+    public TextBody(String body, MediaType contentType) {
         this.body = body.getBytes(StandardCharsets.UTF_8);
         this.contentType = new MediaType(contentType, StandardCharsets.UTF_8);
     }
@@ -72,6 +73,6 @@ public class StringBody implements Body {
 
     @Override
     public String description() {
-        return Stringx.format("<String: {}>", new String(this.body, StandardCharsets.UTF_8));
+        return Stringx.format("<Text: {}>", new String(this.body, StandardCharsets.UTF_8));
     }
 }

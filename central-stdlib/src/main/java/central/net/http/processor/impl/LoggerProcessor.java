@@ -91,7 +91,7 @@ public class LoggerProcessor implements HttpProcessor, ReactiveHttpProcessor {
         }
 
         if (request.getBody() != null) {
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Body".wrap(Logx.Color.BLUE)).append(": ").append(request.getBody().description()).append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Body".wrap(Logx.Color.BLUE)).append(": ").append(request.getBody().description().replace("\\n", "\n").replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append(lineSeparator);
         } else {
             builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Body".wrap(Logx.Color.BLUE)).append(": <null>").append(lineSeparator);
         }
@@ -99,7 +99,7 @@ public class LoggerProcessor implements HttpProcessor, ReactiveHttpProcessor {
         // 打印 HttpResponse 日志
         builder.append("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ".wrap(Logx.Color.WHITE)).append("Response".wrap(Logx.Color.PURPLE)).append(" ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".wrap(Logx.Color.WHITE)).append(lineSeparator);
         builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Duration".wrap(Logx.Color.BLUE)).append(": ").append(response.getTimestamp() - response.getRequest().getTimestamp()).append("ms").append(lineSeparator);
-        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Status".wrap(Logx.Color.BLUE)).append(": ").append(response.getStatus().value()).append("(").append(response.getStatus().name()).append(")").append(lineSeparator);
+        builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Status".wrap(Logx.Color.BLUE)).append(": ").append(response.getStatus().value()).append(" (").append(response.getStatus().name()).append(")").append(lineSeparator);
         builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Headers".wrap(Logx.Color.BLUE)).append(": (").append(response.getHeaders().size()).append(")").append(lineSeparator);
         for (Map.Entry<String, List<String>> header : response.getHeaders().entrySet()) {
             for (String value : header.getValue()) {
@@ -107,7 +107,7 @@ public class LoggerProcessor implements HttpProcessor, ReactiveHttpProcessor {
             }
         }
         if (response.getBody() != null) {
-            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Body".wrap(Logx.Color.BLUE)).append(": ").append(response.getBody().description()).append(lineSeparator);
+            builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Body".wrap(Logx.Color.BLUE)).append(": ").append(response.getBody().description().replace("\\n", "\n").replace("\n", "\n" + "┃ ".wrap(Logx.Color.WHITE))).append(lineSeparator);
         } else {
             builder.append("┣ ".wrap(Logx.Color.WHITE)).append("Body".wrap(Logx.Color.BLUE)).append(": <null>").append(lineSeparator);
         }

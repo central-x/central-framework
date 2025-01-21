@@ -132,7 +132,7 @@ public class ObservableMap<K, V> extends Observable<ObservableMap<K, V>> impleme
     public V put(K key, V value) {
         var removed = this.data.put(key, value);
         this.notifyObservers(EntryAdded.of(this, Map.entry(key, value)));
-        if (removed != null && removed != value) {
+        if (removed != null && removed.equals(value)) {
             this.notifyObservers(EntryRemoved.of(this, Map.entry(key, removed)));
         }
         return removed;

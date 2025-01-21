@@ -25,12 +25,17 @@
 package central.starter.graphql.stub;
 
 import central.net.http.executor.apache.ApacheHttpClientExecutor;
+import central.net.http.processor.impl.TextResponseProcessor;
+import central.net.http.processor.impl.SetHeaderProcessor;
+import central.net.http.processor.impl.TransmitForwardedProcessor;
 import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 /**
  * 应用配置
@@ -46,6 +51,9 @@ public class ApplicationConfiguration {
     public ProviderClient httpClient(@Value("${server.port}") int port) {
         return HttpProxyFactory.builder(ApacheHttpClientExecutor.Default())
                 .contact(new SpringContract())
+                .processor(new TransmitForwardedProcessor())
+                .processor(new SetHeaderProcessor(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE))
+                .processor(new TextResponseProcessor())
                 .baseUrl("http://127.0.0.1:" + port)
                 .target(ProviderClient.class);
     }

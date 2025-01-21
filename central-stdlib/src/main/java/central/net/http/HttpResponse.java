@@ -80,4 +80,100 @@ public abstract class HttpResponse implements AutoCloseable {
             this.getBody().close();
         }
     }
+
+    /**
+     * 修改请求响应
+     */
+    public static Builder mutate(HttpResponse response) {
+        return new Builder(response.getRequest())
+                .status(response.getStatus())
+                .headers(response.getHeaders())
+                .body(response.getBody());
+    }
+
+    /**
+     * 修改响应体
+     */
+    public Builder mutate() {
+        return new Builder(this.getRequest())
+                .status(this.getStatus())
+                .headers(this.getHeaders())
+                .body(this.getBody());
+    }
+
+    /**
+     * 响应构建器
+     */
+    public static class Builder {
+        private final HttpRequest request;
+
+        public Builder(HttpRequest request) {
+            this.request = request;
+        }
+
+        private HttpStatus status;
+
+        /**
+         * 修改状态码
+         */
+        public Builder status(HttpStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        private HttpHeaders headers;
+
+        /**
+         * 修改响应头
+         */
+        public Builder headers(HttpHeaders headers) {
+            this.headers = headers;
+            return this;
+        }
+
+        private Body body;
+
+        /**
+         * 修改响应体
+         */
+        public Builder body(Body body) {
+            this.body = body;
+            return this;
+        }
+
+        public HttpResponse build() {
+            return new ResponseWrapper(this.request, this.status, this.headers, this.body);
+        }
+    }
+
+    /**
+     * 响应包装器
+     */
+    private static class ResponseWrapper extends HttpResponse {
+        private final HttpStatus status;
+        private final HttpHeaders headers;
+        private final Body body;
+
+        public ResponseWrapper(HttpRequest request, HttpStatus status, HttpHeaders headers, Body body) {
+            super(request);
+            this.status = status;
+            this.headers = headers;
+            this.body = body;
+        }
+
+        @Override
+        public HttpStatus getStatus() {
+            return this.status;
+        }
+
+        @Override
+        public HttpHeaders getHeaders() {
+            return this.headers;
+        }
+
+        @Override
+        public Body getBody() {
+            return this.body;
+        }
+    }
 }

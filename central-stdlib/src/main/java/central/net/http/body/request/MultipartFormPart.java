@@ -146,7 +146,7 @@ public class MultipartFormPart implements Body {
         headers.setContentDisposition(ContentDisposition.builder("form-data").name(name).build());
 
         if (Stringx.isNotBlank(body)) {
-            return new MultipartFormPart(name, headers, new StringBody(body, contentType));
+            return new MultipartFormPart(name, headers, new TextBody(body, contentType));
         } else {
             return new MultipartFormPart(name, headers, new RawBody(new byte[0], MediaType.TEXT_PLAIN));
         }

@@ -96,6 +96,11 @@ public class ProviderStubProxy implements InvocationHandler {
         // 执行方法
         var response = this.client.graphql(new GraphQLRequest(graphql, variables), headers);
 
+        if (Stringx.isNullOrEmpty(response)) {
+            // 执行结果为空
+            return null;
+        }
+
         // 直接返回字符串
         if (String.class.isAssignableFrom(method.getReturnType())) {
             return response;

@@ -84,7 +84,7 @@ public class RequestBodyResolver implements SpringResolver {
             } else if (arg instanceof byte[] bytes) {
                 request.setBody(new ByteArrayBody(bytes));
             } else if (arg instanceof String string) {
-                request.setBody(new StringBody(string));
+                request.setBody(new TextBody(string));
             } else {
                 throw new IllegalArgumentException(Stringx.format("Unsupported parameter type '{}' for @RequestBody", parameter.getType().getName()));
             }
@@ -127,7 +127,7 @@ public class RequestBodyResolver implements SpringResolver {
                 request.setBody(new FileBody(file));
                 return true;
             } else if (arg instanceof String string) {
-                request.setBody(new StringBody(string));
+                request.setBody(new TextBody(string));
                 return true;
             } else if (arg instanceof byte[] bytes) {
                 request.setBody(new ByteArrayBody(bytes));

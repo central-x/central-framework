@@ -31,6 +31,8 @@ import central.lang.Stringx;
 import central.net.http.body.request.FileBody;
 import central.net.http.executor.apache.ApacheHttpClientExecutor;
 import central.net.http.processor.impl.AddHeaderProcessor;
+import central.net.http.processor.impl.SetHeaderProcessor;
+import central.net.http.processor.impl.TransmitForwardedProcessor;
 import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
 import central.starter.logging.logback.appender.http.client.CollectClient;
@@ -40,6 +42,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import java.io.File;
 import java.io.IOException;
@@ -86,7 +89,8 @@ public class HttpSender implements Runnable, InitializingBean {
     public void afterPropertiesSet() throws Exception {
         var builder = HttpProxyFactory.builder(ApacheHttpClientExecutor.Default())
                 .contact(new SpringContract())
-                .processor(new AddHeaderProcessor(HttpHeaders.CONTENT_ENCODING, "gzip"));
+                .processor(new AddHeaderProcessor(HttpHeaders.CONTENT_ENCODING, "gzip"))
+                .processor(new SetHeaderProcessor(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE));
         if (Stringx.isNotBlank(code) && Stringx.isNotBlank(secret)) {
             builder.processor((target, chain) -> {
                 target.addHeader("X-Forwarded-Token", JWT.create()
