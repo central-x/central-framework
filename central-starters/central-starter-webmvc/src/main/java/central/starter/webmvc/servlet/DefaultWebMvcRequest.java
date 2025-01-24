@@ -25,7 +25,6 @@
 package central.starter.webmvc.servlet;
 
 import central.lang.Arrayx;
-import central.lang.Assertx;
 import central.lang.Attribute;
 import central.lang.Stringx;
 import central.util.Mapx;
@@ -36,15 +35,14 @@ import jakarta.annotation.Nullable;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * WebMvcRequest 实现
@@ -117,27 +115,22 @@ class DefaultWebMvcRequest extends HttpServletRequestWrapper implements WebMvcRe
         return Objectx.getOrDefault(this.getHeader(XForwardedHeaders.PATH), "/");
     }
 
-    private final Map<String, Object> attributes = new ConcurrentHashMap<>();
+    @Getter
+    private final HttpAttributes attributes = new HttpAttributes();
 
-    @SuppressWarnings("unchecked")
     public <T> @Nullable T getAttribute(@Nonnull Attribute<T> attribute) {
-        return (T) attributes.computeIfAbsent(attribute.getCode(), code -> attribute.getValue());
+        return this.attributes.getAttribute(attribute);
     }
 
     public <T> @Nonnull T getRequiredAttribute(@Nonnull Attribute<T> attribute) {
-        return Assertx.requireNotNull(getAttribute(attribute), "Require nonnull value for key '{}'", attribute.getCode());
+        return this.attributes.getRequiredAttribute(attribute);
     }
 
-    @SuppressWarnings("unchecked")
     public <T> @Nonnull T getAttributeOrDefault(@Nonnull Attribute<T> attribute, @Nonnull T defaultValue) {
-        return (T) this.attributes.getOrDefault(attribute.getCode(), defaultValue);
+        return this.attributes.getAttributeOrDefault(attribute, defaultValue);
     }
 
     public <T> void setAttribute(@Nonnull Attribute<T> attribute, @Nullable T value) {
-        if (value == null) {
-            this.attributes.remove(attribute.getCode());
-        } else {
-            this.attributes.put(attribute.getCode(), value);
-        }
+        this.attributes.setAttribute(attribute, value);
     }
 }

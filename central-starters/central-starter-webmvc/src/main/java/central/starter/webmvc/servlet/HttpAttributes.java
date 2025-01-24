@@ -24,25 +24,25 @@
 
 package central.starter.webmvc.servlet;
 
+import central.lang.Assertx;
 import central.lang.Attribute;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Attributed HttpServletRequest
+ * Http Attributes
  * <p>
- * 支持属性操作
+ * 请求属性
  *
  * @author Alan Yeh
- * @since 2023/03/08
+ * @since 2025/05/23
  */
-public interface AttributedHttpServletRequest extends HttpServletRequest {
+public class HttpAttributes {
 
-    /**
-     * 获取属性集合
-     */
-    HttpAttributes getAttributes();
+    private final Map<String, Object> attributes = new ConcurrentHashMap<>();
 
     /**
      * 获取属性
@@ -51,7 +51,10 @@ public interface AttributedHttpServletRequest extends HttpServletRequest {
      * @param <T>       属性类型
      * @return 属性值
      */
-    <T> @Nullable T getAttribute(@Nonnull Attribute<T> attribute);
+    @SuppressWarnings("unchecked")
+    public <T> @Nullable T getAttribute(@Nonnull Attribute<T> attribute) {
+        return (T) attributes.computeIfAbsent(attribute.getCode(), code -> attribute.getValue());
+    }
 
     /**
      * 获取属性
@@ -60,7 +63,9 @@ public interface AttributedHttpServletRequest extends HttpServletRequest {
      * @param <T>       属性类型
      * @return 属性值
      */
-    <T> @Nonnull T getRequiredAttribute(@Nonnull Attribute<T> attribute);
+    public <T> @Nonnull T getRequiredAttribute(@Nonnull Attribute<T> attribute) {
+        return Assertx.requireNotNull(getAttribute(attribute), "Require nonnull value for key '{}'", attribute.getCode());
+    }
 
     /**
      * 获取属性
@@ -70,7 +75,10 @@ public interface AttributedHttpServletRequest extends HttpServletRequest {
      * @param <T>          属性类型
      * @return 属性值
      */
-    <T> @Nonnull T getAttributeOrDefault(@Nonnull Attribute<T> attribute, @Nonnull T defaultValue);
+    @SuppressWarnings("unchecked")
+    public <T> @Nonnull T getAttributeOrDefault(@Nonnull Attribute<T> attribute, @Nonnull T defaultValue) {
+        return (T) this.attributes.getOrDefault(attribute.getCode(), defaultValue);
+    }
 
     /**
      * 保存属性
@@ -79,5 +87,11 @@ public interface AttributedHttpServletRequest extends HttpServletRequest {
      * @param value     属性值
      * @param <T>       属性类型
      */
-    <T> void setAttribute(@Nonnull Attribute<T> attribute, @Nullable T value);
+    public <T> void setAttribute(@Nonnull Attribute<T> attribute, @Nullable T value) {
+        if (value == null) {
+            this.attributes.remove(attribute.getCode());
+        } else {
+            this.attributes.put(attribute.getCode(), value);
+        }
+    }
 }

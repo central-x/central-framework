@@ -37,6 +37,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 /**
  * 文件响应
@@ -161,7 +162,7 @@ public class FileRender extends Render<FileRender> {
             // 以下代码经过如下浏览器测试均正常
             // 移动：Safari(iOS)、UC浏览器、QQ浏览器、360浏览器、搜狗浏览器、2345浏览器、猎豹浏览器、Chrome、欧朋浏览器、夸克浏览器、CM Browser、魅族浏览器、小米浏览器、华为浏览器、E人E本浏览器、FireFox(下载提示时文件名不正常，下载完了之后是正常的)
             // PC：Safari(Mac)、Chrome、IE8、IE11、Edge、360浏览器（兼容和极速模式均可）、QQ浏览器、FireFox、世界之窗、Opera、Safari(Win)、傲游浏览器
-            String userAgent = this.getRequest().getHeader(HttpHeaders.USER_AGENT).toLowerCase();
+            var userAgent = Optional.ofNullable(this.getRequest().getHeader(HttpHeaders.USER_AGENT)).map(String::toLowerCase).orElse("");
             do {
                 if (userAgent.contains("applewebkit")) {
                     if (userAgent.contains("macintosh")) {
