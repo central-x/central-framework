@@ -39,12 +39,9 @@ import central.util.Version;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * 初始化数据结构
- *
- * @author Alan Yeh
- * @since 2022/09/28
- */
+/// 初始化数据结构
+///
+/// @author Alan Yeh
 public class InitMigration extends Migration {
     public InitMigration() {
         super(Version.of("1.0.0"));

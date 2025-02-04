@@ -32,12 +32,9 @@ import org.apache.shiro.authc.AuthenticationToken;
 
 import java.io.Serial;
 
-/**
- * Json Web Token
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// Json Web Token
+///
+/// @author Alan Yeh
 public class JsonWebToken implements AuthenticationToken {
     @Serial
     private static final long serialVersionUID = -4407799661511688123L;

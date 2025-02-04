@@ -28,12 +28,9 @@ import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
-/**
- * 启用 GraphQL 服务
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// 启用 GraphQL 服务
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

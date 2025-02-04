@@ -38,29 +38,20 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.UUID;
 
-/**
- * 将响应体解析成文件
- *
- * @author Alan Yeh
- * @since 2022/11/18
- */
+/// 将响应体解析成文件
+///
+/// @author Alan Yeh
 public class FileExtractor implements BodyExtractor<File> {
 
-    /**
-     * 文件保存路径
-     */
+    /// 文件保存路径
     private final File location;
-    /**
-     * 文件名
-     */
+    /// 文件名
     private final String filename;
 
-    /**
-     * 构造函数
-     *
-     * @param location 文件保存路径
-     * @param filename 文件名（如果未指定，将解析响应头里面指定的文件名）
-     */
+    /// 构造函数
+    ///
+    /// @param location 文件保存路径
+    /// @param filename 文件名（如果未指定，将解析响应头里面指定的文件名）
     public FileExtractor(@Nonnull File location, @Nullable String filename) throws IOException {
         if (location.exists()) {
             Assertx.mustTrue(location.isDirectory(), "参数[location]错误: 请提供文件夹路径");
@@ -71,21 +62,17 @@ public class FileExtractor implements BodyExtractor<File> {
         this.filename = filename;
     }
 
-    /**
-     * 创建文件解析器
-     *
-     * @param location 文件保存路径
-     * @param filename 文件名（如果未指定，将解析响应头里面指定的文件名）
-     */
+    /// 创建文件解析器
+    ///
+    /// @param location 文件保存路径
+    /// @param filename 文件名（如果未指定，将解析响应头里面指定的文件名）
     public static FileExtractor of(@Nonnull File location, @Nullable String filename) throws IOException {
         return new FileExtractor(location, filename);
     }
 
-    /**
-     * 创建文件解析器（自动解析文件名）
-     *
-     * @param location 文件保存路径
-     */
+    /// 创建文件解析器（自动解析文件名）
+    ///
+    /// @param location 文件保存路径
     public static FileExtractor of(@Nonnull File location) throws IOException {
         return new FileExtractor(location, null);
     }

@@ -28,17 +28,16 @@ import central.bean.MethodNotImplementedException;
 import central.lang.reflect.FieldRef;
 import central.lang.reflect.MethodRef;
 
-/**
- * Pluglet Control Resolver
- * 用于解析 Pluglet 中暴露的控件信息
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Pluglet Control Resolver
+///
+/// 用于解析 Pluglet 中暴露的控件信息
+///
+/// @author Alan Yeh
 public interface ControlResolver {
     boolean support(FieldRef field);
 
     default PlugletControl resolve(FieldRef field) {
-        throw new MethodNotImplementedException(new MethodRef() {});
+        throw new MethodNotImplementedException(new MethodRef() {
+        });
     }
 }

@@ -27,12 +27,9 @@ package central.starter.webmvc.servlet;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletResponseWrapper;
 
-/**
- * WebMvcResponse 实现
- *
- * @author Alan Yeh
- * @since 2023/03/12
- */
+/// WebMvcResponse 实现
+///
+/// @author Alan Yeh
 class DefaultWebMvcResponse extends HttpServletResponseWrapper implements WebMvcResponse {
     public DefaultWebMvcResponse(HttpServletResponse response) {
         super(response);

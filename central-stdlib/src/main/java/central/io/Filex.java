@@ -24,9 +24,9 @@
 
 package central.io;
 
-import central.lang.PublicApi;
 import central.lang.Arrayx;
 import central.lang.Assertx;
+import central.lang.PublicApi;
 import jakarta.annotation.Nonnull;
 import lombok.experimental.UtilityClass;
 
@@ -40,20 +40,15 @@ import java.util.zip.CheckedOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-/**
- * 文件工具
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// 文件工具
+///
+/// @author Alan Yeh
 @PublicApi
 @UtilityClass
 public class Filex {
-    /**
-     * 获取文件扩展名
-     *
-     * @param file 待处理的文件
-     */
+    /// 获取文件扩展名
+    ///
+    /// @param file 待处理的文件
     @Nonnull
     public static String getExtension(@Nonnull File file) {
         if (!file.getName().contains(".")) {
@@ -65,23 +60,19 @@ public class Filex {
         }
     }
 
-    /**
-     * 读取文件为文本
-     *
-     * @param file    待读取的文件
-     * @param charset 文本编码
-     */
+    /// 读取文件为文本
+    ///
+    /// @param file    待读取的文件
+    /// @param charset 文本编码
     public static String readText(@Nonnull File file, Charset charset) throws IOException {
         Assertx.mustNotNull(file, "Argument 'file' must not null");
         return new String(readBytes(file), charset);
     }
 
-    /**
-     * 向文件写入文本
-     *
-     * @param file    待写入的文件
-     * @param content 文本内容
-     */
+    /// 向文件写入文本
+    ///
+    /// @param file    待写入的文件
+    /// @param content 文本内容
     public static void writeText(@Nonnull File file, String content) throws IOException {
         Assertx.mustNotNull(file, "Argument 'file' must not null");
 
@@ -91,12 +82,10 @@ public class Filex {
         writer.close();
     }
 
-    /**
-     * 向文件写入字节
-     *
-     * @param file  待写入的文件
-     * @param bytes 字节内容
-     */
+    /// 向文件写入字节
+    ///
+    /// @param file  待写入的文件
+    /// @param bytes 字节内容
     public static void writeBytes(@Nonnull File file, byte[] bytes) throws IOException {
         Assertx.mustNotNull(file, "Argument 'file' must not null");
 
@@ -110,12 +99,10 @@ public class Filex {
         }
     }
 
-    /**
-     * 向文件追加写入文本
-     *
-     * @param file    待写入的文件
-     * @param content 文本内容
-     */
+    /// 向文件追加写入文本
+    ///
+    /// @param file    待写入的文件
+    /// @param content 文本内容
     public static void appendText(@Nonnull File file, String content, Charset charset) throws IOException {
         Assertx.mustNotNull(file, "Argument 'file' must not null");
 
@@ -125,21 +112,17 @@ public class Filex {
         randomFile.close();
     }
 
-    /**
-     * 向文件追加写入一行文本
-     *
-     * @param file    待写入的文件
-     * @param content 文本内容
-     */
+    /// 向文件追加写入一行文本
+    ///
+    /// @param file    待写入的文件
+    /// @param content 文本内容
     public static void appendLine(@Nonnull File file, String content, Charset charset) throws IOException {
         appendText(file, content + "\n", charset);
     }
 
-    /**
-     * 将文件读成字节
-     *
-     * @param file 待读取的文件
-     */
+    /// 将文件读成字节
+    ///
+    /// @param file 待读取的文件
     @Nonnull
     public static byte[] readBytes(@Nonnull File file) throws IOException {
         Assertx.mustNotNull(file, "Argument 'file' must not null");
@@ -170,12 +153,10 @@ public class Filex {
         }
     }
 
-    /**
-     * 删除文件(夹)
-     * 如果是文件夹，会递归删除所有的文件夹里的内容
-     *
-     * @param file 待删除的文件(夹)
-     */
+    /// 删除文件(夹)
+    /// 如果是文件夹，会递归删除所有的文件夹里的内容
+    ///
+    /// @param file 待删除的文件(夹)
     public static void delete(@Nonnull File file) throws IOException {
         if (!file.exists()) {
             // 如果是 Linux 或 Unit 的软链接，file.exists() 判断的是软链接的目标文件是否存在，而不是软件接文件是否存在。
@@ -195,12 +176,10 @@ public class Filex {
         Assertx.mustTrue(file.delete(), IOException::new, "Can not delete file: " + file.getAbsolutePath());
     }
 
-    /**
-     * 将流复制到目标地址
-     *
-     * @param input  输入流
-     * @param target 输出文件
-     */
+    /// 将流复制到目标地址
+    ///
+    /// @param input  输入流
+    /// @param target 输出文件
     public static void copy(@Nonnull InputStream input, @Nonnull File target) throws IOException {
         Assertx.mustNotNull(input, "Argument 'file' must not null");
         Assertx.mustNotNull(target, "Argument 'file' must not null");
@@ -213,13 +192,11 @@ public class Filex {
         }
     }
 
-    /**
-     * 复制文件(夹)
-     * 如果复制文件夹，会逐级复制子文件
-     *
-     * @param source 源文件
-     * @param target 目标文件
-     */
+    /// 复制文件(夹)
+    /// 如果复制文件夹，会逐级复制子文件
+    ///
+    /// @param source 源文件
+    /// @param target 目标文件
     public static void copy(@Nonnull File source, @Nonnull File target) throws IOException {
         Assertx.mustNotNull(source, "Argument 'file' must not null");
         Assertx.mustNotNull(target, "Argument 'file' must not null");
@@ -262,12 +239,10 @@ public class Filex {
         }
     }
 
-    /**
-     * 压缩文件
-     *
-     * @param sources 源文件，可以是文件夹或文件
-     * @param dist    目标文件
-     */
+    /// 压缩文件
+    ///
+    /// @param sources 源文件，可以是文件夹或文件
+    /// @param dist    目标文件
     public static void compress(List<File> sources, File dist) throws IOException {
         Filex.delete(dist);
 

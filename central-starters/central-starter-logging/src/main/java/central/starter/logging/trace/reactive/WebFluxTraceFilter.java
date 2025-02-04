@@ -34,12 +34,9 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
-/**
- * 追踪过滤器
- *
- * @author Alan Yeh
- * @since 2022/10/25
- */
+/// 追踪过滤器
+///
+/// @author Alan Yeh
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class WebFluxTraceFilter implements WebFilter {
     @Override

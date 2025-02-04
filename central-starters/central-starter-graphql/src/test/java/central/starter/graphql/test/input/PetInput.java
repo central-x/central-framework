@@ -29,12 +29,9 @@ import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * Pet
- *
- * @author Alan Yeh
- * @since 2022/09/29
- */
+/// Pet
+///
+/// @author Alan Yeh
 @Data
 @Builder(toBuilder = true)
 @EqualsAndHashCode

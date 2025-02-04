@@ -30,12 +30,9 @@ import org.springframework.http.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Request/Response Body
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Request/Response Body
+///
+/// @author Alan Yeh
 public interface Body extends AutoCloseable {
 
     default HttpHeaders getHeaders() {
@@ -45,38 +42,26 @@ public interface Body extends AutoCloseable {
         return headers;
     }
 
-    /**
-     * 内容类型
-     */
+    /// 内容类型
     MediaType getContentType();
 
-    /**
-     * 数据长度
-     */
+    /// 数据长度
     Long getContentLength();
 
-    /**
-     * 数据流
-     */
+    /// 数据流
     InputStream getInputStream() throws IOException;
 
-    /**
-     * 描述
-     */
+    /// 描述
     String description();
 
-    /**
-     * 关闭 Body
-     */
+    /// 关闭 Body
     @Override
     default void close() throws Exception {
     }
 
-    /**
-     * Body 解析
-     *
-     * @param extractor 解析器
-     */
+    /// Body 解析
+    ///
+    /// @param extractor 解析器
     default <T> T extract(BodyExtractor<T> extractor) throws IOException {
         return extractor.extract(this);
     }

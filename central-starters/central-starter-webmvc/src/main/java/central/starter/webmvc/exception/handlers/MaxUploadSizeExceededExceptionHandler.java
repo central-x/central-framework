@@ -35,13 +35,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * MaxUploadSizeExceededException Handler
- *
- * @author Alan Yeh
- * @see MaxUploadSizeExceededException
- * @since 2022/07/17
- */
+/// MaxUploadSizeExceededException Handler
+///
+/// @author Alan Yeh
+/// @see MaxUploadSizeExceededException
 @Component
 public class MaxUploadSizeExceededExceptionHandler implements ExceptionHandler {
 

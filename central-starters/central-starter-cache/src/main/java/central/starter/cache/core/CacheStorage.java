@@ -26,42 +26,31 @@ package central.starter.cache.core;
 
 import java.time.Duration;
 
-/**
- * 缓存存储
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// 缓存存储
+///
+/// @author Alan Yeh
 public interface CacheStorage {
-    /**
-     * 判断缓存是否存在
-     *
-     * @param key 缓存键
-     */
+    /// 判断缓存是否存在
+    ///
+    /// @param key 缓存键
     boolean exists(String key);
 
-    /**
-     * 获取缓存
-     *
-     * @param key 缓存键
-     * @param <T> 缓存类型
-     */
+    /// 获取缓存
+    ///
+    /// @param key 缓存键
+    /// @param <T> 缓存类型
     <T> T get(String key);
 
-    /**
-     * 保存/覆盖缓存
-     *
-     * @param key          缓存键
-     * @param value        缓存值
-     * @param expires      有效期
-     * @param dependencies 依存依赖
-     */
+    /// 保存/覆盖缓存
+    ///
+    /// @param key          缓存键
+    /// @param value        缓存值
+    /// @param expires      有效期
+    /// @param dependencies 依存依赖
     void put(String key, Object value, Duration expires, String... dependencies);
 
-    /**
-     * 删除缓存
-     *
-     * @param keys 缓存键
-     */
+    /// 删除缓存
+    ///
+    /// @param keys 缓存键
     void evict(String... keys);
 }

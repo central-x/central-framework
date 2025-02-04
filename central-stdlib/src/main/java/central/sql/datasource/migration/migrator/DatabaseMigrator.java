@@ -27,8 +27,8 @@ package central.sql.datasource.migration.migrator;
 import central.sql.SqlExecutor;
 import central.sql.builder.script.index.AddIndexScript;
 import central.sql.builder.script.table.AddTableScript;
-import central.sql.datasource.migration.MigrateAction;
 import central.sql.datasource.migration.Database;
+import central.sql.datasource.migration.MigrateAction;
 import central.sql.datasource.migration.Table;
 import central.sql.datasource.migration.action.AddIndexMigration;
 import central.sql.datasource.migration.action.AddTableMigration;
@@ -36,7 +36,6 @@ import central.sql.datasource.migration.data.DatabaseData;
 import central.sql.meta.database.DatabaseMeta;
 import central.util.Listx;
 import lombok.Getter;
-import lombok.experimental.Delegate;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -44,12 +43,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * 迁移程序实现
- *
- * @author Alan Yeh
- * @since 2022/08/30
- */
+/// 迁移程序实现
+///
+/// @author Alan Yeh
 public class DatabaseMigrator implements Database {
 
     private final DatabaseData database;
@@ -86,18 +82,14 @@ public class DatabaseMigrator implements Database {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 迁移动作
-     */
+    /// 迁移动作
     @Getter
     private final List<MigrateAction> actions = new ArrayList<>();
 
 
-    /**
-     * 根据元数据初始化迁移程序
-     *
-     * @param meta 数据库元数据
-     */
+    /// 根据元数据初始化迁移程序
+    ///
+    /// @param meta 数据库元数据
     public DatabaseMigrator(DatabaseMeta meta) {
         this.database = DatabaseData.fromMeta(meta);
     }

@@ -45,12 +45,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * 表迁移工具
- *
- * @author Alan Yeh
- * @since 2022/08/31
- */
+/// 表迁移工具
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class TableMigrator implements Table {
     private final DatabaseMigrator migrator;

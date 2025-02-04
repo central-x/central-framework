@@ -25,25 +25,24 @@
 package central.pluglet.binder;
 
 import central.bean.OptionalEnum;
+import central.lang.Arrayx;
+import central.lang.Assertx;
+import central.lang.Stringx;
 import central.lang.reflect.FieldRef;
 import central.lang.reflect.InstanceRef;
 import central.pluglet.FieldBinder;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
-import central.lang.Arrayx;
-import central.lang.Assertx;
 import central.util.Objectx;
-import central.lang.Stringx;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Checkbox Control Binder
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// Checkbox Control Binder
+///
+/// @author Alan Yeh
 public class CheckboxControlBinder implements FieldBinder {
     @Override
     public boolean support(FieldRef field) {
@@ -63,7 +62,7 @@ public class CheckboxControlBinder implements FieldBinder {
 
         // 枚举列表
         var options = Arrayx.asStream(enumType.getRawClass().getEnumConstants())
-                .map(it -> (OptionalEnum<String>)Assertx.requireInstanceOf(OptionalEnum.class, it, "Enum '{}' MUST implements Optional<String>"))
+                .map(it -> (OptionalEnum<String>) Assertx.requireInstanceOf(OptionalEnum.class, it, "Enum '{}' MUST implements Optional<String>"))
                 .toList();
 
         var name = Objectx.getOrDefault(annotation.name(), field.getName());

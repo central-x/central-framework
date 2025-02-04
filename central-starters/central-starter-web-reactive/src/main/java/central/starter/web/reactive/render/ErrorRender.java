@@ -46,12 +46,9 @@ import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * 异常响应
- *
- * @author Alan Yeh
- * @since 2022/10/09
- */
+/// 异常响应
+///
+/// @author Alan Yeh
 public class ErrorRender extends Render<ErrorRender> {
     public ErrorRender(ServerWebExchange exchange) {
         super(exchange);
@@ -69,41 +66,31 @@ public class ErrorRender extends Render<ErrorRender> {
         return new ErrorRender(request, response);
     }
 
-    /**
-     * 调试模式
-     */
+    /// 调试模式
     private boolean debug = false;
 
-    /**
-     * 打开调试模式
-     * <p>
-     * 输出异常栈
-     */
+    /// 打开调试模式
+    ///
+    /// 输出异常栈
     public ErrorRender debug() {
         this.debug = true;
         return this;
     }
 
-    /**
-     * 设置是否为调试模式
-     * <p>
-     * 是否输出异常栈
-     */
+    /// 设置是否为调试模式
+    ///
+    /// 是否输出异常栈
     public ErrorRender debug(boolean debug) {
         this.debug = debug;
         return this;
     }
 
-    /**
-     * 异常
-     */
+    /// 异常
     private Throwable throwable;
 
-    /**
-     * 设置异常
-     *
-     * @param throwable 异常
-     */
+    /// 设置异常
+    ///
+    /// @param throwable 异常
     public ErrorRender setError(Throwable throwable) {
         if (throwable instanceof ResponseStatusException exception) {
             return setError(exception.getStatusCode(), throwable);
@@ -112,71 +99,57 @@ public class ErrorRender extends Render<ErrorRender> {
         }
     }
 
-    /**
-     * 设置状态码和异常
-     *
-     * @param status    状态码
-     * @param throwable 异常
-     */
+    /// 设置状态码和异常
+    ///
+    /// @param status    状态码
+    /// @param throwable 异常
     public ErrorRender setError(HttpStatusCode status, Throwable throwable) {
         this.setStatus(status);
         this.throwable = throwable;
         return this;
     }
 
-    /**
-     * 设置错误信息
-     *
-     * @param message 错误信息
-     */
+    /// 设置错误信息
+    ///
+    /// @param message 错误信息
     public ErrorRender setError(String message) {
         return this.setError(HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
 
-    /**
-     * 设置错误信息和状态码
-     *
-     * @param status  状态码
-     * @param message 错误信息
-     */
+    /// 设置错误信息和状态码
+    ///
+    /// @param status  状态码
+    /// @param message 错误信息
     public ErrorRender setError(HttpStatus status, String message) {
         return this.setError(status, new RuntimeException(message));
     }
 
-    /**
-     * 执行渲染
-     *
-     * @param message 错误信息
-     */
+    /// 执行渲染
+    ///
+    /// @param message 错误信息
     public Mono<Void> render(String message) {
         return this.setError(message).render();
     }
 
-    /**
-     * 执行渲染
-     *
-     * @param status  状态码
-     * @param message 错误信息
-     */
+    /// 执行渲染
+    ///
+    /// @param status  状态码
+    /// @param message 错误信息
     public Mono<Void> render(HttpStatus status, String message) {
         return this.setError(status, message).render();
     }
 
-    /**
-     * 返回异常
-     *
-     * @param throwable 异常
-     */
+    /// 返回异常
+    ///
+    /// @param throwable 异常
     public Mono<Void> render(Throwable throwable) {
         return this.setError(throwable).render();
     }
 
-    /**
-     * 返回异常
-     *
-     * @param status    状态码
-     * @param throwable 异常
-     */
+    /// 返回异常
+    ///
+    /// @param status    状态码
+    /// @param throwable 异常
     public Mono<Void> render(HttpStatus status, Throwable throwable) {
         return this.setError(status, throwable).render();
     }
@@ -206,9 +179,7 @@ public class ErrorRender extends Render<ErrorRender> {
 
     private static final MediaType JSON_CONTENT_TYPE = new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8);
 
-    /**
-     * 渲染 JSON
-     */
+    /// 渲染 JSON
     private Mono<Void> renderJson() {
         // 返回 JSON
         this.response.getHeaders().setContentType(JSON_CONTENT_TYPE);
@@ -235,9 +206,7 @@ public class ErrorRender extends Render<ErrorRender> {
 
     private static final MediaType HTML_CONTENT_TYPE = new MediaType(MediaType.TEXT_HTML, StandardCharsets.UTF_8);
 
-    /**
-     * 渲染 HTML
-     */
+    /// 渲染 HTML
     private Mono<Void> renderHtml() {
         this.getResponse().getHeaders().setContentType(HTML_CONTENT_TYPE);
 

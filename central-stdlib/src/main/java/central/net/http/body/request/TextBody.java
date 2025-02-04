@@ -24,8 +24,8 @@
 
 package central.net.http.body.request;
 
-import central.net.http.body.Body;
 import central.lang.Stringx;
+import central.net.http.body.Body;
 import org.springframework.http.MediaType;
 
 import java.io.ByteArrayInputStream;
@@ -33,14 +33,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-/**
- * Text Body
- * <p>
- * 用于传输文本
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Text Body
+///
+/// 用于传输文本
+///
+/// @author Alan Yeh
 public class TextBody implements Body {
 
     private final byte[] body;

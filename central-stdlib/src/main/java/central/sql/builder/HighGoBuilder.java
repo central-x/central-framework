@@ -24,12 +24,9 @@
 
 package central.sql.builder;
 
-/**
- * 翰高方言
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// 翰高方言
+///
+/// @author Alan Yeh
 public class HighGoBuilder extends StandardSqlBuilder {
 
     @Override

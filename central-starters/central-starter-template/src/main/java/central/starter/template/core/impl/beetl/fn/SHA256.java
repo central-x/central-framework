@@ -32,12 +32,9 @@ import org.beetl.core.Function;
 
 import java.nio.charset.StandardCharsets;
 
-/**
- * 摘要算法
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// 摘要算法
+///
+/// @author Alan Yeh
 public class SHA256 implements Function {
     @Override
     @SneakyThrows

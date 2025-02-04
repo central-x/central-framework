@@ -34,12 +34,9 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-/**
- * 国密 SM3 算法
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// 国密 SM3 算法
+///
+/// @author Alan Yeh
 public class SM3Impl implements DigestImpl {
 
     public String getName() {

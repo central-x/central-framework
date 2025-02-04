@@ -28,12 +28,9 @@ import lombok.Data;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/**
- * Buildx Test Cases
- *
- * @author Alan Yeh
- * @since 2022/08/23
- */
+/// Buildx Test Cases
+///
+/// @author Alan Yeh
 public class TestBuildx {
 
     @Test

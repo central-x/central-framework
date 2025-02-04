@@ -24,13 +24,13 @@
 
 package central.sql.proxy.mapper;
 
+import central.lang.Arrayx;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.lang.Arrayx;
 import central.util.Listx;
 
 import java.lang.reflect.Method;
@@ -38,13 +38,10 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * InsertBatch Handler
- *
- * @author Alan Yeh
- * @see Mapper#insertBatch
- * @since 2022/08/10
- */
+/// InsertBatch Handler
+///
+/// @author Alan Yeh
+/// @see Mapper#insertBatch
 public class InsertBatchHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {

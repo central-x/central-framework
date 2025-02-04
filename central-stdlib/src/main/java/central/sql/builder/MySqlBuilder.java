@@ -26,26 +26,28 @@ package central.sql.builder;
 
 import central.lang.Assertx;
 import central.lang.Stringx;
-import central.sql.*;
+import central.sql.SqlExecutor;
+import central.sql.SqlScript;
+import central.sql.SqlType;
 import central.sql.builder.script.column.AddColumnScript;
 import central.sql.builder.script.column.RenameColumnScript;
 import central.sql.builder.script.table.AddTableScript;
 import central.sql.builder.script.table.RenameTableScript;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.query.Conditions;
-import central.util.*;
+import central.util.Collectionx;
+import central.util.Listx;
+import central.util.Objectx;
+import central.util.Setx;
 import jakarta.annotation.Nonnull;
 
 import java.sql.SQLSyntaxErrorException;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * MySql 方言
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// MySql 方言
+///
+/// @author Alan Yeh
 public class MySqlBuilder extends StandardSqlBuilder {
 
     @Override

@@ -37,19 +37,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Data Transfer Object
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// Data Transfer Object
+///
+/// @author Alan Yeh
 public interface DTO {
-    /**
-     * 将单个 Entity 转换成 DTO
-     *
-     * @param source 源数据类型
-     * @param dto    DTO 类型
-     */
+    /// 将单个 Entity 转换成 DTO
+    ///
+    /// @param source 源数据类型
+    /// @param dto    DTO 类型
     @SneakyThrows({NoSuchMethodException.class, InstantiationException.class, IllegalAccessException.class, InvocationTargetException.class})
     static <T extends S, S extends Entity> T wrap(S source, Class<T> dto) {
         if (source == null) {
@@ -61,32 +56,26 @@ public interface DTO {
         return target;
     }
 
-    /**
-     * 将 {@code List<? extend Entity>} 转换成 DTO
-     *
-     * @param sources 源数据类型
-     * @param dto     DTO 类型
-     */
+    /// 将 {@code List<? extend Entity>} 转换成 DTO
+    ///
+    /// @param sources 源数据类型
+    /// @param dto     DTO 类型
     static <T extends S, S extends Entity> List<T> wrap(List<? extends S> sources, Class<T> dto) {
         return Listx.asStream(sources).map(it -> DTO.wrap(it, dto)).toList();
     }
 
-    /**
-     * 将 {@code Map<String, ? extend Entity>} 转换成 DTO
-     *
-     * @param sources 源数据类型
-     * @param dto     DTO 类型
-     */
+    /// 将 {@code Map<String, ? extend Entity>} 转换成 DTO
+    ///
+    /// @param sources 源数据类型
+    /// @param dto     DTO 类型
     static <T extends S, S extends Entity> Map<String, T> wrap(Map<String, ? extends S> sources, Class<T> dto) {
         return Mapx.asStream(sources).map(it -> KeyValue.of(it.getKey(), DTO.wrap(it.getValue(), dto))).collect(Collectors.toMap(KeyValue::getKey, KeyValue::getValue));
     }
 
-    /**
-     * 将 {@code Page<? extend Entity>} 转换成 DTO
-     *
-     * @param source 源数据分页类型
-     * @param dto    DTO 类型
-     */
+    /// 将 {@code Page<? extend Entity>} 转换成 DTO
+    ///
+    /// @param source 源数据分页类型
+    /// @param dto    DTO 类型
     static <T extends S, S extends Entity> Page<T> wrap(Page<? extends S> source, Class<T> dto) {
         return new Page<T>(Listx.asStream(source.getData()).map(it -> DTO.wrap(it, dto)).toList(), source.getPager());
     }

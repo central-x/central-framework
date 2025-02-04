@@ -36,12 +36,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import java.util.Map;
 import java.util.Properties;
 
-/**
- * Beetl 实现
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// Beetl 实现
+///
+/// @author Alan Yeh
 @ConditionalOnMissingBean(TemplateRender.class)
 public class BeetlRender implements TemplateRender {
 

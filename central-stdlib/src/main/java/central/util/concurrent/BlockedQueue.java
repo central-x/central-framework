@@ -32,12 +32,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * 阻塞队列
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 阻塞队列
+///
+/// @author Alan Yeh
 public class BlockedQueue<E> extends AbstractQueue<E> implements BlockingQueue<E> {
 
     private final transient ReentrantLock lock = new ReentrantLock();
@@ -46,15 +43,15 @@ public class BlockedQueue<E> extends AbstractQueue<E> implements BlockingQueue<E
 
     private final Queue<E> queue;
 
-    public BlockedQueue(Queue<E> queue){
+    public BlockedQueue(Queue<E> queue) {
         this.queue = queue;
     }
 
-    public BlockedQueue(){
+    public BlockedQueue() {
         this(new ArrayDeque<>());
     }
 
-    public BlockedQueue(Collection<? extends E> c){
+    public BlockedQueue(Collection<? extends E> c) {
         this();
         this.addAll(c);
     }
@@ -113,11 +110,11 @@ public class BlockedQueue<E> extends AbstractQueue<E> implements BlockingQueue<E
         try {
             for (; ; ) {
                 E first = this.queue.peek();
-                if (first != null){
+                if (first != null) {
                     return this.queue.poll();
                 }
 
-                if (leader != null){
+                if (leader != null) {
                     available.await();
                 } else {
                     Thread thisThread = Thread.currentThread();
@@ -156,11 +153,11 @@ public class BlockedQueue<E> extends AbstractQueue<E> implements BlockingQueue<E
         try {
             for (; ; ) {
                 E first = this.queue.peek();
-                if (first != null){
+                if (first != null) {
                     return this.queue.poll();
                 }
 
-                if (leader != null){
+                if (leader != null) {
                     nanos = available.awaitNanos(nanos);
                 } else {
                     Thread thisThread = Thread.currentThread();
@@ -193,15 +190,15 @@ public class BlockedQueue<E> extends AbstractQueue<E> implements BlockingQueue<E
             while (polls.size() < maxElements) {
                 E first = this.queue.peek();
 
-                if (first != null){
+                if (first != null) {
                     polls.add(this.queue.poll());
                 } else {
-                    if (nanos <= 0){
+                    if (nanos <= 0) {
                         // 等待时间到了，返回 polled 的数据
                         return polls;
                     } else {
                         // 继续等待
-                        if (leader != null){
+                        if (leader != null) {
                             nanos = available.awaitNanos(nanos);
                         } else {
                             Thread thisThread = Thread.currentThread();

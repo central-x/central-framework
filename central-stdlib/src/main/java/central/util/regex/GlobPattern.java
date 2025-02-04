@@ -27,26 +27,19 @@ package central.util.regex;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-/**
- * Glob 风格正则匹配
- *
- * @author Alan Yeh
- * @since 2023/08/27
- */
+/// Glob 风格正则匹配
+///
+/// @author Alan Yeh
 public class GlobPattern {
-    /**
-     * 编译指定的匹配表达式
-     *
-     * @param regex glob 表达式
-     * @return Pattern
-     */
+    /// 编译指定的匹配表达式
+    ///
+    /// @param regex glob 表达式
+    /// @return Pattern
     public static Pattern compile(String regex) {
         return Pattern.compile(toRegexPattern(regex, false));
     }
 
-    /**
-     * 判断是否是 Glob 风格的表达式
-     */
+    /// 判断是否是 Glob 风格的表达式
     public static boolean isGlobPattern(String regex) {
         for (int i = 0; i < regex.length(); i++) {
             if (globMetaChars.indexOf(regex.charAt(i)) != -1) {
@@ -59,7 +52,7 @@ public class GlobPattern {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // 以下代码来自 sun.nio.fs.Globs
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     private static final String regexMetaChars = ".^$+{[]|()";
@@ -82,11 +75,9 @@ public class GlobPattern {
         return EOL;
     }
 
-    /**
-     * Creates a regex pattern from the given glob expression.
-     *
-     * @throws PatternSyntaxException
-     */
+    /// Creates a regex pattern from the given glob expression.
+    ///
+    /// @throws PatternSyntaxException
     private static String toRegexPattern(String globPattern, boolean isDos) {
         boolean inGroup = false;
         StringBuilder regex = new StringBuilder("^");

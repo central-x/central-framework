@@ -24,12 +24,12 @@
 
 package central.net.http.processor.impl;
 
-import central.pattern.chain.ProcessChain;
-import central.pattern.chain.reactive.ReactiveProcessChain;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
 import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.ReactiveHttpProcessor;
+import central.pattern.chain.ProcessChain;
+import central.pattern.chain.reactive.ReactiveProcessChain;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -37,12 +37,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
-/**
- * 传递 X-Forwarded-* 请求头
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 传递 X-Forwarded-* 请求头
+///
+/// @author Alan Yeh
 public class TransmitForwardedProcessor implements HttpProcessor, ReactiveHttpProcessor {
 
     @Override

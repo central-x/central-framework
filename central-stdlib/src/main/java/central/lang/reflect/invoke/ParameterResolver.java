@@ -32,42 +32,33 @@ import jakarta.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
-/**
- * 参数解析器
- *
- * @author Alan Yeh
- * @since 2022/10/01
- */
+/// 参数解析器
+///
+/// @author Alan Yeh
 public interface ParameterResolver extends Orderable<ParameterResolver> {
 
-    /**
-     * 参数解析器的顺序
-     * 数值越大，排序越靠后
-     */
+    /// 参数解析器的顺序
+    /// 数值越大，排序越靠后
     @Override
     default Integer getOrder() {
         return 0;
     }
 
-    /**
-     * 判断是否支持解析该参数
-     *
-     * @param clazz     方法所在的类
-     * @param method    方法
-     * @param parameter 参数
-     * @return 如果返回 true，则使用此参数解析器解析参数
-     */
+    /// 判断是否支持解析该参数
+    ///
+    /// @param clazz     方法所在的类
+    /// @param method    方法
+    /// @param parameter 参数
+    /// @return 如果返回 true，则使用此参数解析器解析参数
     boolean support(@Nonnull Class<?> clazz, @Nonnull Method method, @Nonnull Parameter parameter);
 
-    /**
-     * 解析参数
-     *
-     * @param clazz     方法所在的类
-     * @param method    方法
-     * @param parameter 参数
-     * @param context   上下文
-     * @return 解析后的参数
-     */
+    /// 解析参数
+    ///
+    /// @param clazz     方法所在的类
+    /// @param method    方法
+    /// @param parameter 参数
+    /// @param context   上下文
+    /// @return 解析后的参数
     @Nullable
     Object resolve(@Nonnull Class<?> clazz, @Nonnull Method method, @Nonnull Parameter parameter, @Nonnull Context context);
 }

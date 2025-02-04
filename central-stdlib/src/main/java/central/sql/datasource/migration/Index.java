@@ -27,36 +27,24 @@ package central.sql.datasource.migration;
 import central.validation.Label;
 import central.validation.Validatable;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-/**
- * 索引信息
- *
- * @author Alan Yeh
- * @since 2022/08/29
- */
+/// 索引信息
+///
+/// @author Alan Yeh
 public interface Index {
 
-    /**
-     * 索引名
-     */
+    /// 索引名
     String getName();
 
-    /**
-     * 字段名
-     */
+    /// 字段名
     String getColumn();
 
-    /**
-     * 是否唯一
-     */
+    /// 是否唯一
     boolean isUnique();
 
-    /**
-     * 删除索引
-     */
+    /// 删除索引
     void drop();
 
     static Index of(String name, boolean unique, String column) {

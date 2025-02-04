@@ -30,64 +30,53 @@ import jakarta.annotation.Nullable;
 import java.time.Duration;
 import java.util.List;
 
-/**
- * 缓存队列
- *
- * @author Alan Yeh
- * @since 2023/07/01
- */
+/// 缓存队列
+///
+/// @author Alan Yeh
 public interface CacheQueue {
-    /**
-     * 获取队列中所有的元素
-     *
-     * @return 元素集合
-     */
-    @Nonnull List<String> values();
+    /// 获取队列中所有的元素
+    ///
+    /// @return 元素集合
+    @Nonnull
+    List<String> values();
 
-    /**
-     * 在队列的最后追加一个元素
-     *
-     * @param value 待添加的元素
-     * @return 是否添加成功
-     */
+    /// 在队列的最后追加一个元素
+    ///
+    /// @param value 待添加的元素
+    /// @return 是否添加成功
     boolean push(@Nonnull String value);
 
-    /**
-     * 获取并移除队列最前面的元素
-     *
-     * @return 被移除的元素。如果队列中没有元素，则返回空
-     */
-    @Nullable String pop();
+    /// 获取并移除队列最前面的元素
+    ///
+    /// @return 被移除的元素。如果队列中没有元素，则返回空
+    @Nullable
+    String pop();
 
-    /**
-     * 获取并移除队列最前面的几个元素
-     *
-     * @param count 移除的元素数量
-     * @return 被移除的元素
-     */
-    @Nonnull List<String> pop(long count);
+    /// 获取并移除队列最前面的几个元素
+    ///
+    /// @param count 移除的元素数量
+    /// @return 被移除的元素
+    @Nonnull
+    List<String> pop(long count);
 
-    /**
-     * 获取并移除队列最前面的元素
-     *
-     * @param timeout 等待时长
-     * @return 被移除的元素。超时后队列中如果没有元素，则返回空
-     * @throws InterruptedException 等待时被中断
-     */
-    @Nullable String take(@Nonnull Duration timeout) throws InterruptedException;
+    /// 获取并移除队列最前面的元素
+    ///
+    /// @param timeout 等待时长
+    /// @return 被移除的元素。超时后队列中如果没有元素，则返回空
+    /// @throws InterruptedException 等待时被中断
+    @Nullable
+    String take(@Nonnull Duration timeout) throws InterruptedException;
 
-    /**
-     * 获取队列最前面的元素，不会移除该元素
-     *
-     * @return 队列最前面的元素。如果队列中没有元素，则返回空
-     */
-    @Nullable String peek();
+    /// 获取队列最前面的元素，不会移除该元素
+    ///
+    /// @return 队列最前面的元素。如果队列中没有元素，则返回空
+    @Nullable
+    String peek();
 
-    /**
-     * 获取队列最前面的几个元素元素，不会移除该元素
-     *
-     * @param count 获取元素数量
-     * @return 元素集合
-     */
-    @Nonnull List<String> peek(long count);
+    /// 获取队列最前面的几个元素元素，不会移除该元素
+    ///
+    /// @param count 获取元素数量
+    /// @return 元素集合
+    @Nonnull
+    List<String> peek(long count);
 }

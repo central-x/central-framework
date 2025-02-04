@@ -47,26 +47,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Error View
- * <p>
- * 错误视图
- *
- * @author Alan Yeh
- * @since 2023/10/29
- */
+/// Error View
+///
+/// 错误视图
+///
+/// @author Alan Yeh
 public class ErrorView implements View {
 
-    /**
-     * 异常
-     */
+    /// 异常
     @Getter
     @Setter
     private Throwable throwable;
 
-    /**
-     * 是否输出详细异常信息
-     */
+    /// 是否输出详细异常信息
     @Getter
     @Setter
     private boolean print;
@@ -109,9 +102,7 @@ public class ErrorView implements View {
 
     private static final String JSON_CONTENT_TYPE = new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8).toString();
 
-    /**
-     * 渲染 JSON
-     */
+    /// 渲染 JSON
     private void renderJson(HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 客户端要求返回 JSON 格式
         response.setContentType(JSON_CONTENT_TYPE);
@@ -139,9 +130,7 @@ public class ErrorView implements View {
 
     private static final String HTML_CONTENT_TYPE = new MediaType(MediaType.TEXT_HTML, StandardCharsets.UTF_8).toString();
 
-    /**
-     * 渲染 HTML
-     */
+    /// 渲染 HTML
     private void renderHtml(HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 返回 HTML 异常信息
         response.setContentType(HTML_CONTENT_TYPE);

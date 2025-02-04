@@ -31,23 +31,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.FactoryBean;
 
-/**
- * Mapper Factory
- *
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// Mapper Factory
+///
+/// @author Alan Yeh
 public class MapperFactoryBean<T extends Mapper<?>> implements FactoryBean<T> {
 
-    /**
-     * Mapper 类型
-     */
+    /// Mapper 类型
     @Getter
     private final Class<T> objectType;
 
-    /**
-     * Mapper 对象名称
-     */
+    /// Mapper 对象名称
     @Setter
     private String name;
 

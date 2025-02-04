@@ -35,12 +35,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
-/**
- * 延迟队列
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 延迟队列
+///
+/// @author Alan Yeh
 public class DelayedQueue<E extends Delayed> extends AbstractQueue<E> implements BlockingQueue<E> {
 
     private final transient ReentrantLock lock = new ReentrantLock();

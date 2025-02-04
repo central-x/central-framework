@@ -26,14 +26,11 @@ package central.util.converter.impl;
 
 import central.util.converter.Converter;
 
-/**
- * Unsupported Converter
- * <p>
- * 不支持的转换器
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Unsupported Converter
+///
+/// 不支持的转换器
+///
+/// @author Alan Yeh
 public class UnsupportedConverter implements Converter<Void> {
 
     private static final UnsupportedConverter INSTANCE = new UnsupportedConverter();

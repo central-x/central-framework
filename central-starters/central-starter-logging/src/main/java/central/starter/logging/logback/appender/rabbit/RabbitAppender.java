@@ -26,12 +26,9 @@ package central.starter.logging.logback.appender.rabbit;
 
 import central.starter.logging.logback.appender.CentralAppender;
 
-/**
- * Rabbit Appender
- *
- * @author Alan Yeh
- * @since 2024/01/21
- */
+/// Rabbit Appender
+///
+/// @author Alan Yeh
 public class RabbitAppender extends CentralAppender {
     @Override
     public String getApplicationCode() {

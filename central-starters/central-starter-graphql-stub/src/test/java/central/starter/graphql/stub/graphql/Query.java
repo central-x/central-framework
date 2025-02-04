@@ -31,29 +31,22 @@ import central.starter.graphql.stub.graphql.query.ProjectQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * GraphQL Query
- *
- * @author Alan Yeh
- * @since 2022/09/30
- */
+/// GraphQL Query
+///
+/// @author Alan Yeh
 @Component
 @GraphQLSchema(types = {GroupQuery.class, ProjectQuery.class})
 public class Query {
 
-    /**
-     * Group Query
-     * 项目组查询
-     */
+    /// Group Query
+    /// 项目组查询
     @GraphQLGetter
     public GroupQuery getGroups(@Autowired GroupQuery query) {
         return query;
     }
 
-    /**
-     * Project Query
-     * 项目查询
-     */
+    /// Project Query
+    /// 项目查询
     @GraphQLGetter
     public ProjectQuery getProjects(@Autowired ProjectQuery query) {
         return query;

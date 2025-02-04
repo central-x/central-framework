@@ -29,23 +29,16 @@ import lombok.Getter;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 
-/**
- * 本地工具
- *
- * @author Alan Yeh
- * @since 2022/10/24
- */
+/// 本地工具
+///
+/// @author Alan Yeh
 public class Localx {
 
-    /**
-     * 本地地址
-     */
+    /// 本地地址
     @Getter
     private static final String localHost;
 
-    /**
-     * 线程号
-     */
+    /// 线程号
     @Getter
     private static final String pid;
 

@@ -34,12 +34,9 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-/**
- * 参数绑定异常
- *
- * @author Alan Yeh
- * @since 2022/10/09
- */
+/// 参数绑定异常
+///
+/// @author Alan Yeh
 @Component
 public class WebExchangeBindExceptionHandler implements ExceptionHandler {
     @Override

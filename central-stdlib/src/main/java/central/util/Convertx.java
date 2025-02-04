@@ -40,12 +40,9 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * 类型转换器
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// 类型转换器
+///
+/// @author Alan Yeh
 public class Convertx {
     private static final Convertx INSTANCE = new Convertx();
 
@@ -53,9 +50,7 @@ public class Convertx {
         return INSTANCE;
     }
 
-    /**
-     * 使用配置文件初始化类型转换器
-     */
+    /// 使用配置文件初始化类型转换器
     public Convertx() {
         Properties properties = new Properties();
         try {
@@ -82,11 +77,9 @@ public class Convertx {
         converters.forEach(this::register);
     }
 
-    /**
-     * 已注册的类型转换器
-     * <p>
-     * target class name -> converter
-     */
+    /// 已注册的类型转换器
+    ///
+    /// target class name -> converter
     private final Map<String, List<Converter<?>>> converters = new ConcurrentHashMap<>();
 
     private Optional<Type> findTargetType(Converter<?> converter) {
@@ -99,11 +92,9 @@ public class Convertx {
                 .findFirst();
     }
 
-    /**
-     * 注册转换器
-     *
-     * @param converter 数据转换器
-     */
+    /// 注册转换器
+    ///
+    /// @param converter 数据转换器
     public void register(Converter<?> converter) {
         var targetType = this.findTargetType(converter);
 
@@ -114,11 +105,9 @@ public class Convertx {
         this.cachedConverter.clear();
     }
 
-    /**
-     * 取消注册转换器
-     *
-     * @param converter 数据转换器
-     */
+    /// 取消注册转换器
+    ///
+    /// @param converter 数据转换器
     public void deregister(Converter<?> converter) {
         var targetType = this.findTargetType(converter);
 
@@ -131,17 +120,13 @@ public class Convertx {
         this.cachedConverter.clear();
     }
 
-    /**
-     * 已缓存的转换器
-     * <p>
-     * 因为如果没找到转换器的话，需要依次调用各个 Converter::support 方法来判断是否支持的数据转换，相对来说比较低效。
-     * 因此将已知的已匹配的类型保存起来，这样下次就可以直接获取到指定的转换器了
-     */
+    /// 已缓存的转换器
+    ///
+    /// 因为如果没找到转换器的话，需要依次调用各个 Converter::support 方法来判断是否支持的数据转换，相对来说比较低效。
+    /// 因此将已知的已匹配的类型保存起来，这样下次就可以直接获取到指定的转换器了
     private final Map<MatchedKey, Converter<?>> cachedConverter = new ConcurrentHashMap<>();
 
-    /**
-     * 查找转换器
-     */
+    /// 查找转换器
     private @Nonnull Converter<?> getConverter(Class<?> source, Class<?> target) {
         // 查找之前已匹配的记录
         return cachedConverter.computeIfAbsent(new MatchedKey(toObjectType(source), toObjectType(target)), key -> {
@@ -176,12 +161,10 @@ public class Convertx {
         }
     }
 
-    /**
-     * 判断是否支持转换数据类型
-     *
-     * @param source 源类型
-     * @param target 目标类型
-     */
+    /// 判断是否支持转换数据类型
+    ///
+    /// @param source 源类型
+    /// @param target 目标类型
     public boolean support(@Nonnull Class<?> source, @Nonnull Class<?> target) {
         Assertx.mustNotNull(source, "Argument 'source' must not null");
         Assertx.mustNotNull(target, "Argument 'target' must not null");
@@ -193,12 +176,10 @@ public class Convertx {
         return UnsupportedConverter.getInstance() != this.getConverter(source, target);
     }
 
-    /**
-     * 转换数据类型
-     *
-     * @param source 源数据
-     * @param target 目标类型
-     */
+    /// 转换数据类型
+    ///
+    /// @param source 源数据
+    /// @param target 目标类型
     public <T> T convert(@Nullable Object source, @Nonnull Class<T> target) {
         if (source == null) {
             return null;

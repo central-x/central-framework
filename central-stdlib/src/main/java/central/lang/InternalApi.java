@@ -24,13 +24,10 @@
 
 package central.lang;
 
-/**
- * 内部标记
- * <p>
- * 内部标记的类或接口表示该类仅供内部使用，不保证其稳定性，随时变更，不建议使用
- *
- * @author Alan Yeh
- * @since 2022/09/08
- */
+/// 内部标记
+///
+/// 内部标记的类或接口表示该类仅供内部使用，不保证其稳定性，随时变更，不建议使用
+///
+/// @author Alan Yeh
 public @interface InternalApi {
 }

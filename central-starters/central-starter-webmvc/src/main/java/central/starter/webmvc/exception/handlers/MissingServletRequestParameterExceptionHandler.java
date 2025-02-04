@@ -36,13 +36,10 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * MissingServletRequestParameterException Handler
- *
- * @author Alan Yeh
- * @see MissingServletRequestParameterException
- * @since 2022/07/17
- */
+/// MissingServletRequestParameterException Handler
+///
+/// @author Alan Yeh
+/// @see MissingServletRequestParameterException
 @Component
 public class MissingServletRequestParameterExceptionHandler implements ExceptionHandler {
 

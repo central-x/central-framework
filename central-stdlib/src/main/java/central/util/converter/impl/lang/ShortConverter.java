@@ -27,10 +27,7 @@ package central.util.converter.impl.lang;
 import central.util.converter.ConvertException;
 import central.util.converter.Converter;
 
-/**
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// @author Alan Yeh
 public class ShortConverter implements Converter<Short> {
     @Override
     public boolean support(Class<?> source) {

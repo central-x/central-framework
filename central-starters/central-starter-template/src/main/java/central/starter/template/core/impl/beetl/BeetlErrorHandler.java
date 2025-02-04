@@ -34,12 +34,9 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Beetl 错误处理
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// Beetl 错误处理
+///
+/// @author Alan Yeh
 public class BeetlErrorHandler implements ErrorHandler {
 
     @Override

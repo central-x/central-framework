@@ -26,57 +26,47 @@ package central.starter.orm;
 
 import central.security.Cipherx;
 import central.sql.*;
-import central.sql.impl.standard.*;
+import central.sql.impl.standard.StandardCipher;
+import central.sql.impl.standard.StandardConverter;
+import central.sql.impl.standard.StandardMetaManager;
+import central.sql.impl.standard.StandardTransformer;
 
+import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * SqlExecutor 配置
- *
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// SqlExecutor 配置
+///
+/// @author Alan Yeh
 public interface SqlExecutorConfigurer {
-    /**
-     * 自定义数据源
-     * 如果返回空的话则 SqlExecutor 会自动通过 DataSource 构建 SqlSource
-     */
+    /// 自定义数据源
+    ///
+    /// 如果返回空的话则[SqlExecutor]会自动通过[DataSource]构建[SqlSource]
     default SqlSource getSource() {
         return null;
     }
 
-    /**
-     * 元数据管理
-     */
+    /// 元数据管理
     default SqlMetaManager getMetaManager() {
         return new StandardMetaManager();
     }
 
-    /**
-     * 加密器
-     */
+    /// 加密器
     default SqlCipher getCipher() {
         return new StandardCipher(Cipherx.NONE, null, null);
     }
 
-    /**
-     * 类型转换器
-     */
+    /// 类型转换器
     default SqlConverter getConverter() {
         return new StandardConverter();
     }
 
-    /**
-     * 类型转换器
-     */
+    /// 类型转换器
     default SqlTransformer getTransformer() {
         return new StandardTransformer();
     }
 
-    /**
-     * Sql 拦载器
-     */
+    /// Sql 拦载器
     default List<SqlInterceptor> getInterceptors() {
         return Collections.emptyList();
     }

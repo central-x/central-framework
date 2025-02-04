@@ -36,42 +36,31 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * Shiro 鉴权域
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// Shiro 鉴权域
+///
+/// @author Alan Yeh
 public class SecurityRealm extends AuthorizingRealm {
 
-    /**
-     * 实际的鉴权服务提供者
-     */
+    /// 实际的鉴权服务提供者
     @Setter(onMethod_ = @Autowired)
     private IdentityProvider provider;
 
-    /**
-     * 只支持 JWT 认证
-     *
-     * @param token 鉴权 Token
-     */
+    /// 只支持 JWT 认证
+    ///
+    /// @param token 鉴权 Token
     @Override
     public boolean supports(AuthenticationToken token) {
         return token instanceof JsonWebToken;
     }
 
-    /**
-     * 认证
-     */
+    /// 认证
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         this.provider.onReceiveAuthenticationToken(token.getCredentials().toString());
         return new SimpleAuthenticationInfo(token.getCredentials(), token.getCredentials(), this.provider.getClass().getSimpleName());
     }
 
-    /**
-     * 执行授权
-     */
+    /// 执行授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         var authorizationInfo = new SimpleAuthorizationInfo();

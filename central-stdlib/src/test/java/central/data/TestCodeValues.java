@@ -29,12 +29,9 @@ import central.util.Setx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/**
- * CodeValues Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// CodeValues Test Cases
+///
+/// @author Alan Yeh
 public class TestCodeValues {
     @Test
     public void case1() {
@@ -49,7 +46,7 @@ public class TestCodeValues {
     }
 
     @Test
-    public void case2(){
+    public void case2() {
         var data = new CodeValues<String>();
         data.put("code1", "value1");
         data.put("code2", "value2");
@@ -60,7 +57,7 @@ public class TestCodeValues {
     }
 
     @Test
-    public void case3(){
+    public void case3() {
         var data = new CodeValues<String>();
         data.put("code1", "value1");
         data.put("code2", "value2");

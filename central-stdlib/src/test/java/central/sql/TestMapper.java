@@ -24,14 +24,15 @@
 
 package central.sql;
 
+import central.lang.Stringx;
 import central.sql.data.*;
 import central.sql.datasource.factory.hikari.HikariDataSourceFactory;
 import central.sql.impl.standard.StandardDataSourceMigrator;
-import central.sql.impl.standard.StandardSource;
 import central.sql.impl.standard.StandardExecutor;
+import central.sql.impl.standard.StandardMetaManager;
+import central.sql.impl.standard.StandardSource;
 import central.sql.interceptor.LogInterceptor;
 import central.sql.mapper.AccountMapper;
-import central.sql.impl.standard.StandardMetaManager;
 import central.sql.mapper.DeptMapper;
 import central.sql.mapper.RoleAccountMapper;
 import central.sql.mapper.RoleMapper;
@@ -41,7 +42,6 @@ import central.sql.query.Columns;
 import central.sql.query.Conditions;
 import central.sql.query.Orders;
 import central.util.Guidx;
-import central.lang.Stringx;
 import central.util.Version;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,12 +57,9 @@ import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Mapper Test Cases
- *
- * @author Alan Yeh
- * @since 2022/09/13
- */
+/// Mapper Test Cases
+///
+/// @author Alan Yeh
 public class TestMapper {
     private AccountMapper accountMapper;
 
@@ -137,9 +134,7 @@ public class TestMapper {
 
     }
 
-    /**
-     * @see Mapper#getMapper
-     */
+    /// @see Mapper#getMapper
     @Test
     public void case1() {
         var deptMapper = this.accountMapper.getMapper(DeptMapper.class);
@@ -147,10 +142,8 @@ public class TestMapper {
         assertInstanceOf(DeptMapper.class, deptMapper);
     }
 
-    /**
-     * @see Mapper#insert
-     * @see Mapper#findById
-     */
+    /// @see Mapper#insert
+    /// @see Mapper#findById
     @Test
     public void case2() {
         var entity = new AccountEntity();
@@ -184,10 +177,8 @@ public class TestMapper {
         assertEquals(entity.getModifyDate(), record.getModifyDate());
     }
 
-    /**
-     * @see Mapper#insertBatch
-     * @see Mapper#findByIds
-     */
+    /// @see Mapper#insertBatch
+    /// @see Mapper#findByIds
     @Test
     public void case3() {
         var entities = new ArrayList<AccountEntity>();
@@ -253,14 +244,12 @@ public class TestMapper {
         assertEquals(lis.getModifyDate(), lisR.getModifyDate());
     }
 
-    /**
-     * @see Mapper#insertBatch
-     * @see Mapper#deleteByIds
-     * @see Mapper#deleteBy
-     * @see Mapper#deleteAll
-     * @see Mapper#count
-     * @see Mapper#countBy
-     */
+    /// @see Mapper#insertBatch
+    /// @see Mapper#deleteByIds
+    /// @see Mapper#deleteBy
+    /// @see Mapper#deleteAll
+    /// @see Mapper#count
+    /// @see Mapper#countBy
     @Test
     public void case4() {
         var entities = new ArrayList<AccountEntity>();
@@ -317,10 +306,8 @@ public class TestMapper {
         assertEquals(1, count);
     }
 
-    /**
-     * @see Mapper#update
-     * @see Mapper#updateBy
-     */
+    /// @see Mapper#update
+    /// @see Mapper#updateBy
     @Test
     public void case5() {
         var zhangs = new AccountEntity();
@@ -364,12 +351,10 @@ public class TestMapper {
         assertNotEquals(zhangs.getModifyDate(), record.getModifyDate());
     }
 
-    /**
-     * @see Mapper#findFirstBy
-     * @see Mapper#findBy
-     * @see Mapper#findAll
-     * @see Mapper#existsBy
-     */
+    /// @see Mapper#findFirstBy
+    /// @see Mapper#findBy
+    /// @see Mapper#findAll
+    /// @see Mapper#existsBy
     @Test
     public void case6() {
         var entities = new ArrayList<AccountEntity>();
@@ -423,9 +408,7 @@ public class TestMapper {
         assertTrue(exists);
     }
 
-    /**
-     * @see Mapper#findPageBy
-     */
+    /// @see Mapper#findPageBy
     @Test
     public void case7() {
         var entities = new ArrayList<AccountEntity>();
@@ -465,9 +448,7 @@ public class TestMapper {
         assertEquals("张16", page.getData().get(0).getName());
     }
 
-    /**
-     * @see central.sql.meta.annotation.Relation
-     */
+    /// @see central.sql.meta.annotation.Relation
     @Test
     public void case8() {
         // 添加部门
@@ -567,9 +548,7 @@ public class TestMapper {
         assertTrue(receives.stream().anyMatch(it -> it.getId().equals(wangw.getId())));
     }
 
-    /**
-     * 只查询指定字段（单表查询）
-     */
+    /// 只查询指定字段（单表查询）
     @Test
     public void case9() {
         var zhangs = new AccountEntity();
@@ -594,9 +573,7 @@ public class TestMapper {
         assertNull(record.getName());
     }
 
-    /**
-     * 只查询指定字段（关联查询）
-     */
+    /// 只查询指定字段（关联查询）
     @Test
     public void case10() {
         // 添加部门

@@ -32,28 +32,19 @@ import lombok.Data;
 
 import java.util.Map;
 
-/**
- * 探测端点配置
- *
- * @author Alan Yeh
- * @since 2023/12/31
- */
+/// 探测端点配置
+///
+/// @author Alan Yeh
 @Data
 public class EndpointProperties {
-    /**
-     * 端点名称
-     */
+    /// 端点名称
     @NotBlank
     @Label("端点名称")
     private String name;
-    /**
-     * 端点类型
-     */
+    /// 端点类型
     @NotNull
     @Label("端点类型")
     private EndpointType type;
-    /**
-     * 初始化参数
-     */
+    /// 初始化参数
     private Map<String, Object> params;
 }

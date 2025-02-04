@@ -27,29 +27,22 @@ package central.sql;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-/**
- * 数据转换器
- * 从数据库中取出来的数据不一定与实体的数据类型相符，因此需要转换后再保存到实体里
- * 在
- *
- * @author Alan Yeh
- * @since 2022/09/14
- */
+/// 数据转换器
+///
+/// 从数据库中取出来的数据不一定与实体的数据类型相符，因此需要转换后再保存到实体里
+///
+/// @author Alan Yeh
 public interface SqlConverter {
-    /**
-     * 是否支持将指定的源类型转换成目标类型
-     *
-     * @param source 源类型
-     * @param target 目标类型
-     */
+    /// 是否支持将指定的源类型转换成目标类型
+    ///
+    /// @param source 源类型
+    /// @param target 目标类型
     boolean support(@Nonnull Class<?> source, @Nonnull Class<?> target);
 
-    /**
-     * 将源对象转换成目标类型对象
-     *
-     * @param source 源对象
-     * @param target 目标类型
-     * @return 目标类型对象
-     */
+    /// 将源对象转换成目标类型对象
+    ///
+    /// @param source 源对象
+    /// @param target 目标类型
+    /// @return 目标类型对象
     <T> T convert(@Nullable Object source, @Nonnull Class<T> target);
 }

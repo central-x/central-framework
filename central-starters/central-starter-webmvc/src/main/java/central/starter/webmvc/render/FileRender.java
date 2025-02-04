@@ -30,7 +30,10 @@ import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
-import org.springframework.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,13 +42,11 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-/**
- * 文件响应
- * 不支持断点下载
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// 文件响应
+///
+/// 不支持断点下载
+///
+/// @author Alan Yeh
 public class FileRender extends Render<FileRender> {
     private InputStream input;
 
@@ -53,10 +54,8 @@ public class FileRender extends Render<FileRender> {
         super(request, response);
     }
 
-    /**
-     * 指定文件名
-     * 如果不认置，则使用 file#getName
-     */
+    /// 指定文件名
+    /// 如果不认置，则使用 file#getName
     @Getter
     private String fileName;
 
@@ -65,10 +64,8 @@ public class FileRender extends Render<FileRender> {
         return this;
     }
 
-    /**
-     * 文件消息摘要
-     * 可以用于唯一确认文件
-     */
+    /// 文件消息摘要
+    /// 可以用于唯一确认文件
     @Getter
     private String digest;
 
@@ -98,9 +95,7 @@ public class FileRender extends Render<FileRender> {
     }
 
 
-    /**
-     * 用于下载时指定文件名
-     */
+    /// 用于下载时指定文件名
     @Getter
     private String contentDisposition;
 

@@ -1,4 +1,4 @@
-///*
+/// *
 // * MIT License
 // *
 // * Copyright (c) 2022-present Alan Yeh <alan@yeh.cn>
@@ -29,12 +29,9 @@
 //import java.nio.file.Path;
 //import java.time.Duration;
 //
-///**
-// * JSchRemoteShell Test Cases
-// *
-// * @author Alan Yeh
-// * @since 2022/12/05
-// */
+///// JSchRemoteShell Test Cases
+/////
+///// @author Alan Yeh
 //public class TestJSchRemoteShell {
 //
 //    @Test

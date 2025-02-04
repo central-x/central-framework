@@ -30,31 +30,22 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
-/**
- * 固定值
- *
- * @author Alan Yeh
- * @since 2022/11/07
- */
+/// 固定值
+///
+/// @author Alan Yeh
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = FixValidator.class)
 public @interface Fix {
 
-    /**
-     * 默认的错误消息
-     */
+    /// 默认的错误消息
     String message() default "{central.validation.constraints.Fix.message}";
 
-    /**
-     * 固定值
-     */
+    /// 固定值
     String value();
 
-    /**
-     * 校验分组
-     */
+    /// 校验分组
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};

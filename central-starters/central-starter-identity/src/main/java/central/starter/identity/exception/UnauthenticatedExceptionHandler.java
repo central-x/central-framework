@@ -49,12 +49,9 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-/**
- * 未登录异常捕捉
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// 未登录异常捕捉
+///
+/// @author Alan Yeh
 @Slf4j
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)

@@ -31,69 +31,38 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 
-/**
- * 条件操作符
- *
- * @author Alan Yeh
- * @since 2022/07/20
- */
+/// 条件操作符
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public enum Operators {
-    /**
-     * 等于[ {@code = ?} ]
-     */
+    /// 等于(`= ?`)
     EQ("EQ", "{} = {}"),
-    /**
-     * 不等于[ {@code <> ?} ]
-     */
+    /// 不等于(`<> ?`)
     NE("NE", "{} <> {}"),
-    /**
-     * 大于 [ > ? ]
-     */
+    /// 大于(`> ?`)
     GT("GT", "{} > {}"),
-    /**
-     * 大于等于 [ {@code >= ?} ]
-     */
+    /// 大于等于 (`>= ?`)
     GE("GE", "{} >= {}"),
-    /**
-     * 小于 [ {@code < ?} ]
-     */
+    /// 小于 (`< ?`)
     LT("LT", "{} < {}"),
-    /**
-     * 小于等于 [ {@code <= ?} ]
-     */
+    /// 小于等于 (`<= ?`)
     LE("LE", "{} <= {}"),
-    /**
-     * 介于 [ {@code between ? and ?} ]
-     */
+    /// 介于 (`between ? and ?`)
     BETWEEN("BETWEEN", "{} BETWEEN {} AND {}"),
-    /**
-     * 不介于 [ {@code not between ? and ?} ]
-     */
+    /// 不介于 (`not between ? and ?`)
     NOT_BETWEEN("NOT_BETWEEN", "{} NOT BETWEEN {} AND {}"),
-    /**
-     * 类似 [ {@code like ?} ]
-     */
+    /// 类似 (`like ?`)
     LIKE("LIKE", "{} LIKE {}"),
-    /**
-     * 不类似 [ {@code not like ?} ]
-     */
+    /// 不类似 (`not like ?`)
     NOT_LIKE("NOT_LIKE", "{} NOT LIKE {}"),
-    /**
-     * 为空 [ {@code is null} ]
-     */
+    /// 为空 (`is null`)
     IS_NULL("IS_NULL", "{} IS NULL"),
-    /**
-     * 不为空 [ {@code is not null} ]
-     */
+    /// 不为空 (`is not null`)
     IS_NOT_NULL("IS_NOT_NULL", "{} IS NOT NULL"),
-    /**
-     * 范围 [ {@code in (?, ?)} ]
-     */
+    /// 范围 (`in(?, ?)`)
     IN("IN", "{} IN ({})"),
-    /**
-     * 不在范围里 [ {@code not in (?, ?)} ]
-     */
+    /// 不在范围里 (`not in(?, ?)`)
     NOT_IN("NOT_IN", "{} NOT IN ({})");
 
     @Getter

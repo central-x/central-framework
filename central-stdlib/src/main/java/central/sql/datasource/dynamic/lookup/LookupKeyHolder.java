@@ -27,16 +27,12 @@ package central.sql.datasource.dynamic.lookup;
 import central.lang.Stringx;
 import central.util.Context;
 
-/**
- * 持有数据源 Key
- *
- * @author Alan Yeh
- * @since 2022/08/11
- */
+/// 持有数据源 Key
+///
+/// @author Alan Yeh
 public class LookupKeyHolder {
-    /**
-     * 强制当前线程以此 LookupKey 为准
-     */
+    
+    /// 强制当前线程以此 LookupKey 为准
     private static final ThreadLocal<String> lookupKey = new ThreadLocal<>();
 
     private static final ThreadLocal<Context> context = ThreadLocal.withInitial(Context::new);

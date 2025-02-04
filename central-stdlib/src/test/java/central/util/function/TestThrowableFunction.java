@@ -29,16 +29,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Throwable Function Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Throwable Function Test Cases
+///
+/// @author Alan Yeh
 public class TestThrowableFunction {
-    /**
-     * o
-     */
+    /// o
     @Test
     public void case1() {
         var function = ThrowableFunction.of((String str) -> Integer.parseInt(str)).ignoreThrows();
@@ -88,14 +83,14 @@ public class TestThrowableFunction {
     }
 
     @Test
-    public void test5(){
+    public void test5() {
         AtomicInteger countDown = new AtomicInteger(1);
 
         var function = ThrowableFunction.of((String str) -> Integer.parseInt(str))
-                        .andThen((var value) -> {
-                            Assertions.assertEquals(Integer.valueOf(1), value);
-                            countDown.decrementAndGet();
-                        }).ignoreThrows();
+                .andThen((var value) -> {
+                    Assertions.assertEquals(Integer.valueOf(1), value);
+                    countDown.decrementAndGet();
+                }).ignoreThrows();
 
         function.accept("1");
 

@@ -28,12 +28,9 @@ import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
-/**
- * 启用 Cookie Store
- *
- * @author Alan Yeh
- * @since 2024/07/01
- */
+/// 启用 Cookie Store
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

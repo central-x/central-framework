@@ -26,22 +26,15 @@ package central.pattern.chain;
 
 import java.util.List;
 
-/**
- * 处理责任链
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 处理责任链
+///
+/// @author Alan Yeh
 public class ProcessChain<T, R> {
 
-    /**
-     * 处理链
-     */
+    /// 处理链
     private final List<? extends Processor<T, R>> processors;
 
-    /**
-     * 当前执行的下标
-     */
+    /// 当前执行的下标
     private final int index;
 
     public ProcessChain(List<? extends Processor<T, R>> processors) {

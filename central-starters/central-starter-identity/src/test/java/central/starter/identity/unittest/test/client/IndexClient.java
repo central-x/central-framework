@@ -28,12 +28,9 @@ import central.starter.identity.unittest.controller.data.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 
-/**
- * Index Client
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Index Client
+///
+/// @author Alan Yeh
 public interface IndexClient {
 
     @GetMapping(value = "/api", consumes = MediaType.APPLICATION_JSON_VALUE)

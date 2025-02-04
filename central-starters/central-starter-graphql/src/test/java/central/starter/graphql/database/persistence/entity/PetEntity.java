@@ -33,12 +33,9 @@ import lombok.*;
 
 import java.io.Serial;
 
-/**
- * Pet Entity
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// Pet Entity
+///
+/// @author Alan Yeh
 @Data
 @Builder
 @NoArgsConstructor

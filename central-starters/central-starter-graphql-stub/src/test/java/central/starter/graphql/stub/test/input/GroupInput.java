@@ -30,13 +30,11 @@ import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * Group
- * 项目组
- *
- * @author Alan Yeh
- * @since 2022/10/04
- */
+/// Group
+///
+/// 项目组
+///
+/// @author Alan Yeh
 @Data
 @Builder(toBuilder = true)
 @EqualsAndHashCode

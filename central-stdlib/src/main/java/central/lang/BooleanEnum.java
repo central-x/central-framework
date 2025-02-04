@@ -29,13 +29,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * Boolean Enum
- * 开关
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// Boolean Enum
+///
+/// 开关
+///
+/// @author Alan Yeh
 @Getter
 @PublicApi
 @AllArgsConstructor

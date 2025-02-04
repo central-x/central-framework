@@ -31,29 +31,22 @@ import central.starter.graphql.stub.graphql.mutation.ProjectMutation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * GraphQL Mutations
- *
- * @author Alan Yeh
- * @since 2022/09/30
- */
+/// GraphQL Mutations
+///
+/// @author Alan Yeh
 @Component
 @GraphQLSchema(types = {GroupMutation.class, ProjectMutation.class})
 public class Mutation {
 
-    /**
-     * Group Mutation
-     * 项目组修改
-     */
+    /// Group Mutation
+    /// 项目组修改
     @GraphQLGetter
     public GroupMutation getGroups(@Autowired GroupMutation mutation) {
         return mutation;
     }
 
-    /**
-     * Project Mutation
-     * 项目修改
-     */
+    /// Project Mutation
+    /// 项目修改
     @GraphQLGetter
     public ProjectMutation getProjects(@Autowired ProjectMutation mutation) {
         return mutation;

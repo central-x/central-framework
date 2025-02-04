@@ -32,21 +32,14 @@ import lombok.Getter;
 
 import java.util.Objects;
 
-/**
- * 条件类型
- *
- * @author Alan Yeh
- * @since 2022/07/20
- */
+/// 条件类型
+///
+/// @author Alan Yeh
 @AllArgsConstructor
 public enum Types {
-    /**
-     * 条件分组
-     */
+    /// 条件分组
     GROUP("GROUP"),
-    /**
-     * 条件类型
-     */
+    /// 条件类型
     CONDITION("CONDITION");
 
     @Getter

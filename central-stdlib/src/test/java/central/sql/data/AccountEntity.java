@@ -41,12 +41,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.math.BigDecimal;
 
-/**
- * 帐户
- *
- * @author Alan Yeh
- * @since 2022/08/02
- */
+/// 帐户
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -65,53 +62,37 @@ public class AccountEntity extends ModifiableEntity implements Available, Valida
         return super.getId();
     }
 
-    /**
-     * @see SqlType#STRING
-     */
+    /// @see SqlType#STRING
     @NotBlank
     @Label("用户名")
     private String username;
 
-    /**
-     * @see SqlType#STRING
-     */
+    /// @see SqlType#STRING
     @NotBlank
     @Label("姓名")
     private String name;
 
-    /**
-     * @see SqlType#INTEGER
-     */
+    /// @see SqlType#INTEGER
     @Label("年龄")
     private Integer age;
 
-    /**
-     * @see SqlType#STRING
-     */
+    /// @see SqlType#STRING
     @Label("部门主键")
     private String deptId;
 
-    /**
-     * @see SqlType#BOOLEAN
-     */
+    /// @see SqlType#BOOLEAN
     @Label("启用/禁用")
     private Boolean enabled;
 
-    /**
-     * @see SqlType#BLOB
-     */
+    /// @see SqlType#BLOB
     @Label("头像")
     private byte[] avatar;
 
-    /**
-     * @see SqlType#BIG_DECIMAL
-     */
+    /// @see SqlType#BIG_DECIMAL
     @Label("工资")
     private BigDecimal salary;
 
-    /**
-     * @see SqlType#LONG
-     */
+    /// @see SqlType#LONG
     @Label("入职时间")
     private Long hiredate;
 }

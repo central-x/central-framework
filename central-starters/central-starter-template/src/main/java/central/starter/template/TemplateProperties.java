@@ -28,23 +28,16 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
-/**
- * 模板引擎配置
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// 模板引擎配置
+///
+/// @author Alan Yeh
 @Data
 @Validated
 @ConfigurationProperties("central.template")
 public class TemplateProperties {
-    /**
-     * 模板引擎存放路径
-     */
+    /// 模板引擎存放路径
     private String location = "classpath:central/template";
 
-    /**
-     * 响应头
-     */
+    /// 响应头
     private String contentType = "text/html/charset=UTF-8";
 }

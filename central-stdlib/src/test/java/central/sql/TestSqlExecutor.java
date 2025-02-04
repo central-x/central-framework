@@ -26,17 +26,14 @@ package central.sql;
 
 import org.junit.jupiter.api.BeforeAll;
 
-/**
- * StandardSqlExecutor Test Cases
- *
- * @author Alan Yeh
- * @since 2022/08/04
- */
+/// StandardSqlExecutor Test Cases
+///
+/// @author Alan Yeh
 public class TestSqlExecutor {
 
 
     @BeforeAll
-    public static void before(){
+    public static void before() {
 
     }
 

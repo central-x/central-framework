@@ -37,14 +37,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-/**
- * GraphQL 入口
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// GraphQL 入口
+///
+/// @author Alan Yeh
 @RestController
 @RequestMapping({"/*/api/graphql", "/api/graphql"})
 public class GraphQLController implements ApplicationContextAware {

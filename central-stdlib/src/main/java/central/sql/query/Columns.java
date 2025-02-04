@@ -38,12 +38,9 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * 列
- *
- * @author Alan Yeh
- * @since 2023/04/25
- */
+/// 列
+///
+/// @author Alan Yeh
 public class Columns<T extends Entity> implements Collection<Columns.Column<T>> {
 
     @Delegate
@@ -73,32 +70,24 @@ public class Columns<T extends Entity> implements Collection<Columns.Column<T>> 
         return Objects.hash(this.columns);
     }
 
-    /**
-     * 查询所有列
-     */
+    /// 查询所有列
     public static <T extends Entity> Columns<T> all() {
         return new Columns<>();
     }
 
-    /**
-     * 创建默认属性列表
-     */
+    /// 创建默认属性列表
     public static <T extends Entity> Columns<T> of(Columns<T> columns) {
         return Objects.requireNonNullElseGet(columns, Columns::new);
     }
 
-    /**
-     * 查询指定属性
-     */
+    /// 查询指定属性
     public static <T extends Entity> Columns<T> of(Class<T> type, String... properties) {
         Columns<T> columns = new Columns<>();
         Arrays.asList(properties).forEach(columns::add);
         return columns;
     }
 
-    /**
-     * 查询指定属性
-     */
+    /// 查询指定属性
     @SafeVarargs
     public static <T extends Entity> Columns<T> of(PropertyRef<T, ?>... properties) {
         Columns<T> columns = new Columns<>();
@@ -106,9 +95,9 @@ public class Columns<T extends Entity> implements Collection<Columns.Column<T>> 
         return columns;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 列信息存放类
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*******************************************************************************************************************
+     * 列信息存放类
+     ******************************************************************************************************************/
     @NoArgsConstructor
     public static class Column<T extends Entity> implements Serializable {
         @Serial
@@ -155,24 +144,20 @@ public class Columns<T extends Entity> implements Collection<Columns.Column<T>> 
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 其它快递方法
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*******************************************************************************************************************
+     * 其它快捷方法
+     ******************************************************************************************************************/
 
-    /**
-     * 添加查询属性
-     *
-     * @param property 属性
-     */
+    /// 添加查询属性
+    ///
+    /// @param property 属性
     public void add(PropertyRef<T, ?> property) {
         this.columns.add(new Column<>(property));
     }
 
-    /**
-     * 添加查询属性
-     *
-     * @param property 属性
-     */
+    /// 添加查询属性
+    ///
+    /// @param property 属性
     public void add(String property) {
         this.columns.add(new Column<>(property));
     }

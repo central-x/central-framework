@@ -27,12 +27,9 @@ package central.util.converter.impl.lang;
 import central.util.converter.ConvertException;
 import central.util.converter.Converter;
 
-/**
- * Boolean Converter
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Boolean Converter
+///
+/// @author Alan Yeh
 public class BooleanConverter implements Converter<Boolean> {
     @Override
     public boolean support(Class<?> source) {

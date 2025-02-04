@@ -51,12 +51,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Set;
 
-/**
- * 扫描注册
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// 扫描注册
+///
+/// @author Alan Yeh
 @Slf4j
 public class ProviderStubRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
     @Setter

@@ -36,12 +36,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 日志上下文
- *
- * @author Alan Yeh
- * @since 2022/10/24
- */
+/// 日志上下文
+///
+/// @author Alan Yeh
 public class LogContext implements Comparable<LogContext> {
 
     @Getter
@@ -50,61 +47,45 @@ public class LogContext implements Comparable<LogContext> {
     @Getter
     private final ILoggingEvent event;
 
-    /**
-     * 日志类型
-     */
+    /// 日志类型
     public String getType() {
         return this.event.getMDCPropertyMap().getOrDefault("type", "debug");
     }
 
-    /**
-     * 租户标识
-     */
+    /// 租户标识
     public String getTenant() {
         return this.event.getMDCPropertyMap().getOrDefault("tenant", "master");
     }
 
-    /**
-     * 跟踪标识
-     */
+    /// 跟踪标识
     public String getTraceId() {
         return this.event.getMDCPropertyMap().getOrDefault("traceId", TraceLocal.getTraceId());
     }
 
-    /**
-     * 日志来源
-     * <p>
-     * {@code className#method(lineNumber)} 或 {@code method url}
-     */
+    /// 日志来源
+    ///
+    /// `className#method(lineNumber)`或`method url`
     public String getSource() {
         return this.event.getMDCPropertyMap().get("source");
     }
 
-    /**
-     * 执行时间
-     */
+    /// 执行时间
     public long getDuration() {
         var time = this.event.getMDCPropertyMap().getOrDefault("duration", "0");
         return Long.parseLong(time);
     }
 
-    /**
-     * 应用主键
-     */
+    /// 应用主键
     public String getApplicationId() {
         return this.event.getMDCPropertyMap().getOrDefault("applicationId", "");
     }
 
-    /**
-     * 应用标识
-     */
+    /// 应用标识
     public String getApplicationCode() {
         return this.event.getMDCPropertyMap().getOrDefault("applicationCode", this.event.getLoggerContextVO().getPropertyMap().get("APPLICATION_CODE"));
     }
 
-    /**
-     * 获取日志调用位置
-     */
+    /// 获取日志调用位置
     public String getLocation() {
         var location = this.event.getMDCPropertyMap().get("location");
         if (Stringx.isNullOrBlank(location)) {
@@ -116,9 +97,7 @@ public class LogContext implements Comparable<LogContext> {
         return location;
     }
 
-    /**
-     * 日志发生时间
-     */
+    /// 日志发生时间
     public long getTimestamp() {
         return this.event.getTimeStamp();
     }

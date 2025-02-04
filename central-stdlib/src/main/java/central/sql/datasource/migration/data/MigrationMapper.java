@@ -26,11 +26,8 @@ package central.sql.datasource.migration.data;
 
 import central.sql.proxy.Mapper;
 
-/**
- * 迁移数据操作
- *
- * @author Alan Yeh
- * @since 2022/09/08
- */
+/// 迁移数据操作
+///
+/// @author Alan Yeh
 public interface MigrationMapper extends Mapper<MigrationEntity> {
 }

@@ -30,23 +30,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import java.util.Map;
-
-/**
- * 数据访问客户端
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// 数据访问客户端
+///
+/// @author Alan Yeh
 public interface ProviderClient {
 
-    /**
-     * 请求入口
-     *
-     * @param body    请求体
-     * @param headers 请求头
-     * @return 执行结果
-     */
+    /// 请求入口
+    ///
+    /// @param body    请求体
+    /// @param headers 请求头
+    /// @return 执行结果
     @PostMapping(value = "/api/graphql", consumes = MediaType.APPLICATION_JSON_VALUE)
     String graphql(@RequestBody GraphQLRequest body, @RequestHeader(required = false) MultiValueMap<String, String> headers) throws Throwable;
 }

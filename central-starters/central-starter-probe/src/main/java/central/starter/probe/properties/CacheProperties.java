@@ -30,24 +30,17 @@ import lombok.Data;
 
 import java.time.Duration;
 
-/**
- * 缓存配置
- *
- * @author Alan Yeh
- * @since 2024/01/04
- */
+/// 缓存配置
+///
+/// @author Alan Yeh
 @Data
 public class CacheProperties {
-    /**
-     * 是否启用缓存
-     */
+    /// 是否启用缓存
     @Label("是否启用缓存功能")
     private boolean enabled = false;
-    /**
-     * 缓存有效期
-     * <p>
-     * 设置缓存有效期时，应注意缓存有效期应短于外部探测间隔
-     */
+    /// 缓存有效期
+    ///
+    /// 设置缓存有效期时，应注意缓存有效期应短于外部探测间隔
     @NotNull
     @Label("缓存超时时间")
     private Long timeout = Duration.ofSeconds(9).toMillis();

@@ -30,11 +30,9 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
-/**
- * 部门信息
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 部门信息
+///
+/// @author Alan Yeh
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Dept extends ModifiableEntity {

@@ -28,38 +28,30 @@ import central.sql.data.Entity;
 
 import java.lang.annotation.*;
 
-/**
- * 一对一、一对多关联
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// 一对一、一对多关联
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(Relation.List.class)
 public @interface Relation {
-    /**
-     * 关联到目标实体
-     */
+    /// 关联到目标实体
     Class<? extends Entity> target();
 
-    /**
-     * 关系别名
-     * 如果 A 表与 B 表存在多种关联，可以为每种关联取一个名字
-     */
+    /// 关系别名
+    ///
+    /// 如果 A 表与 B 表存在多种关联，可以为每种关联取一个名字
     String alias();
 
-    /**
-     * 主表的哪个字段与从表关联
-     * 如果为空，则默认使用主表的主键
-     */
+    /// 主表的哪个字段与从表关联
+    ///
+    /// 如果为空，则默认使用主表的主键
     String property() default "";
 
-    /**
-     * 与从表的指定字段关联
-     * 如果为空，则默认与从表的主键关联
-     */
+    /// 与从表的指定字段关联
+    ///
+    /// 如果为空，则默认与从表的主键关联
     String referencedProperty() default "";
 
     @Target(ElementType.TYPE)

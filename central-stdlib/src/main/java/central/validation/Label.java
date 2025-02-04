@@ -26,18 +26,13 @@ package central.validation;
 
 import java.lang.annotation.*;
 
-/**
- * 属性名
- *
- * @author Alan Yeh
- * @since 2022/08/05
- */
+/// 属性名
+///
+/// @author Alan Yeh
 @Documented
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Label {
-    /**
-     * 标签
-     */
+    /// 标签
     String value();
 }

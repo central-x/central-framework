@@ -36,13 +36,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * 下划线参数处理
- * 将下划线命名的参数转成驼峰命名
- *
- * @author Alan Yeh
- * @since 2023/02/20
- */
+/// 下划线参数处理
+///
+/// 将下划线命名的参数转成驼峰命名
+///
+/// @author Alan Yeh
 public class UnderlineParameterNameFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain filterChain) throws ServletException, IOException {

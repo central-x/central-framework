@@ -35,16 +35,13 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
 
-/**
- * Server Exception
- * <p>
- * 客户端异常
- * <p>
- * 当服务器端返回的状态码是 400~499 范围时，将抛此异常
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Server Exception
+///
+/// 客户端异常
+///
+/// 当服务器端返回的状态码是 400~499 范围时，将抛此异常
+///
+/// @author Alan Yeh
 @Getter
 public class ServerSeriesHttpException extends HttpException {
     @Serial

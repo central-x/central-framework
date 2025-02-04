@@ -32,12 +32,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.Serial;
 
-/**
- * GetterReference Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/20
- */
+/// GetterReference Test Cases
+///
+/// @author Alan Yeh
 public class TestGetterRef {
 
     @Test

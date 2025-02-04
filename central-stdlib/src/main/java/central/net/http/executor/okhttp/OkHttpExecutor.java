@@ -49,12 +49,9 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
-/**
- * OkHttp 实现
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// OkHttp 实现
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class OkHttpExecutor implements HttpExecutor {
 
@@ -108,9 +105,7 @@ public class OkHttpExecutor implements HttpExecutor {
         }
     }
 
-    /**
-     * 默认的 OkHttpClient 配置
-     */
+    /// 默认的 OkHttpClient 配置
     @SneakyThrows
     public static HttpExecutor Default() {
         SSLContext context = SSLContext.getInstance("SSL");

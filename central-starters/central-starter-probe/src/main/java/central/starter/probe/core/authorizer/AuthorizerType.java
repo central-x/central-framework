@@ -31,26 +31,17 @@ import central.starter.probe.core.authorizer.none.NoneAuthorizer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * 探针保护类型
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
+/// 探针保护类型
+///
+/// @author Alan Yeh
 @Getter
 @AllArgsConstructor
 public enum AuthorizerType implements OptionalEnum<Class<? extends Authorizer>> {
-    /**
-     * JWT 监权
-     */
+    /// JWT 监权
     JWT("jwt", JwtAuthorizer.class),
-    /**
-     * 固定监权
-     */
+    /// 固定监权
     FIXED("fixed", FixedAuthorizer.class),
-    /**
-     * 无监权
-     */
+    /// 无监权
     NONE("none", NoneAuthorizer.class);
 
     private final String name;

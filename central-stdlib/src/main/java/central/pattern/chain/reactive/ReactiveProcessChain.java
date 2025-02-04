@@ -28,22 +28,15 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-/**
- * 处理责任链
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 处理责任链
+///
+/// @author Alan Yeh
 public class ReactiveProcessChain<T, R> {
 
-    /**
-     * 处理链
-     */
+    /// 处理链
     private final List<ReactiveProcessor<T, R>> processors;
 
-    /**
-     * 当前执行的下标
-     */
+    /// 当前执行的下标
     private final int index;
 
     public ReactiveProcessChain(List<ReactiveProcessor<T, R>> processors) {
@@ -56,12 +49,12 @@ public class ReactiveProcessChain<T, R> {
         this.index = index;
     }
 
-    public Mono<R> process(T target){
+    public Mono<R> process(T target) {
         return Mono.defer(() -> {
-            if (this.index < this.processors.size()){
+            if (this.index < this.processors.size()) {
                 var processor = this.processors.get(this.index);
                 var next = new ReactiveProcessChain<>(this, this.index + 1);
-                if (processor.predicate(target)){
+                if (processor.predicate(target)) {
                     // 断言成功，则执行处理器
                     return processor.process(target, next);
                 } else {

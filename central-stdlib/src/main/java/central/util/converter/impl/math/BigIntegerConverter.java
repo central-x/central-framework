@@ -29,12 +29,9 @@ import central.util.converter.Converter;
 
 import java.math.BigInteger;
 
-/**
- * BigInteger Converter
- *
- * @author Alan Yeh
- * @since 2022/09/16
- */
+/// BigInteger Converter
+///
+/// @author Alan Yeh
 public class BigIntegerConverter implements Converter<BigInteger> {
     @Override
     public boolean support(Class<?> source) {

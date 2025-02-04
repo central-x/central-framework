@@ -35,12 +35,9 @@ import org.springframework.beans.factory.InitializingBean;
 
 import java.util.Objects;
 
-/**
- * 固定凭证监权
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
+/// 固定凭证监权
+///
+/// @author Alan Yeh
 public class FixedAuthorizer implements Authorizer, InitializingBean {
 
     @Setter

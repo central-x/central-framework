@@ -35,12 +35,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
 
-/**
- * GraphQl 请求
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// GraphQL 请求
+///
+/// @author Alan Yeh
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor

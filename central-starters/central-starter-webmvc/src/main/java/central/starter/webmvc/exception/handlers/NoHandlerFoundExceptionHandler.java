@@ -35,13 +35,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-/**
- * NoHandlerFoundException Handler
- *
- * @author Alan Yeh
- * @see NoHandlerFoundException
- * @since 2022/07/17
- */
+/// NoHandlerFoundException Handler
+///
+/// @author Alan Yeh
+/// @see NoHandlerFoundException
 @Component
 public class NoHandlerFoundExceptionHandler implements ExceptionHandler {
 

@@ -37,12 +37,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.Serial;
 import java.util.List;
 
-/**
- * Person
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// Person
+///
+/// @author Alan Yeh
 @Data
 @GraphQLType("Person")
 @EqualsAndHashCode(callSuper = true)

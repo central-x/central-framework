@@ -36,12 +36,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
-/**
- * 文本响应
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// 文本响应
+///
+/// @author Alan Yeh
 public class TextRender extends Render<TextRender> {
     @Getter
     private String text;
@@ -50,21 +47,17 @@ public class TextRender extends Render<TextRender> {
         super(request, response);
     }
 
-    /**
-     * 设置文本
-     *
-     * @param text 响应文本
-     */
+    /// 设置文本
+    ///
+    /// @param text 响应文本
     public TextRender setText(String text) {
         this.text = text;
         return this;
     }
 
-    /**
-     * 渲染文本
-     *
-     * @param text 响应文本
-     */
+    /// 渲染文本
+    ///
+    /// @param text 响应文本
     public void render(String text) throws IOException {
         this.setText(text).render();
     }

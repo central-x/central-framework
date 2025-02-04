@@ -24,13 +24,13 @@
 
 package central.net.http.proxy.contract.spring.resolver;
 
+import central.lang.Arrayx;
+import central.lang.Assertx;
+import central.lang.Stringx;
 import central.net.http.HttpRequest;
 import central.net.http.body.HttpConverters;
 import central.net.http.proxy.contract.spring.SpringResolver;
-import central.lang.Arrayx;
-import central.lang.Assertx;
 import central.util.Objectx;
-import central.lang.Stringx;
 import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ValueConstants;
@@ -42,13 +42,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * 处理 Query 参数
- *
- * @author Alan Yeh
- * @see RequestParam
- * @since 2022/07/18
- */
+/// 处理 Query 参数
+///
+/// @author Alan Yeh
+/// @see RequestParam
 public class RequestParamResolver implements SpringResolver {
     @Override
     public boolean support(Parameter parameter) {

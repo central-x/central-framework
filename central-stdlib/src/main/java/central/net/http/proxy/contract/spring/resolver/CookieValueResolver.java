@@ -24,12 +24,12 @@
 
 package central.net.http.proxy.contract.spring.resolver;
 
+import central.lang.Assertx;
+import central.lang.Stringx;
 import central.net.http.HttpRequest;
 import central.net.http.body.HttpConverters;
 import central.net.http.proxy.contract.spring.SpringResolver;
-import central.lang.Assertx;
 import central.util.Objectx;
-import central.lang.Stringx;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ValueConstants;
 
@@ -38,13 +38,10 @@ import java.lang.reflect.Parameter;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * 处理 Cookie
- *
- * @author Alan Yeh
- * @see CookieValue
- * @since 2022/07/18
- */
+/// 处理 Cookie
+///
+/// @author Alan Yeh
+/// @see CookieValue
 public class CookieValueResolver implements SpringResolver {
     @Override
     public boolean support(Parameter parameter) {

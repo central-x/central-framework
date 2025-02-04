@@ -25,29 +25,26 @@
 package central.sql.proxy.mapper;
 
 import central.bean.MethodNotImplementedException;
+import central.lang.Arrayx;
 import central.lang.reflect.MethodSignature;
-import central.sql.query.Columns;
-import central.sql.query.Conditions;
-import central.sql.query.Orders;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.lang.Arrayx;
+import central.sql.query.Columns;
+import central.sql.query.Conditions;
+import central.sql.query.Orders;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * FindBy Handler
- *
- * @author Alan Yeh
- * @see Mapper#findBy
- * @since 2022/08/11
- */
+/// FindBy Handler
+///
+/// @author Alan Yeh
+/// @see Mapper#findBy
 public class FindByHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {

@@ -32,12 +32,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * 键值对
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// 键值对
+///
+/// @author Alan Yeh
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -46,14 +43,10 @@ public class KeyValue<K, V> implements Serializable {
     @Serial
     private static final long serialVersionUID = -3400032110427972265L;
 
-    /**
-     * 键
-     */
+    /// 键
     private K key;
 
-    /**
-     * 值
-     */
+    /// 值
     private V value;
 
     public static <K, V> KeyValue<K, V> of(K key, V value) {

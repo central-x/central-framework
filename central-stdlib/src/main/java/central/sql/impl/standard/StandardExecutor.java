@@ -27,15 +27,17 @@ package central.sql.impl.standard;
 import central.bean.Nonnull;
 import central.bean.OptionalEnum;
 import central.lang.Assertx;
+import central.lang.Stringx;
 import central.security.Cipherx;
 import central.sql.*;
-import central.sql.SqlSource;
 import central.util.Mapx;
-import central.lang.Stringx;
 import central.validation.Label;
 import central.validation.Validatex;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 
@@ -43,14 +45,10 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.Date;
-import java.util.List;
 
-/**
- * 标准 Sql 执行器
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// 标准 Sql 执行器
+///
+/// @author Alan Yeh
 @ExtensionMethod({Mapx.class, Stringx.class})
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class StandardExecutor implements SqlExecutor {
@@ -87,9 +85,7 @@ public class StandardExecutor implements SqlExecutor {
         this.interceptors.add(interceptor);
     }
 
-    /**
-     * 初始化
-     */
+    /// 初始化
     public void init() throws Exception {
         if (this.getSource().getMigrator() != null) {
             this.getSource().getMigrator().upgrade(this);

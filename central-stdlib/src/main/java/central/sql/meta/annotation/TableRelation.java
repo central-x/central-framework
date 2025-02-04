@@ -28,53 +28,38 @@ import central.sql.data.Entity;
 
 import java.lang.annotation.*;
 
-/**
- * 多对多关联
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// 多对多关联
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(TableRelation.List.class)
 public @interface TableRelation {
 
-    /**
-     * 关联关系表
-     */
+    /// 关联关系表
     Class<? extends Entity> table();
 
-    /**
-     * 从表
-     */
+    /// 从表
     Class<? extends Entity> target();
 
-    /**
-     * 主表与关联关系表的关联字段
-     * 默认使用主表的主键
-     */
+    /// 主表与关联关系表的关联字段
+    ///
+    /// 默认使用主表的主键
     String property() default "";
 
-    /**
-     * 关联关系表与主键的关联字段
-     */
+    /// 关联关系表与主键的关联字段
     String relationProperty();
 
-    /**
-     * 从表与关联关系表的关联字段
-     * 默认使用从表的主键
-     */
+    /// 从表与关联关系表的关联字段
+    ///
+    /// 默认使用从表的主键
     String targetProperty() default "";
 
-    /**
-     * 关联关系表与从表的关联字段
-     */
+    /// 关联关系表与从表的关联字段
     String targetRelationProperty();
 
-    /**
-     * 别名（关系名）
-     */
+    /// 别名（关系名）
     String alias();
 
     @Target(ElementType.TYPE)

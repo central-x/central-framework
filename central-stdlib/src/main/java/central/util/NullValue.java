@@ -27,12 +27,9 @@ package central.util;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * 空值
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// 空值
+///
+/// @author Alan Yeh
 public class NullValue<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = 2753865325839731879L;

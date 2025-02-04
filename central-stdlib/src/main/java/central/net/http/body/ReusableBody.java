@@ -32,12 +32,9 @@ import org.springframework.http.MediaType;
 
 import java.io.*;
 
-/**
- * 可重复使用的请求体
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 可重复使用的请求体
+///
+/// @author Alan Yeh
 public class ReusableBody implements Body {
     private byte[] bytes;
     private final File cache;

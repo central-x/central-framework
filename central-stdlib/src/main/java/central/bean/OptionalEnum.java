@@ -29,29 +29,20 @@ import central.lang.PublicApi;
 
 import java.util.Objects;
 
-/**
- * Optional Enum
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Optional Enum
+///
+/// @author Alan Yeh
 @PublicApi
 public interface OptionalEnum<V> {
-    /**
-     * 选项名
-     */
+    /// 选项名
     String getName();
 
-    /**
-     * 选项值
-     */
+    /// 选项值
     V getValue();
 
-    /**
-     * 判断当前选项与指定选项值是否匹配
-     *
-     * @param value 指定选项值
-     */
+    /// 判断当前选项与指定选项值是否匹配
+    ///
+    /// @param value 指定选项值
     default boolean isCompatibleWith(Object value) {
         if (value == null) {
             return false;
@@ -64,9 +55,7 @@ public interface OptionalEnum<V> {
         return Objects.equals(this.getValue(), value);
     }
 
-    /**
-     * 查找与指定值相等的选项
-     */
+    /// 查找与指定值相等的选项
     static <T extends OptionalEnum<?>> T resolve(Class<? extends OptionalEnum<?>> type, Object value) {
         return (T) Arrayx.asStream(type.getEnumConstants())
                 .filter(it -> Objects.equals(it.getValue(), value))

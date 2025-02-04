@@ -29,15 +29,10 @@ import central.sql.query.Conditions;
 
 import java.io.Serializable;
 
-/**
- * 查询
- *
- * @author Alan Yeh
- * @since 2024/06/28
- */
+/// 查询
+///
+/// @author Alan Yeh
 public interface Query<T extends Entity> extends Serializable {
-    /**
-     * 构建查询条件
-     */
+    /// 构建查询条件
     Conditions<T> build();
 }

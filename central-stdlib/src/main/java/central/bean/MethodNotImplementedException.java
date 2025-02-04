@@ -31,12 +31,9 @@ import central.lang.reflect.MethodRef;
 import java.io.Serial;
 import java.lang.reflect.Method;
 
-/**
- * 方法未实现异常
- *
- * @author Alan Yeh
- * @since 2022/07/12
- */
+/// 方法未实现异常
+///
+/// @author Alan Yeh
 @PublicApi
 public class MethodNotImplementedException extends RuntimeException {
     @Serial

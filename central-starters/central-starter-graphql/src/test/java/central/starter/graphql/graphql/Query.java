@@ -31,27 +31,20 @@ import central.starter.graphql.graphql.query.PetQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * GraphQL Query
- *
- * @author Alan Yeh
- * @since 2022/09/30
- */
+/// GraphQL Query
+///
+/// @author Alan Yeh
 @Component
 @GraphQLSchema(types = {PersonQuery.class, PetQuery.class})
 public class Query {
 
-    /**
-     * Person Query
-     */
+    /// Person Query
     @GraphQLGetter
     public PersonQuery getPersons(@Autowired PersonQuery query) {
         return query;
     }
 
-    /**
-     * Pet Query
-     */
+    /// Pet Query
     @GraphQLGetter
     public PetQuery getPets(@Autowired PetQuery query) {
         return query;

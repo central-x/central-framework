@@ -33,51 +33,38 @@ import lombok.SneakyThrows;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-/**
- * Field Reference
- *
- * @author Alan Yeh
- * @since 2022/07/12
- */
+/// Field Reference
+///
+/// @author Alan Yeh
 public class FieldRef {
-    /**
-     * 字段
-     */
+    /// 字段
     @Getter
     private final Field field;
 
-    /**
-     * 字段名称
-     */
+    /// 字段名称
     public String getName() {
         return this.field.getName();
     }
 
     private final LazyValue<TypeRef<?>> type = new LazyValue<>(() -> TypeRef.of(getField().getGenericType()));
 
-    /**
-     * 字段类型
-     */
+    /// 字段类型
     public TypeRef<?> getType() {
         return this.type.get();
     }
 
-    /**
-     * 获取字段注解
-     *
-     * @param annotation 注解类
-     * @param <T>        注解类型
-     */
+    /// 获取字段注解
+    ///
+    /// @param annotation 注解类
+    /// @param <T>        注解类型
     public <T extends Annotation> T getAnnotation(Class<T> annotation) {
         return this.field.getAnnotation(annotation);
     }
 
-    /**
-     * 为字段赋值
-     *
-     * @param target 待赋值对象
-     * @param value  值
-     */
+    /// 为字段赋值
+    ///
+    /// @param target 待赋值对象
+    /// @param value  值
     @SneakyThrows
     public void setValue(@Nonnull InstanceRef<?> target, @Nullable Object value) {
         this.field.setAccessible(true);

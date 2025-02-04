@@ -24,22 +24,19 @@
 
 package central.net.http.processor.impl;
 
-import central.pattern.chain.ProcessChain;
-import central.pattern.chain.reactive.ReactiveProcessChain;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
 import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.ReactiveHttpProcessor;
+import central.pattern.chain.ProcessChain;
+import central.pattern.chain.reactive.ReactiveProcessChain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
-/**
- * 处理 UserAgent
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 处理 UserAgent
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class UserAgentProcessor implements HttpProcessor, ReactiveHttpProcessor {
 

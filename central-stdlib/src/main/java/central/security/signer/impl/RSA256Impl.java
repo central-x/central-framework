@@ -24,12 +24,9 @@
 
 package central.security.signer.impl;
 
-/**
- * RSA 256 签名算法
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// RSA 256 签名算法
+///
+/// @author Alan Yeh
 public class RSA256Impl extends RSAImpl {
     // 数字签名 签名/验证算法
     public static final String ALGORITHM = "SHA256withRSA";

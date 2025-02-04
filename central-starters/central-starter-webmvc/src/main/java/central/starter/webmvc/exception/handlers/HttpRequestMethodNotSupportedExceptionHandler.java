@@ -35,12 +35,9 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * 请求方法不支持异常
- *
- * @author Alan Yeh
- * @since 2022/10/20
- */
+/// 请求方法不支持异常
+///
+/// @author Alan Yeh
 @Component
 public class HttpRequestMethodNotSupportedExceptionHandler implements ExceptionHandler {
     @Override

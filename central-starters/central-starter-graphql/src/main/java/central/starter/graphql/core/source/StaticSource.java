@@ -26,12 +26,9 @@ package central.starter.graphql.core.source;
 
 import central.util.Context;
 
-/**
- * 静态调用源
- *
- * @author Alan Yeh
- * @since 2022/10/03
- */
+/// 静态调用源
+///
+/// @author Alan Yeh
 public class StaticSource implements Source {
 
     private final Object source;

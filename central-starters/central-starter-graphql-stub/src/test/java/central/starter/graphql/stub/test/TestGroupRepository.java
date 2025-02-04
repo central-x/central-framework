@@ -36,12 +36,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Repository Stub Test Cases
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// Repository Stub Test Cases
+///
+/// @author Alan Yeh
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = TestApplication.class)
 public class TestGroupRepository {
 

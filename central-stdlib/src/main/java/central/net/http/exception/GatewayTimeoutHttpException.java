@@ -31,12 +31,9 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
 
-/**
- * Gateway Timeout Http Exception
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Gateway Timeout Http Exception
+///
+/// @author Alan Yeh
 public class GatewayTimeoutHttpException extends ServerSeriesHttpException {
     @Serial
     private static final long serialVersionUID = 3340204624554773012L;

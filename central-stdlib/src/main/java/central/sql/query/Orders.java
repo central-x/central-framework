@@ -24,11 +24,11 @@
 
 package central.sql.query;
 
-import central.sql.data.Entity;
-import central.validation.Validatable;
 import central.lang.Assertx;
 import central.lang.reflect.PropertyRef;
+import central.sql.data.Entity;
 import central.util.Listx;
+import central.validation.Validatable;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,12 +40,9 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * 排序
- *
- * @author Alan Yeh
- * @since 2022/07/20
- */
+/// 排序
+///
+/// @author Alan Yeh
 public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Validatable {
     private final List<Order<T>> orders = new ArrayList<>();
 
@@ -74,16 +71,12 @@ public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Va
         return Objects.hash(this.orders);
     }
 
-    /**
-     * 空排序
-     */
+    /// 空排序
     public static <T extends Entity> Orders<T> empty() {
         return new Orders<>();
     }
 
-    /**
-     * 快速构造器
-     */
+    /// 快速构造器
     public static <T extends Entity> Orders<T> of(Class<T> type) {
         return new Orders<>();
     }
@@ -95,9 +88,7 @@ public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Va
         return orders;
     }
 
-    /**
-     * 从 Json 反序列化
-     */
+    /// 从 Json 反序列化
     public static <T extends Entity> Orders<T> from(List<Map<String, Object>> orders) {
         var result = new Orders<T>();
         orders.forEach(it -> result.add(new Order<>(it)));
@@ -118,91 +109,75 @@ public class Orders<T extends Entity> implements Collection<Orders.Order<T>>, Va
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 排序条件构造
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*******************************************************************************************************************
+     * 排序条件构造
+     ******************************************************************************************************************/
 
-    /**
-     * 添加新的排序条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param desc     是否倒序
-     */
+    /// 添加新的排序条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter``
+    /// @param desc     是否倒序
     public Orders<T> and(PropertyRef<T, ?> property, boolean desc) {
         this.orders.add(new Order<>(property, desc));
         return this;
     }
 
-    /**
-     * 添加新的排序条件
-     *
-     * @param property 实体属性名
-     * @param desc     是否倒序
-     */
+    /// 添加新的排序条件
+    ///
+    /// @param property 实体属性名
+    /// @param desc     是否倒序
     public Orders<T> and(String property, boolean desc) {
         this.orders.add(new Order<>(property, desc));
         return this;
     }
 
-    /**
-     * 添加新的正序排序条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     */
+    /// 添加新的正序排序条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter``
     public Orders<T> asc(PropertyRef<T, ?> property) {
         this.orders.add(new Order<>(property, false));
         return this;
     }
 
-    /**
-     * 添加新的正序排序条件
-     *
-     * @param property 实体属性名
-     */
+    /// 添加新的正序排序条件
+    ///
+    /// @param property 实体属性名
     public Orders<T> asc(String property) {
         this.orders.add(new Order<>(property, false));
         return this;
     }
 
-    /**
-     * 添加新的倒序排序条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     */
+    /// 添加新的倒序排序条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter``
     public Orders<T> desc(PropertyRef<T, ?> property) {
         this.orders.add(new Order<>(property, true));
         return this;
     }
 
-    /**
-     * 添加新的倒序排序条件
-     *
-     * @param property 实体属性名
-     */
+    /// 添加新的倒序排序条件
+    ///
+    /// @param property 实体属性名
     public Orders<T> desc(String property) {
         this.orders.add(new Order<>(property, true));
         return this;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 内部排序条件存放类
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*******************************************************************************************************************
+     * 内部排序条件存放类
+     ******************************************************************************************************************/
     @NoArgsConstructor
     public static class Order<T extends Entity> implements Validatable, Serializable {
         @Serial
         private static final long serialVersionUID = 6931560122919921055L;
 
-        /**
-         * 实体属性Getter对应的属性
-         */
+        /// 实体属性Getter对应的属性
         @Getter
         @Setter
         @NotEmpty(message = "属性[property]必须不为空")
         private String property;
 
-        /**
-         * 是否倒序排序
-         */
+        /// 是否倒序排序
         @Getter
         @Setter
         private boolean desc;

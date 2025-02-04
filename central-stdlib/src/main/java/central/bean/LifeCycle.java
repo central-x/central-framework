@@ -26,29 +26,20 @@ package central.bean;
 
 import central.lang.PublicApi;
 
-/**
- * Bean Life Cycle
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Bean Life Cycle
+///
+/// @author Alan Yeh
 @PublicApi
 public interface LifeCycle {
-    /**
-     * 实例刚被创建
-     */
+    /// 实例刚被创建
     default void created() {
     }
 
-    /**
-     * 实例的字段已初始化
-     */
+    /// 实例的字段已初始化
     default void initialized() {
     }
 
-    /**
-     * 实例被销毁
-     */
+    /// 实例被销毁
     default void destroy() {
     }
 }

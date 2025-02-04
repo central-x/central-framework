@@ -34,38 +34,27 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Objects;
 
-/**
- * 范围
- * <p>
- * {@code minimum <= range <= maximum}
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// 范围
+///
+/// `minimum <= range <= maximum`
+///
+/// @author Alan Yeh
 public class Range<T extends Number> implements Serializable, Iterable<Long> {
     @Serial
     private static final long serialVersionUID = 6237219732864605077L;
 
-    /**
-     * 区间最小值
-     */
+    /// 区间最小值
     @Getter
     private final T maximum;
-    /**
-     * 区间最大值
-     */
+    /// 区间最大值
     @Getter
     private final T minimum;
 
-    /**
-     * 排序器，用于判断是否在本区音
-     */
+    /// 排序器，用于判断是否在本区音
     @Getter
     private final Comparator<T> comparator;
 
-    /**
-     * 构建区间
-     */
+    /// 构建区间
     public Range(T element1, T element2, Comparator<T> comparator) {
         Assertx.mustTrue(element1 != null && element2 != null, "参数不参为空");
 
@@ -80,9 +69,7 @@ public class Range<T extends Number> implements Serializable, Iterable<Long> {
         }
     }
 
-    /**
-     * 构建区间
-     */
+    /// 构建区间
     public Range(T minimum, T maximum) {
         this(minimum, maximum, ElementComparator.INSTANCE);
     }
@@ -91,11 +78,9 @@ public class Range<T extends Number> implements Serializable, Iterable<Long> {
         return new Range<>(minimum, maximum);
     }
 
-    /**
-     * 判断数字是否在本范围内
-     *
-     * @param element 待判断的数字
-     */
+    /// 判断数字是否在本范围内
+    ///
+    /// @param element 待判断的数字
     public boolean contains(T element) {
         if (element == null) {
             return false;
@@ -103,9 +88,7 @@ public class Range<T extends Number> implements Serializable, Iterable<Long> {
         return comparator.compare(element, this.minimum) > -1 && comparator.compare(element, this.maximum) < 1;
     }
 
-    /**
-     * 是否包含另一个区间所有的元素
-     */
+    /// 是否包含另一个区间所有的元素
     public boolean containsRange(final Range<T> other) {
         if (other == null) {
             return false;

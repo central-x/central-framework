@@ -39,12 +39,9 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.util.List;
 
-/**
- * 应用 Sql 执行器配置
- *
- * @author Alan Yeh
- * @since 2022/09/28
- */
+/// 应用 Sql 执行器配置
+///
+/// @author Alan Yeh
 @Component
 public class ExecutorConfigurer implements SqlExecutorConfigurer {
 

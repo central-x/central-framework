@@ -36,13 +36,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * MethodArgumentTypeMismatchException Handler
- *
- * @author Alan Yeh
- * @see MethodArgumentTypeMismatchException
- * @since 2022/07/17
- */
+/// MethodArgumentTypeMismatchException Handler
+///
+/// @author Alan Yeh
+/// @see MethodArgumentTypeMismatchException
 @Component
 public class MethodArgumentTypeMismatchExceptionHandler implements ExceptionHandler {
 

@@ -44,19 +44,14 @@ import java.util.Date;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Probe Controller Test Cases
- *
- * @author Alan Yeh
- * @since 2023/12/31
- */
+/// Probe Controller Test Cases
+///
+/// @author Alan Yeh
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = TestApplication.class)
 public class TestProbeController {
 
-    /**
-     * 执行探测
-     */
+    /// 执行探测
     @Test
     public void case1(@Autowired MockMvc mvc) throws Exception {
         var authorization = JWT.create()

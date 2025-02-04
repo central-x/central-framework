@@ -36,12 +36,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-/**
- * 错误信息修改
- *
- * @author Alan Yeh
- * @since 2022/08/05
- */
+/// 错误信息修改
+///
+/// @author Alan Yeh
 public class MessageInterpolator extends ResourceBundleMessageInterpolator {
 
     public MessageInterpolator() {
@@ -69,7 +66,7 @@ public class MessageInterpolator extends ResourceBundleMessageInterpolator {
         Field field;
         try {
             var path = paths[0];
-            if (path.contains("[")){
+            if (path.contains("[")) {
                 // 数组或列表
                 path = path.substring(0, path.indexOf("["));
             }
@@ -80,7 +77,7 @@ public class MessageInterpolator extends ResourceBundleMessageInterpolator {
 
         if (paths.length > 1) {
             if (paths[0].contains("[") && field.getType().equals(List.class)) {
-                var actualType = ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0];
+                var actualType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
                 return getLabelByPath((Class<?>) actualType, Arrays.copyOfRange(paths, 1, paths.length));
             } else {
                 return getLabelByPath(field.getType(), Arrays.copyOfRange(paths, 1, paths.length));

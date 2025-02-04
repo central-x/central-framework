@@ -37,13 +37,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * 参数校验错误异常处理
- *
- * @author Alan Yeh
- * @see BindException
- * @since 2022/07/16
- */
+/// 参数校验错误异常处理
+///
+/// @author Alan Yeh
+/// @see BindException
 @Component
 public class BindExceptionHandler implements ExceptionHandler {
 

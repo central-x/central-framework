@@ -33,12 +33,9 @@ import okio.BufferedSink;
 
 import java.io.IOException;
 
-/**
- * 空 Body
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 空 Body
+///
+/// @author Alan Yeh
 public class EmptyBody extends RequestBody {
 
     private final MediaType contentType;

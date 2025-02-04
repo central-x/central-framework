@@ -32,12 +32,9 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-/**
- * ResponseStatusException Handler
- *
- * @author Alan Yeh
- * @since 2022/10/14
- */
+/// ResponseStatusException Handler
+///
+/// @author Alan Yeh
 @Component("responseStatusExHandler")
 public class ResponseStatusExceptionHandler implements ExceptionHandler {
     @Override

@@ -30,18 +30,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 
-/**
- * 测试应用配置
- *
- * @author Alan Yeh
- * @since 2022/09/23
- */
+/// 测试应用配置
+///
+/// @author Alan Yeh
 @Configuration
 public class ApplicationConfiguration {
 
-    /**
-     * 通过请求头决定数据源
-     */
+    /// 通过请求头决定数据源
     @Bean
     public FilterRegistrationBean<LookupKeyFilter> lookupKeyFilter() {
         var bean = new FilterRegistrationBean<LookupKeyFilter>();

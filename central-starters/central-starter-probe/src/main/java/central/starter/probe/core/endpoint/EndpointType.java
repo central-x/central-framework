@@ -27,35 +27,24 @@ package central.starter.probe.core.endpoint;
 import central.bean.OptionalEnum;
 import central.starter.probe.core.endpoint.datasource.DataSourceEndpoint;
 import central.starter.probe.core.endpoint.host.HostEndpoint;
-import central.starter.probe.core.endpoint.redis.RedisEndpoint;
 import central.starter.probe.core.endpoint.http.HttpEndpoint;
+import central.starter.probe.core.endpoint.redis.RedisEndpoint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * 端点类型
- *
- * @author Alan Yeh
- * @since 2023/12/31
- */
+/// 端点类型
+///
+/// @author Alan Yeh
 @Getter
 @AllArgsConstructor
 public enum EndpointType implements OptionalEnum<Class<? extends Endpoint>> {
-    /**
-     * 数据源探测
-     */
+    /// 数据源探测
     DATASOURCE("datasource", DataSourceEndpoint.class),
-    /**
-     * 主机名探测
-     */
+    /// 主机名探测
     HOST("host", HostEndpoint.class),
-    /**
-     * Redis 探测
-     */
+    /// Redis 探测
     REDIS("redis", RedisEndpoint.class),
-    /**
-     * Http 探测
-     */
+    /// Http 探测
     HTTP("http", HttpEndpoint.class);
 
     private final String name;

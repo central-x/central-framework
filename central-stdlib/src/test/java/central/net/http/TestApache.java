@@ -26,13 +26,10 @@ package central.net.http;
 
 import central.net.http.executor.apache.ApacheHttpClientExecutor;
 
-/**
- * Apache HttpClient Test Cases
- *
- * @author Alan Yeh
- * @since 2024/01/11
- */
-public class TestApache extends TestHttp{
+/// Apache HttpClient Test Cases
+///
+/// @author Alan Yeh
+public class TestApache extends TestHttp {
     @Override
     protected HttpExecutor getExecutor() {
         return ApacheHttpClientExecutor.Default();

@@ -25,10 +25,10 @@
 package central.pluglet.binder;
 
 import central.bean.InitializeException;
+import central.lang.Stringx;
 import central.lang.reflect.FieldRef;
 import central.lang.reflect.InstanceRef;
 import central.pluglet.FieldBinder;
-import central.lang.Stringx;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,12 +37,9 @@ import org.springframework.core.env.Environment;
 
 import java.util.Map;
 
-/**
- * Spring Bean
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Spring Bean
+///
+/// @author Alan Yeh
 public class SpringBeanFieldBinder implements FieldBinder {
     private final ApplicationContext applicationContext;
 

@@ -24,11 +24,11 @@
 
 package central.net.http.body.request;
 
+import central.lang.Arrayx;
+import central.lang.Stringx;
 import central.net.http.body.Body;
 import central.net.http.body.HttpConverters;
-import central.lang.Arrayx;
 import central.util.Objectx;
-import central.lang.Stringx;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
@@ -44,13 +44,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Url Encoded Body
- * 用于提交键值对表单
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Url Encoded Body
+///
+/// 用于提交键值对表单
+///
+/// @author Alan Yeh
 public class UrlEncodedBody implements Body {
 
     @Getter

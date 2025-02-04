@@ -30,53 +30,40 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Pair
- * <p>
- * 二元组
- *
- * @author Alan Yeh
- * @since 2024/09/30
- */
+/// Pair
+///
+/// 二元组
+///
+/// @author Alan Yeh
 @Data
 public class Pair<A, B> implements Serializable {
     @Serial
     private static final long serialVersionUID = 5113180541790271655L;
 
-    /**
-     * 第一个值
-     */
+    /// 第一个值
     private A first;
 
-    /**
-     * 第二个值
-     */
+    /// 第二个值
     private B second;
 
-    /**
-     * 创建元组
-     *
-     * @param first  第一个值
-     * @param second 第二个值
-     */
+    /// 创建元组
+    ///
+    /// @param first  第一个值
+    /// @param second 第二个值
     public Pair(A first, B second) {
         this.first = first;
         this.second = second;
     }
 
-    /**
-     * 创建元组
-     *
-     * @param first  第一个值
-     * @param second 第二个值
-     */
+    /// 创建元组
+    ///
+    /// @param first  第一个值
+    /// @param second 第二个值
     public static <A, B> Pair<A, B> of(A first, B second) {
         return new Pair<>(first, second);
     }
 
-    /**
-     * 转化为 List
-     */
+    /// 转化为 List
     public List<Object> toList() {
         return List.of(first, second);
     }

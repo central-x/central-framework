@@ -26,18 +26,13 @@ package central.starter.probe.core.authorizer;
 
 import central.starter.probe.core.ProbeException;
 
-/**
- * 探针监权
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
+/// 探针监权
+///
+/// @author Alan Yeh
 public interface Authorizer {
-    /**
-     * 验证授权
-     *
-     * @param authorization 授权凭证
-     * @throws ProbeException 授权失败异常
-     */
+    /// 验证授权
+    ///
+    /// @param authorization 授权凭证
+    /// @throws ProbeException 授权失败异常
     void authorize(String authorization) throws ProbeException;
 }

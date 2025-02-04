@@ -26,13 +26,16 @@ package central.sql.builder;
 
 import central.lang.Assertx;
 import central.lang.Stringx;
-import central.sql.query.Conditions;
 import central.sql.SqlExecutor;
 import central.sql.SqlScript;
 import central.sql.SqlType;
 import central.sql.builder.script.index.DropIndexScript;
 import central.sql.meta.entity.EntityMeta;
-import central.util.*;
+import central.sql.query.Conditions;
+import central.util.Collectionx;
+import central.util.Listx;
+import central.util.Objectx;
+import central.util.Setx;
 import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 
@@ -41,12 +44,9 @@ import java.sql.SQLSyntaxErrorException;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * PostgreSql
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// PostgreSql
+///
+/// @author Alan Yeh
 public class PostgreSqlBuilder extends StandardSqlBuilder {
     @Override
     public String handleSqlType(SqlType type, Integer length) {
@@ -63,11 +63,9 @@ public class PostgreSqlBuilder extends StandardSqlBuilder {
         };
     }
 
-    /**
-     * 构建 Update
-     *
-     * @param includeNull 是否更新值为 NULL 的属性
-     */
+    /// 构建 Update
+    ///
+    /// @param includeNull 是否更新值为 NULL 的属性
     @SneakyThrows({IllegalAccessException.class, InvocationTargetException.class})
     protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions, boolean includeNull) throws SQLSyntaxErrorException {
         conditions = Conditions.of(conditions);

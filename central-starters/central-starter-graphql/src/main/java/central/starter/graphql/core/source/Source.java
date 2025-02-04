@@ -26,12 +26,9 @@ package central.starter.graphql.core.source;
 
 import central.util.Context;
 
-/**
- * 获取调用源
- *
- * @author Alan Yeh
- * @since 2022/10/03
- */
+/// 获取调用源
+///
+/// @author Alan Yeh
 public interface Source {
     Object getSource(Context context);
 }

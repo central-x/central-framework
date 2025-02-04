@@ -32,12 +32,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-/**
- * 应用处理
- *
- * @author Alan Yeh
- * @since 2022/10/09
- */
+/// 应用处理
+///
+/// @author Alan Yeh
 @Slf4j
 @Component
 @Order

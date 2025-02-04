@@ -29,12 +29,9 @@ import lombok.SneakyThrows;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-/**
- * ThrowableBiConsumer
- *
- * @author Alan Yeh
- * @since 2022/07/12
- */
+/// ThrowableBiConsumer
+///
+/// @author Alan Yeh
 @FunctionalInterface
 public interface ThrowableBiConsumer<T, U, E extends Exception> {
 
@@ -42,18 +39,14 @@ public interface ThrowableBiConsumer<T, U, E extends Exception> {
         return consumer;
     }
 
-    /**
-     * 消费
-     *
-     * @param t 第一个参数
-     * @param u 第二个参数
-     * @throws E 执行过程中的异常
-     */
+    /// 消费
+    ///
+    /// @param t 第一个参数
+    /// @param u 第二个参数
+    /// @throws E 执行过程中的异常
     void accept(T t, U u) throws E;
 
-    /**
-     * 忽略异常
-     */
+    /// 忽略异常
     default BiConsumer<T, U> ignoreThrows() {
         return (T t, U u) -> {
             try {
@@ -63,11 +56,9 @@ public interface ThrowableBiConsumer<T, U, E extends Exception> {
         };
     }
 
-    /**
-     * 隐匿异常
-     *
-     * @return 被包装后的函数
-     */
+    /// 隐匿异常
+    ///
+    /// @return 被包装后的函数
     default BiConsumer<T, U> sneakThrows() {
         final var that = this;
         return new BiConsumer<T, U>() {
@@ -79,12 +70,10 @@ public interface ThrowableBiConsumer<T, U, E extends Exception> {
         };
     }
 
-    /**
-     * 处理异常，返回异常处理器的结果
-     *
-     * @param handler 异常处理器，第一个参数是异常
-     * @return 被包装后的消费者
-     */
+    /// 处理异常，返回异常处理器的结果
+    ///
+    /// @param handler 异常处理器，第一个参数是异常
+    /// @return 被包装后的消费者
     default BiConsumer<T, U> catchThrows(Consumer<E> handler) {
         return (T t, U u) -> {
             try {
@@ -95,12 +84,10 @@ public interface ThrowableBiConsumer<T, U, E extends Exception> {
         };
     }
 
-    /**
-     * 处理异常，返回异常处理器的结果
-     *
-     * @param handler 异常处理器，第一、二个是原参数，第三个是异常
-     * @return 被包装后的消费者
-     */
+    /// 处理异常，返回异常处理器的结果
+    ///
+    /// @param handler 异常处理器，第一、二个是原参数，第三个是异常
+    /// @return 被包装后的消费者
     default BiConsumer<T, U> catchThrows(TriConsumer<T, U, E> handler) {
         return (T t, U u) -> {
             try {

@@ -28,12 +28,9 @@ import org.springframework.web.server.ServerWebExchange;
 
 import java.net.InetSocketAddress;
 
-/**
- * 解析远程服务地址
- *
- * @author Alan Yeh
- * @since 2022/10/18
- */
+/// 解析远程服务地址
+///
+/// @author Alan Yeh
 public interface RemoteAddressResolver {
     InetSocketAddress resolve(ServerWebExchange exchange);
 }

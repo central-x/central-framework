@@ -36,12 +36,9 @@ import java.security.interfaces.RSAKey;
 import java.util.Arrays;
 import java.util.function.Function;
 
-/**
- * 签名算法类型
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
+/// 签名算法类型
+///
+/// @author Alan Yeh
 @Getter
 @AllArgsConstructor
 public enum AlgorithmType implements OptionalEnum<Function<String, Algorithm>> {

@@ -31,12 +31,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-/**
- * LocalDateTime Converter
- *
- * @author Alan Yeh
- * @since 2022/09/16
- */
+/// LocalDateTime Converter
+///
+/// @author Alan Yeh
 public class LocalDateTimeConverter implements Converter<LocalDateTime> {
     @Override
     public boolean support(Class<?> source) {

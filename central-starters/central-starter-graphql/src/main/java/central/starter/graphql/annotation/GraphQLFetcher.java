@@ -26,20 +26,15 @@ package central.starter.graphql.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * Graphql Fetcher
- *
- * @author Alan Yeh
- * @since 2022/09/29
- */
+/// Graphql Fetcher
+///
+/// @author Alan Yeh
 @Inherited
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GraphQLFetcher {
-    /**
-     * 方法名
-     * 如果为空，则直接取方法名
-     */
+    /// 方法名
+    /// 如果为空，则直接取方法名
     String name() default "";
 }

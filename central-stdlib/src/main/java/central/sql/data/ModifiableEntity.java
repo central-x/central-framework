@@ -31,16 +31,14 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 import java.sql.Timestamp;
 
-/**
- * Modifiable Entity
- * 可更新实体
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// Modifiable Entity
+///
+/// 可更新实体
+///
+/// @author Alan Yeh
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ModifiableEntity extends Entity implements Modifiable{
+public class ModifiableEntity extends Entity implements Modifiable {
     @Serial
     private static final long serialVersionUID = 2093546258253512035L;
 

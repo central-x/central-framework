@@ -27,17 +27,12 @@ package central.starter.graphql;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * GraphQL 配置属性
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// GraphQL 配置属性
+///
+/// @author Alan Yeh
 @Data
 @ConfigurationProperties(prefix = "central.graphql")
 public class GraphQLProperties {
-    /**
-     * 是否启用 GraphQL 服务
-     */
+    /// 是否启用 GraphQL 服务
     private boolean enabled = true;
 }

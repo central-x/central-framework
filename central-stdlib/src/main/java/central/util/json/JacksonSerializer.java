@@ -31,15 +31,15 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
-/**
- * Jackson 实现
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// Jackson 实现
+///
+/// @author Alan Yeh
 public class JacksonSerializer implements JsonSerializer {
     @Getter
     private final ObjectMapper mapper;

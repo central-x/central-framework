@@ -40,7 +40,7 @@ import org.apache.sshd.common.util.security.eddsa.EdDSASecurityProviderRegistrar
 import org.apache.sshd.sftp.client.SftpClient;
 import org.apache.sshd.sftp.client.SftpClientFactory;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,107 +48,85 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.security.KeyPair;
 import java.time.Duration;
-import java.util.*;
+import java.util.EnumSet;
 
-/**
- * 远程 Shell
- * <p>
- * 这是一个非交互式的 Shell，每次命令都是独立再次连到服务器去执行的
- * <p>
- * 例：
- * <pre>
- * {@code try(var shell = RemoteShell.of("10.10.20.20", "root", "x.123456")) {
- *     shell.connect(Duration.ofSeconds(5);
- *     // 执行命令
- *     shell.exec("java", "--version");
- *     // 将本地文件传输到服务器
- *     shell.transferTo(localFile, remotePath);
- *     // 将服务器文件传输到本地
- *     shell.transferFrom(remoteFile, localPath);
- * }}
- * </pre>
- *
- * @author Alan Yeh
- * @since 2022/11/25
- */
+/// 远程 Shell
+///
+/// 这是一个非交互式的 Shell，每次命令都是独立再次连到服务器去执行的
+///
+/// 例：
+///
+/// ```java
+/// try(var shell = RemoteShell.of("10.10.20.20", "root", "x.123456")) {
+///     shell.connect(Duration.ofSeconds(5);
+///     // 执行命令
+///     shell.exec("java", "--version");
+///     // 将本地文件传输到服务器
+///     shell.transferTo(localFile, remotePath);
+///     // 将服务器文件传输到本地
+///     shell.transferFrom(remoteFile, localPath);
+/// }
+/// ```
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class RemoteShell extends Shell {
-    /**
-     * 主机
-     */
+    /// 主机
     @Getter
     private final String host;
-    /**
-     * 端口
-     */
+    /// 端口
     @Getter
     private final int port;
-    /**
-     * 用户名
-     */
+    /// 用户名
     @Getter
     private final String username;
-    /**
-     * 密码
-     */
+    /// 密码
     @Getter
     private final String password;
-    /**
-     * SSH 密钥（公钥）
-     */
+    /// SSH 密钥（公钥）
     @Getter
     private final KeyPair publicKey;
 
-    /**
-     * 使用默认端口创建远程 Shell
-     *
-     * @param host     主机名
-     * @param username 用户名
-     * @param password 密码
-     */
+    /// 使用默认端口创建远程 Shell
+    ///
+    /// @param host     主机名
+    /// @param username 用户名
+    /// @param password 密码
     public static RemoteShell of(String host, String username, String password) {
         return new RemoteShell(host, 22, username, password, null);
     }
 
-    /**
-     * 创建远程 Shell
-     *
-     * @param host     主机名
-     * @param port     端口
-     * @param username 用户名
-     * @param password 密码
-     */
+    /// 创建远程 Shell
+    ///
+    /// @param host     主机名
+    /// @param port     端口
+    /// @param username 用户名
+    /// @param password 密码
     public static RemoteShell of(String host, int port, String username, String password) {
         return new RemoteShell(host, port, username, password, null);
     }
 
-    /**
-     * 使用默认端口创建远程 Shell
-     *
-     * @param host      主机名
-     * @param username  用户名
-     * @param publicKey 认证密钥（ssh public key）
-     */
+    /// 使用默认端口创建远程 Shell
+    ///
+    /// @param host      主机名
+    /// @param username  用户名
+    /// @param publicKey 认证密钥（ssh public key）
     public static RemoteShell of(String host, int port, String username, KeyPair publicKey) {
         return new RemoteShell(host, port, username, null, publicKey);
     }
 
-    /**
-     * 创建远程 Shell
-     *
-     * @param host      主机名
-     * @param username  用户名
-     * @param publicKey 认证密钥（ssh public key）
-     */
+    /// 创建远程 Shell
+    ///
+    /// @param host      主机名
+    /// @param username  用户名
+    /// @param publicKey 认证密钥（ssh public key）
     public static RemoteShell of(String host, String username, KeyPair publicKey) {
         return new RemoteShell(host, 22, username, null, publicKey);
     }
 
-    /**
-     * 工作目录
-     * <p>
-     * 远程工作目录没办法根据当前目录推导出相对路径，因此只能使用 '~' 或绝对路径来表达工作目录
-     */
+    /// 工作目录
+    ///
+    /// 远程工作目录没办法根据当前目录推导出相对路径，因此只能使用 '~' 或绝对路径来表达工作目录
     @Override
     public void setWorkDir(Path workDir) {
         if (workDir.startsWith(Path.of(".")) || workDir.startsWith("..")) {
@@ -166,11 +144,9 @@ public class RemoteShell extends Shell {
 
     private FileSystem fs;
 
-    /**
-     * 远程 Home 目录
-     * <p>
-     * 用于推导以 ~ 开头的远程目录
-     */
+    /// 远程 Home 目录
+    ///
+    /// 用于推导以 ~ 开头的远程目录
     private Path remoteHome;
 
     @Override

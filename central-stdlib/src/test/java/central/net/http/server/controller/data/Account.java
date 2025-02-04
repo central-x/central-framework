@@ -30,12 +30,9 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
-/**
- * 帐户
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 帐户
+///
+/// @author Alan Yeh
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Account extends ModifiableEntity {

@@ -39,33 +39,22 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 静态源
- *
- * @author Alan Yeh
- * @since 2022/10/01
- */
+/// 静态源
+///
+/// @author Alan Yeh
 public class SourceFetcher implements DataFetcher<Object> {
 
-    /**
-     * 命令名
-     */
+    /// 命令名
     @Getter
     private final String name;
 
-    /**
-     * 命令所在对象
-     */
+    /// 命令所在对象
     private final Source source;
 
-    /**
-     * 命令对应的方法
-     */
+    /// 命令对应的方法
     private final Method method;
 
-    /**
-     * 异常处理链
-     */
+    /// 异常处理链
     private final ExceptionHandleChain handler;
 
     @Setter

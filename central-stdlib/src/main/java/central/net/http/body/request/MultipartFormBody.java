@@ -24,12 +24,12 @@
 
 package central.net.http.body.request;
 
+import central.lang.Arrayx;
+import central.lang.Stringx;
 import central.net.http.body.Body;
 import central.net.http.body.HttpConverters;
-import central.lang.Arrayx;
 import central.util.Guidx;
 import central.util.Mapx;
-import central.lang.Stringx;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
@@ -39,15 +39,16 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
-/**
- * Multipart Form Body
- * 用于提交带文件的表单
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Multipart Form Body
+///
+/// 用于提交带文件的表单
+///
+/// @author Alan Yeh
 public class MultipartFormBody implements Body {
 
     private static final byte[] CRLF = {'\r', '\n'};

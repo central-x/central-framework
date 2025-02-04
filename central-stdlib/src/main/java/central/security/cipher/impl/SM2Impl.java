@@ -47,16 +47,15 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
 
-/**
- * 国密 SM2 加解密 (非对称算法)
- * SM2算法就是ECC椭圆曲线密码机制，但在签名、密钥交换方面不同于ECDSA、ECDH等国际标准，而是采取了更为安全的机制。另外，SM2推荐了一条256位的曲线作为标准曲线。
- * SM2标准包括总则，数字签名算法，密钥交换协议，公钥加密算法四个部分，并在每个部分的附录详细说明了实现的相关细节及示例。
- * <p>
- * 密文有 C1|C2|C3 和 C1｜C3｜C2 的区别，本实现采用 C1|C2|C3 作为密文
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// 国密 SM2 加解密 (非对称算法)
+///
+/// SM2 算法就是 ECC 椭圆曲线密码机制，但在签名、密钥交换方面不同于 ECDSA、ECDH 等国际标准，而是采取了更为安全的机制。另外，SM2 推荐了一条256位的曲线作为标准曲线。
+///
+/// SM2 标准包括总则，数字签名算法，密钥交换协议，公钥加密算法四个部分，并在每个部分的附录详细说明了实现的相关细节及示例。
+///
+/// 密文有`C1|C2|C3`和`C1｜C3｜C2`的区别，本实现采用`C1|C2|C3`作为密文
+///
+/// @author Alan Yeh
 public class SM2Impl implements CipherImpl {
     private static final ECNamedCurveParameterSpec PARAMS = ECNamedCurveTable.getParameterSpec("sm2p256v1");
     private static final ECCurve CURVE = PARAMS.getCurve();

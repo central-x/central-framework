@@ -25,9 +25,9 @@
 package central.net.http;
 
 import central.lang.Attribute;
+import central.lang.Stringx;
 import central.net.http.body.Body;
 import central.util.Objectx;
-import central.lang.Stringx;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpHeaders;
@@ -40,40 +40,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-/**
- * Http 请求
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Http 请求
+///
+/// @author Alan Yeh
 public class HttpRequest implements AutoCloseable {
-    /**
-     * 请求创建时间
-     */
+    /// 请求创建时间
     @Getter
     private final long timestamp = System.currentTimeMillis();
 
-    /**
-     * 请求属性
-     * 请求属性不参与网络请求，只用于跟踪请求上下文
-     */
+    /// 请求属性
+    /// 请求属性不参与网络请求，只用于跟踪请求上下文
     @Getter
     private final Map<String, Object> attributes = new HashMap<>();
 
-    /**
-     * 添加请求属性
-     */
+    /// 添加请求属性
     public <T> HttpRequest setAttribute(Attribute<T> attribute, T value) {
         this.attributes.put(attribute.getCode(), value);
         return this;
     }
 
-    /**
-     * 获取请求属性
-     *
-     * @param attribute 属性
-     * @param <T>       属性类型
-     */
+    /// 获取请求属性
+    ///
+    /// @param attribute 属性
+    /// @param <T>       属性类型
     public <T> T getAttribute(Attribute<T> attribute) {
         var result = (T) this.attributes.get(attribute.getCode());
         if (result == null) {
@@ -85,40 +74,31 @@ public class HttpRequest implements AutoCloseable {
         return result;
     }
 
-    /**
-     * 请求方法
-     */
+    /// 请求方法
     @Getter
     @Setter
     private HttpMethod method;
 
-    /**
-     * 请求地址
-     * 如果请求地址是完整的 URL 地址，则使用该 URL 地址访问
-     * 如果请求地址不是完整的 URL 地址，则使用 HttpClient 的 baseUrl 进行拼接
-     */
+    /// 请求地址
+    ///
+    /// - 如果请求地址是完整的 URL 地址，则使用该 URL 地址访问
+    /// - 如果请求地址不是完整的 URL 地址，则使用 HttpClient 的 baseUrl 进行拼接
     @Getter
     @Setter
     private HttpUrl url;
 
-    /**
-     * Cookie
-     */
+    /// Cookie
     @Getter
     @Setter
     private Map<String, String> cookies = new LinkedHashMap<>();
 
-    /**
-     * 设置 Cookie
-     */
+    /// 设置 Cookie
     public HttpRequest setCookie(String name, String value) {
         this.cookies.put(name, value);
         return this;
     }
 
-    /**
-     * 设置 Cookie
-     */
+    /// 设置 Cookie
     public HttpRequest setCookie(Map<String, String> cookies) {
         this.cookies.putAll(cookies);
         return this;
@@ -144,71 +124,56 @@ public class HttpRequest implements AutoCloseable {
         return cookie;
     }
 
-    /**
-     * 请求头
-     */
+    /// 请求头
     @Setter
     @Getter
     private HttpHeaders headers = new HttpHeaders();
 
-    /**
-     * 设置请求头
-     */
+    /// 设置请求头
     public HttpRequest setHeader(String name, String value) {
         this.headers.set(name, value);
         return this;
     }
 
-    /**
-     * 设置请求头
-     */
+    /// 设置请求头
     public HttpRequest setHeader(String name, List<String> values) {
         this.headers.put(name, values);
         return this;
     }
 
-    /**
-     * 添加请求头
-     */
+    /// 添加请求头
     public HttpRequest addHeader(String name, String value) {
         this.headers.add(name, value);
         return this;
     }
 
-    /**
-     * 添加请求头
-     */
+    /// 添加请求头
     public HttpRequest addHeader(String name, List<String> values) {
         this.headers.addAll(name, values);
         return this;
     }
 
-    /**
-     * 添加请求头
-     */
+    /// 添加请求头
     public HttpRequest addHeaders(MultiValueMap<String, String> headers) {
         this.headers.addAll(headers);
         return this;
     }
 
-    /**
-     * 添加请求头
-     * <p>
-     * 代码示例
-     * <pre>
-     * {@code request.addHeaders(headers -> {
-     *     headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-     * }).setCookie("Authorization", "xxx");}
-     * </pre>
-     */
+    /// 添加请求头
+    ///
+    /// 代码示例
+    ///
+    /// ```java
+    /// request.addHeaders(headers -> {
+    ///     headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+    /// }).setCookie("Authorization", "xxx");
+    /// ```
     public HttpRequest addHeaders(Consumer<HttpHeaders> headers) {
         headers.accept(this.headers);
         return this;
     }
 
-    /**
-     * 请求体
-     */
+    /// 请求体
     @Getter
     @Setter
     private Body body;
@@ -225,11 +190,9 @@ public class HttpRequest implements AutoCloseable {
         return Stringx.format("HttpRequest({} {})", this.method.name(), this.url.toString());
     }
 
-    /**
-     * 使用指定的方法发起请求
-     *
-     * @param url 请求地址
-     */
+    /// 使用指定的方法发起请求
+    ///
+    /// @param url 请求地址
     public static HttpRequest of(HttpMethod method, HttpUrl url) {
         var request = new HttpRequest();
         request.setMethod(method);
@@ -237,47 +200,37 @@ public class HttpRequest implements AutoCloseable {
         return request;
     }
 
-    /**
-     * 使用 GET 方法发起请求
-     *
-     * @param url 请求地址
-     */
+    /// 使用 GET 方法发起请求
+    ///
+    /// @param url 请求地址
     public static HttpRequest get(HttpUrl url) {
         return HttpRequest.of(HttpMethod.GET, url);
     }
 
-    /**
-     * 使用 POST 方法发起请求
-     *
-     * @param url 请求地址
-     */
+    /// 使用 POST 方法发起请求
+    ///
+    /// @param url 请求地址
     public static HttpRequest post(HttpUrl url) {
         return HttpRequest.of(HttpMethod.POST, url);
     }
 
-    /**
-     * 使用 PUT 方法发起请求
-     *
-     * @param url 请求地址
-     */
+    /// 使用 PUT 方法发起请求
+    ///
+    /// @param url 请求地址
     public static HttpRequest put(HttpUrl url) {
         return HttpRequest.of(HttpMethod.PUT, url);
     }
 
-    /**
-     * 使用 DELETE 方法发起请求
-     *
-     * @param url 请求地址
-     */
+    /// 使用 DELETE 方法发起请求
+    ///
+    /// @param url 请求地址
     public static HttpRequest delete(HttpUrl url) {
         return HttpRequest.of(HttpMethod.DELETE, url);
     }
 
-    /**
-     * 使用 PATCH 方法发起请求
-     *
-     * @param url 请求地址
-     */
+    /// 使用 PATCH 方法发起请求
+    ///
+    /// @param url 请求地址
     public static HttpRequest patch(HttpUrl url) {
         return HttpRequest.of(HttpMethod.PATCH, url);
     }

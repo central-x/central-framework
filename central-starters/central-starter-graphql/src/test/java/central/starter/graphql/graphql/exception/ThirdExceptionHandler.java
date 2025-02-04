@@ -33,12 +33,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Method;
 
-/**
- * 测试异常处理器排序
- *
- * @author Alan Yeh
- * @since 2024/06/18
- */
+/// 测试异常处理器排序
+///
+/// @author Alan Yeh
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class ThirdExceptionHandler implements ExceptionHandler {
     @Override

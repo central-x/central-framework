@@ -27,12 +27,9 @@ package central.starter.graphql.core.source;
 import central.util.Context;
 import graphql.schema.DataFetchingEnvironment;
 
-/**
- * 动态调用源
- *
- * @author Alan Yeh
- * @since 2022/10/03
- */
+/// 动态调用源
+///
+/// @author Alan Yeh
 public class GraphQLSource implements Source {
     @Override
     public Object getSource(Context context) {

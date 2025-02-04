@@ -28,16 +28,13 @@ import central.net.http.HttpExecutor;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
 
-/**
- * Local Executor
- * <p>
- * 本地执行器
- * <p>
- * 不走网络请求，通过模拟 HttpServletRequest 和 HttpServletResponse 来模拟请求和响应从而提升执行速度
- *
- * @author Alan Yeh
- * @since 2025/01/19
- */
+/// Local Executor
+///
+/// 本地执行器
+///
+/// 不走网络请求，通过模拟 HttpServletRequest 和 HttpServletResponse 来模拟请求和响应从而提升执行速度
+///
+/// @author Alan Yeh
 public class LocalExecutor implements HttpExecutor {
     @Override
     public String getName() {

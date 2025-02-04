@@ -34,12 +34,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Department
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// Department
+///
+/// @author Alan Yeh
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -48,13 +45,9 @@ public class Department extends ModifiableEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 8420604859092025358L;
 
-    /**
-     * 名称
-     */
+    /// 名称
     private String name;
 
-    /**
-     * 帐户信息
-     */
+    /// 帐户信息
     private List<Account> accounts;
 }

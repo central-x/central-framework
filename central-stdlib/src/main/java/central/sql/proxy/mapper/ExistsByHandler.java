@@ -24,25 +24,22 @@
 
 package central.sql.proxy.mapper;
 
-import central.sql.query.Conditions;
+import central.lang.Arrayx;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.lang.Arrayx;
+import central.sql.query.Conditions;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
-/**
- * ExistsBy Handler
- *
- * @author Alan Yeh
- * @see Mapper#existsBy
- * @since 2022/08/11
- */
+/// ExistsBy Handler
+///
+/// @author Alan Yeh
+/// @see Mapper#existsBy
 public class ExistsByHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {

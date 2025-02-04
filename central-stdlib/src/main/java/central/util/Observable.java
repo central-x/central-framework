@@ -30,52 +30,39 @@ import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 可被观查的
- *
- * @author Alan Yeh
- * @see ObserveEvent
- * @see Observer
- * @since 2022/11/11
- */
+/// 可被观查的
+///
+/// @author Alan Yeh
+/// @see ObserveEvent
+/// @see Observer
 public class Observable<O extends Observable<O>> {
-    /**
-     * 观查者列表
-     */
+    /// 观查者列表
     private final List<Observer<O>> observers = new ArrayList<>();
 
-    /**
-     * 添加观查者
-     *
-     * @param observer 观查者
-     */
+    /// 添加观查者
+    ///
+    /// @param observer 观查者
     public synchronized void addObserver(@Nonnull Observer<O> observer) {
         if (!this.observers.contains(observer)) {
             this.observers.add(observer);
         }
     }
 
-    /**
-     * 移除观查者
-     *
-     * @param observer 观查者
-     */
+    /// 移除观查者
+    ///
+    /// @param observer 观查者
     public synchronized void removeObserver(Observer<O> observer) {
         this.observers.remove(observer);
     }
 
-    /**
-     * 通知观查者当前已变更
-     */
+    /// 通知观查者当前已变更
     protected void notifyObservers() {
         this.notifyObservers(() -> (O) this);
     }
 
-    /**
-     * 通知观查者当前已变更
-     *
-     * @param event 变更事件
-     */
+    /// 通知观查者当前已变更
+    ///
+    /// @param event 变更事件
     protected void notifyObservers(@NotNull ObserveEvent<O> event) {
         Observer<O>[] observers;
         synchronized (this) {

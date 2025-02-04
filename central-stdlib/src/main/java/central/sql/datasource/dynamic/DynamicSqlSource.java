@@ -28,7 +28,6 @@ import central.lang.Stringx;
 import central.sql.SqlSource;
 import central.sql.datasource.dynamic.lookup.LookupKeyHolder;
 import central.sql.exception.DataSourceNotFoundException;
-import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.Delegate;
 
@@ -36,17 +35,12 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 动态数据源
- *
- * @author Alan Yeh
- * @since 2022/09/23
- */
+/// 动态数据源
+///
+/// @author Alan Yeh
 public abstract class DynamicSqlSource implements SqlSource {
 
-    /**
-     * 主数据源
-     */
+    /// 主数据源
     public abstract SqlSource getMaster();
 
     @Delegate
@@ -62,9 +56,7 @@ public abstract class DynamicSqlSource implements SqlSource {
         return this.getDataSourceByName(lookupKey);
     }
 
-    /**
-     * 决定当前数据源
-     */
+    /// 决定当前数据源
     protected String determineLookupKey() {
         return "master";
     }
@@ -73,12 +65,10 @@ public abstract class DynamicSqlSource implements SqlSource {
         return Collections.singletonList("master");
     }
 
-    /**
-     * 根据数据源名称获取数据源
-     *
-     * @param name 数据源名称
-     * @return 数据源
-     */
+    /// 根据数据源名称获取数据源
+    ///
+    /// @param name 数据源名称
+    /// @return 数据源
     protected SqlSource getDataSourceByName(String name) throws SQLException {
         if ("master".equals(name)) {
             return this.getMaster();

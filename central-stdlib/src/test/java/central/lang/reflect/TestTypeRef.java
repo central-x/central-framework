@@ -29,21 +29,17 @@ import central.util.LazyValue;
 import lombok.Getter;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * TypeReference Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// TypeReference Test Cases
+///
+/// @author Alan Yeh
 public class TestTypeRef {
-    /**
-     * 通过 Class 构建 TypeReference
-     */
+    /// 通过 Class 构建 TypeReference
     @Test
     public void case1() {
         var reference = TypeRef.of(TestTypeRef.class);
@@ -53,9 +49,7 @@ public class TestTypeRef {
         assertEquals(TestTypeRef.class, reference.getType());
     }
 
-    /**
-     * 通过类名创建 TypeReference
-     */
+    /// 通过类名创建 TypeReference
     @Test
     public void case2() {
         var reference = TypeRef.of("central.lang.reflect.TestTypeRef");
@@ -63,9 +57,7 @@ public class TestTypeRef {
         assertEquals(TestTypeRef.class, reference.getType());
     }
 
-    /**
-     * 通过直接实例化创建 TypeReference
-     */
+    /// 通过直接实例化创建 TypeReference
     @Test
     public void case3() {
         var reference = new TypeRef<TestTypeRef>() {
@@ -74,9 +66,7 @@ public class TestTypeRef {
         assertEquals(TestTypeRef.class, reference.getType());
     }
 
-    /**
-     * 通过直接实例化创建泛型 TypeReference
-     */
+    /// 通过直接实例化创建泛型 TypeReference
     @Test
     public void case4() {
         var reference = new TypeRef<List<String>>() {
@@ -86,10 +76,8 @@ public class TestTypeRef {
         assertEquals(String.class, reference.getActualTypeArgument(0).getType());
     }
 
-    /**
-     * 手动构建泛型
-     * {@code List<String>}
-     */
+    /// 手动构建泛型
+    /// {@code List<String>}
     @Test
     public void case5() {
         var reference = TypeRef.ofList(String.class);
@@ -98,10 +86,8 @@ public class TestTypeRef {
         assertEquals(String.class, reference.getActualTypeArgument(0).getType());
     }
 
-    /**
-     * 手动构建泛型
-     * {@code List<List<String>>}
-     */
+    /// 手动构建泛型
+    /// {@code List<List<String>>}
     @Test
     public void case6() {
         var reference = TypeRef.ofList(TypeRef.ofList(String.class));
@@ -114,10 +100,8 @@ public class TestTypeRef {
         assertEquals(String.class, actualType.getActualTypeArgument(0).getType());
     }
 
-    /**
-     * 手动构建泛型
-     * {@code Map<String, Integer> }
-     */
+    /// 手动构建泛型
+    /// {@code Map<String, Integer> }
     @Test
     public void case7() {
         var reference = TypeRef.ofMap(String.class, Integer.class);
@@ -128,10 +112,8 @@ public class TestTypeRef {
         assertEquals(Integer.class, reference.getActualTypeArgument(1).getType());
     }
 
-    /**
-     * 手动构建泛型
-     * {@code Map<String, List<String>>}
-     */
+    /// 手动构建泛型
+    /// {@code Map<String, List<String>>}
     @Test
     public void case8() {
         var reference = TypeRef.ofMap(String.class, TypeRef.ofList(Integer.class));
@@ -144,9 +126,7 @@ public class TestTypeRef {
         assertEquals(Integer.class, reference.getActualTypeArgument(1).getActualTypeArgument(0).getType());
     }
 
-    /**
-     * 实例化
-     */
+    /// 实例化
     @Test
     public void case9() {
         var reference = TypeRef.ofList(String.class);
@@ -159,9 +139,7 @@ public class TestTypeRef {
         assertEquals("String", object.get(0));
     }
 
-    /**
-     * 实例化
-     */
+    /// 实例化
     @Test
     public void case10() {
         var reference = new TypeRef<TestClass>() {

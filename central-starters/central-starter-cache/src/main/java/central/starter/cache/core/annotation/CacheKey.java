@@ -26,45 +26,38 @@ package central.starter.cache.core.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * 缓存键，对指定的对象进行枚举，主要用于生成多条 Key
- * <p>
- * it 用于指定被枚举的对象，该对象可以是 Array、Collection 两种类型
- * <p>
- * key 用于对指定枚举对象进行计算表达式
- * <p>
- * 例:
- * <pre>
- * {@code @CacheEvict(keys = @CacheKey(key = "central:${it}", it = "args[0]"))
- * public long deleteByIds(List<String> ids){
- *     ...
- * }}</pre>
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// 缓存键，对指定的对象进行枚举，主要用于生成多条 Key
+///
+/// it 用于指定被枚举的对象，该对象可以是 Array、Collection 两种类型
+///
+/// key 用于对指定枚举对象进行计算表达式
+///
+/// 例:
+///
+/// ```java
+/// @CacheEvict(keys = @CacheKey(key = "central:${it}", it = "args[0]"))
+/// public long deleteByIds(List<String> ids){
+///     ...
+/// }
+/// ```
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.ANNOTATION_TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CacheKey {
-    /**
-     * 缓存键
-     * <p>
-     * 支持模板语法
-     * <p>
-     * 可以使用的上下文对象包括:
-     *
-     * <ul>
-     *     <li>args: Object[] 参数列表</li>
-     *     <li>method: Method 方法</li>
-     *     <li>target: Object 待执行方法的对象</li>
-     *     <li>it: Object 被枚举对象的每条记录</li>
-     * </ul>
-     */
+    /// 缓存键
+    ///
+    /// 支持模板语法
+    ///
+    /// 可以使用的上下文对象包括:
+    ///
+    /// - args: Object[] 参数列表
+    /// - method: Method 方法
+    /// - target: Object 待执行方法的对象
+    /// - it: Object 被枚举对象的每条记录
     String key();
 
-    /**
-     * 被枚举的对象
-     */
+    /// 被枚举的对象
     String it();
 }

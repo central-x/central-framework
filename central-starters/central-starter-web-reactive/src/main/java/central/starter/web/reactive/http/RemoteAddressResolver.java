@@ -26,12 +26,9 @@ package central.starter.web.reactive.http;
 
 import org.springframework.web.server.ServerWebExchange;
 
-/**
- * 远程地址解析
- *
- * @author Alan Yeh
- * @since 2022/10/18
- */
+/// 远程地址解析
+///
+/// @author Alan Yeh
 public interface RemoteAddressResolver {
     String resolve(ServerWebExchange exchange);
 }

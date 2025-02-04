@@ -28,54 +28,31 @@ import central.sql.builder.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * 数据库方言
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// 数据库方言
+///
+/// @author Alan Yeh
 @Getter
 @AllArgsConstructor
 public enum SqlDialect {
-    /**
-     * MySql
-     */
+    /// MySql
     MySql("MySql", new MySqlBuilder()),
-    /**
-     * Oracle
-     */
+    /// Oracle
     Oracle("Oracle", new OracleBuilder()),
-    /**
-     * 达梦
-     */
+    /// 达梦
     Dameng("Dameng", new DamengBuilder()),
-    /**
-     * 人大金仓
-     */
+    /// 人大金仓
     Kingbase("Kingbase", new KingbaseBuilder()),
-    /**
-     * 神舟
-     */
+    /// 神舟
     Oscar("Oscar", new OscarBuilder()),
-    /**
-     * 翰高
-     */
+    /// 翰高
     HighGo("HighGo", new HighGoBuilder()),
-    /**
-     * H2
-     */
+    /// H2
     H2("H2", new H2Builder()),
-    /**
-     * PostgreSql
-     */
+    /// PostgreSql
     PostgreSql("PostgreSql", new PostgreSqlBuilder()),
-    /**
-     * 海量数据
-     */
+    /// 海量数据
     Vastbase("Vastbase", new VastbaseBuilder()),
-    /**
-     * 未知的数据
-     */
+    /// 未知的数据
     Unknown("Unknown", new UnknownBuilder());
 
     private final String name;

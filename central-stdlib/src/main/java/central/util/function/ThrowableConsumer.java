@@ -29,12 +29,9 @@ import lombok.SneakyThrows;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-/**
- * Throwable Consumer
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Throwable Consumer
+///
+/// @author Alan Yeh
 @FunctionalInterface
 public interface ThrowableConsumer<T, E extends Exception> {
 
@@ -42,16 +39,12 @@ public interface ThrowableConsumer<T, E extends Exception> {
         return consumer;
     }
 
-    /**
-     * 消费
-     *
-     * @param t 入参
-     */
+    /// 消费
+    ///
+    /// @param t 入参
     void accept(T t) throws E;
 
-    /**
-     * 忽略异常
-     */
+    /// 忽略异常
     default Consumer<T> ignoreThrows() {
         final var that = this;
         return (T t) -> {
@@ -62,11 +55,9 @@ public interface ThrowableConsumer<T, E extends Exception> {
         };
     }
 
-    /**
-     * 隐匿异常
-     *
-     * @return 被包装后的函数
-     */
+    /// 隐匿异常
+    ///
+    /// @return 被包装后的函数
     default Consumer<T> sneakThrows() {
         final var that = this;
         return new Consumer<T>() {
@@ -78,12 +69,10 @@ public interface ThrowableConsumer<T, E extends Exception> {
         };
     }
 
-    /**
-     * 处理异常，返回异常处理器的结果
-     *
-     * @param handler 异常处理器
-     * @return 被包装后的函数
-     */
+    /// 处理异常，返回异常处理器的结果
+    ///
+    /// @param handler 异常处理器
+    /// @return 被包装后的函数
     default Consumer<T> catchThrows(Consumer<E> handler) {
         return (T t) -> {
             try {
@@ -94,12 +83,10 @@ public interface ThrowableConsumer<T, E extends Exception> {
         };
     }
 
-    /**
-     * 处理异常，返回异常处理器的结果
-     *
-     * @param handler 异常处理器
-     * @return 被包装后的函数
-     */
+    /// 处理异常，返回异常处理器的结果
+    ///
+    /// @param handler 异常处理器
+    /// @return 被包装后的函数
     default Consumer<T> catchThrows(BiConsumer<T, E> handler) {
         return (T t) -> {
             try {

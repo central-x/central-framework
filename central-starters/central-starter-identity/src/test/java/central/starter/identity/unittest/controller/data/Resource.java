@@ -28,13 +28,11 @@ import central.sql.data.Entity;
 
 import java.io.Serial;
 
-/**
- * Resource
- * 资源
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// Resource
+///
+/// 资源
+///
+/// @author Alan Yeh
 public class Resource extends Entity {
     @Serial
     private static final long serialVersionUID = 4841280900540104984L;

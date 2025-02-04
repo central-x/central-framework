@@ -31,12 +31,9 @@ import org.springframework.http.MediaType;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-/**
- * Json View
- *
- * @author Alan Yeh
- * @since 2023/11/04
- */
+/// Json View
+///
+/// @author Alan Yeh
 public class JsonView extends TextView {
     private static final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8);
 

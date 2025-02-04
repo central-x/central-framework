@@ -34,23 +34,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-/**
- * 资源处理
- *
- * @author Alan Yeh
- * @since 2022/08/11
- */
+/// 资源处理
+///
+/// @author Alan Yeh
 @PublicApi
 @UtilityClass
 public class Resourcex {
 
-    /**
-     * 获取资源
-     * 资源路径支持 classpath://、file:// 等协议
-     *
-     * @param resourcePath 资源路径
-     * @return InputStream
-     */
+    /// 获取资源
+    /// 资源路径支持 classpath://、file:// 等协议
+    ///
+    /// @param resourcePath 资源路径
+    /// @return InputStream
     public static InputStream getInputStream(URI resourcePath) throws IOException {
         switch (resourcePath.getScheme()) {
             case "classpath" -> {

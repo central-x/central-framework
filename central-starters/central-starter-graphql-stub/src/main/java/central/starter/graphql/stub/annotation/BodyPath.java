@@ -26,12 +26,9 @@ package central.starter.graphql.stub.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * 消息体路径
- *
- * @author Alan Yeh
- * @since 2022/10/04
- */
+/// 消息体路径
+///
+/// @author Alan Yeh
 @Documented
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

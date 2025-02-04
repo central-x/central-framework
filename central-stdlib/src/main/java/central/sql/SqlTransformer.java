@@ -27,20 +27,15 @@ package central.sql;
 import java.sql.SQLException;
 import java.util.Map;
 
-/**
- * 类型转换
- *
- * @author Alan Yeh
- * @since 2022/09/14
- */
+/// 类型转换
+///
+/// @author Alan Yeh
 public interface SqlTransformer {
 
-    /**
-     * 将数据库读取出来的数据转换成指定类型
-     *
-     * @param data 数据库行数据
-     * @param type 目标实体类型
-     * @return 目标实体
-     */
+    /// 将数据库读取出来的数据转换成指定类型
+    ///
+    /// @param data 数据库行数据
+    /// @param type 目标实体类型
+    /// @return 目标实体
     <T> T transform(SqlExecutor executor, Map<String, Object> data, Class<T> type) throws SQLException;
 }

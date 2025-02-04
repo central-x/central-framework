@@ -31,12 +31,9 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
 
-/**
- * Method Not Allowed Http Exception
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Method Not Allowed Http Exception
+///
+/// @author Alan Yeh
 public class MethodNotAllowedHttpException extends ClientSeriesHttpException {
     @Serial
     private static final long serialVersionUID = -3575796476300146492L;

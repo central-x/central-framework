@@ -27,12 +27,9 @@ package central.util.converter.impl.lang;
 import central.util.converter.ConvertException;
 import central.util.converter.Converter;
 
-/**
- * ByteConverter
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// ByteConverter
+///
+/// @author Alan Yeh
 public class ByteConverter implements Converter<Byte> {
     @Override
     public boolean support(Class<?> source) {

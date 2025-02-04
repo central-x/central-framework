@@ -26,19 +26,16 @@ package central.starter.web.reactive.support.resolver;
 
 import central.lang.Arrayx;
 import central.lang.Stringx;
-import central.util.Listx;
 import central.starter.web.reactive.support.RemoteAddressResolver;
+import central.util.Listx;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.server.ServerWebExchange;
 
 import java.net.InetSocketAddress;
 
-/**
- * 通过 X-Forwarded-For 获取远端地址
- *
- * @author Alan Yeh
- * @since 2022/10/18
- */
+/// 通过 X-Forwarded-For 获取远端地址
+///
+/// @author Alan Yeh
 @Slf4j
 public class XForwardedRemoteAddressResolver implements RemoteAddressResolver {
     @Override

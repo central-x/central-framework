@@ -36,13 +36,10 @@ import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-/**
- * GraphQL 执行器
- *
- * @author Alan Yeh
- * @see GraphQLExecutorFactory
- * @since 2022/09/09
- */
+/// GraphQL 执行器
+///
+/// @author Alan Yeh
+/// @see GraphQLExecutorFactory
 public class GraphQLExecutor {
 
     @Setter

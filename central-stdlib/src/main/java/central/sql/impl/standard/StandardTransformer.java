@@ -24,11 +24,11 @@
 
 package central.sql.impl.standard;
 
-import central.lang.reflect.TypeRef;
-import central.sql.SqlTransformer;
-import central.sql.SqlExecutor;
-import central.util.Setx;
 import central.lang.Stringx;
+import central.lang.reflect.TypeRef;
+import central.sql.SqlExecutor;
+import central.sql.SqlTransformer;
+import central.util.Setx;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
@@ -42,12 +42,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 标准 Bean 转换器
- *
- * @author Alan Yeh
- * @since 2022/09/14
- */
+/// 标准 Bean 转换器
+///
+/// @author Alan Yeh
 public class StandardTransformer implements SqlTransformer {
     @Override
     public <T> T transform(SqlExecutor executor, Map<String, Object> data, Class<T> type) throws SQLException {

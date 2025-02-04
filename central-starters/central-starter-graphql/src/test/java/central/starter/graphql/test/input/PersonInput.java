@@ -29,12 +29,9 @@ import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * Person
- *
- * @author Alan Yeh
- * @since 2022/09/29
- */
+/// Person
+///
+/// @author Alan Yeh
 @Data
 @Builder(toBuilder = true)
 @EqualsAndHashCode

@@ -24,23 +24,19 @@
 
 package central.util;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * ObservableMap Test Cases
- *
- * @author Alan Yeh
- * @since 2022/11/11
- */
+/// ObservableMap Test Cases
+///
+/// @author Alan Yeh
 public class TestObservableMap {
 
     @Test
-    public void case1(){
+    public void case1() {
         var map = new HashMap<String, String>();
         map.put("test1", "1");
         map.put("test2", "2");

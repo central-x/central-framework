@@ -27,12 +27,9 @@ package central.sql.exception;
 import java.io.Serial;
 import java.sql.SQLException;
 
-/**
- * 数据源不存在异常
- *
- * @author Alan Yeh
- * @since 2022/09/23
- */
+/// 数据源不存在异常
+///
+/// @author Alan Yeh
 public class DataSourceNotFoundException extends SQLException {
     @Serial
     private static final long serialVersionUID = -2121452333193794015L;

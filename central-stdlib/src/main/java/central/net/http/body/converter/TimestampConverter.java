@@ -29,12 +29,9 @@ import jakarta.annotation.Nullable;
 
 import java.sql.Timestamp;
 
-/**
- * Timestamp 转换器
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Timestamp 转换器
+///
+/// @author Alan Yeh
 public class TimestampConverter implements HttpConverter<Timestamp> {
     @Override
     public boolean support(@Nullable Object source) {

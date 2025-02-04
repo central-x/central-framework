@@ -31,31 +31,22 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
-/**
- * 枚举类型校验
- *
- * @author Alan Yeh
- * @since 2022/07/18
- */
+/// 枚举类型校验
+///
+/// @author Alan Yeh
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = EnumsValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
 public @interface Enums {
 
-    /**
-     * 默认的错误消息
-     */
+    /// 默认的错误消息
     String message() default "";
 
-    /**
-     * 枚举类
-     */
+    /// 枚举类
     Class<? extends OptionalEnum<?>> value();
 
-    /**
-     * 校验分组
-     */
+    /// 校验分组
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};

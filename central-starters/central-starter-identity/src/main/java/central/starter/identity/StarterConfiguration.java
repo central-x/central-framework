@@ -52,12 +52,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * 安全认证配置
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// 安全认证配置
+///
+/// @author Alan Yeh
 @Configuration
 @ConditionalOnProperty(name = "central.identity.enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(IdentityProperties.class)
@@ -90,9 +87,7 @@ public class StarterConfiguration {
         return securityManager;
     }
 
-    /**
-     * 配置全局拦载器
-     */
+    /// 配置全局拦载器
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager, ShiroFilter shiroFilter) {
         var filterFactoryBean = new ShiroFilterFactoryBean();

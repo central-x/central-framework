@@ -32,12 +32,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serial;
 
-/**
- * Timeout Http Request
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Timeout Http Request
+///
+/// @author Alan Yeh
 public class TimeoutHttpRequest extends HttpException {
     @Serial
     private static final long serialVersionUID = -1002053311889529005L;

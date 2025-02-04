@@ -27,12 +27,9 @@ package central.net.http.body.converter;
 import central.net.http.body.HttpConverter;
 import jakarta.annotation.Nullable;
 
-/**
- * Number 转换器
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Number 转换器
+///
+/// @author Alan Yeh
 public class NumberConverter implements HttpConverter<Number> {
     @Override
     public boolean support(@Nullable Object source) {

@@ -34,21 +34,14 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.List;
 import java.util.logging.Logger;
 
-/**
- * 读写分离数据源
- *
- * @author Alan Yeh
- * @since 2022/09/08
- */
+/// 读写分离数据源
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class SplittingDataSource implements DataSource {
-    /**
-     * 主数据源
-     */
+    /// 主数据源
     private final DataSource master;
-    /**
-     * 从数据源
-     */
+    /// 从数据源
     private final List<DataSource> slaves;
 
     @Override

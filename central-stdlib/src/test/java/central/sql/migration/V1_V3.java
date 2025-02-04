@@ -31,13 +31,11 @@ import central.util.Version;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * V1 升级到 V3
- * 测试越过 V2、V3
- *
- * @author Alan Yeh
- * @since 2022/09/20
- */
+/// V1 升级到 V3
+///
+/// 测试越过 V2、V3
+///
+/// @author Alan Yeh
 public class V1_V3 extends Migration {
     public V1_V3() {
         super(Version.of("1.0.0"), Version.of("1.0.2"));

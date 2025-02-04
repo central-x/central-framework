@@ -35,12 +35,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-/**
- * 数据实体
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// 数据实体
+///
+/// @author Alan Yeh
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -58,11 +55,9 @@ public class Entity implements Identifiable, Serializable {
     @Label("创建时间")
     private Timestamp createDate;
 
-    /**
-     * 初始化实体的创建人唯一标识与创建时间
-     *
-     * @param creatorId 创建人唯一标识
-     */
+    /// 初始化实体的创建人唯一标识与创建时间
+    ///
+    /// @param creatorId 创建人唯一标识
     public void updateCreator(String creatorId) {
         this.setCreatorId(creatorId);
         this.setCreateDate(new Timestamp(System.currentTimeMillis()));

@@ -32,12 +32,9 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
 
-/**
- * Request Timeout Http Exception
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Request Timeout Http Exception
+///
+/// @author Alan Yeh
 public class RequestTimeoutHttpException extends ClientSeriesHttpException {
     @Serial
     private static final long serialVersionUID = 1111765175713785840L;

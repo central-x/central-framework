@@ -30,12 +30,9 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.Objects;
 
-/**
- * 固定值校验器
- *
- * @author Alan Yeh
- * @since 2022/11/07
- */
+/// 固定值校验器
+///
+/// @author Alan Yeh
 public class FixValidator implements ConstraintValidator<Fix, Object> {
 
     private String fix;

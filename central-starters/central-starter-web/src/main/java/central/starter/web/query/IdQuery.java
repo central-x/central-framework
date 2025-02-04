@@ -32,12 +32,9 @@ import lombok.Data;
 
 import java.io.Serial;
 
-/**
- * 主键查询
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 主键查询
+///
+/// @author Alan Yeh
 @Data
 public class IdQuery<E extends Entity> implements Query<E> {
 

@@ -32,26 +32,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Observable Map
- * <p>
- * 当里面的元素发生变动时，会向观察者发出通知
- * <p>
- * 注意:
- * <p>
- * {@link  ConcurrentHashMap } 或类似这些的数据容器，由于重写了 {@link Map} 里面的 default 方法，因此可能导致通知失效
- *
- * @author Alan Yeh
- * @since 2022/11/11
- */
+/// Observable Map
+///
+/// 当里面的元素发生变动时，会向观察者发出通知
+///
+/// 注意:
+///
+/// [ConcurrentHashMap]或类似这些的数据容器，由于重写了[Map]里面的 default 方法，因此可能导致通知失效
+///
+/// @author Alan Yeh
 public class ObservableMap<K, V> extends Observable<ObservableMap<K, V>> implements Map<K, V> {
 
-    /**
-     * 元素被添加事件
-     *
-     * @param <K> 键类型
-     * @param <V> 值类型
-     */
+    /// 元素被添加事件
+    ///
+    /// @param <K> 键类型
+    /// @param <V> 值类型
     @Getter
     @RequiredArgsConstructor
     public static class EntryAdded<K, V> implements ObserveEvent<ObservableMap<K, V>> {
@@ -69,12 +64,10 @@ public class ObservableMap<K, V> extends Observable<ObservableMap<K, V>> impleme
         }
     }
 
-    /**
-     * 元素被删除事件
-     *
-     * @param <K> 键类型
-     * @param <V> 值类型
-     */
+    /// 元素被删除事件
+    ///
+    /// @param <K> 键类型
+    /// @param <V> 值类型
     @Getter
     @RequiredArgsConstructor
     public static class EntryRemoved<K, V> implements ObserveEvent<ObservableMap<K, V>> {

@@ -35,31 +35,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * 方法调用
- *
- * @author Alan Yeh
- * @since 2022/10/01
- */
+/// 方法调用
+///
+/// @author Alan Yeh
 public class Invocation {
-    /**
-     * 类
-     */
+    /// 类
     private final Class<?> clazz;
 
-    /**
-     * 方法
-     */
+    /// 方法
     private final Method method;
 
-    /**
-     * 参数
-     */
+    /// 参数
     private final Parameter[] parameters;
 
-    /**
-     * 参数解析器
-     */
+    /// 参数解析器
     private final List<ParameterResolver> resolvers = new ArrayList<>();
 
     private Invocation(Method method) {
@@ -68,35 +57,29 @@ public class Invocation {
         this.parameters = method.getParameters();
     }
 
-    /**
-     * 快速构建
-     *
-     * @param method 待调用方法
-     */
+    /// 快速构建
+    ///
+    /// @param method 待调用方法
     public static Invocation of(Method method) {
         return new Invocation(method);
     }
 
-    /**
-     * 添加参数解析器
-     *
-     * @param resolvers 参数解析器
-     */
+    /// 添加参数解析器
+    ///
+    /// @param resolvers 参数解析器
     public Invocation resolvers(List<ParameterResolver> resolvers) {
         this.resolvers.addAll(Objectx.getOrDefault(resolvers, Collections.emptyList()));
         this.resolvers.sort(Comparator.comparing(ParameterResolver::getOrder));
         return this;
     }
 
-    /**
-     * 调用方法
-     * <p>
-     * 参数解析器会从调用上下文中解析需要的参数
-     *
-     * @param source  待调用对象
-     * @param context 调用上下文
-     * @return 调用结果
-     */
+    /// 调用方法
+    ///
+    /// 参数解析器会从调用上下文中解析需要的参数
+    ///
+    /// @param source  待调用对象
+    /// @param context 调用上下文
+    /// @return 调用结果
     public Object invoke(Object source, Context context) throws InvocationTargetException, IllegalAccessException {
         // 构建调用参数列表
         Object[] args = new Object[this.parameters.length];

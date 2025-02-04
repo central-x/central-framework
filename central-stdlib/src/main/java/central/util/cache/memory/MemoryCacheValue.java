@@ -33,12 +33,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 
-/**
- * 内存缓存值
- *
- * @author Alan Yeh
- * @since 2023/07/02
- */
+/// 内存缓存值
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class MemoryCacheValue implements CacheValue {
     private final String key;

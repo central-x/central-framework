@@ -29,12 +29,9 @@ import org.springframework.core.convert.converter.Converter;
 
 import java.sql.Timestamp;
 
-/**
- * 日期转换工具
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 日期转换工具
+///
+/// @author Alan Yeh
 public class LongToTimestampConverter implements Converter<Long, Timestamp> {
 
     @Override

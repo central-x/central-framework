@@ -24,13 +24,13 @@
 
 package central.net.http.proxy;
 
+import central.lang.Arrayx;
+import central.lang.Assertx;
 import central.net.http.HttpClient;
 import central.net.http.HttpExecutor;
 import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.impl.LoggerProcessor;
 import central.net.http.proxy.contract.internal.InternalContract;
-import central.lang.Arrayx;
-import central.lang.Assertx;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -40,12 +40,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * HttpClient Factory
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// HttpClient Factory
+///
+/// @author Alan Yeh
 public class HttpProxyFactory {
 
     public static Builder builder(HttpExecutor executor) {
@@ -55,9 +52,7 @@ public class HttpProxyFactory {
     public static class BaseBuilder<T extends BaseBuilder<T>> {
         protected String baseUrl;
 
-        /**
-         * 设置基础 URL
-         */
+        /// 设置基础 URL
         public T baseUrl(String baseUrl) {
             this.baseUrl = baseUrl;
             return (T) this;
@@ -65,11 +60,9 @@ public class HttpProxyFactory {
 
         protected Contract contract = new InternalContract();
 
-        /**
-         * 设置代理解析契约
-         *
-         * @param contract 契约
-         */
+        /// 设置代理解析契约
+        ///
+        /// @param contract 契约
         public T contact(Contract contract) {
             this.contract = contract;
             return (T) this;
@@ -77,9 +70,7 @@ public class HttpProxyFactory {
 
         protected File tmp = Path.of("tmp", "http").toFile();
 
-        /**
-         * 设置缓存目录
-         */
+        /// 设置缓存目录
         public T tmp(File tmp) {
             this.tmp = tmp;
             return (T) this;
@@ -90,34 +81,26 @@ public class HttpProxyFactory {
     public static class Builder extends BaseBuilder<Builder> {
         private final HttpExecutor executor;
 
-        /**
-         * 请求处理器
-         */
+        /// 请求处理器
         private final List<HttpProcessor> processors = new ArrayList<>();
 
-        /**
-         * 添加请求处理器
-         *
-         * @param processor 处理器
-         */
+        /// 添加请求处理器
+        ///
+        /// @param processor 处理器
         public Builder processor(HttpProcessor processor) {
             this.processors.add(processor);
             return this;
         }
 
-        /**
-         * 添加请求处理器
-         *
-         * @param processors 处理器
-         */
+        /// 添加请求处理器
+        ///
+        /// @param processors 处理器
         public Builder processors(List<HttpProcessor> processors) {
             this.processors.addAll(processors);
             return this;
         }
 
-        /**
-         * 添加日志处理器
-         */
+        /// 添加日志处理器
         public Builder log() {
             this.processors.add(new LoggerProcessor());
             return this;

@@ -24,24 +24,21 @@
 
 package central.sql.proxy.mapper;
 
+import central.lang.Stringx;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.lang.Stringx;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
-/**
- * ToString Handler
- *
- * @author Alan Yeh
- * @see Mapper#toString
- * @since 2022/08/11
- */
+/// ToString Handler
+///
+/// @author Alan Yeh
+/// @see Mapper#toString
 public class ToStringHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {

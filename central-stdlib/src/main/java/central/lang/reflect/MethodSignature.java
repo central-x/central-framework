@@ -34,16 +34,11 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * 方法签名
- *
- * @author Alan Yeh
- * @since 2023/05/01
- */
+/// 方法签名
+///
+/// @author Alan Yeh
 public class MethodSignature {
-    /**
-     * 签名
-     */
+    /// 签名
     @Getter
     private final String signature;
 
@@ -59,47 +54,39 @@ public class MethodSignature {
                 + ")";
     }
 
-    /**
-     * 根据指定方法创建方法参数
-     *
-     * @param method 方法
-     * @return 方法参数
-     */
+    /// 根据指定方法创建方法参数
+    ///
+    /// @param method 方法
+    /// @return 方法参数
     public static MethodSignature of(Method method) {
         return new MethodSignature(method);
     }
 
-    /**
-     * 根据指定类型下的指定方法创建方法签名
-     *
-     * @param type           类型
-     * @param name           方法名
-     * @param parameterTypes 参数类型
-     * @return 方法签名
-     * @throws NoSuchMethodException 找不到指定的方法
-     */
+    /// 根据指定类型下的指定方法创建方法签名
+    ///
+    /// @param type           类型
+    /// @param name           方法名
+    /// @param parameterTypes 参数类型
+    /// @return 方法签名
+    /// @throws NoSuchMethodException 找不到指定的方法
     public static MethodSignature of(Class<?> type, String name, Class<?>... parameterTypes) throws NoSuchMethodException {
         return new MethodSignature(type.getMethod(name, parameterTypes));
     }
 
-    /**
-     * 创建方法签名
-     *
-     * @param name           方法名
-     * @param returnType     返回类型
-     * @param parameterTypes 参数类型
-     * @return 方法签名
-     */
+    /// 创建方法签名
+    ///
+    /// @param name           方法名
+    /// @param returnType     返回类型
+    /// @param parameterTypes 参数类型
+    /// @return 方法签名
     public static MethodSignature of(String name, Class<?> returnType, Class<?>... parameterTypes) {
         return new MethodSignature(name, returnType, parameterTypes);
     }
 
-    /**
-     * 查找指定类型与本方法签名相符的方法
-     *
-     * @param type 类型
-     * @return 方法
-     */
+    /// 查找指定类型与本方法签名相符的方法
+    ///
+    /// @param type 类型
+    /// @return 方法
     public @Nullable Method findMethod(@NotNull Class<?> type) {
         var methods = type.getDeclaredMethods();
         for (var method : methods) {
@@ -111,13 +98,11 @@ public class MethodSignature {
         return null;
     }
 
-    /**
-     * 查找指定类型与本方法签名相符的方法
-     *
-     * @param type     类型
-     * @param modifier 方法修饰
-     * @return 方法
-     */
+    /// 查找指定类型与本方法签名相符的方法
+    ///
+    /// @param type     类型
+    /// @param modifier 方法修饰
+    /// @return 方法
     public @Nullable Method findMethod(@Nonnull Class<?> type, int modifier) {
         var methods = type.getDeclaredMethods();
         for (var method : methods) {

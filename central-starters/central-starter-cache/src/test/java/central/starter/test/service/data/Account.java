@@ -33,12 +33,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * Account
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// Account
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,18 +44,12 @@ public class Account extends ModifiableEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = -211918724358308182L;
 
-    /**
-     * 名称
-     */
+    /// 名称
     private String name;
 
-    /**
-     * 部门主键
-     */
+    /// 部门主键
     private String departmentId;
 
-    /**
-     * 部门信息
-     */
+    /// 部门信息
     private Department department;
 }

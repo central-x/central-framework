@@ -34,31 +34,24 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * 可修改的代理
- *
- * @author Alan Yeh
- * @since 2022/10/25
- */
+/// 可修改的代理
+///
+/// @author Alan Yeh
 public interface ModifiableProvider<Data extends ModifiableEntity, Input extends Serializable> extends Provider<Data, Input> {
-    /**
-     * 更新数据
-     *
-     * @param input    数据输入
-     * @param operator 操作人
-     * @return 更新后的实体数据
-     */
+    /// 更新数据
+    ///
+    /// @param input    数据输入
+    /// @param operator 操作人
+    /// @return 更新后的实体数据
     Data update(@Validated({Update.class, Default.class}) Input input, String operator);
 
     Data update(@Validated({Update.class, Default.class}) Input input, String operator, @RequestHeader(XForwardedHeaders.TENANT) String tenant);
 
-    /**
-     * 批量更新数据
-     *
-     * @param inputs   数据输入
-     * @param operator 操作人
-     * @return 更新后的实体数据
-     */
+    /// 批量更新数据
+    ///
+    /// @param inputs   数据输入
+    /// @param operator 操作人
+    /// @return 更新后的实体数据
     List<Data> updateBatch(@Validated({Update.class, Default.class}) List<Input> inputs, String operator);
 
     List<Data> updateBatch(@Validated({Update.class, Default.class}) List<Input> inputs, String operator, @RequestHeader(XForwardedHeaders.TENANT) String tenant);

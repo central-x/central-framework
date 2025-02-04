@@ -34,12 +34,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 异常处理链
- *
- * @author Alan Yeh
- * @since 2024/06/13
- */
+/// 异常处理链
+///
+/// @author Alan Yeh
 public class ExceptionHandleChain {
     // 用户自定义异常处理器
     private final List<ExceptionHandler> handlers;
@@ -53,13 +50,11 @@ public class ExceptionHandleChain {
         AnnotationAwareOrderComparator.sort(this.handlers);
     }
 
-    /**
-     * 处理异常
-     *
-     * @param method    抛出异常的方法
-     * @param throwable 待处理的异常
-     * @return 已处理的异常
-     */
+    /// 处理异常
+    ///
+    /// @param method    抛出异常的方法
+    /// @param throwable 待处理的异常
+    /// @return 已处理的异常
     public ResponseStatusException handle(Method method, Throwable throwable) {
         if (throwable instanceof InvocationTargetException exception) {
             throwable = exception.getTargetException();

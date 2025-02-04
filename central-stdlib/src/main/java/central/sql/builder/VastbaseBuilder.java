@@ -24,11 +24,8 @@
 
 package central.sql.builder;
 
-/**
- * 海量数据
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// 海量数据
+///
+/// @author Alan Yeh
 public class VastbaseBuilder extends StandardSqlBuilder {
 }

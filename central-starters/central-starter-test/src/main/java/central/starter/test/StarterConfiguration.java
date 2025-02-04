@@ -26,12 +26,9 @@ package central.starter.test;
 
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Starter Configuration
- *
- * @author Alan Yeh
- * @since 2024/07/01
- */
+/// Starter Configuration
+///
+/// @author Alan Yeh
 @Configuration
 public class StarterConfiguration {
 

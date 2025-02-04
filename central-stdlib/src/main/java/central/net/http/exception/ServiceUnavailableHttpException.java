@@ -31,12 +31,9 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
 
-/**
- * Service Unavailable Http Exception
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Service Unavailable Http Exception
+///
+/// @author Alan Yeh
 public class ServiceUnavailableHttpException extends ServerSeriesHttpException {
     @Serial
     private static final long serialVersionUID = 1226339196091521813L;

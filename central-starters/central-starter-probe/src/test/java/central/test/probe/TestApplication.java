@@ -27,12 +27,9 @@ package central.test.probe;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * 测试应用
- *
- * @author Alan Yeh
- * @since 2023/12/29
- */
+/// 测试应用
+///
+/// @author Alan Yeh
 @SpringBootApplication
 public class TestApplication {
     public static void main(String[] args) {

@@ -26,15 +26,11 @@ package central.starter.logging.trace.servlet;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.DispatcherServlet;
 
-/**
- * Trace Configuration
- *
- * @author Alan Yeh
- * @since 2022/10/25
- */
+/// Trace Configuration
+///
+/// @author Alan Yeh
 @Configuration
 //@Import(TraceFilter.class)
 @ConditionalOnBean(DispatcherServlet.class)

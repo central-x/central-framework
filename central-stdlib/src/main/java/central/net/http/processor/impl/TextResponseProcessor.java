@@ -38,14 +38,11 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
-/**
- * Text Body Processor
- * <p>
- * 如果响应体的 MediaType 是 application/json，则提前处理，方便后续处理
- *
- * @author Alan Yeh
- * @since 2025/01/22
- */
+/// Text Body Processor
+///
+/// 如果响应体的 MediaType 是 application/json，则提前处理，方便后续处理
+///
+/// @author Alan Yeh
 public class TextResponseProcessor implements HttpProcessor, ReactiveHttpProcessor {
     @Override
     public boolean predicate(HttpRequest target) {

@@ -29,7 +29,9 @@ import central.bean.Page;
 import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.lang.Stringx;
-import central.util.*;
+import central.util.LazyValue;
+import central.util.Listx;
+import central.util.Objectx;
 import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -42,29 +44,24 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-/**
- * 类型引用
- * <p>
- * 由于泛型在使用的过程中，会被类型擦除，因此可能需要比较麻烦才能拿到类型信息
- * 根据 Java 的特性，可以通过继承的方式将泛型固化下来
- * <p>
- * 本类通过声明匿名类的方式，可以将泛型正确地固化下来。
- * <p>
- * {@code var reference = new TypeReference<List<String>>(){} }
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// 类型引用
+///
+/// 由于泛型在使用的过程中，会被类型擦除，因此可能需要比较麻烦才能拿到类型信息
+/// 根据 Java 的特性，可以通过继承的方式将泛型固化下来
+///
+/// 本类通过声明匿名类的方式，可以将泛型正确地固化下来。
+///
+/// ```java
+/// var reference = new TypeReference<List<String>>(){}
+/// ```
+///
+/// @author Alan Yeh
 public abstract class TypeRef<T> {
-    /**
-     * 类型
-     */
+    /// 类型
     @Getter
     private final Type type;
 
-    /**
-     * 获取类型名称
-     */
+    /// 获取类型名称
     public String getName() {
         return this.type.getTypeName();
     }
@@ -81,97 +78,77 @@ public abstract class TypeRef<T> {
         return null;
     });
 
-    /**
-     * 将类型转换为 Class
-     */
+    /// 将类型转换为 Class
     public Class<T> getRawClass() {
         return this.rawClass.get();
     }
 
     private final LazyValue<Type> rawType = new LazyValue<>(() -> isParameterized() ? getParameterizedType().getRawType() : getType());
 
-    /**
-     * 获取原始类型
-     */
+    /// 获取原始类型
     public Type getRawType() {
         return this.rawType.get();
     }
 
     private final LazyValue<ParameterizedType> parameterizedType = new LazyValue<>(() -> getType() instanceof ParameterizedType p ? p : null);
 
-    /**
-     * 获取泛型类型
-     * 如果该类型不是泛型，将会返回 null
-     * 可以通过 {@link #isParameterized()} 方法检查
-     */
+    /// 获取泛型类型
+    ///
+    /// 如果该类型不是泛型，将会返回 null
+    ///
+    /// 可以通过 [#isParameterized()] 方法检查
     public ParameterizedType getParameterizedType() {
         return this.parameterizedType.get();
     }
 
     private final LazyValue<List<? extends TypeRef<?>>> actualTypeArguments = new LazyValue<>(() -> getParameterizedType() == null ? Collections.emptyList() : Arrayx.asStream(getParameterizedType().getActualTypeArguments()).map(TypeRef::of).toList());
 
-    /**
-     * 获取泛型参 类型
-     */
+    /// 获取泛型参 类型
     public List<? extends TypeRef<?>> getActualTypeArguments() {
         return this.actualTypeArguments.get();
     }
 
-    /**
-     * 获取泛型参数类型
-     *
-     * @param index 指定下标
-     */
+    /// 获取泛型参数类型
+    ///
+    /// @param index 指定下标
     public TypeRef<?> getActualTypeArgument(int index) {
         return this.getActualTypeArguments().get(index);
     }
 
-    /**
-     * 判断当前类型是否泛型
-     */
+    /// 判断当前类型是否泛型
     public boolean isParameterized() {
         return this.type instanceof ParameterizedType;
     }
 
     private final LazyValue<TypeRef<?>> superType = new LazyValue<>(() -> getRawClass() == null ? null : TypeRef.of(getRawClass().getGenericSuperclass()));
 
-    /**
-     * 获取父类型
-     */
+    /// 获取父类型
     public TypeRef<?> getSuperType() {
         return this.superType.get();
     }
 
     private final LazyValue<List<? extends TypeRef<?>>> interfaceTypes = new LazyValue<>(() -> getRawClass() == null ? Collections.emptyList() : Arrayx.asStream(getRawClass().getAnnotatedInterfaces()).map(AnnotatedType::getType).map(TypeRef::of).toList());
 
-    /**
-     * 获取继承的接口
-     */
+    /// 获取继承的接口
     public List<? extends TypeRef<?>> getInterfaceTypes() {
         return this.interfaceTypes.get();
     }
 
-    /**
-     * 获取继承的接口
-     *
-     * @param index 下标
-     */
+    /// 获取继承的接口
+    ///
+    /// @param index 下标
     public TypeRef<?> getInterfaceType(int index) {
         return this.getInterfaceTypes().get(index);
     }
 
-    /**
-     * 类型是否枚举类型
-     */
+    /// 类型是否枚举类型
     public boolean isEnum() {
         return getRawClass().isEnum();
     }
 
     private final LazyValue<List<FieldRef>> fields = new LazyValue<>(() -> getRawClass() == null ? Collections.emptyList() : Arrayx.asStream(getRawClass().getDeclaredFields()).map(FieldRef::of).toList());
 
-    /**
-     * 获取字段信息
-     */
+    /// 获取字段信息
     public List<FieldRef> getFields() {
         return fields.get();
     }
@@ -192,12 +169,11 @@ public abstract class TypeRef<T> {
         return Listx.asStream(this.getProperties()).filter(it -> property.equals(it.getName())).findFirst().orElse(null);
     }
 
-    /**
-     * 创建实例
-     * 根据指定参数查找构造函数，并通过该构造函数创建实例
-     *
-     * @param args 构造参数
-     */
+    /// 创建实例
+    ///
+    /// 根据指定参数查找构造函数，并通过该构造函数创建实例
+    ///
+    /// @param args 构造参数
     @SneakyThrows
     public InstanceRef<T> newInstance(Object... args) {
         Class<T> clazz = this.getRawClass();
@@ -275,22 +251,18 @@ public abstract class TypeRef<T> {
         }
     }
 
-    /**
-     * 根据 Type 创建 TypeReference
-     * <p>
-     * 也可以使用 {@link Method#getGenericReturnType()} 的值作为参数
-     */
+    /// 根据 Type 创建 TypeReference
+    ///
+    /// 也可以使用 [Method#getGenericReturnType()] 的值作为参数
     public static <T> TypeRef<T> of(Type type) {
         return new TypeRef<>(type) {
         };
     }
 
-    /**
-     * 根据 Class 创建 TypeReference
-     *
-     * @param type 类
-     * @param <T>  类型
-     */
+    /// 根据 Class 创建 TypeReference
+    ///
+    /// @param type 类
+    /// @param <T>  类型
     public static <T> TypeRef<T> of(Class<T> type) {
         return new TypeRef<>(type) {
         };
@@ -303,95 +275,77 @@ public abstract class TypeRef<T> {
         };
     }
 
-    /**
-     * 构建 List 类型
-     *
-     * @param elementType 元素类型
-     */
+    /// 构建 List 类型
+    ///
+    /// @param elementType 元素类型
     public static <T extends List<V>, V> TypeRef<T> ofList(TypeRef<V> elementType) {
         return new TypeRef<>(new ParameterizedTypeImpl(List.class, new Type[]{elementType.getType()})) {
         };
     }
 
-    /**
-     * 构建 List 类型
-     *
-     * @param elementType 元素类型
-     */
+    /// 构建 List 类型
+    ///
+    /// @param elementType 元素类型
     public static <T extends List<E>, E> TypeRef<T> ofList(Class<? extends E> elementType) {
         return new TypeRef<>(new ParameterizedTypeImpl(List.class, new Type[]{elementType})) {
         };
     }
 
-    /**
-     * 构建 Set 类型
-     *
-     * @param elementType 元素类型
-     */
+    /// 构建 Set 类型
+    ///
+    /// @param elementType 元素类型
     public static <T extends Set<V>, V> TypeRef<T> ofSet(TypeRef<V> elementType) {
         return new TypeRef<>(new ParameterizedTypeImpl(Set.class, new Type[]{elementType.getType()})) {
         };
     }
 
-    /**
-     * 构建 Set 类型
-     *
-     * @param elementType 元素类型
-     */
+    /// 构建 Set 类型
+    ///
+    /// @param elementType 元素类型
     public static <T extends Set<E>, E> TypeRef<T> ofSet(Class<? extends E> elementType) {
         return new TypeRef<>(new ParameterizedTypeImpl(Set.class, new Type[]{elementType})) {
         };
     }
 
-    /**
-     * 构建 Map 类型
-     *
-     * @param keyType   Key 类型
-     * @param valueType Value 类型
-     */
+    /// 构建 Map 类型
+    ///
+    /// @param keyType   Key 类型
+    /// @param valueType Value 类型
     public static <T extends Map<K, V>, K, V> TypeRef<T> ofMap(TypeRef<K> keyType, TypeRef<V> valueType) {
         return new TypeRef<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType.getType(), valueType.getType()})) {
         };
     }
 
-    /**
-     * 构建 Map 类型
-     *
-     * @param keyType   Key 类型
-     * @param valueType Value 类型
-     */
+    /// 构建 Map 类型
+    ///
+    /// @param keyType   Key 类型
+    /// @param valueType Value 类型
     public static <T extends Map<K, V>, K, V> TypeRef<T> ofMap(Class<? extends K> keyType, TypeRef<V> valueType) {
         return new TypeRef<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType, valueType.getType()})) {
         };
     }
 
-    /**
-     * 构建 Map 类型
-     *
-     * @param keyType   Key 类型
-     * @param valueType Value 类型
-     */
+    /// 构建 Map 类型
+    ///
+    /// @param keyType   Key 类型
+    /// @param valueType Value 类型
     public static <T extends Map<K, V>, K, V> TypeRef<T> ofMap(Class<? extends K> keyType, Class<? extends V> valueType) {
         return new TypeRef<>(new ParameterizedTypeImpl(Map.class, new Type[]{keyType, valueType})) {
         };
     }
 
-    /**
-     * 构建 Page 类型
-     *
-     * @param valueType Value 类型
-     */
+    /// 构建 Page 类型
+    ///
+    /// @param valueType Value 类型
     public static <T extends Serializable> TypeRef<Page<T>> ofPage(Class<T> valueType) {
         return new TypeRef<>(new ParameterizedTypeImpl(Page.class, new Type[]{valueType})) {
         };
     }
 
-    /**
-     * 手动构建类型引用
-     *
-     * @param rawType             原生类型
-     * @param actualTypeArguments 泛型参数
-     */
+    /// 手动构建类型引用
+    ///
+    /// @param rawType             原生类型
+    /// @param actualTypeArguments 泛型参数
     public static <T> TypeRef<T> ofParameterized(Type rawType, Type... actualTypeArguments) {
         return new TypeRef<>(new ParameterizedTypeImpl(rawType, actualTypeArguments)) {
         };

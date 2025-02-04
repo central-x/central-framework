@@ -35,12 +35,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 
-/**
- * 帐户实体
- *
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// 帐户实体
+///
+/// @author Alan Yeh
 @Data
 @Table(name = "XT_ACCOUNT")
 @NoArgsConstructor

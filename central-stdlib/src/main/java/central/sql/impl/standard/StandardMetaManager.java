@@ -41,7 +41,9 @@ import central.sql.meta.entity.EntityMeta;
 import central.sql.meta.entity.ForeignMeta;
 import central.sql.meta.entity.ForeignTableMeta;
 import central.sql.meta.entity.PropertyMeta;
-import central.util.*;
+import central.util.Listx;
+import central.util.Mapx;
+import central.util.Objectx;
 import central.validation.Label;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -63,12 +65,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
-/**
- * 默认的元数据管理
- *
- * @author Alan Yeh
- * @since 2022/09/13
- */
+/// 默认的元数据管理
+///
+/// @author Alan Yeh
 @ExtensionMethod({Stringx.class, Listx.class, Mapx.class, Arrayx.class})
 public class StandardMetaManager implements SqlMetaManager {
     private final Predicate<String> matcher;
@@ -221,7 +220,7 @@ public class StandardMetaManager implements SqlMetaManager {
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Entity Meta
     private final Map<String, EntityMeta> metas = new ConcurrentHashMap<>();
 

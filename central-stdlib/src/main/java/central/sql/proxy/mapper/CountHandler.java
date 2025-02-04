@@ -24,7 +24,6 @@
 
 package central.sql.proxy.mapper;
 
-import central.sql.query.Conditions;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.data.Entity;
@@ -32,17 +31,15 @@ import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
+import central.sql.query.Conditions;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
-/**
- * Count Mapper
- *
- * @author Alan Yeh
- * @see Mapper#count
- * @since 2022/08/11
- */
+/// Count Mapper
+///
+/// @author Alan Yeh
+/// @see Mapper#count
 public class CountHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {

@@ -31,12 +31,9 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
 
-/**
- * Internal Server Error Http Exception
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Internal Server Error Http Exception
+///
+/// @author Alan Yeh
 public class InternalServerErrorHttpException extends ServerSeriesHttpException {
     @Serial
     private static final long serialVersionUID = -3641513511553857590L;

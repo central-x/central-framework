@@ -32,12 +32,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-/**
- * 内存缓存集合(TreeSet)
- *
- * @author Alan Yeh
- * @since 2023/07/27
- */
+/// 内存缓存集合(TreeSet)
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class MemoryCacheZSet implements CacheSet {
     private final String key;

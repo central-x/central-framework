@@ -31,41 +31,28 @@ import graphql.schema.GraphQLScalarType;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * GraphQL 配置
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// GraphQL 配置
+///
+/// @author Alan Yeh
 public interface GraphQLConfigurer {
-    /**
-     * 添加标量
-     */
+    /// 添加标量
     default List<GraphQLScalarType> getScalars() {
         return Collections.emptyList();
     }
 
-    /**
-     * 添加参数解析器
-     */
+    /// 添加参数解析器
     default List<ParameterResolver> getParameterResolvers() {
         return Collections.emptyList();
     }
 
-    /**
-     * 添加异常处理器
-     */
+    /// 添加异常处理器
     default List<ExceptionHandler> getExceptionHandlers() {
         return Collections.emptyList();
     }
 
-    /**
-     * 获取 Query 对象
-     */
+    /// 获取 Query 对象
     Object getQuery();
 
-    /**
-     * 获取 Mutation 对象
-     */
+    /// 获取 Mutation 对象
     Object getMutation();
 }

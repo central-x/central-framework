@@ -25,36 +25,27 @@
 package central.sql.impl.standard;
 
 import central.lang.Assertx;
+import central.lang.Stringx;
 import central.security.cipher.CipherImpl;
 import central.sql.SqlCipher;
-import central.lang.Stringx;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.security.GeneralSecurityException;
 import java.security.Key;
 
-/**
- * Cipherx
- *
- * @author Alan Yeh
- * @since 2022/08/05
- */
+/// Cipherx
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class StandardCipher implements SqlCipher {
-    /**
-     * 加密器
-     */
+    /// 加密器
     private final CipherImpl cipher;
 
-    /**
-     * 加密密钥
-     */
+    /// 加密密钥
     private final Key encryptKey;
 
-    /**
-     * 解密密钥
-     */
+    /// 解密密钥
     private final Key decryptKey;
 
     @Override

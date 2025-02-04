@@ -31,13 +31,10 @@ import org.springframework.util.ClassUtils;
 
 import java.lang.annotation.Annotation;
 
-/**
- * 查找方法上面的注解
- *
- * @author Alan Yeh
- * @see org.apache.shiro.spring.aop.SpringAnnotationResolver
- * @since 2023/02/13
- */
+/// 查找方法上面的注解
+///
+/// @author Alan Yeh
+/// @see org.apache.shiro.spring.aop.SpringAnnotationResolver
 public class MethodAnnotationResolver implements AnnotationResolver {
     @Override
     public Annotation getAnnotation(MethodInvocation mi, Class<? extends Annotation> clazz) {

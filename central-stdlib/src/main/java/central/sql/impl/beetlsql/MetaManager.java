@@ -1,4 +1,4 @@
-///*
+/// *
 // * MIT License
 // *
 // * Copyright (c) 2022-present Alan Yeh <alan@yeh.cn>
@@ -34,31 +34,25 @@
 //import java.util.Map;
 //import java.util.concurrent.ConcurrentHashMap;
 //
-///**
-// * 元数据管理
-// *
-// * @author Alan Yeh
-// * @since 2022/08/05
-// */
+///// 元数据管理
+/////
+///// @author Alan Yeh
 //public class MetaManager {
 //
 //    private final Map<String, EntityMeta> metas = new ConcurrentHashMap<>();
 //
-//    /**
-//     * 判断是否存在指定的元数据
-//     */
+//    /// 判断是否存在指定的元数据
 //    public boolean contains(Class<? extends Entity> entity) {
 //        return this.metas.containsKey(entity.getName());
 //    }
 //
-//    /**
-//     * 获取实体元数据
-//     * 如果没有缓存，则重新构建一个新的
-//     *
-//     * @param executor 执行器
-//     * @param entity   实体
-//     * @return 实体元数据
-//     */
+//    /// 获取实体元数据
+//    ///
+//    /// 如果没有缓存，则重新构建一个新的
+//    ///
+//    /// @param executor 执行器
+//    /// @param entity   实体
+//    /// @return 实体元数据
 //    public EntityMeta getEntity(SqlExecutor executor, Class<? extends Entity> entity) {
 //        synchronized (MetaManager.class) {
 //            var meta = metas.get(entity.getName());
@@ -77,13 +71,11 @@
 //        }
 //    }
 //
-//    /**
-//     * 构建实体的元数据
-//     *
-//     * @param executor Sql 执行器
-//     * @param entity   实体
-//     * @param meta     实体元数据
-//     */
+//    /// 构建实体的元数据
+//    ///
+//    /// @param executor Sql 执行器
+//    /// @param entity   实体
+//    /// @param meta     实体元数据
 //    @SneakyThrows(SQLException.class)
 //    private void buildEntity(SqlExecutor executor, Class<? extends Entity> entity, EntityMeta meta) {
 //        meta.setType(entity);

@@ -27,12 +27,9 @@ package central.util.converter.impl.lang;
 import central.util.converter.ConvertException;
 import central.util.converter.Converter;
 
-/**
- * Float Converter
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Float Converter
+///
+/// @author Alan Yeh
 public class FloatConverter implements Converter<Float> {
     @Override
     public boolean support(Class<?> source) {

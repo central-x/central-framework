@@ -39,12 +39,9 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.util.Objects;
 
-/**
- * GraphQL 原生参数注入
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// GraphQL 原生参数注入
+///
+/// @author Alan Yeh
 public class GraphQLBeanParameterResolver implements ParameterResolver {
     @Override
     public boolean support(@Nonnull Class<?> clazz, @Nonnull Method method, @Nonnull Parameter parameter) {

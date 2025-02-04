@@ -24,8 +24,8 @@
 
 package central.net.http.executor.okhttp.body;
 
-import central.net.http.body.Body;
 import central.io.IOStreamx;
+import central.net.http.body.Body;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import okhttp3.MediaType;
@@ -35,12 +35,9 @@ import okio.Okio;
 
 import java.io.IOException;
 
-/**
- * 请求体包装
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 请求体包装
+///
+/// @author Alan Yeh
 public class WrapperBody extends RequestBody {
     private final Body body;
 

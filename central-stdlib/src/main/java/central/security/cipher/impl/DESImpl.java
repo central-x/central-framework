@@ -40,12 +40,9 @@ import java.security.Key;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-/**
- * DES 加解密算法
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// DES 加解密算法
+///
+/// @author Alan Yeh
 public class DESImpl implements CipherImpl {
     private static final String ALGORITHM = "DES";
 
@@ -64,23 +61,21 @@ public class DESImpl implements CipherImpl {
         return new KeyPair(key, key);
     }
 
-    /**
-     * 获取 DES Key
-     * 加密密钥和钥密密钥是相同的
-     *
-     * @param keySpec Key Spec
-     */
+    /// 获取 DES Key
+    ///
+    /// 加密密钥和钥密密钥是相同的
+    ///
+    /// @param keySpec Key Spec
     @Override
     public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return this.getKey(keySpec);
     }
 
-    /**
-     * 获取 DES Key
-     * 加密密钥和钥密密钥是相同的
-     *
-     * @param keySpec Key Spec
-     */
+    /// 获取 DES Key
+    ///
+    /// 加密密钥和钥密密钥是相同的
+    ///
+    /// @param keySpec Key Spec
     @Override
     public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return this.getKey(keySpec);

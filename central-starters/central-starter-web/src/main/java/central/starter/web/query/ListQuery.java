@@ -32,12 +32,9 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
-/**
- * 列表查询入参
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 列表查询入参
+///
+/// @author Alan Yeh
 @Data
 @EqualsAndHashCode(callSuper = true)
 public abstract class ListQuery<E extends Entity> extends KeywordQuery<E> {

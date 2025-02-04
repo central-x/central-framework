@@ -30,25 +30,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Orderable Entity
- * <p>
- * 可排序的实体
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// Orderable Entity
+///
+/// 可排序的实体
+///
+/// @author Alan Yeh
 public interface Orderable<T extends Orderable<T>> extends Comparable<T> {
-    /**
-     * 获取排序号
-     */
+    /// 获取排序号
     Integer getOrder();
 
-    /**
-     * 设置排序号
-     *
-     * @param order 排序号
-     */
+    /// 设置排序号
+    ///
+    /// @param order 排序号
     default void setOrder(Integer order) {
     }
 

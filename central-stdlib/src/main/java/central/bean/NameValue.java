@@ -31,24 +31,17 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * Name Value Pair
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Name Value Pair
+///
+/// @author Alan Yeh
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class NameValue<V extends Serializable> implements Serializable {
     @Serial
     private static final long serialVersionUID = -839267549007873480L;
-    /**
-     * Name
-     */
+    /// Name
     private String name;
-    /**
-     * Value
-     */
+    /// Value
     private V value;
 }

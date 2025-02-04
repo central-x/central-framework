@@ -33,13 +33,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.util.List;
 
-/**
- * Group
- * 项目组
- *
- * @author Alan Yeh
- * @since 2022/10/04
- */
+/// Group
+///
+/// 项目组
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -48,13 +46,9 @@ public class Group extends ModifiableEntity {
     @Serial
     private static final long serialVersionUID = 8897670338001315184L;
 
-    /**
-     * 名称
-     */
+    /// 名称
     private String name;
 
-    /**
-     * 项目列表
-     */
+    /// 项目列表
     private List<Project> projects;
 }

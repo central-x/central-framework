@@ -43,12 +43,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * Http Proxy
- *
- * @author Alan Yeh
- * @since 2022/07/19
- */
+/// Http Proxy
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class HttpProxy implements InvocationHandler {
 

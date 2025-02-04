@@ -24,15 +24,12 @@
 
 package central.net.http.processor;
 
-import central.pattern.chain.reactive.ReactiveProcessor;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
+import central.pattern.chain.reactive.ReactiveProcessor;
 
-/**
- * 响应式处理器
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 响应式处理器
+///
+/// @author Alan Yeh
 public interface ReactiveHttpProcessor extends ReactiveProcessor<HttpRequest, HttpResponse> {
 }

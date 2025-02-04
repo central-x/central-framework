@@ -25,8 +25,8 @@
 package central.starter.probe.core.endpoint.redis;
 
 import central.lang.Stringx;
-import central.starter.probe.core.endpoint.Endpoint;
 import central.starter.probe.core.ProbeException;
+import central.starter.probe.core.endpoint.Endpoint;
 import central.util.Logx;
 import central.validation.Label;
 import central.validation.Validatex;
@@ -45,12 +45,9 @@ import org.springframework.beans.factory.InitializingBean;
 
 import java.time.Duration;
 
-/**
- * Redis 探针
- *
- * @author Alan Yeh
- * @since 2023/12/29
- */
+/// Redis 探针
+///
+/// @author Alan Yeh
 @Slf4j
 @ExtensionMethod(Logx.class)
 public class RedisEndpoint implements Endpoint, InitializingBean, BeanNameAware {

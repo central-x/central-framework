@@ -37,12 +37,9 @@ import java.io.Serial;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-/**
- * Http Exception
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Http Exception
+///
+/// @author Alan Yeh
 @Getter
 public class HttpException extends RuntimeException {
     @Serial
@@ -72,12 +69,10 @@ public class HttpException extends RuntimeException {
             Mapx.entry(HttpStatus.Series.SERVER_ERROR, ServerSeriesHttpException::new)
     );
 
-    /**
-     * 快速构建 Http 异常
-     *
-     * @param request  请求
-     * @param response 响应
-     */
+    /// 快速构建 Http 异常
+    ///
+    /// @param request  请求
+    /// @param response 响应
     public static HttpException of(@Nonnull HttpRequest request, @Nullable HttpResponse response) {
         if (response != null) {
             {

@@ -26,28 +26,19 @@ package central.pluglet;
 
 import central.lang.reflect.InstanceRef;
 
-/**
- * 处理实例生命周期
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// 处理实例生命周期
+///
+/// @author Alan Yeh
 public interface LifeCycleProcessor {
-    /**
-     * 实例刚被创建
-     */
+    /// 实例刚被创建
     default void afterCreated(InstanceRef<?> instance) {
     }
 
-    /**
-     * 实例的属性已初始化
-     */
+    /// 实例的属性已初始化
     default void afterPropertySet(InstanceRef<?> instance) {
     }
 
-    /**
-     * 实例将被销毁
-     */
+    /// 实例将被销毁
     default void beforeDestroy(InstanceRef<?> instance) {
     }
 }

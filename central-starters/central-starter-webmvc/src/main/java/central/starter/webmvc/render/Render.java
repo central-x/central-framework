@@ -36,12 +36,9 @@ import org.springframework.http.MediaType;
 import java.io.IOException;
 import java.util.Objects;
 
-/**
- * Http 响应
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// Http 响应
+///
+/// @author Alan Yeh
 public abstract class Render<T extends Render<?>> {
     @Getter
     private final HttpServletRequest request;
@@ -51,56 +48,44 @@ public abstract class Render<T extends Render<?>> {
     @Getter
     private HttpStatusCode status;
 
-    /**
-     * 设置请求上下文
-     *
-     * @param request  HttpServletRequest
-     * @param response HttpServletResponse
-     */
+    /// 设置请求上下文
+    ///
+    /// @param request  HttpServletRequest
+    /// @param response HttpServletResponse
     public Render(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
         this.request = Objects.requireNonNull(request);
         this.response = Objects.requireNonNull(response);
     }
 
-    /**
-     * 设置响应头
-     */
+    /// 设置响应头
     @SuppressWarnings("unchecked")
     public T setHeader(String name, String value) {
         response.setHeader(name, value);
         return (T) this;
     }
 
-    /**
-     * 设置响应体类型
-     */
+    /// 设置响应体类型
     @SuppressWarnings("unchecked")
     public T setContentType(MediaType contentType) {
         response.setHeader(HttpHeaders.CONTENT_TYPE, contentType.toString());
         return (T) this;
     }
 
-    /**
-     * 添加 Cookie
-     */
+    /// 添加 Cookie
     @SuppressWarnings("unchecked")
     public T addCookie(Cookie cookie) {
         response.addCookie(cookie);
         return (T) this;
     }
 
-    /**
-     * 添加 Cookie
-     */
+    /// 添加 Cookie
     @SuppressWarnings("unchecked")
     public T addCookie(String name, String value) {
         response.addCookie(new Cookie(name, value));
         return (T) this;
     }
 
-    /**
-     * 设置状态码
-     */
+    /// 设置状态码
     @SuppressWarnings("unchecked")
     public T setStatus(HttpStatusCode status) {
         this.status = status;

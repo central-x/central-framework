@@ -29,12 +29,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.util.Map;
 
-/**
- * 不缓存
- *
- * @author Alan Yeh
- * @since 2024/01/04
- */
+/// 不缓存
+///
+/// @author Alan Yeh
 @ConditionalOnProperty(value = "central.probe.cache.enabled", havingValue = "false", matchIfMissing = true)
 public class NoneCache implements Cache {
     @Override

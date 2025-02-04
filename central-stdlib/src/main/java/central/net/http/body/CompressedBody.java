@@ -36,19 +36,14 @@ import java.io.InputStream;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPOutputStream;
 
-/**
- * 压缩请求体
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 压缩请求体
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class CompressedBody implements Body {
     private final Body delegate;
 
-    /**
-     * 压缩类型
-     */
+    /// 压缩类型
     private final CompressType type;
 
     @Override

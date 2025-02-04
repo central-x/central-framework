@@ -30,19 +30,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Listx Test Cases
- *
- * @author Alan Yeh
- * @since 2025/01/02
- */
+/// Listx Test Cases
+///
+/// @author Alan Yeh
 public class TestListx {
 
-    /**
-     * @see Listx#partition
-     */
+    /// @see Listx#partition
     @Test
-    public void case1(){
+    public void case1() {
         var source = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         var partitions = Listx.partition(source, 3);
 

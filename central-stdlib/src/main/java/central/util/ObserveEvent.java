@@ -24,17 +24,12 @@
 
 package central.util;
 
-/**
- * 变更事件
- *
- * @author Alan Yeh
- * @see Observable
- * @see Observer
- * @since 2022/11/11
- */
+/// 变更事件
+///
+/// @author Alan Yeh
+/// @see Observable
+/// @see Observer
 public interface ObserveEvent<O extends Observable<O>> {
-    /**
-     * 获取被观查者
-     */
+    /// 获取被观查者
     O getObservable();
 }

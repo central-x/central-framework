@@ -36,12 +36,9 @@ import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 脚本解析器
- *
- * @author Alan Yeh
- * @since 2022/08/09
- */
+/// 脚本解析器
+///
+/// @author Alan Yeh
 public class ScriptParser {
 
     public static List<SqlScript> parse(SqlBuilder builder, String content) throws SQLSyntaxErrorException {

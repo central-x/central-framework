@@ -24,12 +24,12 @@
 
 package central.net.http.processor.impl;
 
-import central.pattern.chain.ProcessChain;
-import central.pattern.chain.reactive.ReactiveProcessChain;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
 import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.ReactiveHttpProcessor;
+import central.pattern.chain.ProcessChain;
+import central.pattern.chain.reactive.ReactiveProcessChain;
 import central.util.Logx;
 import lombok.experimental.ExtensionMethod;
 import org.slf4j.Logger;
@@ -40,12 +40,9 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Logger
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Logger
+///
+/// @author Alan Yeh
 @ExtensionMethod(Logx.class)
 public class LoggerProcessor implements HttpProcessor, ReactiveHttpProcessor {
 

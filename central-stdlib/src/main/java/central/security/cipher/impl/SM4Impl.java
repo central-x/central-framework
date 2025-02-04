@@ -44,14 +44,13 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
 
-/**
- * 国密 SM4 加解密算法 (对称算法)
- * 无线局域网标准的分组数据算法。对称加密，密钥长度和分组长度均为 128 位
- * 本实现采用 CBC 分组加密
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// 国密 SM4 加解密算法 (对称算法)
+///
+/// 无线局域网标准的分组数据算法。对称加密，密钥长度和分组长度均为 128 位
+///
+/// 本实现采用 CBC 分组加密
+///
+/// @author Alan Yeh
 public class SM4Impl implements CipherImpl {
     // SM4 supports 128-bit(16 bytes) secret key
     public static final int KEY_SIZE = 128 / 8;

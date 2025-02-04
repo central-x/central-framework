@@ -29,12 +29,9 @@ import central.util.converter.Converter;
 
 import java.math.BigDecimal;
 
-/**
- * BigDecimal Converter
- *
- * @author Alan Yeh
- * @since 2022/09/16
- */
+/// BigDecimal Converter
+///
+/// @author Alan Yeh
 public class BigDecimalConverter implements Converter<BigDecimal> {
     @Override
     public boolean support(Class<?> source) {

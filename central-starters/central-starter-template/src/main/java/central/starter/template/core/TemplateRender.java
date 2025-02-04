@@ -26,20 +26,15 @@ package central.starter.template.core;
 
 import java.util.Map;
 
-/**
- * 模板渲染引擎
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// 模板渲染引擎
+///
+/// @author Alan Yeh
 public interface TemplateRender {
 
-    /**
-     * 渲染
-     *
-     * @param template 模板字符串
-     * @param params   参数
-     * @return 渲染后的字符串
-     */
+    /// 渲染
+    ///
+    /// @param template 模板字符串
+    /// @param params   参数
+    /// @return 渲染后的字符串
     String render(String template, Map<String, Object> params);
 }

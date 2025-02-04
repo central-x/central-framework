@@ -33,12 +33,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Method;
 
-/**
- * 默认异常处理器
- *
- * @author Alan Yeh
- * @since 2024/06/13
- */
+/// 默认异常处理器
+///
+/// @author Alan Yeh
 public class FallbackHandler implements ExceptionHandler {
     @Override
     public boolean support(Throwable throwable) {

@@ -41,12 +41,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * GraphQL Test Cases
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// GraphQL Test Cases
+///
+/// @author Alan Yeh
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = TestApplication.class)
 public class TestGraphQL {
 
@@ -65,9 +62,7 @@ public class TestGraphQL {
     }
 
 
-    /**
-     * 测试 DataLoader、GraphQLBean 注入等
-     */
+    /// 测试 DataLoader、GraphQLBean 注入等
     @Test
     public void test1() {
         String graphql = """
@@ -93,9 +88,7 @@ public class TestGraphQL {
         System.out.println(result);
     }
 
-    /**
-     * 测试 DataLoader 注入等
-     */
+    /// 测试 DataLoader 注入等
     @Test
     public void test2() {
         String graphql = """
@@ -120,9 +113,7 @@ public class TestGraphQL {
         System.out.println(result);
     }
 
-    /**
-     * 测试请求头、默认值、参数转换、SpringBean 注入
-     */
+    /// 测试请求头、默认值、参数转换、SpringBean 注入
     @Test
     public void test3() {
         String graphql = """

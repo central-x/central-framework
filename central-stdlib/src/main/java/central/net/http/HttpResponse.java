@@ -29,22 +29,15 @@ import lombok.Getter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
-/**
- * Http 响应
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Http 响应
+///
+/// @author Alan Yeh
 public abstract class HttpResponse implements AutoCloseable {
-    /**
-     * 响应创建时间
-     */
+    /// 响应创建时间
     @Getter
     private final long timestamp = System.currentTimeMillis();
 
-    /**
-     * 此响应的请求
-     */
+    /// 此响应的请求
     @Getter
     private final HttpRequest request;
 
@@ -52,26 +45,18 @@ public abstract class HttpResponse implements AutoCloseable {
         this.request = request;
     }
 
-    /**
-     * 状态码
-     */
+    /// 状态码
     public abstract HttpStatus getStatus();
 
-    /**
-     * 状态码在 [200, 300) 之间为成功
-     */
+    /// 状态码在 [200, 300) 之间为成功
     public boolean isSuccess() {
         return HttpStatus.Series.SUCCESSFUL == HttpStatus.Series.resolve(this.getStatus().value());
     }
 
-    /**
-     * 获取响应头
-     */
+    /// 获取响应头
     public abstract HttpHeaders getHeaders();
 
-    /**
-     * 获取响应体
-     */
+    /// 获取响应体
     public abstract Body getBody();
 
     @Override
@@ -81,9 +66,7 @@ public abstract class HttpResponse implements AutoCloseable {
         }
     }
 
-    /**
-     * 修改请求响应
-     */
+    /// 修改请求响应
     public static Builder mutate(HttpResponse response) {
         return new Builder(response.getRequest())
                 .status(response.getStatus())
@@ -91,9 +74,7 @@ public abstract class HttpResponse implements AutoCloseable {
                 .body(response.getBody());
     }
 
-    /**
-     * 修改响应体
-     */
+    /// 修改响应体
     public Builder mutate() {
         return new Builder(this.getRequest())
                 .status(this.getStatus())
@@ -101,9 +82,7 @@ public abstract class HttpResponse implements AutoCloseable {
                 .body(this.getBody());
     }
 
-    /**
-     * 响应构建器
-     */
+    /// 响应构建器
     public static class Builder {
         private final HttpRequest request;
 
@@ -113,9 +92,7 @@ public abstract class HttpResponse implements AutoCloseable {
 
         private HttpStatus status;
 
-        /**
-         * 修改状态码
-         */
+        /// 修改状态码
         public Builder status(HttpStatus status) {
             this.status = status;
             return this;
@@ -123,9 +100,7 @@ public abstract class HttpResponse implements AutoCloseable {
 
         private HttpHeaders headers;
 
-        /**
-         * 修改响应头
-         */
+        /// 修改响应头
         public Builder headers(HttpHeaders headers) {
             this.headers = headers;
             return this;
@@ -133,9 +108,7 @@ public abstract class HttpResponse implements AutoCloseable {
 
         private Body body;
 
-        /**
-         * 修改响应体
-         */
+        /// 修改响应体
         public Builder body(Body body) {
             this.body = body;
             return this;
@@ -146,9 +119,7 @@ public abstract class HttpResponse implements AutoCloseable {
         }
     }
 
-    /**
-     * 响应包装器
-     */
+    /// 响应包装器
     private static class ResponseWrapper extends HttpResponse {
         private final HttpStatus status;
         private final HttpHeaders headers;

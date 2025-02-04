@@ -29,15 +29,11 @@ import central.sql.datasource.migration.*;
 import central.util.Version;
 
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 
-/**
- * 用于测试新增表
- *
- * @author Alan Yeh
- * @since 2022/09/14
- */
+/// 用于测试新增表
+///
+/// @author Alan Yeh
 public class V2 extends Migration {
 
     public V2() {

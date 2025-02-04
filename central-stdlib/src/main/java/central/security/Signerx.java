@@ -28,46 +28,29 @@ import central.security.signer.SignerImpl;
 import central.security.signer.impl.*;
 import lombok.experimental.UtilityClass;
 
-/**
- * 数字签名算法
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// 数字签名算法
+///
+/// @author Alan Yeh
 @UtilityClass
 public class Signerx {
-    /**
-     * RSA 256 签名算法
-     */
+    /// RSA 256 签名算法
     public static final SignerImpl RSA_256 = new RSA256Impl();
 
-    /**
-     * RSA 384 签名算法
-     */
+    /// RSA 384 签名算法
     public static final SignerImpl RSA_384 = new RSA384Impl();
 
-    /**
-     * RSA 512 签名算法
-     */
+    /// RSA 512 签名算法
     public static final SignerImpl RSA_512 = new RSA512Impl();
 
-    /**
-     * SM2 签名算法
-     */
+    /// SM2 签名算法
     public static final SignerImpl SM2 = new SM2Impl();
 
-    /**
-     * ECDSA 256 签名算法
-     */
+    /// ECDSA 256 签名算法
     public static final SignerImpl ECDSA_256 = new ECDSA256Impl();
 
-    /**
-     * ECDSA 384 签名算法
-     */
+    /// ECDSA 384 签名算法
     public static final SignerImpl ECDSA_384 = new ECDSA384Impl();
 
-    /**
-     * ECDSA 512 签名算法
-     */
+    /// ECDSA 512 签名算法
     public static final SignerImpl ECDSA_512 = new ECDSA512Impl();
 }

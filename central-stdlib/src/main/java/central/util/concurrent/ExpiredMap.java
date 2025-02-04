@@ -36,12 +36,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 元素过期 Map
- *
- * @author Alan Yeh
- * @since 2022/11/09
- */
+/// 元素过期 Map
+///
+/// @author Alan Yeh
 public class ExpiredMap<K, V extends Expired> implements Map<K, V>, Closeable {
     private final Map<K, V> data = new ConcurrentHashMap<>();
 

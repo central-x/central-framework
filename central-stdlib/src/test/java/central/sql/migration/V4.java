@@ -26,16 +26,13 @@ package central.sql.migration;
 
 import central.sql.SqlType;
 import central.sql.datasource.migration.Column;
-import central.sql.datasource.migration.Migration;
 import central.sql.datasource.migration.Database;
+import central.sql.datasource.migration.Migration;
 import central.util.Version;
 
 import java.sql.SQLException;
 
-/**
- * @author Alan Yeh
- * @since 2022/09/16
- */
+/// @author Alan Yeh
 public class V4 extends Migration {
     public V4() {
         super(Version.of("1.0.2"), Version.of("1.0.3"));
@@ -62,7 +59,7 @@ public class V4 extends Migration {
         {
             // 重命名表
             var table = database.getTable("XT_NEW");
-            if (table != null){
+            if (table != null) {
                 table.rename("XT_ORIGIN");
             }
         }
@@ -71,7 +68,7 @@ public class V4 extends Migration {
             // 恢复字段
             var table = database.getTable("XT_ORIGIN");
             var column = table.getColumn("TEST_COL");
-            if (column == null){
+            if (column == null) {
                 table.addColumn(Column.of("TEST_COL", SqlType.LONG, "测试字段"));
             }
         }

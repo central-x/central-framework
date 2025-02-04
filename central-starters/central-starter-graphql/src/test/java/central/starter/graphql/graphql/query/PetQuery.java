@@ -48,12 +48,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * Pet Query
- *
- * @author Alan Yeh
- * @since 2022/09/29
- */
+/// Pet Query
+///
+/// @author Alan Yeh
 @Component
 @GraphQLSchema(path = "pet", types = PetDTO.class)
 public class PetQuery {
@@ -61,11 +58,9 @@ public class PetQuery {
     @Setter(onMethod_ = @Autowired)
     private PetPersistence persistence;
 
-    /**
-     * 批量数据加载器
-     *
-     * @param ids 主键
-     */
+    /// 批量数据加载器
+    ///
+    /// @param ids 主键
     @GraphQLBatchLoader
     public @Nonnull Map<String, PetDTO> batchLoader(@RequestParam List<String> ids) {
         var data = this.persistence.findByIds(ids);
@@ -73,11 +68,9 @@ public class PetQuery {
                 .collect(Collectors.toMap(Entity::getId, Function.identity()));
     }
 
-    /**
-     * 根据主键查询数据
-     *
-     * @param id 主键
-     */
+    /// 根据主键查询数据
+    ///
+    /// @param id 主键
     @GraphQLFetcher
     public @Nullable PetDTO findById(@RequestParam String id) {
         var data = this.persistence.findById(id);
@@ -85,25 +78,21 @@ public class PetQuery {
     }
 
 
-    /**
-     * 查询数据
-     *
-     * @param ids 主键
-     */
+    /// 查询数据
+    ///
+    /// @param ids 主键
     @GraphQLFetcher
     public @Nonnull List<PetDTO> findByIds(@RequestParam List<String> ids) {
         var data = this.persistence.findByIds(ids);
         return DTO.wrap(data, PetDTO.class);
     }
 
-    /**
-     * 查询数据
-     *
-     * @param limit      获取前 N 条数据
-     * @param offset     偏移量
-     * @param conditions 过滤条件
-     * @param orders     排序条件
-     */
+    /// 查询数据
+    ///
+    /// @param limit      获取前 N 条数据
+    /// @param offset     偏移量
+    /// @param conditions 过滤条件
+    /// @param orders     排序条件
     @GraphQLFetcher
     public @Nonnull List<PetDTO> findBy(@RequestParam(required = false) Long limit,
                                         @RequestParam(required = false) Long offset,
@@ -113,14 +102,12 @@ public class PetQuery {
         return DTO.wrap(data, PetDTO.class);
     }
 
-    /**
-     * 分页查询数据
-     *
-     * @param pageIndex  分页下标
-     * @param pageSize   分页大小
-     * @param conditions 过滤条件
-     * @param orders     排序条件
-     */
+    /// 分页查询数据
+    ///
+    /// @param pageIndex  分页下标
+    /// @param pageSize   分页大小
+    /// @param conditions 过滤条件
+    /// @param orders     排序条件
     @GraphQLFetcher
     public @Nonnull Page<PetDTO> pageBy(@RequestParam long pageIndex,
                                         @RequestParam long pageSize,
@@ -130,11 +117,9 @@ public class PetQuery {
         return DTO.wrap(data, PetDTO.class);
     }
 
-    /**
-     * 查询符合条件的数据数量
-     *
-     * @param conditions 筛选条件
-     */
+    /// 查询符合条件的数据数量
+    ///
+    /// @param conditions 筛选条件
     @GraphQLFetcher
     public Long countBy(@RequestParam Conditions<PetEntity> conditions) {
         return this.persistence.countBy(conditions);

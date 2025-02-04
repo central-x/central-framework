@@ -39,14 +39,11 @@ import java.net.CookiePolicy;
 import java.net.URI;
 import java.util.ArrayList;
 
-/**
- * Cookie Store
- * <p>
- * 用于解决测试过程中的会话问题
- *
- * @author Alan Yeh
- * @since 2024/07/01
- */
+/// Cookie Store
+///
+/// 用于解决测试过程中的会话问题
+///
+/// @author Alan Yeh
 public class CookieStore {
 
     private final CookieManager manager;
@@ -58,12 +55,10 @@ public class CookieStore {
         manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
     }
 
-    /**
-     * 从响应头里抓到需要保存的 Cookie
-     *
-     * @param uri      请求地址
-     * @param response 请求响应
-     */
+    /// 从响应头里抓到需要保存的 Cookie
+    ///
+    /// @param uri      请求地址
+    /// @param response 请求响应
     public void put(URI uri, HttpServletResponse response) throws IOException {
         var headers = new HttpHeaders();
 
@@ -75,22 +70,18 @@ public class CookieStore {
         this.put(uri, headers);
     }
 
-    /**
-     * 从响应头里抓到需要保存的 Cookie
-     *
-     * @param uriString 请求地址
-     * @param response  请求响应
-     */
+    /// 从响应头里抓到需要保存的 Cookie
+    ///
+    /// @param uriString 请求地址
+    /// @param response  请求响应
     public void put(String uriString, HttpServletResponse response) throws IOException {
         this.put(URI.create(uriString), response);
     }
 
-    /**
-     * 从响应头里抓到需要保存的 Cookie
-     *
-     * @param uri     请求地址
-     * @param headers 响应头
-     */
+    /// 从响应头里抓到需要保存的 Cookie
+    ///
+    /// @param uri     请求地址
+    /// @param headers 响应头
     public void put(URI uri, HttpHeaders headers) throws IOException {
         var targetUri = UriComponentsBuilder.fromUri(uri)
                 .scheme(this.uri.getScheme())
@@ -101,22 +92,18 @@ public class CookieStore {
         this.manager.put(targetUri, headers);
     }
 
-    /**
-     * 从响应头里抓到需要保存的 Cookie
-     *
-     * @param uriString 请求地址
-     * @param headers   响应头
-     */
+    /// 从响应头里抓到需要保存的 Cookie
+    ///
+    /// @param uriString 请求地址
+    /// @param headers   响应头
     public void put(String uriString, HttpHeaders headers) throws IOException {
         this.put(URI.create(uriString), headers);
     }
 
-    /**
-     * 获取请求指定 URI 时需要提供的请求头（Cookie 请求头）
-     *
-     * @param uri 待访问地址
-     * @return 请求头
-     */
+    /// 获取请求指定 URI 时需要提供的请求头（Cookie 请求头）
+    ///
+    /// @param uri 待访问地址
+    /// @return 请求头
     public HttpHeaders get(URI uri) throws IOException {
         var targetUri = UriComponentsBuilder.fromUri(uri)
                 .scheme(this.uri.getScheme())
@@ -127,22 +114,18 @@ public class CookieStore {
         return new HttpHeaders(new MultiValueMapAdapter<>(this.manager.get(targetUri, Mapx.newHashMap())));
     }
 
-    /**
-     * 获取请求指定 URI 时需要提供的请求头（Cookie 请求头）
-     *
-     * @param uriString 待访问地址
-     * @return 请求头
-     */
+    /// 获取请求指定 URI 时需要提供的请求头（Cookie 请求头）
+    ///
+    /// @param uriString 待访问地址
+    /// @return 请求头
     public HttpHeaders get(String uriString) throws IOException {
         return this.get(URI.create(uriString));
     }
 
-    /**
-     * 根据待访问地址获取需要的 Cookie
-     *
-     * @param uri 待访问地址
-     * @return Cookie
-     */
+    /// 根据待访问地址获取需要的 Cookie
+    ///
+    /// @param uri 待访问地址
+    /// @return Cookie
     public Cookie[] getCookies(URI uri) throws IOException {
         var targetUri = UriComponentsBuilder.fromUri(uri)
                 .scheme(this.uri.getScheme())
@@ -160,12 +143,10 @@ public class CookieStore {
         return cookies;
     }
 
-    /**
-     * 根据待访问地址获取需要的 Cookie
-     *
-     * @param uriString 待访问地址
-     * @return Cookie
-     */
+    /// 根据待访问地址获取需要的 Cookie
+    ///
+    /// @param uriString 待访问地址
+    /// @return Cookie
     public Cookie[] getCookies(String uriString) throws IOException {
         return this.getCookies(URI.create(uriString));
     }

@@ -26,12 +26,9 @@ package central.starter.cache;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * 缓存配置
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// 缓存配置
+///
+/// @author Alan Yeh
 @ConfigurationProperties("central.cache")
 public class CacheProperties {
 }

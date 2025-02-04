@@ -29,23 +29,20 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-/**
- * Memory Cache Value Test Cases
- *
- * @author Alan Yeh
- * @since 2023/07/27
- */
+/// Memory Cache Value Test Cases
+///
+/// @author Alan Yeh
 public class TestMemoryCacheValue {
 
     private final CacheRepository repository = new MemoryCacheRepository();
 
     @BeforeEach
-    public void before(){
+    public void before() {
         repository.clear();
     }
 
     @Test
-    public void case1(){
+    public void case1() {
         var value = repository.opsValue("mcube:test");
         value.set("test");
 

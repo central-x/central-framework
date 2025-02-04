@@ -34,13 +34,10 @@ import central.sql.proxy.MapperProxy;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
-/**
- * DeleteAll Handler
- *
- * @author Alan Yeh
- * @see Mapper#deleteAll
- * @since 2022/08/11
- */
+/// DeleteAll Handler
+///
+/// @author Alan Yeh
+/// @see Mapper#deleteAll
 public class DeleteAllHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {

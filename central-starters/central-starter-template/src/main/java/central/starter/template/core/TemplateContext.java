@@ -24,11 +24,8 @@
 
 package central.starter.template.core;
 
-/**
- * 模板上下文
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// 模板上下文
+///
+/// @author Alan Yeh
 public class TemplateContext {
 }

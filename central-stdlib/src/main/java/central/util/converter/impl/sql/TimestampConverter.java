@@ -29,12 +29,9 @@ import central.util.converter.Converter;
 
 import java.sql.Timestamp;
 
-/**
- * Timestamp Converter
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// Timestamp Converter
+///
+/// @author Alan Yeh
 public class TimestampConverter implements Converter<Timestamp> {
     @Override
     public boolean support(Class<?> source) {

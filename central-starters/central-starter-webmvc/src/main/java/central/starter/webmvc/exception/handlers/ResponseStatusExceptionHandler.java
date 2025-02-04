@@ -34,13 +34,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * ResponseStatusException Handler
- *
- * @author Alan Yeh
- * @see ResponseStatusException
- * @since 2022/10/07
- */
+/// ResponseStatusException Handler
+///
+/// @author Alan Yeh
+/// @see ResponseStatusException
 @Component
 public class ResponseStatusExceptionHandler implements ExceptionHandler {
     @Override

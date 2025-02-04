@@ -28,12 +28,9 @@ import central.starter.cache.EnableCaching;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * Test Application
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// Test Application
+///
+/// @author Alan Yeh
 @EnableCaching
 @SpringBootApplication
 public class TestApplication {

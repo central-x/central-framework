@@ -30,13 +30,10 @@ import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
 
-/**
- * 查找类下面的注解
- *
- * @author Alan Yeh
- * @see org.apache.shiro.spring.aop.SpringAnnotationResolver
- * @since 2023/02/13
- */
+/// 查找类下面的注解
+///
+/// @author Alan Yeh
+/// @see org.apache.shiro.spring.aop.SpringAnnotationResolver
 public class ClassAnnotationResolver implements AnnotationResolver {
 
     @Override

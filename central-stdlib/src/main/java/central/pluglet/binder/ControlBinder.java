@@ -32,17 +32,16 @@ import central.lang.reflect.InstanceRef;
 import central.pluglet.FieldBinder;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
-import central.util.*;
+import central.util.Convertx;
+import central.util.Objectx;
+import central.util.Setx;
 
 import java.util.Map;
 import java.util.Set;
 
-/**
- * 属性绑定
- *
- * @author Alan Yeh
- * @since 2022/07/12
- */
+/// 属性绑定
+///
+/// @author Alan Yeh
 public class ControlBinder implements FieldBinder {
 
     private final Set<ControlType> unsupported = Setx.of(ControlType.RADIO, ControlType.CHECKBOX);
@@ -58,7 +57,7 @@ public class ControlBinder implements FieldBinder {
         var annotation = field.getAnnotation(Control.class);
         var name = Objectx.getOrDefault(annotation.name(), field.getName());
         var value = params.get(name);
-        if (value == null){
+        if (value == null) {
             value = Arrayx.getFirstOrNull(annotation.defaultValue());
         }
         if (value != null) {

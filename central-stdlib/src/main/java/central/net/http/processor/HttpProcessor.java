@@ -28,11 +28,8 @@ import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
 import central.pattern.chain.Processor;
 
-/**
- * 请求处理器
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 请求处理器
+///
+/// @author Alan Yeh
 public interface HttpProcessor extends Processor<HttpRequest, HttpResponse> {
 }

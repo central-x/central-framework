@@ -24,41 +24,30 @@
 
 package central.starter.cache.core;
 
-/**
- * 缓存加速
- * <p>
- * 通过临时缓存，将本次请求里面用到的缓存在内存里保存一份，这样就不需要去 Redis 这些远程缓存系统重复获取缓存了
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// 缓存加速
+///
+/// 通过临时缓存，将本次请求里面用到的缓存在内存里保存一份，这样就不需要去 Redis 这些远程缓存系统重复获取缓存了
+///
+/// @author Alan Yeh
 public interface CacheAccelerator {
-    /**
-     * 判断缓存是否存在
-     *
-     * @param key 缓存键
-     */
+    /// 判断缓存是否存在
+    ///
+    /// @param key 缓存键
     boolean exists(String key);
 
-    /**
-     * 获取缓存
-     *
-     * @param key 缓存键
-     */
+    /// 获取缓存
+    ///
+    /// @param key 缓存键
     String get(String key);
 
-    /**
-     * 保存/覆盖缓存
-     *
-     * @param key   缓存键
-     * @param value 缓存值
-     */
+    /// 保存/覆盖缓存
+    ///
+    /// @param key   缓存键
+    /// @param value 缓存值
     void put(String key, String value);
 
-    /**
-     * 清除缓存
-     *
-     * @param keys 缓存键
-     */
+    /// 清除缓存
+    ///
+    /// @param keys 缓存键
     void evict(String... keys);
 }

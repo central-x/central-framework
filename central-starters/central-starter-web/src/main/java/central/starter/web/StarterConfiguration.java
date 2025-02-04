@@ -32,17 +32,12 @@ import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
 import java.util.concurrent.Executors;
 
-/**
- * Starter Configuration
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// Starter Configuration
+///
+/// @author Alan Yeh
 @Configuration
 public class StarterConfiguration {
-    /**
-     * 异步事件发布
-     */
+    /// 异步事件发布
     @Bean
     public ApplicationEventMulticaster applicationEventMulticaster() {
         var multicaster = new SimpleApplicationEventMulticaster();

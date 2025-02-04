@@ -32,12 +32,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * Value
- *
- * @author Alan Yeh
- * @since 2022/07/17
- */
+/// Value
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -48,43 +45,33 @@ public class Value<T extends Serializable> implements Serializable {
     @Nullable
     private volatile T value;
 
-    /**
-     * 获取当前的值
-     */
+    /// 获取当前的值
     @Nullable
     public T get() {
         return this.value;
     }
 
-    /**
-     * 获取值，如果当前的值为空，则返回 other
-     *
-     * @param other 另一个值
-     */
+    /// 获取值，如果当前的值为空，则返回 other
+    ///
+    /// @param other 另一个值
     public T get(T other) {
         return isNotNull() ? value : other;
     }
 
-    /**
-     * 判断当前的值是否为 null
-     */
+    /// 判断当前的值是否为 null
     public boolean isNull() {
         return this.value == null;
     }
 
-    /**
-     * 判断当前的值是否不为 null
-     */
+    /// 判断当前的值是否不为 null
     public boolean isNotNull() {
         return this.value != null;
     }
 
-    /**
-     * 快速创建 Value 对象
-     *
-     * @param value 值
-     * @param <T>   值类型
-     */
+    /// 快速创建 Value 对象
+    ///
+    /// @param value 值
+    /// @param <T>   值类型
     public static <T extends Serializable> Value<T> of(@Nullable T value) {
         return new Value<>(value);
     }

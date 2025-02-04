@@ -32,18 +32,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Function;
 
-/**
- * Property Reference
- * 属性引用
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// Property Reference
+///
+/// 属性引用
+///
+/// @author Alan Yeh
 @FunctionalInterface
 public interface PropertyRef<T, R> extends Function<T, R>, Serializable {
-    /**
-     * 根据属性名
-     */
+    /// 根据属性名
     default String getPropertyName() {
         try {
             Method method = this.getClass().getDeclaredMethod("writeReplace");

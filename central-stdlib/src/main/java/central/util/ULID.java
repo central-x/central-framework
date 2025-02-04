@@ -34,41 +34,36 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Universally Unique Lexicographically Sortable Identifier
- *
- * <pre>
- * 0                   1                   2                   3
- *  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
- * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- * |                      32_bit_uint_time_high                    |
- * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- * |     16_bit_uint_time_low      |       16_bit_uint_random      |
- * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- * |                       32_bit_uint_random                      |
- * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- * |                       32_bit_uint_random                      |
- * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- * </pre>
- * <p>
- * Usage:
- * <pre>{@code
- * var ulid = ULID.randomULID();
- * var value = ulid.toString();
- * var nextVal = ulid.increase();
- * }</pre>
- *
- * @author Alan Yeh
- * @since 2023/06/04
- */
+/// Universally Unique Lexicographically Sortable Identifier
+/// ```
+/// 0                   1                   2                   3
+/// 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+/// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/// |                      32_bit_uint_time_high                    |
+/// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/// |     16_bit_uint_time_low      |       16_bit_uint_random      |
+/// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/// |                       32_bit_uint_random                      |
+/// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/// |                       32_bit_uint_random                      |
+/// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/// ```
+///
+/// Usage:
+///
+/// ```java
+/// var ulid = ULID.randomULID();
+/// var value = ulid.toString();
+/// var nextVal = ulid.increase();
+/// ```
+///
+/// @author Alan Yeh
 public final class ULID implements Serializable, Comparable<ULID> {
 
     @Serial
     private static final long serialVersionUID = -2374524733859089730L;
 
-    /**
-     * Create a new ULID
-     */
+    /// Create a new ULID
     public static ULID randomULID() {
         long timestamp = System.currentTimeMillis();
 
@@ -78,44 +73,28 @@ public final class ULID implements Serializable, Comparable<ULID> {
         return new ULID(timestamp, random);
     }
 
-    /**
-     * Timestamp component mask
-     */
+    /// Timestamp component mask
     private static final long TIMESTAMP_MASK = 0xffff000000000000L;
 
-    /**
-     * Timestamp overflow flag, the 1st char of the input string must be between 0 and 7
-     */
+    /// Timestamp overflow flag, the 1st char of the input string must be between 0 and 7
     private static final byte TIMESTAMP_OVERFLOW_FLAG = 0b11000;
 
-    /**
-     * The least significant 64 bits increase overflow, 0xffffffffffffffffL + 1
-     */
+    /// The least significant 64 bits increase overflow, 0xffffffffffffffffL + 1
     private static final long OVERFLOW = 0x0000000000000000L;
-    /**
-     * The length of randomness component of ULID
-     */
+    /// The length of randomness component of ULID
     public static final int RANDOMNESS_BYTE_LEN = 10;
 
-    /**
-     * The most significant 64 bits of this ULID.
-     */
+    /// The most significant 64 bits of this ULID.
     private final long msb;
 
-    /**
-     * The least significant 64 bits of this ULID.
-     */
+    /// The least significant 64 bits of this ULID.
     private final long lsb;
 
-    /**
-     * Default alphabet of ULID
-     */
+    /// Default alphabet of ULID
     private static final char[] DEFAULT_ALPHABET = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
             'D', 'E', 'F', 'G', 'H', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z'};
 
-    /**
-     * Decoding table of ULID
-     */
+    /// Decoding table of ULID
     private static final byte[] DECODING_TABLE = new byte[]{
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -132,9 +111,7 @@ public final class ULID implements Serializable, Comparable<ULID> {
             0x1d, 0x1e, 0x1f, -1, -1, -1, -1, -1
     };
 
-    /**
-     * The length of bytes of ULID
-     */
+    /// The length of bytes of ULID
     private static final int ULID_BYTE_LEN = 0x1a;
 
     private ULID(long timestamp, byte[] random) {
@@ -165,34 +142,26 @@ public final class ULID implements Serializable, Comparable<ULID> {
         this.lsb = lsb;
     }
 
-    /**
-     * Get the most significant 64 bits of this ULID.
-     */
+    /// Get the most significant 64 bits of this ULID.
     public long getMostSignificantBits() {
         return this.msb;
     }
 
-    /**
-     * Get the least significant 64 bits of this ULID.
-     */
+    /// Get the least significant 64 bits of this ULID.
     public long getLeastSignificantBits() {
         return this.lsb;
     }
 
-    /**
-     * Get the timestamp component of ULID
-     *
-     * @return the timestamp component
-     */
+    /// Get the timestamp component of ULID
+    ///
+    /// @return the timestamp component
     public long getTimestamp() {
         return this.msb >>> 16;
     }
 
-    /**
-     * Get next ULID
-     *
-     * @return A new ULID
-     */
+    /// Get next ULID
+    ///
+    /// @return A new ULID
     public ULID increase() {
         long newMsb = this.msb;
         long newLsb = this.lsb + 1;
@@ -202,12 +171,10 @@ public final class ULID implements Serializable, Comparable<ULID> {
         return new ULID(newMsb, newLsb);
     }
 
-    /**
-     * Format ULID to canonical string with default alphabet. Use 'formatUnsignedLong0' from Long.formatUnsignedLong0()
-     *
-     * @param alphabet The Alphabet used to encode
-     * @return canonical string
-     */
+    /// Format ULID to canonical string with default alphabet. Use 'formatUnsignedLong0' from Long.formatUnsignedLong0()
+    ///
+    /// @param alphabet The Alphabet used to encode
+    /// @return canonical string
     private String toCanonicalString(char[] alphabet) {
         byte[] bytes = new byte[ULID_BYTE_LEN];
         formatUnsignedLong0(this.lsb & 0xffffffffffL, 5, bytes, 18, 8, alphabet);
@@ -216,9 +183,7 @@ public final class ULID implements Serializable, Comparable<ULID> {
         return new String(bytes, StandardCharsets.US_ASCII);
     }
 
-    /**
-     * Reference to java.lang.Long.formatUnsignedLong0()
-     */
+    /// Reference to java.lang.Long.formatUnsignedLong0()
     private static void formatUnsignedLong0(long val, int shift, byte[] buf, int offset, int len, char[] alphabet) {
         int charPos = offset + len;
         long radix = 1L << shift;
@@ -253,11 +218,9 @@ public final class ULID implements Serializable, Comparable<ULID> {
         return new ULID((timestamp << 16) | (highRandomness >>> 24), (highRandomness << 40) | (lowRandomness & 0xffffffffffL));
     }
 
-    /**
-     * Decode component from char buf.
-     *
-     * @return Decoded unsigned long value
-     */
+    /// Decode component from char buf.
+    ///
+    /// @return Decoded unsigned long value
     private static long decodeComponent(long val, int start, int end, int shirt, int ms, byte[] table, char[] buf) {
         for (int i = start; i <= end; i++) {
             val |= (long) table[buf[i]] << (ms = ms - shirt);
@@ -266,21 +229,17 @@ public final class ULID implements Serializable, Comparable<ULID> {
     }
 
 
-    /**
-     * Create a new UUID from this ULID.
-     *
-     * @return A new UUID created with msb and lsb from this ULID
-     */
+    /// Create a new UUID from this ULID.
+    ///
+    /// @return A new UUID created with msb and lsb from this ULID
     public UUID toUUID() {
         return new UUID(this.msb, this.lsb);
     }
 
-    /**
-     * Create a new ULID from another one UUID.
-     *
-     * @param uuid Another one UUID
-     * @return A new ULID with the specified value
-     */
+    /// Create a new ULID from another one UUID.
+    ///
+    /// @param uuid Another one UUID
+    /// @return A new ULID with the specified value
     public static ULID fromUUID(UUID uuid) {
         return new ULID(uuid.getMostSignificantBits(), uuid.getLeastSignificantBits());
     }

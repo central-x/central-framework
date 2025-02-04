@@ -26,11 +26,8 @@ package central.security.cipher;
 
 import central.bean.OptionalEnum;
 
-/**
- * 加解密选项
- *
- * @author Alan Yeh
- * @since 2023/04/06
- */
+/// 加解密选项
+///
+/// @author Alan Yeh
 public interface CipherOption<T> extends OptionalEnum<T> {
 }

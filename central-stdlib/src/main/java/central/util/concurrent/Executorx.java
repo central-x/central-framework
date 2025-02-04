@@ -24,11 +24,8 @@
 
 package central.util.concurrent;
 
-/**
- * 线程池工具
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// 线程池工具
+///
+/// @author Alan Yeh
 public class Executorx {
 }

@@ -31,13 +31,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Method;
 
-/**
- * ResponseStatusException Handler
- *
- * @author Alan Yeh
- * @see ResponseStatusException
- * @since 2024/06/13
- */
+/// ResponseStatusException Handler
+///
+/// @author Alan Yeh
+/// @see ResponseStatusException
 public class ResponseStatusExceptionHandler implements ExceptionHandler {
     @Override
     public boolean support(Throwable throwable) {

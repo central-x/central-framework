@@ -33,40 +33,29 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-/**
- * 将响应体解析成字符串
- *
- * @author Alan Yeh
- * @since 2022/07/17
- */
+/// 将响应体解析成字符串
+///
+/// @author Alan Yeh
 public class StringExtractor implements BodyExtractor<String> {
 
-    /**
-     * 字符集
-     */
+    /// 字符集
     private final Charset charset;
 
-    /**
-     * 构造函数
-     *
-     * @param charset 字符集（如果未定指，将使用响应头里指定的字符集）
-     */
+    /// 构造函数
+    ///
+    /// @param charset 字符集（如果未定指，将使用响应头里指定的字符集）
     public StringExtractor(@Nullable Charset charset) {
         this.charset = charset;
     }
 
-    /**
-     * 创建字符串解析器
-     */
+    /// 创建字符串解析器
     public static StringExtractor of() {
         return new StringExtractor(null);
     }
 
-    /**
-     * 创建字符串解析器
-     *
-     * @param charset 字符集（如果未定指，将使用响应头里指定的字符集）
-     */
+    /// 创建字符串解析器
+    ///
+    /// @param charset 字符集（如果未定指，将使用响应头里指定的字符集）
     public static StringExtractor of(@Nullable Charset charset) {
         return new StringExtractor(charset);
     }

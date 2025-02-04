@@ -24,27 +24,25 @@
 
 package central.pluglet.control.resolver;
 
+import central.lang.Arrayx;
 import central.lang.reflect.FieldRef;
-import central.pluglet.control.ControlResolver;
 import central.pluglet.annotation.Control;
+import central.pluglet.control.ControlResolver;
 import central.pluglet.control.ControlType;
 import central.pluglet.control.PlugletControl;
-import central.lang.Arrayx;
 import central.util.Convertx;
 import central.util.Objectx;
 import central.util.Setx;
 
 import java.util.Set;
 
-/**
- * Normal Field Resolver
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Normal Field Resolver
+///
+/// @author Alan Yeh
 public class FieldResolver implements ControlResolver {
 
     private final Set<ControlType> unsupported = Setx.of(ControlType.CHECKBOX, ControlType.RADIO);
+
     @Override
     public boolean support(FieldRef field) {
         var annotation = field.getAnnotation(Control.class);

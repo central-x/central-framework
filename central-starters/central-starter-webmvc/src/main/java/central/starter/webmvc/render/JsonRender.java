@@ -38,12 +38,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Json Render
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// Json Render
+///
+/// @author Alan Yeh
 public class JsonRender extends Render<JsonRender> {
     @Getter
     private Map<String, Object> json = new HashMap<>();

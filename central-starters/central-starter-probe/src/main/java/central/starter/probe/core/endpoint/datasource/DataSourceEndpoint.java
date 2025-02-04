@@ -28,8 +28,8 @@ import central.lang.Assertx;
 import central.lang.Stringx;
 import central.sql.SqlDialect;
 import central.sql.SqlType;
-import central.starter.probe.core.endpoint.Endpoint;
 import central.starter.probe.core.ProbeException;
+import central.starter.probe.core.endpoint.Endpoint;
 import central.util.Logx;
 import central.util.Mapx;
 import central.validation.Label;
@@ -51,12 +51,9 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * 数据源探针
- *
- * @author Alan Yeh
- * @since 2023/12/29
- */
+/// 数据源探针
+///
+/// @author Alan Yeh
 @Slf4j
 @ExtensionMethod(Logx.class)
 public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameAware {
@@ -64,49 +61,39 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
     @Setter
     private String beanName;
 
-    /**
-     * 数据库驱动
-     * <p>
-     * 如果为空时，通过 url 进行推理
-     */
+    /// 数据库驱动
+    ///
+    /// 如果为空时，通过 url 进行推理
     @Setter
     @NotBlank
     @Size(max = 512)
     @Label("数据库驱动")
     private String driver;
 
-    /**
-     * 数据库连接字符串
-     */
+    /// 数据库连接字符串
     @Setter
     @NotBlank
     @Size(max = 4096)
     @Label("数据库连接字符串")
     private String url;
 
-    /**
-     * 用户名
-     */
+    /// 用户名
     @Setter
     @NotBlank
     @Size(max = 128)
     @Label("用户名")
     private String username;
 
-    /**
-     * 密码
-     */
+    /// 密码
     @Setter
     @NotBlank
     @Size(max = 256)
     @Label("密码")
     private String password;
 
-    /**
-     * 查询测试
-     * <p>
-     * 如果为空时，则根据数据库类型自动选择对应的 sql
-     */
+    /// 查询测试
+    ///
+    /// 如果为空时，则根据数据库类型自动选择对应的 sql
     @Setter
     @Size(max = 4096)
     @Label("查询测试")
@@ -213,9 +200,7 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
         }
     }
 
-    /**
-     * 获取数据库元数据
-     */
+    /// 获取数据库元数据
     private Map<String, String> queryMetadata(Connection connection) throws SQLException {
         var databaseMeta = connection.getMetaData();
 
@@ -225,9 +210,7 @@ public class DataSourceEndpoint implements Endpoint, InitializingBean, BeanNameA
         return metadata;
     }
 
-    /**
-     * 获取数据库测试查询结果
-     */
+    /// 获取数据库测试查询结果
     private Map<String, String> queryData(Connection connection) throws SQLException {
         try (var statement = connection.prepareStatement(this.query)) {
             try (var resultSet = statement.executeQuery()) {

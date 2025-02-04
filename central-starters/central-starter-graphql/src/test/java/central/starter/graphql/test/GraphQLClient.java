@@ -31,12 +31,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 
 import java.util.Map;
 
-/**
- * GraphQL Client
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// GraphQL Client
+///
+/// @author Alan Yeh
 public interface GraphQLClient {
     @PostMapping(value = "/api/graphql", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     String graphql(@RequestPart String query, @RequestPart Map<String, Object> variables, @RequestHeader("TEST_HEADER") String header);

@@ -31,12 +31,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Data;
 
-/**
- * 创建用户参数
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 创建用户参数
+///
+/// @author Alan Yeh
 @Data
 public class AccountParams {
     @NotBlank(message = "主键[id]必须不为空", groups = Update.class)

@@ -25,9 +25,8 @@
 package central.starter.graphql.stub.core;
 
 import central.lang.Assertx;
-import central.lang.Stringx;
-import central.starter.graphql.stub.ProviderClient;
 import central.starter.graphql.stub.Provider;
+import central.starter.graphql.stub.ProviderClient;
 import central.starter.graphql.stub.annotation.GraphQLStub;
 import central.util.MarkdownResources;
 import lombok.Getter;
@@ -38,29 +37,20 @@ import org.springframework.beans.factory.InitializingBean;
 import java.lang.reflect.Proxy;
 import java.nio.file.Path;
 
-/**
- * Provider Factory
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// Provider Factory
+///
+/// @author Alan Yeh
 public class ProviderFactoryBean<T extends Provider<?, ?>> implements FactoryBean<T>, InitializingBean {
 
-    /**
-     * 类型
-     */
+    /// 类型
     @Getter
     private final Class<T> objectType;
 
-    /**
-     * 对象名
-     */
+    /// 对象名
     @Setter
     private String name;
 
-    /**
-     * 客户端
-     */
+    /// 客户端
     @Setter
     private ProviderClient client;
 
@@ -86,9 +76,7 @@ public class ProviderFactoryBean<T extends Provider<?, ?>> implements FactoryBea
         }
     }
 
-    /**
-     * 获取代理对象
-     */
+    /// 获取代理对象
     @Override
     public T getObject() throws Exception {
         return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{this.getObjectType()}, new ProviderStubProxy(this.objectType, this.client, this.resources));

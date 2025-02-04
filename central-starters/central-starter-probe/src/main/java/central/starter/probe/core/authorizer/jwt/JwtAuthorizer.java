@@ -44,12 +44,9 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * JWT 监权
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
+/// JWT 监权
+///
+/// @author Alan Yeh
 @Slf4j
 public class JwtAuthorizer implements Authorizer, InitializingBean {
     @Setter
@@ -112,7 +109,7 @@ public class JwtAuthorizer implements Authorizer, InitializingBean {
                     } else if (claim.getValue() instanceof Long value) {
                         builder.withClaim(claim.getKey(), value);
                     } else if (claim.getValue() instanceof String value) {
-                        if (Stringx.isNullOrBlank(value)){
+                        if (Stringx.isNullOrBlank(value)) {
                             builder.withClaimPresence(claim.getKey());
                         } else {
                             builder.withClaim(claim.getKey(), value);

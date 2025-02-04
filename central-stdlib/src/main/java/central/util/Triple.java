@@ -30,59 +30,44 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Triple
- * <p>
- * 三元组
- *
- * @author Alan Yeh
- * @since 2024/09/30
- */
+/// Triple
+///
+/// 三元组
+///
+/// @author Alan Yeh
 @Data
 public class Triple<A, B, C> implements Serializable {
     @Serial
     private static final long serialVersionUID = -620657469834849526L;
 
-    /**
-     * 第一个值
-     */
+    /// 第一个值
     private A first;
-    /**
-     * 第二个值
-     */
+    /// 第二个值
     private B second;
-    /**
-     * 第三个值
-     */
+    /// 第三个值
     private C third;
 
-    /**
-     * 创建元组
-     *
-     * @param first  第一个值
-     * @param second 第二个值
-     * @param third  第三个值
-     */
+    /// 创建元组
+    ///
+    /// @param first  第一个值
+    /// @param second 第二个值
+    /// @param third  第三个值
     public Triple(A first, B second, C third) {
         this.first = first;
         this.second = second;
         this.third = third;
     }
 
-    /**
-     * 创建元组
-     *
-     * @param first  第一个值
-     * @param second 第二个值
-     * @param third  第三个值
-     */
+    /// 创建元组
+    ///
+    /// @param first  第一个值
+    /// @param second 第二个值
+    /// @param third  第三个值
     public static <A, B, C> Triple<A, B, C> of(A first, B second, C third) {
         return new Triple<>(first, second, third);
     }
 
-    /**
-     * 转化为 List
-     */
+    /// 转化为 List
     public List<Object> toList() {
         return List.of(first, second, third);
     }

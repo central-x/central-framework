@@ -29,29 +29,22 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Method;
 
-/**
- * GraphQL 异常处理器
- * <p>
- * 用于将 GraphQL 执行过程中发生的异常转化为 ResponseStatusException，处理后的异常将会被直接抛出
- *
- * @author Alan Yeh
- * @see ResponseStatusException
- * @since 2024/06/13
- */
+/// GraphQL 异常处理器
+///
+/// 用于将 GraphQL 执行过程中发生的异常转化为 ResponseStatusException，处理后的异常将会被直接抛出
+///
+/// @author Alan Yeh
+/// @see ResponseStatusException
 public interface ExceptionHandler {
-    /**
-     * 是否可以处理该异常
-     *
-     * @param throwable 待处理的异常
-     */
+    /// 是否可以处理该异常
+    ///
+    /// @param throwable 待处理的异常
     boolean support(Throwable throwable);
 
-    /**
-     * 处理异常
-     *
-     * @param throwable 待处理的异常
-     * @return 处理后的异常
-     */
+    /// 处理异常
+    ///
+    /// @param throwable 待处理的异常
+    /// @return 处理后的异常
     @Nonnull
     ResponseStatusException handle(@Nonnull Method method, @Nonnull Throwable throwable);
 }

@@ -24,12 +24,9 @@
 
 package central.security.signer.impl;
 
-/**
- * ECDSA 256 签名算法
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
+/// ECDSA 256 签名算法
+///
+/// @author Alan Yeh
 public class ECDSA256Impl extends ECDSAImpl {
     // 数字签名 签名/验证算法
     public static final String ALGORITHM = "SHA256withECDSA";

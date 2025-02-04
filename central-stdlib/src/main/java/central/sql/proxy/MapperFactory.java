@@ -25,10 +25,10 @@
 package central.sql.proxy;
 
 import central.io.Resourcex;
+import central.lang.Stringx;
 import central.sql.SqlDialect;
 import central.sql.SqlExecutor;
 import central.util.MarkdownResources;
-import central.lang.Stringx;
 import central.validation.Label;
 import central.validation.Validatex;
 import jakarta.validation.constraints.NotBlank;
@@ -43,12 +43,9 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Mapper 工厂
- *
- * @author Alan Yeh
- * @since 2022/07/20
- */
+/// Mapper 工厂
+///
+/// @author Alan Yeh
 @Setter
 @Accessors(chain = true)
 public class MapperFactory<T extends Mapper<?>> {
@@ -63,19 +60,17 @@ public class MapperFactory<T extends Mapper<?>> {
     @Label("Sql 资源路径")
     private String resourcePath;
 
-    /**
-     * 方法处理器
-     * 已默认添加 Mapper 中声明的方法的处理器
-     * 这里主要添加开发者需要额外支持的处理器
-     */
+    /// 方法处理器
+    ///
+    /// 已默认添加 Mapper 中声明的方法的处理器
+    ///
+    /// 这里主要添加开发者需要额外支持的处理器
     private Map<String, MapperHandler> handlers = new HashMap<>();
 
-    /**
-     * 为方法添加处理器
-     *
-     * @param method  方法名
-     * @param handler 处理器
-     */
+    /// 为方法添加处理器
+    ///
+    /// @param method  方法名
+    /// @param handler 处理器
     public MapperFactory<T> addMapper(String method, MapperHandler handler) {
         this.handlers.put(method, handler);
         return this;

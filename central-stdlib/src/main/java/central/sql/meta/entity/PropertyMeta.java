@@ -24,73 +24,54 @@
 
 package central.sql.meta.entity;
 
+import central.lang.Stringx;
 import central.sql.SqlConversion;
 import central.util.Objectx;
-import central.lang.Stringx;
 import jakarta.annotation.Nullable;
 import lombok.Data;
 
 import java.beans.PropertyDescriptor;
 
-/**
- * 属性信息
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// 属性信息
+///
+/// @author Alan Yeh
 @Data
 public class PropertyMeta {
-    /**
-     * 属性字段名
-     */
+    /// 属性字段名
     private String name;
 
-    /**
-     * 字段名
-     * 如果此字段为空的话，说明开发者没有指定字段名
-     */
+    /// 字段名
+    ///
+    /// 如果此字段为空的话，说明开发者没有指定字段名
     @Nullable
     private String columnName;
 
-    /**
-     * 获取字段名
-     * 如果开发者没的指定字段名，则根据开发者指定的命名规则将属性名转成字段名
-     *
-     * @param conversion 命名规则
-     */
+    /// 获取字段名
+    ///
+    /// 如果开发者没的指定字段名，则根据开发者指定的命名规则将属性名转成字段名
+    ///
+    /// @param conversion 命名规则
     public String getColumnName(SqlConversion conversion) {
         return Objectx.getOrDefault(this.columnName, conversion.getColumnName(this.name));
     }
 
-    /**
-     * 备注
-     */
+    /// 备注
     @Nullable
     private String remarks;
 
-    /**
-     * 是否主键
-     */
+    /// 是否主键
     private boolean primary;
 
-    /**
-     * 获取属性描述
-     */
+    /// 获取属性描述
     private PropertyDescriptor descriptor;
 
-    /**
-     * 字段加密
-     */
+    /// 字段加密
     private boolean encrypted;
 
-    /**
-     * 更新时忽略
-     */
+    /// 更新时忽略
     private boolean updatable = true;
 
-    /**
-     * 插入时忽略（就是没有这个字段）
-     */
+    /// 插入时忽略（就是没有这个字段）
     private boolean insertable = true;
 
     @Override

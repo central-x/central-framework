@@ -34,12 +34,9 @@ import reactor.core.publisher.Mono;
 
 import java.net.ConnectException;
 
-/**
- * 连接异常
- *
- * @author Alan Yeh
- * @since 2022/10/09
- */
+/// 连接异常
+///
+/// @author Alan Yeh
 @Slf4j
 @Component
 public class ConnectExceptionHandler implements ExceptionHandler {

@@ -46,12 +46,9 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import java.time.Duration;
 
-/**
- * Apache HttpClient
- *
- * @author Alan Yeh
- * @since 2024/01/11
- */
+/// Apache HttpClient
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class ApacheHttpClientExecutor implements HttpExecutor {
 
@@ -114,9 +111,7 @@ public class ApacheHttpClientExecutor implements HttpExecutor {
     public static class Builder {
         private Duration connectTimeout = Duration.ofSeconds(60);
 
-        /**
-         * 连接超时时间（毫秒）
-         */
+        /// 连接超时时间（毫秒）
         public Builder connectTimeout(long connectTimeout) {
             this.connectTimeout = Duration.ofMillis(connectTimeout);
             return this;

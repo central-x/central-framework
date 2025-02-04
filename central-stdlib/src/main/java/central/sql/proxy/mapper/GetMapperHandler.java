@@ -24,24 +24,21 @@
 
 package central.sql.proxy.mapper;
 
+import central.lang.Arrayx;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.lang.Arrayx;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
-/**
- * GetMapper Handler
- *
- * @author Alan Yeh
- * @see Mapper#getMapper
- * @since 2022/08/10
- */
+/// GetMapper Handler
+///
+/// @author Alan Yeh
+/// @see Mapper#getMapper
 public class GetMapperHandler implements MapperHandler {
     @Override
     @SuppressWarnings("rawtypes")

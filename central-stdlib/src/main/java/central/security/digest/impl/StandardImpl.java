@@ -33,12 +33,9 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 
-/**
- * 标准摘要算法
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// 标准摘要算法
+///
+/// @author Alan Yeh
 public class StandardImpl implements DigestImpl {
 
     private final String algorithm;

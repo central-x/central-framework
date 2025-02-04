@@ -26,66 +26,43 @@ package central.sql.datasource.migration;
 
 import java.util.List;
 
-/**
- * 迁移程序
- *
- * @author Alan Yeh
- * @since 2022/08/29
- */
+/// 迁移程序
+///
+/// @author Alan Yeh
 public interface Database {
-    /**
-     * 数据库 URL
-     */
+    /// 数据库 URL
     String getUrl();
 
-    /**
-     * 数据库产品名称
-     */
+    /// 数据库产品名称
     String getName();
 
-    /**
-     * 数据库版本
-     */
+    /// 数据库版本
     String getVersion();
 
-    /**
-     * 数据库驱动名
-     */
+    /// 数据库驱动名
     String getDriverName();
 
-    /**
-     * 数据库驱动版本
-     */
+    /// 数据库驱动版本
     String getDriverVersion();
 
-    /**
-     * 获取表信息
-     */
+    /// 获取表信息
     List<Table> getTables();
 
-    /**
-     * 添加迁移动作
-     * 不建议直接添加迁移动作，通过 #getTable 方法获取到表结构之后，通过该表进行迁移会更准确一些
-     *
-     * @param action 迁移动作
-     */
+    /// 添加迁移动作
+    ///
+    /// 不建议直接添加迁移动作，通过[#getTable]方法获取到表结构之后，通过该表进行迁移会更准确一些
+    ///
+    /// @param action 迁移动作
     void addAction(MigrateAction action);
 
-    /**
-     * 添加表信息
-     *
-     * @param table 表信息
-     */
+    /// 添加表信息
+    ///
+    /// @param table 表信息
     void addTable(Table table);
 
-    /**
-     * 获取表信息
-     */
+    /// 获取表信息
     Table getTable(String name);
 
-    /**
-     * 销毁数据库
-     * 慎用
-     */
+    /// 销毁数据库（`慎用`）
     void drop();
 }

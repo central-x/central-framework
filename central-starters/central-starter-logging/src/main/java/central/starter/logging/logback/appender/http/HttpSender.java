@@ -32,7 +32,6 @@ import central.net.http.body.request.FileBody;
 import central.net.http.executor.apache.ApacheHttpClientExecutor;
 import central.net.http.processor.impl.AddHeaderProcessor;
 import central.net.http.processor.impl.SetHeaderProcessor;
-import central.net.http.processor.impl.TransmitForwardedProcessor;
 import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
 import central.starter.logging.logback.appender.http.client.CollectClient;
@@ -54,33 +53,20 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-/**
- * 日志发送器
- *
- * @author Alan Yeh
- * @since 2022/10/24
- */
+/// 日志发送器
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class HttpSender implements Runnable, InitializingBean {
-    /**
-     * 日志目录
-     */
+    /// 日志目录
     private final File dir;
-    /**
-     * 应用标识
-     */
+    /// 应用标识
     private final String code;
-    /**
-     * 应用密钥
-     */
+    /// 应用密钥
     private final String secret;
-    /**
-     * 日志服务器路径
-     */
+    /// 日志服务器路径
     private final String server;
-    /**
-     * 采集器路径
-     */
+    /// 采集器路径
     private final String path;
 
     private CollectClient client;

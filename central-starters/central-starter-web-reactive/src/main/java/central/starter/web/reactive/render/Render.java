@@ -38,12 +38,9 @@ import reactor.core.publisher.Mono;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.Charset;
 
-/**
- * Http
- *
- * @author Alan Yeh
- * @since 2022/10/09
- */
+/// Http
+///
+/// @author Alan Yeh
 public abstract class Render<T extends Render<?>> {
     @Getter
     protected ServerHttpRequest request;
@@ -61,72 +58,58 @@ public abstract class Render<T extends Render<?>> {
         this.response = response;
     }
 
-    /**
-     * 设置响应头
-     *
-     * @param name  名
-     * @param value 值
-     */
+    /// 设置响应头
+    ///
+    /// @param name  名
+    /// @param value 值
     @SuppressWarnings("unchecked")
     public T setHeader(String name, String value) {
         this.response.getHeaders().set(name, value);
         return (T) this;
     }
 
-    /**
-     * 添加 Cookie
-     *
-     * @param cookie cookie
-     */
+    /// 添加 Cookie
+    ///
+    /// @param cookie cookie
     @SuppressWarnings("unchecked")
     public T addCookie(ResponseCookie cookie) {
         response.addCookie(cookie);
         return (T) this;
     }
 
-    /**
-     * 添加 Cookie
-     *
-     * @param name  名
-     * @param value 值
-     */
+    /// 添加 Cookie
+    ///
+    /// @param name  名
+    /// @param value 值
     @SuppressWarnings("unchecked")
     public T addCookie(String name, String value) {
         response.addCookie(ResponseCookie.from(name, value).build());
         return (T) this;
     }
 
-    /**
-     * 设置状态码
-     *
-     * @param status 状态码
-     */
+    /// 设置状态码
+    ///
+    /// @param status 状态码
     @SuppressWarnings("unchecked")
     public T setStatus(HttpStatusCode status) {
         response.setStatusCode(status);
         return (T) this;
     }
 
-    /**
-     * 写响应
-     */
+    /// 写响应
     public abstract Mono<Void> render();
 
-    /**
-     * 写字符串到响应体
-     *
-     * @param body    字符串
-     * @param charset 字符串编码
-     */
+    /// 写字符串到响应体
+    ///
+    /// @param body    字符串
+    /// @param charset 字符串编码
     protected Mono<Void> writeString(String body, Charset charset) {
         return writeBytes(body.getBytes(charset));
     }
 
-    /**
-     * 写字节码到响应体
-     *
-     * @param bytes 字节码
-     */
+    /// 写字节码到响应体
+    ///
+    /// @param bytes 字节码
     protected Mono<Void> writeBytes(byte[] bytes) {
         return response.writeWith(DataBufferUtils.readInputStream(() -> new ByteArrayInputStream(bytes), new DefaultDataBufferFactory(), IOStreamx.BUFFER_SIZE))
                 .then(Mono.defer(response::setComplete));

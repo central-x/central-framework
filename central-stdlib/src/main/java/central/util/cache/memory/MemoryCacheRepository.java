@@ -40,12 +40,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
-/**
- * 内存缓存仓库
- *
- * @author Alan Yeh
- * @since 2023/06/10
- */
+/// 内存缓存仓库
+///
+/// @author Alan Yeh
 public class MemoryCacheRepository implements CacheRepository, AutoCloseable {
 
     private final Map<String, Cache> caches = new HashMap<>();

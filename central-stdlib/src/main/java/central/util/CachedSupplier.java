@@ -30,31 +30,20 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.function.Supplier;
 
-/**
- * 带缓存的 Supplier
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// 带缓存的 Supplier
+///
+/// @author Alan Yeh
 public class CachedSupplier<T extends Serializable> implements Supplier<T> {
-    /**
-     * 缓存时间
-     * 如果 timout < 0，则获取一次后永远不再更新
-     * 如果 timeout == 0，则每次都从 supplier 中重新获取新的值
-     * 如果 timeout > 0，则在 timeout 过期前不再获取新值，过期后重新从 supplier 中获取新值
-     */
+    /// 缓存时间
+    /// - 如果`timeout < 0`，则获取一次后永远不再更新
+    /// - 如果`timeout == 0`，则每次都从 supplier 中重新获取新的值
+    /// - 如果`timeout > 0`，则在 timeout 过期前不再获取新值，过期后重新从 supplier 中获取新值
     private final Duration timeout;
-    /**
-     * 缓存过期过，从 Supplier 中获取新的值
-     */
+    /// 缓存过期过，从 Supplier 中获取新的值
     private final Supplier<T> supplier;
-    /**
-     * 上一次更新值的时间戳
-     */
+    /// 上一次更新值的时间戳
     private volatile long last = 0;
-    /**
-     * 已缓存的值
-     */
+    /// 已缓存的值
     private volatile Value<T> value;
 
     private final Object lock = new Object();
@@ -64,9 +53,7 @@ public class CachedSupplier<T extends Serializable> implements Supplier<T> {
         this.supplier = supplier;
     }
 
-    /**
-     * 获取值
-     */
+    /// 获取值
     @Override
     public T get() {
         if (value == null) {
@@ -101,9 +88,7 @@ public class CachedSupplier<T extends Serializable> implements Supplier<T> {
         }
     }
 
-    /**
-     * 清除已缓存的值
-     */
+    /// 清除已缓存的值
     public void clear() {
         synchronized (lock) {
             this.value = null;

@@ -28,30 +28,21 @@ import central.starter.logging.logback.appender.CentralAppender;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * 将日志写入到本地
- *
- * @author Alan Yeh
- * @since 2024/01/21
- */
+/// 将日志写入到本地
+///
+/// @author Alan Yeh
 public class LocalAppender extends CentralAppender {
-    /**
-     * 应用标识（应用服务名）
-     */
+    /// 应用标识（应用服务名）
     @Getter
     @Setter
     private String applicationCode;
 
-    /**
-     * 最大批量发送大小
-     */
+    /// 最大批量发送大小
     @Getter
     @Setter
     private int batchSize = 100000;
 
-    /**
-     * 最大批量发送时间
-     */
+    /// 最大批量发送时间
     @Getter
     @Setter
     private int batchTime = 2000;

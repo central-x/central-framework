@@ -29,12 +29,9 @@ import org.springframework.web.server.ServerWebExchange;
 
 import java.net.InetSocketAddress;
 
-/**
- * 默认远程端口解析
- *
- * @author Alan Yeh
- * @since 2022/10/18
- */
+/// 默认远程端口解析
+///
+/// @author Alan Yeh
 public class DefaultRemoteAddressResolver implements RemoteAddressResolver {
     @Override
     public InetSocketAddress resolve(ServerWebExchange exchange) {

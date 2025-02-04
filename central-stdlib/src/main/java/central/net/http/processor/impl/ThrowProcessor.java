@@ -39,12 +39,9 @@ import org.springframework.http.MediaType;
 import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 
-/**
- * 抛异常处理器
- *
- * @author Alan Yeh
- * @since 2022/11/03
- */
+/// 抛异常处理器
+///
+/// @author Alan Yeh
 public class ThrowProcessor implements HttpProcessor {
     @Override
     public HttpResponse process(HttpRequest target, ProcessChain<HttpRequest, HttpResponse> chain) throws Exception {

@@ -34,12 +34,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Mono;
 
-/**
- * 覆盖请求头信息
- *
- * @author Alan Yeh
- * @since 2022/10/14
- */
+/// 覆盖请求头信息
+///
+/// @author Alan Yeh
 public class SetHeaderProcessor implements HttpProcessor, ReactiveHttpProcessor {
 
     private final MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();

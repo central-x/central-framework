@@ -54,12 +54,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-/**
- * Starter Configuration
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// Starter Configuration
+///
+/// @author Alan Yeh
 @Configuration
 @ComponentScan("central.starter.webmvc.exception")
 @EnableConfigurationProperties(WebMvcProperties.class)
@@ -72,27 +69,21 @@ public class StarterConfiguration implements WebMvcConfigurer {
     @Setter(onMethod_ = @Autowired)
     private JsonExceptionResolver resolver;
 
-    /**
-     * 添加全局异常捕捉
-     */
+    /// 添加全局异常捕捉
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
         resolvers.add(resolver);
     }
 
-    /**
-     * 添加日期转换
-     * 参数使用 java.sql.TimeStamp 作为保存日期的类型，前后端使用 time millis 作为传输格式
-     */
+    /// 添加日期转换
+    /// 参数使用 java.sql.TimeStamp 作为保存日期的类型，前后端使用 time millis 作为传输格式
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new LongToTimestampConverter());
     }
 
 
-    /**
-     * 配置 Jackson
-     */
+    /// 配置 Jackson
     @Bean
     @ConditionalOnClass(ObjectMapper.class)
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
@@ -107,10 +98,8 @@ public class StarterConfiguration implements WebMvcConfigurer {
         return converter;
     }
 
-    /**
-     * 自定义参数校验器
-     * 支持 @Label 注解
-     */
+    /// 自定义参数校验器
+    /// 支持 @Label 注解
     @Override
     public Validator getValidator() {
         return new SpringValidatorAdapter(Validation.byProvider(HibernateValidator.class)
@@ -120,9 +109,7 @@ public class StarterConfiguration implements WebMvcConfigurer {
                 .getValidator());
     }
 
-    /**
-     * 支持下划线命名的入参
-     */
+    /// 支持下划线命名的入参
     @Bean
     public FilterRegistrationBean<UnderlineParameterNameFilter> underlineParameterNameFilterRegistrationBean() {
         var bean = new FilterRegistrationBean<UnderlineParameterNameFilter>();
@@ -133,9 +120,7 @@ public class StarterConfiguration implements WebMvcConfigurer {
         return bean;
     }
 
-    /**
-     * 将所有 HttpServletRequest 封装为 WebMvcRequest
-     */
+    /// 将所有 HttpServletRequest 封装为 WebMvcRequest
     @Bean
     public FilterRegistrationBean<WebMvcWrapFilter> webMvcWrapFilterRegistrationBean() {
         var bean = new FilterRegistrationBean<WebMvcWrapFilter>();

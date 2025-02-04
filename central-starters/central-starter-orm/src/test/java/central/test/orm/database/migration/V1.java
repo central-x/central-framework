@@ -31,12 +31,9 @@ import central.util.Version;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * 数据库迁移
- *
- * @author Alan Yeh
- * @since 2022/09/23
- */
+/// 数据库迁移
+///
+/// @author Alan Yeh
 public class V1 extends Migration {
     public V1() {
         super(Version.of("1.0.0"));

@@ -33,13 +33,11 @@ import lombok.*;
 
 import java.io.Serial;
 
-/**
- * Project
- * 项目
- *
- * @author Alan Yeh
- * @since 2022/10/04
- */
+/// Project
+///
+/// 项目
+///
+/// @author Alan Yeh
 @Data
 @Builder
 @NoArgsConstructor

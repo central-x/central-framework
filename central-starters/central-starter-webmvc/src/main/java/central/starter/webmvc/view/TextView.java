@@ -37,14 +37,11 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-/**
- * Text View
- * <p>
- * 文本视图
- *
- * @author Alan Yeh
- * @since 2023/11/04
- */
+/// Text View
+///
+/// 文本视图
+///
+/// @author Alan Yeh
 public class TextView implements View {
 
     @Getter

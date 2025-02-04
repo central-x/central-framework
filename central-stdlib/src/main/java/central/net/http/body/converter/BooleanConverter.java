@@ -27,12 +27,9 @@ package central.net.http.body.converter;
 import central.net.http.body.HttpConverter;
 import jakarta.annotation.Nullable;
 
-/**
- * Boolean 转换器
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Boolean 转换器
+///
+/// @author Alan Yeh
 public class BooleanConverter implements HttpConverter<Boolean> {
     @Override
     public boolean support(@Nullable Object source) {

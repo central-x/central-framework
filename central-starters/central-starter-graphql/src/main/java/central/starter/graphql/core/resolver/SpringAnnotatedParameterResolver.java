@@ -31,12 +31,9 @@ import org.springframework.format.support.FormattingConversionService;
 
 import java.lang.annotation.Annotation;
 
-/**
- * Spring Converter
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// Spring Converter
+///
+/// @author Alan Yeh
 public abstract class SpringAnnotatedParameterResolver extends AnnotatedParameterResolver {
 
     private final Object lock = new Object();

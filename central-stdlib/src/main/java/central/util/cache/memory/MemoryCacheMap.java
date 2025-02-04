@@ -32,12 +32,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-/**
- * 内存缓存键值对
- *
- * @author Alan Yeh
- * @since 2023/07/02
- */
+/// 内存缓存键值对
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class MemoryCacheMap implements CacheMap {
 

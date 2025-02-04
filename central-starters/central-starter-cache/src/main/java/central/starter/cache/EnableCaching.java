@@ -29,21 +29,16 @@ import org.springframework.core.Ordered;
 
 import java.lang.annotation.*;
 
-/**
- * 启用缓存系统
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// 启用缓存系统
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Import(StarterConfiguration.class)
 public @interface EnableCaching {
-    /**
-     * 缓存切面顺序
-     * <p>
-     * 当与其它切面冲突时，可能需要调整此值
-     */
+    /// 缓存切面顺序
+    ///
+    /// 当与其它切面冲突时，可能需要调整此值
     int order() default Ordered.HIGHEST_PRECEDENCE;
 }

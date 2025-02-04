@@ -24,13 +24,13 @@
 
 package central.net.http.proxy.contract.spring.resolver;
 
+import central.lang.Assertx;
+import central.lang.Stringx;
 import central.net.http.HttpRequest;
 import central.net.http.body.Body;
 import central.net.http.body.InputStreamBody;
 import central.net.http.body.request.*;
 import central.net.http.proxy.contract.spring.SpringResolver;
-import central.lang.Assertx;
-import central.lang.Stringx;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -40,13 +40,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Map;
 
-/**
- * 处理请求体
- *
- * @author Alan Yeh
- * @see RequestBody
- * @since 2022/07/18
- */
+/// 处理请求体
+///
+/// @author Alan Yeh
+/// @see RequestBody
 public class RequestBodyResolver implements SpringResolver {
     @Override
     public boolean support(Parameter parameter) {

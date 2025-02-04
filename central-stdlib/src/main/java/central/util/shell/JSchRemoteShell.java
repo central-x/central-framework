@@ -43,90 +43,67 @@ import java.security.KeyPair;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 使用 JSch 实现的 RemoteShell
- *
- * @author Alan Yeh
- * @since 2022/12/03
- */
+/// 使用 JSch 实现的 RemoteShell
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class JSchRemoteShell extends Shell {
-    /**
-     * 主机
-     */
+    /// 主机
     @Getter
     private final String host;
-    /**
-     * 端口
-     */
+    /// 端口
     @Getter
     private final int port;
-    /**
-     * 用户名
-     */
+    /// 用户名
     @Getter
     private final String username;
-    /**
-     * 密码
-     */
+    /// 密码
     @Getter
     private final String password;
-    /**
-     * SSH 密钥（公钥）
-     */
+    /// SSH 密钥（公钥）
     @Getter
     private final KeyPair publicKey;
 
-    /**
-     * 使用默认端口创建远程 Shell
-     *
-     * @param host     主机名
-     * @param username 用户名
-     * @param password 密码
-     */
+    /// 使用默认端口创建远程 Shell
+    ///
+    /// @param host     主机名
+    /// @param username 用户名
+    /// @param password 密码
     public static JSchRemoteShell of(String host, String username, String password) {
         return new JSchRemoteShell(host, 22, username, password, null);
     }
 
-    /**
-     * 创建远程 Shell
-     *
-     * @param host     主机名
-     * @param port     端口
-     * @param username 用户名
-     * @param password 密码
-     */
+    /// 创建远程 Shell
+    ///
+    /// @param host     主机名
+    /// @param port     端口
+    /// @param username 用户名
+    /// @param password 密码
     public static JSchRemoteShell of(String host, int port, String username, String password) {
         return new JSchRemoteShell(host, port, username, password, null);
     }
 
-    /**
-     * 使用默认端口创建远程 Shell
-     *
-     * @param host      主机名
-     * @param username  用户名
-     * @param publicKey 认证密钥（ssh public key）
-     */
+    /// 使用默认端口创建远程 Shell
+    ///
+    /// @param host      主机名
+    /// @param username  用户名
+    /// @param publicKey 认证密钥（ssh public key）
     public static JSchRemoteShell of(String host, int port, String username, KeyPair publicKey) {
         return new JSchRemoteShell(host, port, username, null, publicKey);
     }
 
-    /**
-     * 创建远程 Shell
-     *
-     * @param host      主机名
-     * @param username  用户名
-     * @param publicKey 认证密钥（ssh public key）
-     */
+    /// 创建远程 Shell
+    ///
+    /// @param host      主机名
+    /// @param username  用户名
+    /// @param publicKey 认证密钥（ssh public key）
     public static JSchRemoteShell of(String host, String username, KeyPair publicKey) {
         return new JSchRemoteShell(host, 22, username, null, publicKey);
     }
 
-    /**
-     * 工作目录
-     * <p>
-     * 远程工作目录没办法根据当前目录推导出相对路径，因此只能使用 '~' 或绝对路径来表达工作目录
-     */
+    /// 工作目录
+    ///
+    /// 远程工作目录没办法根据当前目录推导出相对路径，因此只能使用 '~' 或绝对路径来表达工作目录
     @Override
     public void setWorkDir(Path workDir) {
         if (workDir.startsWith(Path.of(".")) || workDir.startsWith("..")) {
@@ -139,11 +116,9 @@ public class JSchRemoteShell extends Shell {
     private final JSch factory = new JSch();
     private Session session;
 
-    /**
-     * 远程 Home 目录
-     * <p>
-     * 用于推导以 ~ 开头的远程目录
-     */
+    /// 远程 Home 目录
+    ///
+    /// 用于推导以 ~ 开头的远程目录
     private Path remoteHome;
 
     @Override
@@ -392,9 +367,7 @@ public class JSchRemoteShell extends Shell {
         }
     }
 
-    /**
-     * 将本地相对路径解析成绝对路径
-     */
+    /// 将本地相对路径解析成绝对路径
     private Path toLocalAbsolute(Path path) throws IOException {
         if (path.isAbsolute()) {
             return path.toAbsolutePath();
@@ -414,15 +387,12 @@ public class JSchRemoteShell extends Shell {
         }
     }
 
-    /**
-     * 将远程相对路径解析成绝对路径
-     *
-     * <ul>
-     *     <li>.：相对工作目录</li>
-     *     <li>..：相对工作目录的上级目录</li>
-     *     <li>~：相对用户目录</li>
-     * </ul>
-     */
+    /// 将远程相对路径解析成绝对路径
+    /// <ul>
+    /// <li>.：相对工作目录</li>
+    /// <li>..：相对工作目录的上级目录</li>
+    /// <li>~：相对用户目录</li>
+    /// </ul>
     private Path toRemoteAbsolute(Path path) throws IOException {
         if (path.isAbsolute()) {
             return path;

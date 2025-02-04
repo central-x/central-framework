@@ -24,11 +24,8 @@
 
 package central.validation.group;
 
-/**
- * 参数校验分组
- *
- * @author Alan Yeh
- * @since 2022/07/18
- */
+/// 参数校验分组
+///
+/// @author Alan Yeh
 public interface Insert {
 }

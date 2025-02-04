@@ -33,12 +33,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-/**
- * 内存缓存
- *
- * @author Alan Yeh
- * @since 2024/01/04
- */
+/// 内存缓存
+///
+/// @author Alan Yeh
 @Component
 @ConditionalOnProperty(value = "central.probe.cache.enabled", havingValue = "true")
 public class MemoryCache implements Cache {
@@ -46,13 +43,9 @@ public class MemoryCache implements Cache {
     @Setter(onMethod_ = @Autowired)
     private ProbeProperties properties;
 
-    /**
-     * 缓存产生时间
-     */
+    /// 缓存产生时间
     private long timestamp = 0;
-    /**
-     * 缓存
-     */
+    /// 缓存
     private Map<String, String> data;
 
     @Override

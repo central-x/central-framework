@@ -30,12 +30,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
-/**
- * 日志工具
- *
- * @author Alan Yeh
- * @since 2024/01/02
- */
+/// 日志工具
+///
+/// @author Alan Yeh
 @UtilityClass
 public class Logx {
     @Getter
@@ -54,23 +51,19 @@ public class Logx {
         private final String value;
     }
 
-    /**
-     * 设置日志的文字颜色
-     *
-     * @param text       日志
-     * @param foreground 文字颜色
-     */
+    /// 设置日志的文字颜色
+    ///
+    /// @param text       日志
+    /// @param foreground 文字颜色
     public String wrap(String text, Color foreground) {
         return Stringx.format("\u001B[3{}m{}\u001B[0m", foreground.getValue(), text);
     }
 
-    /**
-     * 设置日志的文字颜色和背景颜色
-     *
-     * @param text       日志
-     * @param foreground 文字颜色
-     * @param background 背景颜色
-     */
+    /// 设置日志的文字颜色和背景颜色
+    ///
+    /// @param text       日志
+    /// @param foreground 文字颜色
+    /// @param background 背景颜色
     public String wrap(String text, Color foreground, Color background) {
         return Stringx.format("\u001B[4{};3{}m{}\u001B[0m", background.getValue(), foreground.getValue(), text);
     }

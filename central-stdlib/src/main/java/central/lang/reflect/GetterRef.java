@@ -31,12 +31,9 @@ import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 
-/**
- * 方法引用
- *
- * @author Alan Yeh
- * @since 2022/07/20
- */
+/// 方法引用
+///
+/// @author Alan Yeh
 @FunctionalInterface
 public interface GetterRef<T, R> extends Function<T, R>, Serializable {
 

@@ -33,49 +33,35 @@ import java.util.Date;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 缓存
- *
- * @author Alan Yeh
- * @since 2023/07/06
- */
+/// 缓存
+///
+/// @author Alan Yeh
 class Cache implements Delayed {
 
-    /**
-     * 创建时间（时间戳）
-     */
+    /// 创建时间（时间戳）
     @Getter
     private final long timestamp = System.currentTimeMillis();
 
-    /**
-     * 键
-     */
+    /// 键
     @Getter
     private final String key;
 
-    /**
-     * 值
-     */
+    /// 值
     @Getter
     @Setter
     private Object value;
 
-    /**
-     * 值类型
-     */
+    /// 值类型
     @Getter
     private DataType type;
 
-    /**
-     * 记录该元素是否已无效
-     */
+    /// 记录该元素是否已无效
     @Getter
     private boolean invalid = false;
 
-    /**
-     * 过期时间（时间戳）
-     * 如果过期时间 < 0 表示永不过期
-     */
+    /// 过期时间（时间戳）
+    ///
+    /// 如果过期时间 < 0 表示永不过期
     private long expire = -1;
 
     public Cache(String key, Object value, DataType type) {
@@ -84,37 +70,27 @@ class Cache implements Delayed {
         this.type = type;
     }
 
-    /**
-     * 判断该缓存是否永久有效的
-     */
+    /// 判断该缓存是否永久有效的
     public boolean isPermanent() {
         return this.expire < 0;
     }
 
-    /**
-     * 判断该缓存是否已过期
-     */
+    /// 判断该缓存是否已过期
     public boolean isExpired() {
         return this.expire > 0 && this.timestamp > this.expire;
     }
 
-    /**
-     * 设置当前缓存的过期时间
-     */
+    /// 设置当前缓存的过期时间
     public void setExpire(Date expire) {
         this.expire = expire.getTime();
     }
 
-    /**
-     * 设置当前缓存为永久有效
-     */
+    /// 设置当前缓存为永久有效
     public void persist() {
         this.expire = -1;
     }
 
-    /**
-     * 将缓存设为无效
-     */
+    /// 将缓存设为无效
     public void invalid() {
         this.invalid = true;
     }

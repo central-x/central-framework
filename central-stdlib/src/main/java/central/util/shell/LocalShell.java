@@ -38,12 +38,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 本地 Shell
- *
- * @author Alan Yeh
- * @since 2022/12/02
- */
+/// 本地 Shell
+///
+/// @author Alan Yeh
 public class LocalShell extends Shell {
 
     private final ProcessBuilder factory = new ProcessBuilder();

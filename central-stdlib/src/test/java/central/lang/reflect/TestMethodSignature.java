@@ -25,17 +25,13 @@
 package central.lang.reflect;
 
 import central.sql.data.Entity;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * MethodSignature Test Cases
- *
- * @author Alan Yeh
- * @since 2023/05/01
- */
+/// MethodSignature Test Cases
+///
+/// @author Alan Yeh
 public class TestMethodSignature {
 
     @Test

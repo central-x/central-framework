@@ -25,47 +25,42 @@
 package central.pluglet;
 
 import central.bean.InitializeException;
+import central.lang.Arrayx;
+import central.lang.Assertx;
+import central.lang.Stringx;
 import central.lang.reflect.InstanceRef;
 import central.lang.reflect.TypeRef;
 import central.pluglet.binder.ControlBinder;
 import central.pluglet.control.ControlResolver;
 import central.pluglet.control.PlugletControl;
-import central.lang.Arrayx;
-import central.lang.Assertx;
-import central.lang.Stringx;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
-/**
- * Pluglet Factory
- * Pluglet 用于通过可视化的方式动态构建插件。开发人员通过声明 Pluglet 之后，PlugletFactory 可以将这些插件需要的内容
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Pluglet Factory
+///
+/// Pluglet 用于通过可视化的方式动态构建插件。开发人员通过声明 Pluglet 之后，PlugletFactory 可以将这些插件需要的内容
+///
+/// @author Alan Yeh
 public class PlugletFactory {
 
-    /**
-     * 字段绑定
-     */
+    /// 字段绑定
     private final List<FieldBinder> binders = new ArrayList<>();
 
     public void registerBinder(FieldBinder binder) {
         this.binders.add(binder);
     }
 
-    /**
-     * 实例生命周期处理
-     */
+    /// 实例生命周期处理
     private final List<LifeCycleProcessor> processors = new ArrayList<>();
 
     public void registerLifeCycleProcessor(LifeCycleProcessor processor) {
         this.processors.add(processor);
     }
 
-    /**
-     * 控件解析
-     */
+    /// 控件解析
     private final List<ControlResolver> resolvers = new ArrayList<>();
 
     public PlugletFactory() {
@@ -114,11 +109,9 @@ public class PlugletFactory {
                 .forEach(it -> this.processors.add((LifeCycleProcessor) it.getInstance()));
     }
 
-    /**
-     * 获取插件声明的控件列表
-     *
-     * @param pluglet 插件
-     */
+    /// 获取插件声明的控件列表
+    ///
+    /// @param pluglet 插件
     public List<PlugletControl> getControls(Class<?> pluglet) {
         var reference = TypeRef.of(pluglet);
         var fields = reference.getFields();
@@ -138,14 +131,12 @@ public class PlugletFactory {
         return controls;
     }
 
-    /**
-     * 创建插件
-     *
-     * @param pluglet 插件类型
-     * @param params  初始化参数
-     * @param <T>     插件类型
-     * @return 插件实例
-     */
+    /// 创建插件
+    ///
+    /// @param pluglet 插件类型
+    /// @param params  初始化参数
+    /// @param <T>     插件类型
+    /// @return 插件实例
     public <T> T create(Class<T> pluglet, Map<String, Object> params) {
         var reference = TypeRef.of(pluglet);
         var instance = reference.newInstance();
@@ -174,12 +165,12 @@ public class PlugletFactory {
         return instance.getInstance();
     }
 
-    public void destroy(Object pluglet){
-        if (pluglet == null){
+    public void destroy(Object pluglet) {
+        if (pluglet == null) {
             return;
         }
         var instance = InstanceRef.of(pluglet);
-        for (var processor : this.processors){
+        for (var processor : this.processors) {
             processor.beforeDestroy(instance);
         }
 

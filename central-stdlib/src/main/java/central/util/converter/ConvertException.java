@@ -28,14 +28,11 @@ import central.lang.Stringx;
 
 import java.io.Serial;
 
-/**
- * Convert Exception
- * <p>
- * 格式转换异常
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Convert Exception
+///
+/// 格式转换异常
+///
+/// @author Alan Yeh
 public class ConvertException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -7706679677177839195L;

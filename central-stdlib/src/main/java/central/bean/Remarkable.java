@@ -24,22 +24,15 @@
 
 package central.bean;
 
-/**
- * 可备注的
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// 可备注的
+///
+/// @author Alan Yeh
 public interface Remarkable {
-    /**
-     * 获取备注
-     */
+    /// 获取备注
     String getRemark();
 
-    /**
-     * 设置备注
-     *
-     * @param remark 备注
-     */
+    /// 设置备注
+    ///
+    /// @param remark 备注
     void setRemark(String remark);
 }

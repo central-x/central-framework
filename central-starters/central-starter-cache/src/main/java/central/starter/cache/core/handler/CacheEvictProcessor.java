@@ -41,13 +41,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
-/**
- * 清除缓存
- *
- * @author Alan Yeh
- * @see CacheEvict
- * @since 2022/11/15
- */
+/// 清除缓存
+///
+/// @author Alan Yeh
+/// @see CacheEvict
 @Slf4j
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 1)

@@ -29,17 +29,12 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 
-/**
- * Digestx Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// Digestx Test Cases
+///
+/// @author Alan Yeh
 public class TestDigestx {
 
-    /**
-     * @see <a href="https://www.sojson.com/hash.html">sojson</a>
-     */
+    /// @see <a href="https://www.sojson.com/hash.html">sojson</a>
     @Test
     public void case1() {
         var license = """
@@ -51,9 +46,7 @@ public class TestDigestx {
         Assertions.assertEquals("f47b4a6c4dfad9403f3887ee23bc92a5", md5);
     }
 
-    /**
-     * @see <a href="https://www.sojson.com/hash.html">sojson</a>
-     */
+    /// @see <a href="https://www.sojson.com/hash.html">sojson</a>
     @Test
     public void case2() {
         var license = """
@@ -65,9 +58,7 @@ public class TestDigestx {
         Assertions.assertEquals("bb58cd273ae5891b8cdf8489beccc4ecea74e69d", sha1);
     }
 
-    /**
-     * @see <a href="https://www.sojson.com/hash.html">sojson</a>
-     */
+    /// @see <a href="https://www.sojson.com/hash.html">sojson</a>
     @Test
     public void case3() {
         var license = """
@@ -79,9 +70,7 @@ public class TestDigestx {
         Assertions.assertEquals("dc9431186457bafb669ea65b64e7d940b9bfa18e63d86f6916c8a999", sha224);
     }
 
-    /**
-     * @see <a href="https://www.sojson.com/hash.html">sojson</a>
-     */
+    /// @see <a href="https://www.sojson.com/hash.html">sojson</a>
     @Test
     public void case4() {
         var license = """
@@ -93,9 +82,7 @@ public class TestDigestx {
         Assertions.assertEquals("3a51db0133a4765c48cafd109dad00187fa5066d5a9fd8ca6fc81a2fc6c18f20", sha256);
     }
 
-    /**
-     * @see <a href="https://www.sojson.com/hash.html">sojson</a>
-     */
+    /// @see <a href="https://www.sojson.com/hash.html">sojson</a>
     @Test
     public void case5() {
         var license = """
@@ -107,9 +94,7 @@ public class TestDigestx {
         Assertions.assertEquals("7ee3b84c3b10e3e7c00820c39e9b0facaf252af202b5e6c9ddbb77298c9d1a7daebefb2096198d208d21151de347208f", sha384);
     }
 
-    /**
-     * @see <a href="https://www.sojson.com/hash.html">sojson</a>
-     */
+    /// @see <a href="https://www.sojson.com/hash.html">sojson</a>
     @Test
     public void case6() {
         var license = """

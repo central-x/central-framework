@@ -24,21 +24,18 @@
 
 package central.sql.datasource.factory.hikari;
 
+import central.lang.Stringx;
 import central.sql.SqlDialect;
 import central.sql.datasource.factory.DataSourceFactory;
 import central.util.Objectx;
-import central.lang.Stringx;
 import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
 import java.util.Objects;
 
-/**
- * Hikari
- *
- * @author Alan Yeh
- * @since 2022/08/05
- */
+/// Hikari
+///
+/// @author Alan Yeh
 public class HikariDataSourceFactory extends HikariProperties implements DataSourceFactory {
 
 //    public HikariDataSourceFactory() {

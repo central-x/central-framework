@@ -29,20 +29,14 @@ import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
-/**
- * 启用 ORM 服务
- *
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// 启用 ORM 服务
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Import({StarterConfiguration.class, MapperRegistrar.class})
 public @interface EnableOrm {
 
-    /**
-     * 待扫描 Mapper 的包路径
-     */
+/// 待扫描 Mapper 的包路径
     String[] packages() default {};
 }

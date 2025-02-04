@@ -26,12 +26,9 @@ package central.sql.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * 加密字段
- *
- * @author Alan Yeh
- * @since 2022/08/08
- */
+/// 加密字段
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

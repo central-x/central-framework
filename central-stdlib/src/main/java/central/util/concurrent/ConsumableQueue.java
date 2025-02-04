@@ -34,16 +34,17 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
-/**
- * 可消费的队列
- * 用于快速创建队列消费线程
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 可消费的队列
+///
+/// 用于快速创建队列消费线程
+///
+/// @author Alan Yeh
 public class ConsumableQueue<E, Queue extends BlockingQueue<E>> implements BlockingQueue<E>, Closeable {
 
     private final Queue queue;
@@ -79,13 +80,12 @@ public class ConsumableQueue<E, Queue extends BlockingQueue<E>> implements Block
         }
     }
 
-    /**
-     * 添加消费者
-     * 已添加的消费者会自动加入到异步线程池进行消费
-     *
-     * @param consumer 队列消费者
-     * @return 消费者标识，移除消费者需要使用此标识
-     */
+    /// 添加消费者
+    ///
+    /// 已添加的消费者会自动加入到异步线程池进行消费
+    ///
+    /// @param consumer 队列消费者
+    /// @return 消费者标识，移除消费者需要使用此标识
     public String addConsumer(Consumer<Queue> consumer) {
         Future<?> future = this.executor.submit(() -> {
             if (consumer instanceof InitializingBean) {
@@ -103,13 +103,12 @@ public class ConsumableQueue<E, Queue extends BlockingQueue<E>> implements Block
         return key;
     }
 
-    /**
-     * 使用指定的标识添加消费者
-     * 已添加的消费者会自动加入到异步线程池进行消费
-     *
-     * @param key      标费者标识
-     * @param consumer 队列消费者
-     */
+    /// 使用指定的标识添加消费者
+    ///
+    /// 已添加的消费者会自动加入到异步线程池进行消费
+    ///
+    /// @param key      标费者标识
+    /// @param consumer 队列消费者
     public void addConsumer(String key, Consumer<Queue> consumer) {
         Future<?> future = this.executor.submit(() -> {
             if (consumer instanceof InitializingBean) {
@@ -125,11 +124,9 @@ public class ConsumableQueue<E, Queue extends BlockingQueue<E>> implements Block
         this.runners.put(key, future);
     }
 
-    /**
-     * 移除消费者
-     *
-     * @param key 消费者标识
-     */
+    /// 移除消费者
+    ///
+    /// @param key 消费者标识
     public void removeConsumer(String key) {
         Future<?> future = this.runners.remove(key);
         future.cancel(true);

@@ -27,12 +27,9 @@ package central.test.probe;
 import central.starter.probe.EnableProbe;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * 应用配置
- *
- * @author Alan Yeh
- * @since 2023/12/29
- */
+/// 应用配置
+///
+/// @author Alan Yeh
 @EnableProbe
 @Configuration
 public class ApplicationConfiguration {

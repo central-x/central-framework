@@ -44,12 +44,9 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
-/**
- * 应用数据源
- *
- * @author Alan Yeh
- * @since 2022/09/23
- */
+/// 应用数据源
+///
+/// @author Alan Yeh
 @Component
 public class ApplicationSource extends DynamicSqlSource implements InitializingBean, EnvironmentAware {
 

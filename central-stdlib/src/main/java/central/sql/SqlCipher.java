@@ -24,26 +24,19 @@
 
 package central.sql;
 
-/**
- * 数据加密器
- *
- * @author Alan Yeh
- * @since 2022/08/02
- */
+/// 数据加密器
+///
+/// @author Alan Yeh
 public interface SqlCipher {
-    /**
-     * 加密数据
-     *
-     * @param data 待加密的数据
-     * @return 已加密的数据
-     */
+    /// 加密数据
+    ///
+    /// @param data 待加密的数据
+    /// @return 已加密的数据
     String encrypt(String data);
 
-    /**
-     * 解密数据
-     *
-     * @param encryptedData 已加密的数据
-     * @return 已解密的数据
-     */
+    /// 解密数据
+    ///
+    /// @param encryptedData 已加密的数据
+    /// @return 已解密的数据
     String decrypt(String encryptedData);
 }

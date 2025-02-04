@@ -24,6 +24,7 @@
 
 package central.sql.builder.script;
 
+import central.lang.Stringx;
 import central.sql.SqlBuilder;
 import central.sql.SqlScript;
 import central.sql.SqlType;
@@ -31,7 +32,6 @@ import central.sql.builder.script.column.AddColumnScript;
 import central.sql.builder.script.column.DropColumnScript;
 import central.sql.builder.script.column.RenameColumnScript;
 import central.util.Objectx;
-import central.lang.Stringx;
 import central.validation.Validatex;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -41,17 +41,12 @@ import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 字段相关表本解析器
- *
- * @author Alan Yeh
- * @since 2022/08/09
- */
+/// 字段相关表本解析器
+///
+/// @author Alan Yeh
 class ColumnScriptParser {
 
-    /**
-     * 解析 XML
-     */
+    /// 解析 XML
     public static List<SqlScript> parse(SqlBuilder dialect, Node parent) throws SQLSyntaxErrorException {
         List<SqlScript> sqls = new ArrayList<>();
 
@@ -91,9 +86,7 @@ class ColumnScriptParser {
         return Objectx.getOrDefault(item.getNodeValue(), defaultValue);
     }
 
-    /**
-     * 解析添加字段脚本
-     */
+    /// 解析添加字段脚本
     private static List<AddColumnScript> parseAddColumnScript(Node parent) {
         List<AddColumnScript> scripts = new ArrayList<>();
 
@@ -131,9 +124,7 @@ class ColumnScriptParser {
         return scripts;
     }
 
-    /**
-     * 解析删除表字段脚本
-     */
+    /// 解析删除表字段脚本
     private static List<DropColumnScript> parseDropColumnScript(Node parent) {
         List<DropColumnScript> scripts = new ArrayList<>();
 
@@ -157,9 +148,7 @@ class ColumnScriptParser {
         return scripts;
     }
 
-    /**
-     * 解析重命名表字段脚本
-     */
+    /// 解析重命名表字段脚本
     private static List<RenameColumnScript> parseRenameColumnScript(Node parent) {
         List<RenameColumnScript> scripts = new ArrayList<>();
 

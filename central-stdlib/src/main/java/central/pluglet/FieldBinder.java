@@ -29,26 +29,19 @@ import central.lang.reflect.InstanceRef;
 
 import java.util.Map;
 
-/**
- * Pluglet Field Binder
- *
- * @author Alan Yeh
- * @since 2022/07/12
- */
+/// Pluglet Field Binder
+///
+/// @author Alan Yeh
 public interface FieldBinder {
-    /**
-     * 判断是否支持绑定字段
-     *
-     * @param field 字段
-     */
+    /// 判断是否支持绑定字段
+    ///
+    /// @param field 字段
     boolean support(FieldRef field);
 
-    /**
-     * 绑定字段
-     *
-     * @param target 待绑定对象
-     * @param field  待绑定对象字段
-     * @param params 入参
-     */
+    /// 绑定字段
+    ///
+    /// @param target 待绑定对象
+    /// @param field  待绑定对象字段
+    /// @param params 入参
     void bind(InstanceRef<?> target, FieldRef field, Map<String, Object> params);
 }

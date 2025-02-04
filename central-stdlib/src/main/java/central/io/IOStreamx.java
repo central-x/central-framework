@@ -36,35 +36,28 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-/**
- * 流工具
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// 流工具
+///
+/// @author Alan Yeh
 @PublicApi
 @UtilityClass
 public class IOStreamx {
     public static final int BUFFER_SIZE = 8 * 1204;
 
-    /**
-     * 传输数据流
-     *
-     * @param input  输入流
-     * @param output 输出流
-     * @return 共复制了多少字节
-     */
+    /// 传输数据流
+    ///
+    /// @param input  输入流
+    /// @param output 输出流
+    /// @return 共复制了多少字节
     public static long transfer(@Nonnull InputStream input, @Nonnull OutputStream output) throws IOException {
         return transfer(input, output, -1);
     }
 
-    /**
-     * 传输数据流
-     *
-     * @param input  输入流
-     * @param output 输出流
-     * @param length 传输长度（-1 传输直至关闭）
-     */
+    /// 传输数据流
+    ///
+    /// @param input  输入流
+    /// @param output 输出流
+    /// @param length 传输长度（-1 传输直至关闭）
     public static long transfer(@Nonnull InputStream input, @Nonnull OutputStream output, long length) throws IOException {
         Assertx.mustNotNull(input, "Argument 'input' must not null");
         Assertx.mustNotNull(output, "Argument 'output' must not null");
@@ -118,11 +111,9 @@ public class IOStreamx {
         }
     }
 
-    /**
-     * 将输入流读成字节码
-     *
-     * @param input 输入流
-     */
+    /// 将输入流读成字节码
+    ///
+    /// @param input 输入流
     public static byte[] readBytes(@Nullable InputStream input) throws IOException {
         if (input == null) {
             return new byte[0];
@@ -134,25 +125,21 @@ public class IOStreamx {
         }
     }
 
-    /**
-     * 将输入流转为文本
-     *
-     * @param input   输入流
-     * @param charset 字符编码
-     * @return 文本，如果 input 为空时，返回空字符串
-     */
+    /// 将输入流转为文本
+    ///
+    /// @param input   输入流
+    /// @param charset 字符编码
+    /// @return 文本，如果 input 为空时，返回空字符串
     public static @Nonnull String readText(InputStream input, Charset charset) throws IOException {
         return readText(input, -1, charset);
     }
 
-    /**
-     * 读取流指定长度的本文
-     *
-     * @param input   输入流
-     * @param length  只读指定长度, 负数时为不限长度
-     * @param charset 字符编码
-     * @return 文本，如果 input 为空时，返回空字符串
-     */
+    /// 读取流指定长度的本文
+    ///
+    /// @param input   输入流
+    /// @param length  只读指定长度, 负数时为不限长度
+    /// @param charset 字符编码
+    /// @return 文本，如果 input 为空时，返回空字符串
     public static @Nonnull String readText(InputStream input, int length, Charset charset) throws IOException {
         if (input == null) {
             return "";
@@ -179,12 +166,10 @@ public class IOStreamx {
         }
     }
 
-    /**
-     * 将 InputStream 转成 BufferedInputStream
-     *
-     * @param input InputStream
-     * @return BufferedInputStream
-     */
+    /// 将 InputStream 转成 BufferedInputStream
+    ///
+    /// @param input InputStream
+    /// @return BufferedInputStream
     public static BufferedInputStream buffered(InputStream input) {
         if (input instanceof BufferedInputStream buffered) {
             return buffered;
@@ -193,12 +178,10 @@ public class IOStreamx {
         }
     }
 
-    /**
-     * 将 OutputStream 转成 BufferedOutputStream
-     *
-     * @param output OutputStream
-     * @return BufferedOutputStream
-     */
+    /// 将 OutputStream 转成 BufferedOutputStream
+    ///
+    /// @param output OutputStream
+    /// @return BufferedOutputStream
     public static BufferedOutputStream buffered(OutputStream output) {
         if (output instanceof BufferedOutputStream buffered) {
             return buffered;
@@ -207,12 +190,10 @@ public class IOStreamx {
         }
     }
 
-    /**
-     * 读取一行文本
-     *
-     * @param input   输入流
-     * @param charset 字符集
-     */
+    /// 读取一行文本
+    ///
+    /// @param input   输入流
+    /// @param charset 字符集
     public static String readLine(InputStream input, Charset charset) throws IOException {
         var arrays = new byte[0];
 
@@ -238,41 +219,33 @@ public class IOStreamx {
         }
     }
 
-    /**
-     * 读取一行文本
-     *
-     * @param input 输入流
-     */
+    /// 读取一行文本
+    ///
+    /// @param input 输入流
     public static String readLine(InputStream input) throws IOException {
         return readLine(input, StandardCharsets.UTF_8);
     }
 
-    /**
-     * 向输出流写入一行文本
-     *
-     * @param output  输入流
-     * @param line    文本
-     * @param charset 字符集
-     */
+    /// 向输出流写入一行文本
+    ///
+    /// @param output  输入流
+    /// @param line    文本
+    /// @param charset 字符集
     public static void writeLine(OutputStream output, String line, Charset charset) throws IOException {
         output.write(line.getBytes(charset));
         output.write('\n');
         output.flush();
     }
 
-    /**
-     * 向输出流写入一行文本
-     *
-     * @param output 输入流
-     * @param line   文本
-     */
+    /// 向输出流写入一行文本
+    ///
+    /// @param output 输入流
+    /// @param line   文本
     public static void writeLine(OutputStream output, String line) throws IOException {
         writeLine(output, line, StandardCharsets.UTF_8);
     }
 
-    /**
-     * 关闭指定对象
-     */
+    /// 关闭指定对象
     public static void close(Closeable closeable) {
         if (closeable != null) {
             try {

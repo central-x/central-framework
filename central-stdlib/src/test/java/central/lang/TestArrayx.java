@@ -26,14 +26,11 @@ package central.lang;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-/**
- * Arrayx Test Cases
- *
- * @author Alan Yeh
- * @since 2022/11/27
- */
+/// Arrayx Test Cases
+///
+/// @author Alan Yeh
 public class TestArrayx {
 
     @Test

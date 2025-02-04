@@ -24,13 +24,13 @@
 
 package central.net.http.processor.impl;
 
-import central.pattern.chain.ProcessChain;
-import central.pattern.chain.reactive.ReactiveProcessChain;
+import central.lang.Arrayx;
 import central.net.http.HttpRequest;
 import central.net.http.HttpResponse;
 import central.net.http.processor.HttpProcessor;
 import central.net.http.processor.ReactiveHttpProcessor;
-import central.lang.Arrayx;
+import central.pattern.chain.ProcessChain;
+import central.pattern.chain.reactive.ReactiveProcessChain;
 import central.util.Listx;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -40,12 +40,9 @@ import reactor.core.publisher.Mono;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-/**
- * 传递请求头
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 传递请求头
+///
+/// @author Alan Yeh
 public class TransmitHeaderProcessor implements HttpProcessor, ReactiveHttpProcessor {
     private final Predicate<String> filter;
 

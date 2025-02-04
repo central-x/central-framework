@@ -33,14 +33,14 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-/**
- * 内存存储
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// 内存存储
+///
+/// @author Alan Yeh
 @ConditionalOnMissingBean(CacheStorage.class)
 public class MemoryStorage implements CacheStorage, DisposableBean {
 

@@ -37,138 +37,113 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Stream;
 
-/**
- * Map 工具
- *
- * @author Alan Yeh
- * @since 2022/07/12
- */
+/// Map 工具
+///
+/// @author Alan Yeh
 @UtilityClass
 public class Mapx {
 
-    /**
-     * 将可空集合变成不可空集合
-     *
-     * @param map 集合
-     * @param <K> 键类型
-     * @param <V> 值类型
-     */
+    /// 将可空集合变成不可空集合
+    ///
+    /// @param map 集合
+    /// @param <K> 键类型
+    /// @param <V> 值类型
     public static <K, V> Map<K, V> nullSafe(@Nullable Map<K, V> map) {
         return map == null ? newHashMap() : map;
     }
 
-    /**
-     * 判断集合是否为空
-     *
-     * @param map 集合
-     * @param <K> 键类型
-     * @param <V> 值类型
-     */
+    /// 判断集合是否为空
+    ///
+    /// @param map 集合
+    /// @param <K> 键类型
+    /// @param <V> 值类型
     public static <K, V> boolean isNullOrEmpty(@Nullable Map<K, V> map) {
         return map == null || map.isEmpty();
     }
 
-    /**
-     * 判断集合是否不为空
-     *
-     * @param map 集合
-     * @param <K> 键类型
-     * @param <V> 值类型
-     */
+    /// 判断集合是否不为空
+    ///
+    /// @param map 集合
+    /// @param <K> 键类型
+    /// @param <V> 值类型
     public static <K, V> boolean isNotEmpty(@Nullable Map<K, V> map) {
         return map != null && !map.isEmpty();
     }
 
-    /**
-     * 转成 Stream
-     *
-     * @param map 集合
-     * @param <K> 键类型
-     * @param <V> 值类型
-     */
+    /// 转成 Stream
+    ///
+    /// @param map 集合
+    /// @param <K> 键类型
+    /// @param <V> 值类型
     public static <K, V> Stream<Map.Entry<K, V>> asStream(@Nullable Map<K, V> map) {
         return isNullOrEmpty(map) ? Stream.empty() : map.entrySet().stream();
     }
 
-    /**
-     * 获取指定键的值
-     *
-     * @param map 集合
-     * @param key 键
-     * @param <K> 键类型
-     * @param <V> 值类型
-     */
+    /// 获取指定键的值
+    ///
+    /// @param map 集合
+    /// @param key 键
+    /// @param <K> 键类型
+    /// @param <V> 值类型
     public static <K, V> @Nonnull Optional<V> get(@Nullable Map<K, V> map, K key) {
         return Optional.ofNullable(getOrNull(map, key));
     }
 
-    /**
-     * 获取指定键的值
-     *
-     * @param map 集合
-     * @param key 键
-     * @param <K> 键类型
-     * @param <V> 值类型
-     */
+    /// 获取指定键的值
+    ///
+    /// @param map 集合
+    /// @param key 键
+    /// @param <K> 键类型
+    /// @param <V> 值类型
     public static <K, V> V getOrNull(@Nullable Map<K, V> map, K key) {
         return isNullOrEmpty(map) ? null : map.get(key);
     }
 
-    /**
-     * 快速创建 HashMap
-     *
-     * @param <K> 键类型
-     * @param <V> 值类型
-     */
+    /// 快速创建 HashMap
+    ///
+    /// @param <K> 键类型
+    /// @param <V> 值类型
     public static <K, V> Map<K, V> newHashMap() {
         return new HashMap<>();
     }
 
-    /**
-     * 快速创建键值对
-     *
-     * @param key   键
-     * @param value 值
-     * @param <K>   键类型
-     * @param <V>   值类型
-     */
+    /// 快速创建键值对
+    ///
+    /// @param key   键
+    /// @param value 值
+    /// @param <K>   键类型
+    /// @param <V>   值类型
     public static <K, V> Map<K, V> newHashMap(K key, V value) {
         var map = new HashMap<K, V>();
         map.put(key, value);
         return map;
     }
 
-    /**
-     * 快速创建 LinkedHashMap
-     *
-     * @param <K> 键类型
-     * @param <V> 值类型
-     */
+    /// 快速创建 LinkedHashMap
+    ///
+    /// @param <K> 键类型
+    /// @param <V> 值类型
     public static <K, V> Map<K, V> newLinkedHashMap() {
         return new LinkedHashMap<>();
     }
 
-    /**
-     * 快速创建 LinkedHashMap
-     *
-     * @param key   键
-     * @param value 值
-     * @param <K>   键类型
-     * @param <V>   值类型
-     */
+    /// 快速创建 LinkedHashMap
+    ///
+    /// @param key   键
+    /// @param value 值
+    /// @param <K>   键类型
+    /// @param <V>   值类型
     public static <K, V> Map<K, V> newLinkedHashMap(K key, V value) {
         var map = new HashMap<K, V>();
         map.put(key, value);
         return map;
     }
 
-    /**
-     * 快速构建 Map
-     *
-     * @param entries 键值对
-     * @param <K>     键类型
-     * @param <V>     值类型
-     */
+    /// 快速构建 Map
+    ///
+    /// @param entries 键值对
+    /// @param <K>     键类型
+    /// @param <V>     值类型
     @SafeVarargs
     public static <K, V> Map<K, V> of(Map.Entry<K, V>... entries) {
         var map = new HashMap<K, V>();
@@ -178,14 +153,12 @@ public class Mapx {
         return map;
     }
 
-    /**
-     * 快速构建健值对
-     *
-     * @param key   键
-     * @param value 值
-     * @param <K>   键类型
-     * @param <V>   值类型
-     */
+    /// 快速构建健值对
+    ///
+    /// @param key   键
+    /// @param value 值
+    /// @param <K>   键类型
+    /// @param <V>   值类型
     public static <K, V> Map.Entry<K, V> entry(K key, V value) {
         return new Entry<>(key, value);
     }
@@ -205,12 +178,10 @@ public class Mapx {
         }
     }
 
-    /**
-     * 将 Map 转换线程安全类
-     *
-     * @param unsafe 非线程安全集合
-     * @return 线程安全集合
-     */
+    /// 将 Map 转换线程安全类
+    ///
+    /// @param unsafe 非线程安全集合
+    /// @return 线程安全集合
     public static <K, V> Map<K, V> threadSafe(Map<K, V> unsafe) {
         return new ThreadSafeMap<>(unsafe);
     }
@@ -360,12 +331,10 @@ public class Mapx {
         }
     }
 
-    /**
-     * 将 Map 转换大小写不敏感的 Map
-     *
-     * @param map 原 Map
-     * @param <V> 值类型
-     */
+    /// 将 Map 转换大小写不敏感的 Map
+    ///
+    /// @param map 原 Map
+    /// @param <V> 值类型
     public static <V> Map<String, V> caseInsensitive(Map<String, V> map) {
         return new CaseInsensitiveMap<>(map);
     }

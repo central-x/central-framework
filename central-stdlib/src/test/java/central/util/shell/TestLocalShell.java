@@ -1,4 +1,4 @@
-///*
+/// *
 // * MIT License
 // *
 // * Copyright (c) 2022-present Alan Yeh <alan@yeh.cn>
@@ -29,17 +29,14 @@
 //import java.nio.file.Path;
 //import java.time.Duration;
 //
-///**
-// * LocalShell Test Cases
-// *
-// * @author Alan Yeh
-// * @since 2022/12/02
-// */
+///// LocalShell Test Cases
+/////
+///// @author Alan Yeh
 //public class TestLocalShell {
 //
 //    @Test
 //    public void case1() throws Exception {
-//        try (var shell = new LocalShell()){
+//        try (var shell = new LocalShell()) {
 //            shell.connect(Duration.ofSeconds(5));
 //            shell.exec("pod", "--version");
 //
@@ -51,7 +48,7 @@
 //
 //    @Test
 //    public void case2() throws Exception {
-//        try (var shell = new LocalShell()){
+//        try (var shell = new LocalShell()) {
 //            shell.connect(Duration.ofSeconds(5));
 //
 //            shell.transferTo(Path.of("~/Documents/andes"));
@@ -63,7 +60,7 @@
 //
 //    @Test
 //    public void case3() throws Exception {
-//        try (var shell = new LocalShell()){
+//        try (var shell = new LocalShell()) {
 //            shell.connect(Duration.ofSeconds(5));
 //
 //            shell.transferFrom(Path.of("~/andes"), Path.of("~/Documents"));
@@ -75,7 +72,7 @@
 //
 //    @Test
 //    public void case4() throws Exception {
-//        try (var shell = new LocalShell()){
+//        try (var shell = new LocalShell()) {
 //            shell.connect(Duration.ofSeconds(5));
 //
 //            shell.rm(Path.of("~/andes"));

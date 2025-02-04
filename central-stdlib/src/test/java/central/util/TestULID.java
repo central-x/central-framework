@@ -27,17 +27,14 @@ package central.util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/**
- * ULID Test Cases
- *
- * @author Alan Yeh
- * @since 2023/06/04
- */
+/// ULID Test Cases
+///
+/// @author Alan Yeh
 public class TestULID {
 
     @Test
-    public void case1(){
-        for (int i = 0; i < 10_000; i ++) {
+    public void case1() {
+        for (int i = 0; i < 10_000; i++) {
             Assertions.assertEquals(26, ULID.randomULID().toString().length());
         }
     }

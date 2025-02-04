@@ -24,11 +24,8 @@
 
 package central.sql.builder;
 
-/**
- * 未知的方言
- *
- * @author Alan Yeh
- * @since 2022/09/23
- */
+/// 未知的方言
+///
+/// @author Alan Yeh
 public class UnknownBuilder extends StandardSqlBuilder {
 }

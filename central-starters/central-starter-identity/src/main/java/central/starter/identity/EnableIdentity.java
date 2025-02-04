@@ -28,12 +28,9 @@ import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
-/**
- * 启用安全认证服务
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// 启用安全认证服务
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

@@ -31,71 +31,54 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-/**
- * Collection 工具
- *
- * @author Alan Yeh
- * @since 2022/07/12
- */
+/// Collection 工具
+///
+/// @author Alan Yeh
 @UtilityClass
 public class Collectionx {
-    /**
-     * 判断集合是否为空
-     *
-     * @param collection 集合
-     * @param <T>        元素类型
-     */
+    /// 判断集合是否为空
+    ///
+    /// @param collection 集合
+    /// @param <T>        元素类型
     public static <T> boolean isNullOrEmpty(@Nullable Collection<T> collection) {
         return collection == null || collection.isEmpty();
     }
 
-    /**
-     * 判断集合是否不为空
-     *
-     * @param collection 集合
-     * @param <T>        元素类型
-     */
+    /// 判断集合是否不为空
+    ///
+    /// @param collection 集合
+    /// @param <T>        元素类型
     public static <T> boolean isNotEmpty(@Nullable Collection<T> collection) {
         return collection != null && !collection.isEmpty();
     }
 
-    /**
-     * 获取第一个元素
-     *
-     * @param collection 集合
-     * @param <T>        元素类型
-     */
+    /// 获取第一个元素
+    ///
+    /// @param collection 集合
+    /// @param <T>        元素类型
     public static <T> @Nonnull Optional<T> getFirst(@Nullable Collection<T> collection) {
         return Optional.ofNullable(getFirstOrNull(collection));
     }
 
-    /**
-     * 获取第一个元素
-     *
-     * @param collection 集合
-     * @param <T>        元素类型
-     */
+    /// 获取第一个元素
+    ///
+    /// @param collection 集合
+    /// @param <T>        元素类型
     public static <T> @Nullable T getFirstOrNull(@Nullable Collection<T> collection) {
         return isNullOrEmpty(collection) ? null : collection.iterator().next();
     }
 
-    /**
-     * 创建一个空 Map
-     */
+    /// 创建一个空 Map
     public static <K, V> Map<K, V> emptyMap() {
         return (Map<K, V>) EMPTY_MAP;
     }
 
-    /**
-     * 创建一个空 Set
-     */
+    /// 创建一个空 Set
     public static <V> Set<V> emptySet() {
         return (Set<V>) EMPTY_SET;
     }
 
-    /**
-     * 创建一个空 List
-     */
+    /// 创建一个空 List
     public static <V> List<V> emptyList() {
         return (List<V>) EMPTY_LIST;
     }

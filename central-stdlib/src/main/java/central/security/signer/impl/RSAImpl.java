@@ -36,13 +36,10 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
-/**
- * RSA 签名算法
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
-public abstract class RSAImpl  implements SignerImpl {
+/// RSA 签名算法
+///
+/// @author Alan Yeh
+public abstract class RSAImpl implements SignerImpl {
     private static final int BUFFER_SIZE = 8 * 1024;
     // 密钥长度在 2048 或 4096 是比较安全的
     private static final int KEY_SIZE = 2048;

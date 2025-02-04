@@ -32,12 +32,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serial;
 
-/**
- * IO Http Exception
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// IO Http Exception
+///
+/// @author Alan Yeh
 public class IOHttpException extends HttpException {
     @Serial
     private static final long serialVersionUID = -4179983448771259792L;

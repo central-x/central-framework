@@ -24,9 +24,9 @@
 
 package central.net.http;
 
+import central.lang.Stringx;
 import central.util.Listx;
 import central.util.Mapx;
-import central.lang.Stringx;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.LinkedMultiValueMap;
@@ -39,12 +39,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Http Url
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Http Url
+///
+/// @author Alan Yeh
 public class HttpUrl {
     @Getter
     private String baseUrl;
@@ -65,61 +62,45 @@ public class HttpUrl {
         return new ImmutableHttpUrl(value);
     }
 
-    /**
-     * Query 参数
-     */
+    /// Query 参数
     @Getter
     private final MultiValueMap<String, String> query = new LinkedMultiValueMap<>();
 
-    /**
-     * URL 参数
-     */
+    /// URL 参数
     @Getter
     private final Map<String, Object> variables = new HashMap<>();
 
-    /**
-     * 设置 Query 参数
-     */
+    /// 设置 Query 参数
     public HttpUrl setQuery(String name, String value) {
         this.query.set(name, value);
         return this;
     }
 
-    /**
-     * 设置 Query 参数
-     */
+    /// 设置 Query 参数
     public HttpUrl setQuery(String name, List<String> values) {
         this.query.put(name, values);
         return this;
     }
 
-    /**
-     * 添加 Query 参数
-     */
+    /// 添加 Query 参数
     public HttpUrl addQuery(String name, String value) {
         this.query.add(name, value);
         return this;
     }
 
-    /**
-     * 添加 Query 参数
-     */
+    /// 添加 Query 参数
     public HttpUrl addQuery(String name, List<String> values) {
         this.query.addAll(name, values);
         return this;
     }
 
-    /**
-     * 添加 Query 参数
-     */
+    /// 添加 Query 参数
     public HttpUrl addQuery(MultiValueMap<String, String> query) {
         this.query.addAll(query);
         return this;
     }
 
-    /**
-     * 设置 URL 参数
-     */
+    /// 设置 URL 参数
     public HttpUrl setVariable(String name, Object value) {
         this.variables.put(name, value);
         return this;
@@ -177,9 +158,7 @@ public class HttpUrl {
         return this.getValue();
     }
 
-    /**
-     * 不能修改的 Url
-     */
+    /// 不能修改的 Url
     public static class ImmutableHttpUrl extends HttpUrl {
 
         public ImmutableHttpUrl(String value) {

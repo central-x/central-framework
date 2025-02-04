@@ -31,78 +31,60 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-/**
- * 缓存集合
- *
- * @author Alan Yeh
- * @since 2023/06/10
- */
+/// 缓存集合
+///
+/// @author Alan Yeh
 public interface CacheSet {
 
-    /**
-     * 返回集合中所有的元素
-     */
-    @Nullable Set<String> values();
+    /// 返回集合中所有的元素
+    @Nullable
+    Set<String> values();
 
-    /**
-     * 向集合里添加元素
-     *
-     * @param values 待添加元素
-     * @return 被添加的元素数量
-     */
+    /// 向集合里添加元素
+    ///
+    /// @param values 待添加元素
+    /// @return 被添加的元素数量
     long add(@Nonnull String... values);
 
-    /**
-     * 向集合里添加元素
-     *
-     * @param values 待添加元素
-     * @return 被添加的元素数量
-     */
+    /// 向集合里添加元素
+    ///
+    /// @param values 待添加元素
+    /// @return 被添加的元素数量
     long add(@Nonnull Collection<String> values);
 
-    /**
-     * 移除集合里的指定元素
-     *
-     * @param values 待移除元素
-     * @return 被移除的元素数量
-     */
+    /// 移除集合里的指定元素
+    ///
+    /// @param values 待移除元素
+    /// @return 被移除的元素数量
     long remove(@Nonnull String... values);
 
-    /**
-     * 移除集合里的指定元素
-     *
-     * @param values 待移除元素
-     * @return 被移除的元素数量
-     */
+    /// 移除集合里的指定元素
+    ///
+    /// @param values 待移除元素
+    /// @return 被移除的元素数量
     long remove(@Nonnull Collection<String> values);
 
-    /**
-     * 随机移除集合中的任一元素
-     *
-     * @return 被移除的元素
-     */
-    @Nullable String pop();
+    /// 随机移除集合中的任一元素
+    ///
+    /// @return 被移除的元素
+    @Nullable
+    String pop();
 
-    /**
-     * 随机移除集合中指定个数的元素
-     *
-     * @param count 移除个数
-     * @return 被移除的元素
-     */
-    @Nonnull List<String> pop(long count);
+    /// 随机移除集合中指定个数的元素
+    ///
+    /// @param count 移除个数
+    /// @return 被移除的元素
+    @Nonnull
+    List<String> pop(long count);
 
-    /**
-     * 返回当前集合的元素数量
-     *
-     * @return 元素数量
-     */
+    /// 返回当前集合的元素数量
+    ///
+    /// @return 元素数量
     long size();
 
-    /**
-     * 判断当前集合是否包含指定元素
-     *
-     * @param value 元素
-     * @return 是否包含
-     */
+    /// 判断当前集合是否包含指定元素
+    ///
+    /// @param value 元素
+    /// @return 是否包含
     boolean contains(@Nonnull String value);
 }

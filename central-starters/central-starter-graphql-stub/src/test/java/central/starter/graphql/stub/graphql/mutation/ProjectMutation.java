@@ -44,14 +44,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-/**
- * Project Mutation
- * <p>
- * 项目修改
- *
- * @author Alan Yeh
- * @since 2022/10/04
- */
+/// Project Mutation
+///
+/// 项目修改
+///
+/// @author Alan Yeh
 @Component
 @GraphQLSchema(path = "mutation", types = ProjectDTO.class)
 public class ProjectMutation {
@@ -59,12 +56,10 @@ public class ProjectMutation {
     @Setter(onMethod_ = @Autowired)
     private ProjectPersistence persistence;
 
-    /**
-     * 保存数据
-     *
-     * @param input    数据输入
-     * @param operator 操作人
-     */
+    /// 保存数据
+    ///
+    /// @param input    数据输入
+    /// @param operator 操作人
     @GraphQLFetcher
     public @Nonnull ProjectDTO insert(@RequestParam @Validated({Insert.class, Default.class}) ProjectInput input,
                                       @RequestParam String operator) {
@@ -72,12 +67,10 @@ public class ProjectMutation {
         return DTO.wrap(data, ProjectDTO.class);
     }
 
-    /**
-     * 批量保存数据
-     *
-     * @param inputs   数据输入
-     * @param operator 操作人
-     */
+    /// 批量保存数据
+    ///
+    /// @param inputs   数据输入
+    /// @param operator 操作人
     @GraphQLFetcher
     public @Nonnull List<ProjectDTO> insertBatch(@RequestParam @Validated({Insert.class, Default.class}) List<ProjectInput> inputs,
                                                  @RequestParam String operator) {
@@ -85,12 +78,10 @@ public class ProjectMutation {
         return DTO.wrap(data, ProjectDTO.class);
     }
 
-    /**
-     * 更新数据
-     *
-     * @param input    数据输入
-     * @param operator 操作人
-     */
+    /// 更新数据
+    ///
+    /// @param input    数据输入
+    /// @param operator 操作人
     @GraphQLFetcher
     public @Nonnull ProjectDTO update(@RequestParam @Validated({Update.class, Default.class}) ProjectInput input,
                                       @RequestParam String operator) {
@@ -98,12 +89,10 @@ public class ProjectMutation {
         return DTO.wrap(data, ProjectDTO.class);
     }
 
-    /**
-     * 批量更新数据
-     *
-     * @param inputs   数据输入
-     * @param operator 操作人
-     */
+    /// 批量更新数据
+    ///
+    /// @param inputs   数据输入
+    /// @param operator 操作人
     @GraphQLFetcher
     public @Nonnull List<ProjectDTO> updateBatch(@RequestParam @Validated({Update.class, Default.class}) List<ProjectInput> inputs,
                                                  @RequestParam String operator) {
@@ -111,21 +100,17 @@ public class ProjectMutation {
         return DTO.wrap(data, ProjectDTO.class);
     }
 
-    /**
-     * 根据主键删除数据
-     *
-     * @param ids 主键
-     */
+    /// 根据主键删除数据
+    ///
+    /// @param ids 主键
     @GraphQLFetcher
     public long deleteByIds(@RequestParam List<String> ids) {
         return this.persistence.deleteByIds(ids);
     }
 
-    /**
-     * 根据条件删除数据
-     *
-     * @param conditions 条件
-     */
+    /// 根据条件删除数据
+    ///
+    /// @param conditions 条件
     @GraphQLFetcher
     public long deleteBy(@RequestParam Conditions<ProjectEntity> conditions) {
         return this.persistence.deleteBy(conditions);

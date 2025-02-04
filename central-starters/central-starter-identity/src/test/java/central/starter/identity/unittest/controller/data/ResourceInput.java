@@ -31,12 +31,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * Resource Input
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// Resource Input
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

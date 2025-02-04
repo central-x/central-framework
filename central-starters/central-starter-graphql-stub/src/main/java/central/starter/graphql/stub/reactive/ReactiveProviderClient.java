@@ -24,11 +24,8 @@
 
 package central.starter.graphql.stub.reactive;
 
-/**
- * 响应式通信客户端
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// 响应式通信客户端
+///
+/// @author Alan Yeh
 public interface ReactiveProviderClient {
 }

@@ -35,12 +35,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * 创建表
- *
- * @author Alan Yeh
- * @since 2022/08/09
- */
+/// 创建表
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

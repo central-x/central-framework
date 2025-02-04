@@ -26,21 +26,15 @@ package central.sql;
 
 import java.sql.Connection;
 
-/**
- * 事务管理
- *
- * @author Alan Yeh
- * @since 2022/09/08
- */
+/// 事务管理
+///
+/// @author Alan Yeh
 public interface SqlTransactionManager {
-    /**
-     * 获取连接
-     */
+    /// 获取连接
     Connection getConnection();
 
-    /**
-     * 归还连接
-     * @param connection
-     */
+    /// 归还连接
+    ///
+    /// @param connection
     void returnConnection(Connection connection);
 }

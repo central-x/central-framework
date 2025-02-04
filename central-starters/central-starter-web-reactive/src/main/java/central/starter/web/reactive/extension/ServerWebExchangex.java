@@ -31,59 +31,48 @@ import jakarta.annotation.Nullable;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.server.ServerWebExchange;
 
-/**
- * ServerWebExchange Extension Methods
- *
- * @author Alan Yeh
- * @since 2022/10/18
- */
+/// ServerWebExchange Extension Methods
+///
+/// @author Alan Yeh
 @UtilityClass
 public class ServerWebExchangex {
-    /**
-     * 获取交换属性
-     *
-     * @param exchange  Current Exchange
-     * @param attribute Attribute
-     * @param <T>       Attribute type
-     * @return Attribute value
-     */
+    /// 获取交换属性
+    ///
+    /// @param exchange  Current Exchange
+    /// @param attribute Attribute
+    /// @param <T>       Attribute type
+    /// @return Attribute value
     public static <T> @Nullable T getAttribute(ServerWebExchange exchange, Attribute<T> attribute) {
         return (T) exchange.getAttributes().computeIfAbsent(attribute.getCode(), code -> attribute.getValue());
     }
 
-    /**
-     * 获取交换属性
-     *
-     * @param exchange     Current Exchange
-     * @param attribute    Attribute
-     * @param defaultValue Default attribute value
-     * @param <T>          Attribute Type
-     * @return Attribute Value
-     */
+    /// 获取交换属性
+    ///
+    /// @param exchange     Current Exchange
+    /// @param attribute    Attribute
+    /// @param defaultValue Default attribute value
+    /// @param <T>          Attribute Type
+    /// @return Attribute Value
     public static <T> @Nonnull T getAttributeOrDefault(ServerWebExchange exchange, Attribute<T> attribute, T defaultValue) {
         return (T) exchange.getAttributeOrDefault(attribute.getCode(), defaultValue);
     }
 
-    /**
-     * 获取非空交换属性
-     *
-     * @param exchange  Current Exchange
-     * @param attribute Attribute
-     * @param <T>       Attribute type
-     * @return Attribute value
-     */
+    /// 获取非空交换属性
+    ///
+    /// @param exchange  Current Exchange
+    /// @param attribute Attribute
+    /// @param <T>       Attribute type
+    /// @return Attribute value
     public static <T> @Nonnull T getRequiredAttribute(ServerWebExchange exchange, Attribute<T> attribute) {
         return Assertx.requireNotNull(getAttribute(exchange, attribute), "Require nonnull value for key '{}'", attribute.getCode());
     }
 
-    /**
-     * 保存交换属性
-     *
-     * @param exchange     Current Exchange
-     * @param attribute    Attribute
-     * @param value        Attribute value
-     * @param <T>Attribute type
-     */
+    /// 保存交换属性
+    ///
+    /// @param exchange     Current Exchange
+    /// @param attribute    Attribute
+    /// @param value        Attribute value
+    /// @param <T>Attribute type
     public static <T> void setAttribute(ServerWebExchange exchange, Attribute<T> attribute, T value) {
         if (value == null) {
             exchange.getAttributes().remove(attribute.getCode());

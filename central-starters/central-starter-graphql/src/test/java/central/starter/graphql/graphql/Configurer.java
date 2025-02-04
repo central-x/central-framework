@@ -35,12 +35,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/**
- * GraphQL 配置
- *
- * @author Alan Yeh
- * @since 2022/09/30
- */
+/// GraphQL 配置
+///
+/// @author Alan Yeh
 @Component
 public class Configurer implements GraphQLConfigurer {
     @Setter(onMethod_ = @Autowired)

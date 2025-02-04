@@ -30,18 +30,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * 异常处理器
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// 异常处理器
+///
+/// @author Alan Yeh
 public interface ExceptionHandler {
-    /**
-     * 是否可以处理该异常
-     *
-     * @param throwable 待处理的异常
-     */
+    /// 是否可以处理该异常
+    ///
+    /// @param throwable 待处理的异常
     boolean support(Throwable throwable);
 
     @Nullable

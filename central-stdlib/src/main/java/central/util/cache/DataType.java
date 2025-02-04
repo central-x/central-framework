@@ -33,12 +33,9 @@ import lombok.Getter;
 
 import java.util.Objects;
 
-/**
- * 数据类型
- *
- * @author Alan Yeh
- * @since 2023/06/10
- */
+/// 数据类型
+///
+/// @author Alan Yeh
 @Getter
 @AllArgsConstructor
 public enum DataType implements OptionalEnum<Integer> {

@@ -26,21 +26,16 @@ package central.lang;
 
 import lombok.experimental.UtilityClass;
 
-/**
- * 比较工具
- *
- * @author Alan Yeh
- * @since 2022/11/01
- */
+/// 比较工具
+///
+/// @author Alan Yeh
 @UtilityClass
 public class Comparex {
 
-    /**
-     * 判断第一个元数是否大于第二个元素
-     *
-     * @param first  第一个元素
-     * @param second 第二个元素
-     */
+    /// 判断第一个元数是否大于第二个元素
+    ///
+    /// @param first  第一个元素
+    /// @param second 第二个元素
     public static <T extends Comparable<T>> boolean isGreater(T first, T second) {
         return CompareResult.GT.matches(first, second);
     }

@@ -26,12 +26,9 @@ package central.net.http.server.controller.data;
 
 import lombok.Data;
 
-/**
- * 文件信息
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 文件信息
+///
+/// @author Alan Yeh
 @Data
 public class Upload {
 

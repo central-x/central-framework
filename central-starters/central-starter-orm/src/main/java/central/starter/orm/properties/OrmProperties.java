@@ -27,12 +27,9 @@ package central.starter.orm.properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * Orm 配置
- *
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// Orm 配置
+///
+/// @author Alan Yeh
 @Data
 @ConfigurationProperties(prefix = "central.orm")
 public class OrmProperties {

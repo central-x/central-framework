@@ -31,12 +31,9 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
 
-/**
- * Forbidden Http Exception
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Forbidden Http Exception
+///
+/// @author Alan Yeh
 public class ForbiddenHttpException extends ClientSeriesHttpException {
     @Serial
     private static final long serialVersionUID = 2387011863305995812L;

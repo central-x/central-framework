@@ -29,39 +29,24 @@ import lombok.Data;
 
 import java.sql.Types;
 
-/**
- * 字段元数据
- *
- * @author Alan Yeh
- * @since 2022/08/06
- */
+/// 字段元数据
+///
+/// @author Alan Yeh
 @Data
 public class ColumnMeta {
-    /**
-     * 字段名
-     */
+    /// 字段名
     private String name;
-    /**
-     * 是否主键
-     */
+    /// 是否主键
     private boolean primary;
-    /**
-     * 字段类型
-     *
-     * @see Types
-     */
+    /// 字段类型
+    ///
+    /// @see Types
     private int type;
-    /**
-     * 字段长度
-     */
+    /// 字段长度
     private Integer size;
-    /**
-     * 小数位数
-     */
+    /// 小数位数
 //    private Integer digit;
-    /**
-     * 备注
-     */
+    /// 备注
     private String remarks;
 
     @Override

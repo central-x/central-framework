@@ -27,12 +27,9 @@ package central.net.http.body.converter;
 import central.net.http.body.HttpConverter;
 import jakarta.annotation.Nullable;
 
-/**
- * 字符串转换器
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 字符串转换器
+///
+/// @author Alan Yeh
 public class StringConverter implements HttpConverter<String> {
     @Override
     public boolean support(@Nullable Object source) {

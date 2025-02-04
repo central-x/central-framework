@@ -34,12 +34,9 @@ import central.sql.datasource.migration.data.TableData;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 
-/**
- * 字段迁移
- *
- * @author Alan Yeh
- * @since 2022/08/31
- */
+/// 字段迁移
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class ColumnMigrator implements Column {
     private final DatabaseMigrator migrator;

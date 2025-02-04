@@ -26,15 +26,11 @@ package central.util.shell;
 
 import lombok.Getter;
 
-import java.io.IOException;
 import java.io.Serial;
 
-/**
- * Shell 异常
- *
- * @author Alan Yeh
- * @since 2022/11/25
- */
+/// Shell 异常
+///
+/// @author Alan Yeh
 public class ShellException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 366159005708119523L;
@@ -42,43 +38,35 @@ public class ShellException extends RuntimeException {
     @Getter
     private final int res;
 
-    /**
-     * 创建 Shell 异常
-     *
-     * @param res     返回码
-     * @param message 错误信息
-     */
+    /// 创建 Shell 异常
+    ///
+    /// @param res     返回码
+    /// @param message 错误信息
     public ShellException(int res, String message) {
         this(res, message, null);
     }
 
-    /**
-     * 创建 Shell 异常
-     *
-     * @param res     返回码
-     * @param message 错误信息
-     * @param cause   原因
-     */
+    /// 创建 Shell 异常
+    ///
+    /// @param res     返回码
+    /// @param message 错误信息
+    /// @param cause   原因
     public ShellException(int res, String message, Throwable cause) {
         super(message, cause);
         this.res = res;
     }
 
-    /**
-     * 创建 Shell 异常
-     *
-     * @param message 错误信息
-     */
+    /// 创建 Shell 异常
+    ///
+    /// @param message 错误信息
     public ShellException(String message) {
         this(-1, message, null);
     }
 
-    /**
-     * 创建 Shell 异常
-     *
-     * @param message 错误信息
-     * @param cause   原因
-     */
+    /// 创建 Shell 异常
+    ///
+    /// @param message 错误信息
+    /// @param cause   原因
     public ShellException(String message, Throwable cause) {
         this(-1, message, cause);
     }

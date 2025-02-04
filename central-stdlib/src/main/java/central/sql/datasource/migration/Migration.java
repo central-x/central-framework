@@ -35,12 +35,9 @@ import lombok.Data;
 
 import java.sql.SQLException;
 
-/**
- * 数据库迁移
- *
- * @author Alan Yeh
- * @since 2022/08/23
- */
+/// 数据库迁移
+///
+/// @author Alan Yeh
 @Data
 public abstract class Migration implements Validatable {
     @Label("开始版本")
@@ -61,38 +58,30 @@ public abstract class Migration implements Validatable {
         Assertx.mustTrue(CompareResult.GT.matches(this.end, this.begin), "结束版本[end]必须比开始版本[start]大");
     }
 
-    /**
-     * 表结构迁移
-     *
-     * @param database 数据库
-     */
+    /// 表结构迁移
+    ///
+    /// @param database 数据库
     public void upgrade(Database database) throws SQLException {
 
     }
 
-    /**
-     * 回滚表结构
-     *
-     * @param database 数据库
-     */
+    /// 回滚表结构
+    ///
+    /// @param database 数据库
     public void downgrade(Database database) throws SQLException {
 
     }
 
-    /**
-     * 数据移迁
-     *
-     * @param executor Sql 执行器
-     */
+    /// 数据移迁
+    ///
+    /// @param executor Sql 执行器
     public void upgrade(SqlExecutor executor) throws SQLException {
 
     }
 
-    /**
-     * 回滚数据
-     *
-     * @param executor Sql 执行器
-     */
+    /// 回滚数据
+    ///
+    /// @param executor Sql 执行器
     public void downgrade(SqlExecutor executor) throws SQLException {
 
     }

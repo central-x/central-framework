@@ -30,33 +30,24 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
-/**
- * 前缀校验器
- * <p>
- * 要求字符串必须包含指定前缀
- *
- * @author Alan Yeh
- * @since 2022/11/07
- */
+/// 前缀校验器
+///
+/// 要求字符串必须包含指定前缀
+///
+/// @author Alan Yeh
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = PrefixValidator.class)
 public @interface Prefix {
 
-    /**
-     * 默认的错误消息
-     */
+    /// 默认的错误消息
     String message() default "{central.validation.constraints.Prefix.message}";
 
-    /**
-     * 前缀
-     */
+    /// 前缀
     String value();
 
-    /**
-     * 校验分组
-     */
+    /// 校验分组
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};

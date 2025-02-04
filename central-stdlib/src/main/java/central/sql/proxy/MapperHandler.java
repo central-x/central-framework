@@ -31,23 +31,18 @@ import central.sql.meta.entity.EntityMeta;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
-/**
- * Mapper 方法处理器
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// Mapper 方法处理器
+///
+/// @author Alan Yeh
 public interface MapperHandler {
-    /**
-     * 处理 Mapper 方法
-     *
-     * @param proxy    代理
-     * @param executor Sql 处理器
-     * @param builder  Sql 构造器
-     * @param meta     实体元数据
-     * @param method   被调用的方法
-     * @param args     被调的参数
-     * @return 处理结果
-     */
+    /// 处理 Mapper 方法
+    ///
+    /// @param proxy    代理
+    /// @param executor Sql 处理器
+    /// @param builder  Sql 构造器
+    /// @param meta     实体元数据
+    /// @param method   被调用的方法
+    /// @param args     被调的参数
+    /// @return 处理结果
     Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException;
 }

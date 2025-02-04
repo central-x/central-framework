@@ -24,25 +24,22 @@
 
 package central.pluglet.binder;
 
-import central.bean.TypeCheckException;
 import central.bean.OptionalEnum;
+import central.bean.TypeCheckException;
+import central.lang.Arrayx;
+import central.lang.Assertx;
 import central.lang.reflect.FieldRef;
 import central.lang.reflect.InstanceRef;
 import central.pluglet.FieldBinder;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
-import central.lang.Arrayx;
-import central.lang.Assertx;
 import central.util.Objectx;
 
 import java.util.Map;
 
-/**
- * Radio Control Binder
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// Radio Control Binder
+///
+/// @author Alan Yeh
 public class RadioControlBinder implements FieldBinder {
     @Override
     public boolean support(FieldRef field) {

@@ -33,31 +33,22 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Expirable Value
- *
- * @author Alan Yeh
- * @since 2023/04/28
- */
+/// Expirable Value
+///
+/// @author Alan Yeh
 public class ExpirableValue<V> {
 
-    /**
-     * 创建时间
-     */
+    /// 创建时间
     @Getter
     private final long timestamp;
 
-    /**
-     * 过期时间点
-     * <p>
-     * 如果过期时间为 -1 时，值永不过期
-     */
+    /// 过期时间点
+    ///
+    /// 如果过期时间为 -1 时，值永不过期
     @Getter
     private long expireTime;
 
-    /**
-     * 值
-     */
+    /// 值
     private final V value;
 
     public ExpirableValue(V value, Duration expires) {
@@ -80,25 +71,19 @@ public class ExpirableValue<V> {
         return new ExpirableValue<>(value);
     }
 
-    /**
-     * 刷新过期时间
-     *
-     * @param expires 过期时间
-     */
+    /// 刷新过期时间
+    ///
+    /// @param expires 过期时间
     public void expires(Duration expires) {
         this.expireTime = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(expires);
     }
 
-    /**
-     * 设置为永不过期
-     */
+    /// 设置为永不过期
     public void permanent() {
         this.expireTime = -1;
     }
 
-    /**
-     * 判断当前元素是否已过期
-     */
+    /// 判断当前元素是否已过期
     public boolean isExpired() {
         if (this.expireTime < 0) {
             return false;
@@ -107,18 +92,14 @@ public class ExpirableValue<V> {
         }
     }
 
-    /**
-     * 判断当前元素是否是永久有效的
-     */
+    /// 判断当前元素是否是永久有效的
     public boolean isPermanent() {
         return this.expireTime < 0;
     }
 
-    /**
-     * 获取有效值
-     * <p>
-     * 如果当前元素已过期，则返回空
-     */
+    /// 获取有效值
+    ///
+    /// 如果当前元素已过期，则返回空
     public @Nullable Optional<V> getValue() {
         if (this.isExpired()) {
             return Optional.empty();

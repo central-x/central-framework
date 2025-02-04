@@ -29,22 +29,15 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 批量 Sql 脚本
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// 批量 Sql 脚本
+///
+/// @author Alan Yeh
 @Data
 public class SqlBatchScript {
-    /**
-     * Sql
-     */
+    /// Sql
     private String sql;
 
-    /**
-     * 批量 Sql 参数
-     */
+    /// 批量 Sql 参数
     private List<List<Object>> args = new ArrayList<>();
 
     public SqlBatchScript(String sql) {

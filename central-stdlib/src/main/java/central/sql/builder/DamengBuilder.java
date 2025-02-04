@@ -24,12 +24,9 @@
 
 package central.sql.builder;
 
-/**
- * 达梦方言
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// 达梦方言
+///
+/// @author Alan Yeh
 public class DamengBuilder extends StandardSqlBuilder {
 
 }

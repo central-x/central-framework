@@ -31,12 +31,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * Code Value Pair
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// Code Value Pair
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,13 +41,9 @@ public class CodeValue<V extends Serializable> implements Codeable, Serializable
     @Serial
     private static final long serialVersionUID = 4057748517887523735L;
 
-    /**
-     * Code
-     */
+    /// Code
     private String code;
 
-    /**
-     * Value
-     */
+    /// Value
     private V value;
 }

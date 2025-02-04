@@ -42,15 +42,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-/**
- * 缓存
- *
- * @author Alan Yeh
- * @see Cacheable
- * @since 2022/11/15
- */
+/// 缓存
+///
+/// @author Alan Yeh
+/// @see Cacheable
 @Slf4j
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)

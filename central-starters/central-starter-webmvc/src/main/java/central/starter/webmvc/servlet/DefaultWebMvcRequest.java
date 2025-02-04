@@ -44,12 +44,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.Objects;
 
-/**
- * WebMvcRequest 实现
- *
- * @author Alan Yeh
- * @since 2023/03/08
- */
+/// WebMvcRequest 实现
+///
+/// @author Alan Yeh
 class DefaultWebMvcRequest extends HttpServletRequestWrapper implements WebMvcRequest {
 
     public DefaultWebMvcRequest(HttpServletRequest request) {

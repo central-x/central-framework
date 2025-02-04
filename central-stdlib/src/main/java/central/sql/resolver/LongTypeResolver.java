@@ -31,12 +31,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-/**
- * Long 解析
- *
- * @author Alan Yeh
- * @since 2022/08/10
- */
+/// Long 解析
+///
+/// @author Alan Yeh
 public class LongTypeResolver implements SqlTypeResolver {
     @Override
     public Object resolve(SqlDialect dialect, ResultSet cursor, ResultSetMetaData meta, int index) throws SQLException {

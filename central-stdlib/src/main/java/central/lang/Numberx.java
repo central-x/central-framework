@@ -29,17 +29,12 @@ import lombok.experimental.UtilityClass;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 数字工具
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// 数字工具
+///
+/// @author Alan Yeh
 @UtilityClass
 public class Numberx {
-    /**
-     * 62 进制声明
-     */
+    /// 62 进制声明
     private final static char[] digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8',
             '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
             'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y',
@@ -55,23 +50,17 @@ public class Numberx {
         }
     }
 
-    /**
-     * 支持的最大进制数
-     */
+    /// 支持的最大进制数
     public static final int MAX_RADIX = digits.length;
 
-    /**
-     * 支持的最小进制数
-     */
+    /// 支持的最小进制数
     public static final int MIN_RADIX = 2;
 
-    /**
-     * 将长整型数值转换为指定的进制数（最大支持62进制，字母数字已经用尽）
-     *
-     * @param i     源整型数值
-     * @param radix 进制
-     * @return 转换后的进制
-     */
+    /// 将长整型数值转换为指定的进制数（最大支持62进制，字母数字已经用尽）
+    ///
+    /// @param i     源整型数值
+    /// @param radix 进制
+    /// @return 转换后的进制
     public static String toString(long i, int radix) {
         if (radix < MIN_RADIX || radix > MAX_RADIX) {
             radix = 10;
@@ -108,12 +97,10 @@ public class Numberx {
     }
 
 
-    /**
-     * 将字符串转换为长整型数字
-     *
-     * @param s     数字字符串
-     * @param radix 进制数
-     */
+    /// 将字符串转换为长整型数字
+    ///
+    /// @param s     数字字符串
+    /// @param radix 进制数
     public static long toNumber(String s, int radix) {
         if (s == null) {
             throw new NumberFormatException("null");

@@ -36,13 +36,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * InvalidPropertyException Handler
- *
- * @author Alan Yeh
- * @see InvalidPropertyException
- * @since 2022/07/17
- */
+/// InvalidPropertyException Handler
+///
+/// @author Alan Yeh
+/// @see InvalidPropertyException
 @Component
 public class InvalidPropertyExceptionHandler implements ExceptionHandler {
 

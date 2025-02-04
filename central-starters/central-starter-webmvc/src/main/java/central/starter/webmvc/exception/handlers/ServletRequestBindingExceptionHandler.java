@@ -26,7 +26,6 @@ package central.starter.webmvc.exception.handlers;
 
 import central.starter.webmvc.exception.ExceptionHandler;
 import central.starter.webmvc.view.ErrorView;
-import central.util.Mapx;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.Nullable;
@@ -36,12 +35,9 @@ import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * ServletRequestBindingException Handler
- *
- * @author Alan Yeh
- * @since 2022/11/09
- */
+/// ServletRequestBindingException Handler
+///
+/// @author Alan Yeh
 @Component
 public class ServletRequestBindingExceptionHandler implements ExceptionHandler {
     @Override

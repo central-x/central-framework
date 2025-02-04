@@ -24,6 +24,8 @@
 
 package central.net.http.proxy.contract.spring.resolver;
 
+import central.lang.Assertx;
+import central.lang.Stringx;
 import central.net.http.HttpRequest;
 import central.net.http.body.HttpConverters;
 import central.net.http.body.request.JsonBody;
@@ -31,9 +33,7 @@ import central.net.http.body.request.MultipartFormBody;
 import central.net.http.body.request.MultipartFormPart;
 import central.net.http.body.request.UrlEncodedBody;
 import central.net.http.proxy.contract.spring.SpringResolver;
-import central.lang.Assertx;
 import central.util.Objectx;
-import central.lang.Stringx;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -43,13 +43,10 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
-/**
- * 处理处求体信息
- *
- * @author Alan Yeh
- * @see RequestPart
- * @since 2022/07/18
- */
+/// 处理处求体信息
+///
+/// @author Alan Yeh
+/// @see RequestPart
 public class RequestPartResolver implements SpringResolver {
     @Override
     public boolean support(Parameter parameter) {

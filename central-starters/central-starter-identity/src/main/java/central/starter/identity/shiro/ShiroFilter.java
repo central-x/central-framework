@@ -48,24 +48,19 @@ import org.springframework.http.MediaType;
 import java.net.URI;
 import java.util.Objects;
 
-/**
- * Shiro 拦载器
- * <p>
- * 此拦截器会将所有请求都拦截下来，然后判断请求的 Header 中是否包含 Authorization 信息，
- * 如果有，则自动登录，并在 Request 的 attributes 中附带帐户相关信息
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// Shiro 拦载器
+///
+/// 此拦截器会将所有请求都拦截下来，然后判断请求的 Header 中是否包含 Authorization 信息，
+/// 如果有，则自动登录，并在 Request 的 attributes 中附带帐户相关信息
+///
+/// @author Alan Yeh
 public class ShiroFilter extends BasicHttpAuthenticationFilter {
     @Setter(onMethod_ = @Autowired)
     private IdentityProperties properties;
 
-    /**
-     * 判断用户是否想要登录
-     * <p>
-     * 主要判断头部里面是否包含 Authorization 字段
-     */
+    /// 判断用户是否想要登录
+    ///
+    /// 主要判断头部里面是否包含 Authorization 字段
     @Override
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
         if (request instanceof HttpServletRequest servletRequest) {
@@ -77,9 +72,7 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
         return false;
     }
 
-    /**
-     * 判断请求是否是退出登录请求
-     */
+    /// 判断请求是否是退出登录请求
     protected boolean isLogoutAttempt(ServletRequest request, ServletResponse response) {
         if (request instanceof HttpServletRequest servletRequest) {
             if (!"GET".equalsIgnoreCase(servletRequest.getMethod())) {
@@ -118,9 +111,7 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
         return request.getParameter(this.properties.getCookie());
     }
 
-    /**
-     * 执行登录操作
-     */
+    /// 执行登录操作
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         var token = new JsonWebToken(this.findJwt((HttpServletRequest) request));
@@ -139,9 +130,7 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
         return true;
     }
 
-    /**
-     * 执行退出登录操作
-     */
+    /// 执行退出登录操作
     protected void executeLogout(ServletRequest request, ServletResponse response) throws Exception {
         var servletRequest = (HttpServletRequest) request;
         var servletResponse = (HttpServletResponse) response;
@@ -165,12 +154,11 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
         }
     }
 
-    /**
-     * 开发者在 Controller 的方法中，可以通过 @RequestAttribute String accountId 来获取帐户唯一标识
-     * <p>
-     * 无论 JWT 是认证通过还是不通过，都应该返回 true，只有标了注解的方法，才会被切面拦截
-     * 如果返回 false 的话，会导致请求被拉截，一些普通的不需要权限的请求，比如获取验证码这些接口也会被拦截
-     */
+    /// 开发者在 Controller 的方法中，可以通过 @RequestAttribute String accountId 来获取帐户唯一标识
+    ///
+    /// 无论 JWT 是认证通过还是不通过，都应该返回 true，只有标了注解的方法，才会被切面拦截
+    ///
+    /// 如果返回 false 的话，会导致请求被拉截，一些普通的不需要权限的请求，比如获取验证码这些接口也会被拦截
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         if (this.isLoginAttempt(request, response)) {

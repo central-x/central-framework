@@ -26,42 +26,31 @@ package central.starter.cache.core.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * 删除缓存
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// 删除缓存
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(CacheEvict.List.class)
 public @interface CacheEvict {
-    /**
-     * 缓存键
-     * <p>
-     * 支持模板语法
-     * <p>
-     * 可以使用的上下文对象包括:
-     *
-     * <ul>
-     *     <li>args: Object[] 参数列表</li>
-     *     <li>method: Method 方法</li>
-     *     <li>target: Object 待执行方法的对象</li>
-     * </ul>
-     */
+    /// 缓存键
+    ///
+    /// 支持模板语法
+    ///
+    /// 可以使用的上下文对象包括:
+    ///
+    /// - args: Object[] 参数列表
+    /// - method: Method 方法
+    /// - target: Object 待执行方法的对象
     String key() default "";
 
-    /**
-     * 缓存键
-     */
+    /// 缓存键
     CacheKey[] keys() default {};
 
-    /**
-     * 是否在执行方法前清除缓存
-     * <p>
-     * 默认在执行方法之后清除缓存。如果方法在执行过程中抛出了异常，那么将不会执行清除缓存操作。
-     */
+    /// 是否在执行方法前清除缓存
+    ///
+    /// 默认在执行方法之后清除缓存。如果方法在执行过程中抛出了异常，那么将不会执行清除缓存操作。
     boolean beforeInvocation() default false;
 
     @Documented

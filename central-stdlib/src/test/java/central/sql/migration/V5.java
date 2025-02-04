@@ -31,10 +31,7 @@ import central.util.Version;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * @author Alan Yeh
- * @since 2022/09/20
- */
+/// @author Alan Yeh
 public class V5 extends Migration {
     public V5() {
         super(Version.of("1.0.3"), Version.of("1.0.4"));

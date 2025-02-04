@@ -26,9 +26,9 @@ package central.sql;
 
 import central.sql.datasource.factory.hikari.HikariDataSourceFactory;
 import central.sql.impl.standard.StandardDataSourceMigrator;
-import central.sql.impl.standard.StandardSource;
 import central.sql.impl.standard.StandardExecutor;
 import central.sql.impl.standard.StandardMetaManager;
+import central.sql.impl.standard.StandardSource;
 import central.sql.interceptor.LogInterceptor;
 import central.sql.migration.*;
 import central.util.Version;
@@ -40,12 +40,9 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * 测试数据库版本迁移
- *
- * @author Alan Yeh
- * @since 2022/08/15
- */
+/// 测试数据库版本迁移
+///
+/// @author Alan Yeh
 public class TestDataSourceMigrator {
 
     private SqlExecutor executor;
@@ -95,9 +92,7 @@ public class TestDataSourceMigrator {
         migrator.downgrade(executor);
     }
 
-    /**
-     * 测试添加表
-     */
+    /// 测试添加表
     @Test
     public void case1() throws SQLException {
         // 升级数据库

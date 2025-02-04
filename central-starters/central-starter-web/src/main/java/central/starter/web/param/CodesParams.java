@@ -32,12 +32,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * 标识查询
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 标识查询
+///
+/// @author Alan Yeh
 @Data
 public class CodesParams implements Serializable {
 

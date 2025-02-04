@@ -27,12 +27,9 @@ package central.util.converter.impl.lang;
 import central.util.converter.ConvertException;
 import central.util.converter.Converter;
 
-/**
- * Integer Converter
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Integer Converter
+///
+/// @author Alan Yeh
 public class IntegerConverter implements Converter<Integer> {
     @Override
     public boolean support(Class<?> source) {

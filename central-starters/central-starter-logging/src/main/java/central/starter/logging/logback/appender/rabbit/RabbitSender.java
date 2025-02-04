@@ -24,11 +24,8 @@
 
 package central.starter.logging.logback.appender.rabbit;
 
-/**
- * Rabbit Sender
- *
- * @author Alan Yeh
- * @since 2024/01/21
- */
+/// Rabbit Sender
+///
+/// @author Alan Yeh
 public class RabbitSender {
 }

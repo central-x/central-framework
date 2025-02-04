@@ -34,12 +34,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * 最后
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// 最后
+///
+/// @author Alan Yeh
 @Slf4j
 public class FallbackHandler implements ExceptionHandler {
 

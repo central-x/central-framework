@@ -44,12 +44,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
-/**
- * Java 实现
- *
- * @author Alan Yeh
- * @since 2022/07/18
- */
+/// Java 实现
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class JavaExecutor implements HttpExecutor {
 
@@ -100,9 +97,7 @@ public class JavaExecutor implements HttpExecutor {
         }
     }
 
-    /**
-     * 默认的 HttpClient 配置
-     */
+    /// 默认的 HttpClient 配置
     @SneakyThrows
     public static JavaExecutor Default() {
         var context = SSLContext.getInstance("SSL");
@@ -124,9 +119,7 @@ public class JavaExecutor implements HttpExecutor {
     public static class Builder {
         private Duration connectTimeout = Duration.ofSeconds(60);
 
-        /**
-         * 连接超时时间（毫秒）
-         */
+        /// 连接超时时间（毫秒）
         public Builder connectTimeout(long connectTimeout) {
             this.connectTimeout = Duration.ofMillis(connectTimeout);
             return this;

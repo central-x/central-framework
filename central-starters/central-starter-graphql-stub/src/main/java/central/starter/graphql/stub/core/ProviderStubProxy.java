@@ -30,8 +30,8 @@ import central.lang.Assertx;
 import central.lang.Stringx;
 import central.lang.reflect.TypeRef;
 import central.starter.graphql.stub.GraphQLRequest;
-import central.starter.graphql.stub.ProviderClient;
 import central.starter.graphql.stub.Provider;
+import central.starter.graphql.stub.ProviderClient;
 import central.starter.graphql.stub.annotation.BodyPath;
 import central.util.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -46,12 +46,9 @@ import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * GraphQL Proxy
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// GraphQL Proxy
+///
+/// @author Alan Yeh
 public class ProviderStubProxy implements InvocationHandler {
 
     private final Class<? extends Provider<?, ?>> stub;
@@ -118,7 +115,7 @@ public class ProviderStubProxy implements InvocationHandler {
         }
 
         var returnType = method.getAnnotatedReturnType().getType();
-        if (this.dataTypes.containsKey(returnType.getTypeName())){
+        if (this.dataTypes.containsKey(returnType.getTypeName())) {
             returnType = this.dataTypes.get(returnType.getTypeName()).getType();
         }
 
@@ -141,9 +138,7 @@ public class ProviderStubProxy implements InvocationHandler {
         }
     }
 
-    /**
-     * 解析参数
-     */
+    /// 解析参数
     private void resolveParameters(Method method, Object[] args, Map<String, Object> variables, MultiValueMap<String, String> headers) throws Throwable {
         var parameters = method.getParameters();
 

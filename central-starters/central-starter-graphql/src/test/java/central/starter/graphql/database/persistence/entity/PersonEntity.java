@@ -33,12 +33,9 @@ import lombok.*;
 
 import java.io.Serial;
 
-/**
- * Person
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// Person
+///
+/// @author Alan Yeh
 @Data
 @Builder
 @NoArgsConstructor
@@ -59,7 +56,7 @@ public class PersonEntity extends ModifiableEntity {
     @Label("姓名")
     private String name;
 
-    public void fromInput(PersonInput input){
+    public void fromInput(PersonInput input) {
         this.setId(input.getId());
         this.setName(input.getName());
     }

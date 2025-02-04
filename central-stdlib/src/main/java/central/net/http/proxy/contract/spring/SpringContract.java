@@ -24,13 +24,13 @@
 
 package central.net.http.proxy.contract.spring;
 
+import central.lang.Arrayx;
+import central.lang.Assertx;
+import central.lang.Stringx;
 import central.net.http.HttpRequest;
 import central.net.http.HttpUrl;
 import central.net.http.proxy.Contract;
 import central.net.http.proxy.contract.spring.resolver.*;
-import central.lang.Arrayx;
-import central.lang.Assertx;
-import central.lang.Stringx;
 import central.util.Objectx;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpMethod;
@@ -41,12 +41,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.lang.reflect.Method;
 import java.util.List;
 
-/**
- * Spring 注解
- *
- * @author Alan Yeh
- * @since 2022/07/18
- */
+/// Spring 注解
+///
+/// @author Alan Yeh
 public class SpringContract implements Contract {
 
     private final List<SpringResolver> resolvers;

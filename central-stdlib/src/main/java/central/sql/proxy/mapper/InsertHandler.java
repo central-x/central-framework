@@ -24,6 +24,7 @@
 
 package central.sql.proxy.mapper;
 
+import central.lang.Arrayx;
 import central.lang.Assertx;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
@@ -31,18 +32,14 @@ import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.lang.Arrayx;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
-/**
- * Insert Handler
- *
- * @author Alan Yeh
- * @see Mapper#insert
- * @since 2022/08/10
- */
+/// Insert Handler
+///
+/// @author Alan Yeh
+/// @see Mapper#insert
 public class InsertHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {

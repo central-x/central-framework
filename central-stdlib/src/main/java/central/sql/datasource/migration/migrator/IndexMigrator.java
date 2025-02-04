@@ -32,12 +32,9 @@ import central.sql.datasource.migration.data.TableData;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 
-/**
- * 索引迁移
- *
- * @author Alan Yeh
- * @since 2022/08/31
- */
+/// 索引迁移
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class IndexMigrator implements Index {
     private final DatabaseMigrator migrator;

@@ -29,18 +29,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Base64;
 
-/**
- * Cipherx Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Cipherx Test Cases
+///
+/// @author Alan Yeh
 public class TestCipherx {
-    /**
-     * None
-     */
+    /// None
     @Test
-    public void case1() throws Exception{
+    public void case1() throws Exception {
         var keys = Cipherx.NONE.generateKeyPair();
 
         // 测试 Key 是否能正常序列化与反序列化
@@ -61,9 +56,7 @@ public class TestCipherx {
         Assertions.assertEquals(source, decrypted);
     }
 
-    /**
-     * RSA
-     */
+    /// RSA
     @Test
     public void case2() throws Exception {
         var keys = Cipherx.RSA.generateKeyPair();
@@ -86,9 +79,7 @@ public class TestCipherx {
         Assertions.assertEquals(source, decrypted);
     }
 
-    /**
-     * DES
-     */
+    /// DES
     @Test
     public void case3() throws Exception {
         var keys = Cipherx.DES.generateKeyPair();
@@ -111,9 +102,7 @@ public class TestCipherx {
         Assertions.assertEquals(source, decrypted);
     }
 
-    /**
-     * 3DES
-     */
+    /// 3DES
     @Test
     public void case4() throws Exception {
         var keys = Cipherx.DESede.generateKeyPair();
@@ -136,9 +125,7 @@ public class TestCipherx {
         Assertions.assertEquals(source, decrypted);
     }
 
-    /**
-     * AES
-     */
+    /// AES
     @Test
     public void case5() throws Exception {
         var keys = Cipherx.AES.generateKeyPair();
@@ -161,9 +148,7 @@ public class TestCipherx {
         Assertions.assertEquals(source, decrypted);
     }
 
-    /**
-     * SM2
-     */
+    /// SM2
     @Test
     public void case6() throws Exception {
         var keys = Cipherx.SM2.generateKeyPair();
@@ -186,9 +171,7 @@ public class TestCipherx {
         Assertions.assertEquals(source, decrypted);
     }
 
-    /**
-     * SM4
-     */
+    /// SM4
     @Test
     public void case7() throws Exception {
         var keys = Cipherx.SM4.generateKeyPair();

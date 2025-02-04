@@ -41,12 +41,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-/**
- * PlutletFactory Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/12
- */
+/// PlutletFactory Test Cases
+///
+/// @author Alan Yeh
 public class TestPlugletFactory {
 
     private PlugletFactory factory;
@@ -117,7 +114,7 @@ public class TestPlugletFactory {
     }
 
     @Test
-    public void case2(){
+    public void case2() {
         var timestamp = System.currentTimeMillis();
         var params = new HashMap<String, Object>();
         params.put("int", "200");
@@ -181,13 +178,13 @@ public class TestPlugletFactory {
 
         @Override
         public boolean isCompatibleWith(Object value) {
-            if (value == null){
+            if (value == null) {
                 return false;
             }
-            if (value instanceof String s){
+            if (value instanceof String s) {
                 return "true".equalsIgnoreCase(s) || "1".equals(s);
             }
-            if (value instanceof BooleanEnum b){
+            if (value instanceof BooleanEnum b) {
                 return this.value.equals(b.value);
             }
             return false;

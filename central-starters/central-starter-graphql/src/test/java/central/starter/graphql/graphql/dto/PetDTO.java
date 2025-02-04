@@ -35,12 +35,9 @@ import org.dataloader.DataLoader;
 import java.io.Serial;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Pet
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// Pet
+///
+/// @author Alan Yeh
 @Data
 @GraphQLType("Pet")
 @EqualsAndHashCode(callSuper = true)

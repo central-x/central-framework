@@ -35,19 +35,15 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 
-/**
- * 角色实体
- *
- * @author Alan Yeh
- * @since 2022/09/16
- */
-
+/// 角色实体
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "XT_ROLE")
 @EqualsAndHashCode(callSuper = true)
-public class RoleEntity extends ModifiableEntity{
+public class RoleEntity extends ModifiableEntity {
     @Serial
     private static final long serialVersionUID = 860169279148490279L;
 

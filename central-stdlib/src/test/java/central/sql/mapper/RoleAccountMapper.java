@@ -27,11 +27,8 @@ package central.sql.mapper;
 import central.sql.data.RoleAccountEntity;
 import central.sql.proxy.Mapper;
 
-/**
- * 角色用户关联操作类
- *
- * @author Alan Yeh
- * @since 2022/09/17
- */
+/// 角色用户关联操作类
+///
+/// @author Alan Yeh
 public interface RoleAccountMapper extends Mapper<RoleAccountEntity> {
 }

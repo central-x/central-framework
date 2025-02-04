@@ -43,45 +43,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * HttpClient
- *
- * @author Alan Yeh
- * @since 2022/07/17
- */
+/// HttpClient
+///
+/// @author Alan Yeh
 public class HttpClient {
 
-    /**
-     * 已注册的 Http 请求执行器
-     * <p>
-     * 由各类第三方框架为指定的协议提供请求执行能力
-     */
+    /// 已注册的 Http 请求执行器
+    ///
+    /// 由各类第三方框架为指定的协议提供请求执行能力
     private final Map<String, HttpExecutor> executors;
 
     private final HttpExecutor defaultExecutor;
 
-    /**
-     * @param defaultExecutor 默认的 HttpExecutor
-     */
+    /// @param defaultExecutor 默认的 HttpExecutor
     public HttpClient(HttpExecutor defaultExecutor) {
         this.executors = new HashMap<>();
         this.defaultExecutor = defaultExecutor;
     }
 
-    /**
-     * 为指定协议指定 Executor
-     *
-     * @param scheme   请求协议
-     * @param executor 请求执行器
-     */
+    /// 为指定协议指定 Executor
+    ///
+    /// @param scheme   请求协议
+    /// @param executor 请求执行器
     public void registerExecutor(String scheme, HttpExecutor executor) {
         this.executors.put(scheme, executor);
     }
 
-    /**
-     * 基础 URL
-     * HttpClient 会处理所有请求，如果请求是一个相对路径请求，则会使用基础 URL 作为其基础服务信息
-     */
+    /// 基础 URL
+    ///
+    /// HttpClient 会处理所有请求，如果请求是一个相对路径请求，则会使用基础 URL 作为其基础服务信息
     @Getter
     private String baseUrl;
 
@@ -95,9 +85,7 @@ public class HttpClient {
         }
     }
 
-    /**
-     * 缓存目录
-     */
+    /// 缓存目录
     @Getter
     private File tmp = Path.of("tmp", "http").toFile();
 
@@ -123,32 +111,26 @@ public class HttpClient {
     @Getter
     private final List<HttpProcessor> processors = new ArrayList<>();
 
-    /**
-     * 添加请求处理器
-     *
-     * @param processor 请求处理器
-     */
+    /// 添加请求处理器
+    ///
+    /// @param processor 请求处理器
     public void addProcessor(HttpProcessor processor) {
         this.processors.add(processor);
     }
 
-    /**
-     * 添加请求处理器
-     *
-     * @param processors 请求处理器
-     */
+    /// 添加请求处理器
+    ///
+    /// @param processors 请求处理器
     public void addProcessors(List<HttpProcessor> processors) {
         if (Listx.isNotEmpty(processors)) {
             this.processors.addAll(processors);
         }
     }
 
-    /**
-     * 执行请求
-     *
-     * @param request 执行请求
-     * @return 响应
-     */
+    /// 执行请求
+    ///
+    /// @param request 执行请求
+    /// @return 响应
     public HttpResponse execute(HttpRequest request) throws Exception {
         request.getUrl().setBaseUrl(this.getBaseUrl());
 

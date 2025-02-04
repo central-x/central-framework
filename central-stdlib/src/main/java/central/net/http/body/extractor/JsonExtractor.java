@@ -35,42 +35,33 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-/**
- * 将响应体解析成对象（JSON）
- *
- * @author Alan Yeh
- * @since 2022/07/17
- */
+/// 将响应体解析成对象（JSON）
+///
+/// @author Alan Yeh
 public class JsonExtractor<T> implements BodyExtractor<T> {
     private final Charset charset;
     private final TypeRef<T> type;
 
-    /**
-     * 构造函数
-     *
-     * @param type    对象类型
-     * @param charset 字符集（如果未定指，将使用响应头里指定的字符集）
-     */
+    /// 构造函数
+    ///
+    /// @param type    对象类型
+    /// @param charset 字符集（如果未定指，将使用响应头里指定的字符集）
     public JsonExtractor(@Nonnull TypeRef<T> type, @Nullable Charset charset) {
         this.charset = charset;
         this.type = type;
     }
 
-    /**
-     * 创建 JSON 解析器
-     *
-     * @param type 对象类型
-     */
+    /// 创建 JSON 解析器
+    ///
+    /// @param type 对象类型
     public static <T> JsonExtractor<T> of(TypeRef<T> type) {
         return new JsonExtractor<>(type, null);
     }
 
-    /**
-     * 创建 JSON 解析器
-     *
-     * @param type    对象类型
-     * @param charset 字符集
-     */
+    /// 创建 JSON 解析器
+    ///
+    /// @param type    对象类型
+    /// @param charset 字符集
     public static <T> JsonExtractor<T> of(TypeRef<T> type, Charset charset) {
         return new JsonExtractor<>(type, null);
     }

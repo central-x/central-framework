@@ -34,12 +34,9 @@ import org.springframework.core.annotation.Order;
 
 import java.io.IOException;
 
-/**
- * 会话跟踪过滤器
- *
- * @author Alan Yeh
- * @since 2022/10/24
- */
+/// 会话跟踪过滤器
+///
+/// @author Alan Yeh
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class TraceFilter implements Filter {
     @Override

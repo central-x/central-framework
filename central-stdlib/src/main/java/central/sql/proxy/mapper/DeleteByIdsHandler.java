@@ -24,7 +24,7 @@
 
 package central.sql.proxy.mapper;
 
-import central.sql.query.Conditions;
+import central.lang.Arrayx;
 import central.sql.SqlBuilder;
 import central.sql.SqlExecutor;
 import central.sql.data.Entity;
@@ -32,20 +32,17 @@ import central.sql.meta.entity.EntityMeta;
 import central.sql.proxy.Mapper;
 import central.sql.proxy.MapperHandler;
 import central.sql.proxy.MapperProxy;
-import central.lang.Arrayx;
+import central.sql.query.Conditions;
 import central.util.Listx;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * DeleteByIds Handler
- *
- * @author Alan Yeh
- * @see Mapper#deleteByIds
- * @since 2022/08/10
- */
+/// DeleteByIds Handler
+///
+/// @author Alan Yeh
+/// @see Mapper#deleteByIds
 public class DeleteByIdsHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {

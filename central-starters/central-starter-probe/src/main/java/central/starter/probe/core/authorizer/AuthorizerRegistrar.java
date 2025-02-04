@@ -40,12 +40,9 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 
-/**
- * 探针监权注册器
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
+/// 探针监权注册器
+///
+/// @author Alan Yeh
 public class AuthorizerRegistrar implements ImportBeanDefinitionRegistrar, EnvironmentAware {
 
     @Setter

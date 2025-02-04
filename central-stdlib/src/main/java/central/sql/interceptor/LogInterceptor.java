@@ -25,9 +25,9 @@
 package central.sql.interceptor;
 
 import central.bean.OptionalEnum;
+import central.lang.Arrayx;
 import central.sql.SqlContext;
 import central.sql.SqlInterceptor;
-import central.lang.Arrayx;
 import central.util.Listx;
 import central.util.Logx;
 import lombok.experimental.ExtensionMethod;
@@ -41,12 +41,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Sql 日志
- *
- * @author Alan Yeh
- * @since 2022/08/05
- */
+/// Sql 日志
+///
+/// @author Alan Yeh
 @ExtensionMethod(Logx.class)
 public class LogInterceptor implements SqlInterceptor {
     private final Logger logger;
@@ -114,7 +111,7 @@ public class LogInterceptor implements SqlInterceptor {
         } else {
             var builder = new StringBuilder();
             for (var it : args) {
-                if (!builder.isEmpty()){
+                if (!builder.isEmpty()) {
                     builder.append(lineSeparator).append("┃".wrap(Logx.Color.WHITE)).append("      ");
                 }
                 builder.append(this.formatArgs(it));
@@ -151,7 +148,7 @@ public class LogInterceptor implements SqlInterceptor {
                 } else {
                     builder.append(string, 0, 10).append("...");
                 }
-            } else if (arg instanceof byte[]){
+            } else if (arg instanceof byte[]) {
                 builder.append("<bytes>");
             } else {
                 builder.append(arg);

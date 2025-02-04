@@ -31,56 +31,41 @@ import jakarta.annotation.Nullable;
 
 import java.sql.SQLException;
 
-/**
- * 数据库迁移工具
- *
- * @author Alan Yeh
- * @since 2022/09/19
- */
+/// 数据库迁移工具
+///
+/// @author Alan Yeh
 public interface DataSourceMigrator {
-    /**
-     * 迁移名
-     * <p>
-     * 不同的迁移名之间的版本可以共存
-     */
+    /// 迁移名
+    ///
+    /// 不同的迁移名之间的版本可以共存
     @Nonnull
     String getName();
 
-    /**
-     * 基线版本
-     * <p>
-     * 低于基线版本的 Migration 将不被执行
-     */
+    /// 基线版本
+    ///
+    /// 低于基线版本的 Migration 将不被执行
     @Nullable
     Version getBaseline();
 
-    /**
-     * 目标版本
-     * <p>
-     * {@code baseline < version <= target} 的 Migration 将被执行
-     */
+    /// 目标版本
+    ///
+    /// `baseline < version <= target`时 Migration 将被执行
     @Nonnull
     Version getTarget();
 
-    /**
-     * 添加迁移
-     *
-     * @param migration 迁移
-     */
+    /// 添加迁移
+    ///
+    /// @param migration 迁移
     void addMigration(Migration migration);
 
-    /**
-     * 升级 Sql 执行器
-     *
-     * @param executor Sql 执行器
-     */
+    /// 升级 Sql 执行器
+    ///
+    /// @param executor Sql 执行器
     void upgrade(SqlExecutor executor) throws SQLException;
 
-    /**
-     * 降级 Sql 执行器
-     *
-     * @param executor
-     * @throws SQLException
-     */
+    /// 降级 Sql 执行器
+    ///
+    /// @param executor
+    /// @throws SQLException
     void downgrade(SqlExecutor executor) throws SQLException;
 }

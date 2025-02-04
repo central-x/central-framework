@@ -32,13 +32,11 @@ import org.springframework.http.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * InputStream Body
- * 主要用于传输数据流
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// InputStream Body
+///
+/// 主要用于传输数据流
+///
+/// @author Alan Yeh
 public class InputStreamBody implements Body {
 
     @Getter

@@ -26,12 +26,9 @@ package central.starter.template.core;
 
 import java.io.Serial;
 
-/**
- * 渲染异常
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// 渲染异常
+///
+/// @author Alan Yeh
 public class RenderException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -1624192278380488376L;

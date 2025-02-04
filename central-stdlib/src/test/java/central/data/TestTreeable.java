@@ -34,12 +34,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Treeable Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// Treeable Test Cases
+///
+/// @author Alan Yeh
 public class TestTreeable {
 
     @Test

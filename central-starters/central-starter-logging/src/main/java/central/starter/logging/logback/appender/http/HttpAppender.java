@@ -34,73 +34,52 @@ import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * 使用 Http 的方式将日志发送到采集中心进行收集
- *
- * @author Alan Yeh
- * @since 2022/10/24
- */
+/// 使用 Http 的方式将日志发送到采集中心进行收集
+///
+/// @author Alan Yeh
 public class HttpAppender extends CentralAppender {
 
-    /**
-     * 采集器服务
-     */
+    /// 采集器服务
     @Getter
     @Setter
     private String collectorServer;
 
-    /**
-     * 采集器路径
-     */
+    /// 采集器路径
     @Getter
     @Setter
     private String collectorPath;
 
-    /**
-     * 微服务名
-     */
+    /// 微服务名
     @Getter
     @Setter
     private String serviceName;
 
-    /**
-     * 微服务版本号
-     */
+    /// 微服务版本号
     @Getter
     @Setter
     private String serviceVersion;
 
-    /**
-     * 微服务端口
-     */
+    /// 微服务端口
     @Getter
     @Setter
     private String servicePort;
 
-    /**
-     * 应用标识（应用服务名）
-     */
+    /// 应用标识（应用服务名）
     @Getter
     @Setter
     private String applicationCode;
 
-    /**
-     * 应用密钥
-     */
+    /// 应用密钥
     @Getter
     @Setter
     private String applicationSecret;
 
-    /**
-     * 最大批量发送大小
-     */
+    /// 最大批量发送大小
     @Getter
     @Setter
     private int batchSize = 100000;
 
-    /**
-     * 最大批量发送时间
-     */
+    /// 最大批量发送时间
     @Getter
     @Setter
     private int batchTime = 2000;

@@ -31,17 +31,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * 插件工厂配置
- *
- * @author Alan Yeh
- * @since 2024/02/04
- */
+/// 插件工厂配置
+///
+/// @author Alan Yeh
 @Configuration
 public class PlugletConfiguration {
-    /**
-     * 插件工厂
-     */
+    /// 插件工厂
     @Bean
     public PlugletFactory plugletFactory(ApplicationContext applicationContext) {
         var factory = new PlugletFactory();

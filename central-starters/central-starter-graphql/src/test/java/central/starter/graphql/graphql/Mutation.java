@@ -31,27 +31,20 @@ import central.starter.graphql.graphql.mutation.PetMutation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * GraphQL Mutations
- *
- * @author Alan Yeh
- * @since 2022/09/30
- */
+/// GraphQL Mutations
+///
+/// @author Alan Yeh
 @Component
 @GraphQLSchema(types = {PersonMutation.class, PetMutation.class})
 public class Mutation {
 
-    /**
-     * Person Mutation
-     */
+    /// Person Mutation
     @GraphQLGetter
     public PersonMutation getPersons(@Autowired PersonMutation mutation) {
         return mutation;
     }
 
-    /**
-     * Pet Mutation
-     */
+    /// Pet Mutation
     @GraphQLGetter
     public PetMutation getPets(@Autowired PetMutation mutation) {
         return mutation;

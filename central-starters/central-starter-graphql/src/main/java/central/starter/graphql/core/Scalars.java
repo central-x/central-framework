@@ -32,12 +32,9 @@ import jakarta.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-/**
- * 标量
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// 标量
+///
+/// @author Alan Yeh
 public class Scalars {
 
     static final GraphQLScalarType TIMESTAMP = GraphQLScalarType.newScalar()

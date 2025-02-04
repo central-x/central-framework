@@ -32,19 +32,14 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Conditions Test Cases
- *
- * @author Alan Yeh
- * @since 2022/08/02
- */
+/// Conditions Test Cases
+///
+/// @author Alan Yeh
 public class TestConditions {
 
-    /**
-     * Test Operators
-     */
+    /// Test Operators
     @Test
-    public void case1(){
+    public void case1() {
         var conditions = Conditions.of(AccountEntity.class).eq(AccountEntity::getAge, 18);
         assertEquals("age = 18", conditions.toSql());
 
@@ -88,31 +83,25 @@ public class TestConditions {
         assertEquals(conditions.toSql(), "age NOT IN (" + Stream.of(18, 19, 20, 21).map(String::valueOf).collect(Collectors.joining(", ")) + ")");
     }
 
-    /**
-     * Test AND
-     */
+    /// Test AND
     @Test
-    public void case2(){
+    public void case2() {
         var conditions = Conditions.of(AccountEntity.class).eq(AccountEntity::getAge, 18).eq(AccountEntity::getName, "张三");
 
         assertEquals("age = 18 AND name = 张三", conditions.toSql());
     }
 
-    /**
-     * Test OR
-     */
+    /// Test OR
     @Test
-    public void case3(){
+    public void case3() {
         var conditions = Conditions.of(AccountEntity.class).eq(AccountEntity::getAge, 18).or().eq(AccountEntity::getAge, 19);
 
         assertEquals("age = 18 OR age = 19", conditions.toSql());
     }
 
-    /**
-     * Test Nest
-     */
+    /// Test Nest
     @Test
-    public void case4(){
+    public void case4() {
         var conditions = Conditions.of(AccountEntity.class).eq(AccountEntity::getAge, 18).and(filter -> {
             filter.eq(AccountEntity::getName, "张三").or().eq(AccountEntity::getName, "李四");
         });

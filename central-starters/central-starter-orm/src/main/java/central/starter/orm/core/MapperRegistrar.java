@@ -49,12 +49,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Set;
 
-/**
- * Mapper 自动注入
- *
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// Mapper 自动注入
+///
+/// @author Alan Yeh
 @Slf4j
 public class MapperRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
 

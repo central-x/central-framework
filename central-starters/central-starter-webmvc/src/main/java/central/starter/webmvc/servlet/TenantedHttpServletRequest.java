@@ -24,21 +24,15 @@
 
 package central.starter.webmvc.servlet;
 
-/**
- * Tenanted HttpServletRequest
- * 支持租户
- *
- * @author Alan Yeh
- * @since 2023/03/08
- */
+/// Tenanted HttpServletRequest
+///
+/// 支持租户
+///
+/// @author Alan Yeh
 public interface TenantedHttpServletRequest extends AttributedHttpServletRequest {
-    /**
-     * 获取租户标识
-     */
+    /// 获取租户标识
     String getTenantCode();
 
-    /**
-     * 获取租户路径
-     */
+    /// 获取租户路径
     String getTenantPath();
 }

@@ -24,6 +24,7 @@
 
 package central.sql.builder.script;
 
+import central.lang.Stringx;
 import central.sql.SqlBuilder;
 import central.sql.SqlScript;
 import central.sql.SqlType;
@@ -31,7 +32,6 @@ import central.sql.builder.script.table.AddTableScript;
 import central.sql.builder.script.table.DropTableScript;
 import central.sql.builder.script.table.RenameTableScript;
 import central.util.Objectx;
-import central.lang.Stringx;
 import central.validation.Validatex;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -41,17 +41,12 @@ import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 表相关脚本解析器
- *
- * @author Alan Yeh
- * @since 2022/08/09
- */
+/// 表相关脚本解析器
+///
+/// @author Alan Yeh
 class TableScriptParser {
 
-    /**
-     * 解析 XML
-     */
+    /// 解析 XML
     public static List<SqlScript> parse(SqlBuilder dialect, Node parent) throws SQLSyntaxErrorException {
         List<SqlScript> sqls = new ArrayList<>();
 
@@ -92,9 +87,7 @@ class TableScriptParser {
     }
 
 
-    /**
-     * 解析添加表脚本
-     */
+    /// 解析添加表脚本
     private static List<AddTableScript> parseAddTableScript(Node parent) {
         List<AddTableScript> scripts = new ArrayList<>();
 
@@ -152,9 +145,7 @@ class TableScriptParser {
         return scripts;
     }
 
-    /**
-     * 解析删除表脚本
-     */
+    /// 解析删除表脚本
     private static List<DropTableScript> parseDropTableScript(Node parent) {
         List<DropTableScript> scripts = new ArrayList<>();
 
@@ -177,9 +168,7 @@ class TableScriptParser {
         return scripts;
     }
 
-    /**
-     * 解析重命名表脚本
-     */
+    /// 解析重命名表脚本
     private static List<RenameTableScript> parseRenameTableScript(Node parent) {
         List<RenameTableScript> scripts = new ArrayList<>();
 

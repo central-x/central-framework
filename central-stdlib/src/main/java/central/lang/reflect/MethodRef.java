@@ -28,30 +28,27 @@ import lombok.Getter;
 
 import java.lang.reflect.Method;
 
-/**
- * 方法引用
- *
- * @author Alan Yeh
- * @since 2022/07/12
- */
+/// 方法引用
+///
+/// @author Alan Yeh
 public abstract class MethodRef {
     @Getter
     private final Method method;
 
-    private MethodRef(Method method){
+    private MethodRef(Method method) {
         this.method = method;
     }
 
-    public MethodRef(){
+    public MethodRef() {
         this.method = this.getClass().getEnclosingMethod();
     }
 
-    public static MethodRef of(Method method){
-        return new MethodRef(method){
+    public static MethodRef of(Method method) {
+        return new MethodRef(method) {
         };
     }
 
-    public TypeRef<?> getReturnType(){
+    public TypeRef<?> getReturnType() {
         return TypeRef.of(this.method.getGenericReturnType());
     }
 }

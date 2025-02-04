@@ -24,13 +24,10 @@
 
 package central.lang;
 
-/**
- * 实验标识
- * <p>
- * 带有实验标识的类或接口，表示目前正处理实验阶段，暂时不成熟
- *
- * @author Alan Yeh
- * @since 2022/09/08
- */
+/// 实验标识
+///
+/// 带有实验标识的类或接口，表示目前正处理实验阶段，暂时不成熟
+///
+/// @author Alan Yeh
 public @interface ExperimentalApi {
 }

@@ -45,18 +45,13 @@ import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 
-/**
- * 配置
- *
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// 配置
+///
+/// @author Alan Yeh
 @EnableConfigurationProperties({OrmProperties.class, MigrationProperties.class, DataSourceProperties.class})
 public class StarterConfiguration {
 
-    /**
-     * DataSource Factory
-     */
+    /// DataSource Factory
     @Bean
     @ConditionalOnMissingBean(DataSourceFactory.class)
     public DataSourceFactory getDataSourceFactory(Environment environment) {
@@ -66,9 +61,7 @@ public class StarterConfiguration {
         };
     }
 
-    /**
-     * 创建数据源
-     */
+    /// 创建数据源
     @Bean
     @ConditionalOnMissingBean(DataSource.class)
     public DataSource getDataSource(DataSourceFactory factory, Environment environment) {
@@ -76,9 +69,7 @@ public class StarterConfiguration {
         return factory.build(properties.getDriverClassName(), properties.getUrl(), properties.getUsername(), properties.getPassword());
     }
 
-    /**
-     * 创建 Sql 执行器默认配置
-     */
+    /// 创建 Sql 执行器默认配置
     @Bean
     @ConditionalOnMissingBean(SqlExecutorConfigurer.class)
     public SqlExecutorConfigurer getExecutorConfigurer(Environment environment, DataSource dataSource) {
@@ -90,9 +81,7 @@ public class StarterConfiguration {
         };
     }
 
-    /**
-     * 创建 Sql 执行器
-     */
+    /// 创建 Sql 执行器
     @Bean(initMethod = "init")
     @ConditionalOnMissingBean(SqlExecutor.class)
     public StandardExecutor getExecutor(Environment environment, DataSource dataSource, @Autowired SqlExecutorConfigurer configurer) {

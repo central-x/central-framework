@@ -29,22 +29,17 @@ import central.util.Guidx;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 用于跟踪上下文
- *
- * @author Alan Yeh
- * @since 2022/10/25
- */
+/// 用于跟踪上下文
+///
+/// @author Alan Yeh
 public class TraceLocal {
     private final static String TRACE_ID = "traceId";
 
     private final static ThreadLocal<Map<String, String>> traceLocal = ThreadLocal.withInitial(HashMap::new);
 
-    /**
-     * 开始追踪
-     * <p>
-     * 此方法用于在不同的微服务里追踪同一链路
-     */
+    /// 开始追踪
+    ///
+    /// 此方法用于在不同的微服务里追踪同一链路
     public static String trace(String traceId) {
         if (Stringx.isNullOrBlank(traceId)) {
             traceId = Guidx.nextID();
@@ -53,32 +48,24 @@ public class TraceLocal {
         return traceId;
     }
 
-    /**
-     * 开始追踪
-     */
+    /// 开始追踪
     public static String trace() {
         var traceId = Guidx.nextID();
         setTraceId(traceId);
         return traceId;
     }
 
-    /**
-     * 获取追踪标识
-     */
+    /// 获取追踪标识
     public static String getTraceId() {
         return traceLocal.get().computeIfAbsent(TRACE_ID, key -> Guidx.nextID());
     }
 
-    /**
-     * 设置上下文标识
-     */
+    /// 设置上下文标识
     public static void setTraceId(String traceId) {
         traceLocal.get().put(TRACE_ID, traceId);
     }
 
-    /**
-     * 结束追踪
-     */
+    /// 结束追踪
     public static void end() {
         traceLocal.remove();
     }

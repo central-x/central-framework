@@ -52,12 +52,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-/**
- * 标准 Sql 构建工具
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// 标准 Sql 构建工具
+///
+/// @author Alan Yeh
 @Slf4j
 public abstract class StandardSqlBuilder implements SqlBuilder {
     @Override
@@ -273,11 +270,9 @@ public abstract class StandardSqlBuilder implements SqlBuilder {
         return forUpdate(executor, meta, entity, conditions, true);
     }
 
-    /**
-     * 构建 Update
-     *
-     * @param includeNull 是否更新值为 NULL 的属性
-     */
+    /// 构建 Update
+    ///
+    /// @param includeNull 是否更新值为 NULL 的属性
     @SneakyThrows({IllegalAccessException.class, InvocationTargetException.class})
     protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions, boolean includeNull) throws SQLSyntaxErrorException {
         conditions = Conditions.of(conditions);

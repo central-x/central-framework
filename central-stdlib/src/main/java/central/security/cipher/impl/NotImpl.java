@@ -33,12 +33,9 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 
-/**
- * 未实现
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// 未实现
+///
+/// @author Alan Yeh
 public class NotImpl implements CipherImpl {
 
     @Override

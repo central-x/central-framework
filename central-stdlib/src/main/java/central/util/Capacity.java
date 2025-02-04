@@ -34,12 +34,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigInteger;
 
-/**
- * 容量
- *
- * @author Alan Yeh
- * @since 2022/11/01
- */
+/// 容量
+///
+/// @author Alan Yeh
 public final class Capacity implements Serializable, Comparable<Capacity> {
     @Serial
     private static final long serialVersionUID = 4068595332892344041L;
@@ -62,9 +59,7 @@ public final class Capacity implements Serializable, Comparable<Capacity> {
         private final BigInteger value;
     }
 
-    /**
-     * 字节长度
-     */
+    /// 字节长度
     @Getter
     private final BigInteger length;
 
@@ -108,11 +103,9 @@ public final class Capacity implements Serializable, Comparable<Capacity> {
         return of(length, Unit.ZB);
     }
 
-    /**
-     * 转换成拽定单位容器
-     *
-     * @param unit 容量单位
-     */
+    /// 转换成拽定单位容器
+    ///
+    /// @param unit 容量单位
     public BigInteger to(Unit unit) {
         return BigInteger.valueOf(Math.round(this.length.multiply(BigInteger.valueOf(10)).divide(unit.getValue()).doubleValue() / 10.0d));
     }
@@ -149,19 +142,15 @@ public final class Capacity implements Serializable, Comparable<Capacity> {
         return this.to(Unit.ZB);
     }
 
-    /**
-     * 直接输出 B
-     */
+    /// 直接输出 B
     @Override
     public String toString() {
         return this.length + " B";
     }
 
-    /**
-     * 保留小数点位数
-     *
-     * @param digit 小数点位数
-     */
+    /// 保留小数点位数
+    ///
+    /// @param digit 小数点位数
     public String toString(Integer digit) {
         if (CompareResult.LE.matches(this.length, Unit.KB.getValue())) {
             return this.length + " " + Unit.B.getName();

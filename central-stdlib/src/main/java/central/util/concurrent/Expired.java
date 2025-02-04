@@ -26,18 +26,13 @@ package central.util.concurrent;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * 可过期的
- *
- * @author Alan Yeh
- * @since 2022/11/09
- */
+/// 可过期的
+///
+/// @author Alan Yeh
 public interface Expired {
-    /**
-     * 返回对象的剩余过期时间
-     *
-     * @param unit 时间单位
-     * @return 剩余过期时间；0 或者负数代表这个元素已过期
-     */
+    /// 返回对象的剩余过期时间
+    ///
+    /// @param unit 时间单位
+    /// @return 剩余过期时间；0 或者负数代表这个元素已过期
     long getExpire(TimeUnit unit);
 }

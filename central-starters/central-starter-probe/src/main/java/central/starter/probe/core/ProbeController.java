@@ -25,9 +25,9 @@
 package central.starter.probe.core;
 
 import central.starter.probe.ProbeProperties;
+import central.starter.probe.core.authorizer.Authorizer;
 import central.starter.probe.core.cache.Cache;
 import central.starter.probe.core.endpoint.Endpoint;
-import central.starter.probe.core.authorizer.Authorizer;
 import central.util.Mapx;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +47,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 探针控制器
- *
- * @author Alan Yeh
- * @since 2023/12/27
- */
+/// 探针控制器
+///
+/// @author Alan Yeh
 @Controller
 @RequestMapping("/__probe")
 public class ProbeController {
@@ -68,9 +65,7 @@ public class ProbeController {
     @Setter(onMethod_ = @Autowired)
     private ProbeProperties properties;
 
-    /**
-     * 探针入口地址
-     */
+    /// 探针入口地址
     @GetMapping
     public ResponseEntity<Map<String, String>> index(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) throws InterruptedException {
         // 验证保护器

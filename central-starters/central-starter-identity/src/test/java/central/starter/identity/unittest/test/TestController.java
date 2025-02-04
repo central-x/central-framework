@@ -43,22 +43,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-/**
- * Permissions Test Cases
- * 权限测试
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// Permissions Test Cases
+///
+/// 权限测试
+///
+/// @author Alan Yeh
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = TestApplication.class)
 public class TestController {
 
     @Value("${server.port}")
     private int port;
 
-    /**
-     * Test OK
-     */
+    /// Test OK
     @Test
     public void case1() {
         var permissions = String.join(",", ResourceController.Permissions.VIEW, ResourceController.Permissions.EDIT);
@@ -78,9 +74,7 @@ public class TestController {
         Assertions.assertEquals(1, resources.size());
     }
 
-    /**
-     * Test Unauthorized
-     */
+    /// Test Unauthorized
     @Test
     public void case2() {
         var permissions = String.join(",", ResourceController.Permissions.ADD, ResourceController.Permissions.EDIT);
@@ -99,9 +93,7 @@ public class TestController {
         Assertions.assertThrows(UnauthorizedHttpException.class, () -> client.findBy());
     }
 
-    /**
-     * Test Forbidden
-     */
+    /// Test Forbidden
     @Test
     public void case3() {
         var permissions = String.join(",", ResourceController.Permissions.ADD, ResourceController.Permissions.EDIT);
@@ -119,11 +111,9 @@ public class TestController {
         Assertions.assertThrows(ForbiddenHttpException.class, () -> client.insert(new ResourceInput(Guidx.nextID())));
     }
 
-    /**
-     * Test OK
-     */
+    /// Test OK
     @Test
-    public void case4(){
+    public void case4() {
         var permissions = String.join(",", ResourceController.Permissions.ADD, ResourceController.Permissions.EDIT);
         var jwt = JWT.create()
                 .withClaim("permissions", permissions)

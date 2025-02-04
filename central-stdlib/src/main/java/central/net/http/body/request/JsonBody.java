@@ -24,10 +24,10 @@
 
 package central.net.http.body.request;
 
+import central.lang.Stringx;
 import central.lang.reflect.TypeRef;
 import central.net.http.body.Body;
 import central.util.Jsonx;
-import central.lang.Stringx;
 import org.springframework.http.MediaType;
 
 import java.io.ByteArrayInputStream;
@@ -37,13 +37,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Json Body
- * 主要用于传输 JSON
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// Json Body
+///
+/// 主要用于传输 JSON
+///
+/// @author Alan Yeh
 public class JsonBody implements Body {
 
     private final Map<String, Object> json = new HashMap<>();

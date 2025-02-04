@@ -27,11 +27,8 @@ package central.sql.mapper;
 import central.sql.data.AccountEntity;
 import central.sql.proxy.Mapper;
 
-/**
- * 帐户操作类
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// 帐户操作类
+///
+/// @author Alan Yeh
 public interface AccountMapper extends Mapper<AccountEntity> {
 }

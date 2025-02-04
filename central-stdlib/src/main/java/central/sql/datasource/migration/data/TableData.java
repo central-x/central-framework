@@ -31,17 +31,12 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-/**
- * 表信息
- *
- * @author Alan Yeh
- * @since 2022/08/31
- */
+/// 表信息
+///
+/// @author Alan Yeh
 @Data
 public class TableData implements Serializable {
     @Serial

@@ -24,9 +24,8 @@
 
 package central.net.http.processor.impl;
 
-/**
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 失败重试
+///
+/// @author Alan Yeh
 public class RetryProcessor {
 }

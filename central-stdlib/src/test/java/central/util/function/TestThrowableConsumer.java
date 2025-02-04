@@ -29,12 +29,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * ThrowableConsumer Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// ThrowableConsumer Test Cases
+///
+/// @author Alan Yeh
 public class TestThrowableConsumer {
     @Test
     public void case1() {

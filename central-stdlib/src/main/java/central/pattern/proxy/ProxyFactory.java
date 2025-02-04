@@ -34,12 +34,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 代理工厂
- *
- * @author Alan Yeh
- * @since 2022/07/20
- */
+/// 代理工厂
+///
+/// @author Alan Yeh
 public class ProxyFactory {
 
     private final List<ProxyMethod> methods = new ArrayList<>();

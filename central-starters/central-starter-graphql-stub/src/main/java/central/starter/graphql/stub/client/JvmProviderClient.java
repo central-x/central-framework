@@ -24,11 +24,8 @@
 
 package central.starter.graphql.stub.client;
 
-/**
- * Jvm Provider Client
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// Jvm Provider Client
+///
+/// @author Alan Yeh
 public class JvmProviderClient {
 }

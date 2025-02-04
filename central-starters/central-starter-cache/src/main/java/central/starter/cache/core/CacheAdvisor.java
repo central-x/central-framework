@@ -51,9 +51,7 @@ public class CacheAdvisor extends AbstractPointcutAdvisor implements Initializin
     @Serial
     private static final long serialVersionUID = 623201814085892146L;
 
-    /**
-     * 切面顺序
-     */
+/// 切面顺序
     @Getter
     private final int order;
 

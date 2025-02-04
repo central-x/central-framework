@@ -32,12 +32,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-/**
- * 内存缓存集合(HashSet)
- *
- * @author Alan Yeh
- * @since 2023/07/02
- */
+/// 内存缓存集合(HashSet)
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class MemoryCacheSet implements CacheSet {
 

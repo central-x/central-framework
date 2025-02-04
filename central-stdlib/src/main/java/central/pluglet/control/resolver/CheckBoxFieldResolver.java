@@ -32,16 +32,13 @@ import central.lang.reflect.FieldRef;
 import central.pluglet.annotation.Control;
 import central.pluglet.control.ControlType;
 import central.pluglet.control.PlugletControl;
-import central.util.*;
+import central.util.Objectx;
 
 import java.util.List;
 
-/**
- * CheckBox Control
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// CheckBox Control
+///
+/// @author Alan Yeh
 public class CheckBoxFieldResolver extends FieldResolver {
     @Override
     public boolean support(FieldRef field) {
@@ -61,7 +58,7 @@ public class CheckBoxFieldResolver extends FieldResolver {
 
         // 枚举列表
         var options = Arrayx.asStream(enumType.getRawClass().getEnumConstants())
-                .map(it -> (OptionalEnum<String>)Assertx.requireInstanceOf(OptionalEnum.class, it, "Enum '{}' MUST implements Optional<String>"))
+                .map(it -> (OptionalEnum<String>) Assertx.requireInstanceOf(OptionalEnum.class, it, "Enum '{}' MUST implements Optional<String>"))
                 .map(it -> new NameValue<>(it.getName(), it.getValue()))
                 .toList();
 

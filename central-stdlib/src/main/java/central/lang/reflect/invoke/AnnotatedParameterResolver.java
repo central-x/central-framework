@@ -31,12 +31,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
-/**
- * 带有注解的参数解析器
- *
- * @author Alan Yeh
- * @since 2022/10/01
- */
+/// 带有注解的参数解析器
+///
+/// @author Alan Yeh
 public abstract class AnnotatedParameterResolver implements ParameterResolver {
     @Getter
     private final Class<? extends Annotation> annotation;

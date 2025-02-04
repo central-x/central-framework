@@ -24,10 +24,10 @@
 
 package central.bean;
 
+import central.lang.Stringx;
 import central.util.Collectionx;
 import central.util.Mapx;
 import central.util.Objectx;
-import central.lang.Stringx;
 import lombok.SneakyThrows;
 
 import java.io.Serial;
@@ -37,12 +37,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * Coder value pairs
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// Coder value pairs
+///
+/// @author Alan Yeh
 public class CodeValues<V extends Serializable> implements Collection<CodeValue<V>>, Serializable {
     @Serial
     private static final long serialVersionUID = 5058361389934247060L;
@@ -58,12 +55,10 @@ public class CodeValues<V extends Serializable> implements Collection<CodeValue<
         this.internal.addAll(init.entrySet().stream().map(it -> new CodeValue<>(it.getKey(), it.getValue())).collect(Collectors.toSet()));
     }
 
-    /**
-     * 设置键值
-     *
-     * @param code  键
-     * @param value 值
-     */
+    /// 设置键值
+    ///
+    /// @param code  键
+    /// @param value 值
     public void put(String code, V value) {
         var data = this.internal.stream().filter(it -> code.equals(it.getCode())).findFirst();
         if (data.isPresent()) {
@@ -73,13 +68,11 @@ public class CodeValues<V extends Serializable> implements Collection<CodeValue<
         }
     }
 
-    /**
-     * 如果值不存在，则设置此值
-     * 如果值存在，则使用原来的值
-     *
-     * @param key   键
-     * @param value 值
-     */
+    /// 如果值不存在，则设置此值
+    /// 如果值存在，则使用原来的值
+    ///
+    /// @param key   键
+    /// @param value 值
     public V putIfAbsent(String key, V value) {
         var origin = this.internal.stream().filter(it -> it.getCode().equals(key)).findFirst();
         if (origin.isPresent()) {
@@ -92,11 +85,9 @@ public class CodeValues<V extends Serializable> implements Collection<CodeValue<
         }
     }
 
-    /**
-     * 是否包含指定的键
-     *
-     * @param code 键
-     */
+    /// 是否包含指定的键
+    ///
+    /// @param code 键
     public boolean containsCode(String code) {
         if (Stringx.isNullOrBlank(code)) {
             return false;
@@ -110,11 +101,9 @@ public class CodeValues<V extends Serializable> implements Collection<CodeValue<
         return false;
     }
 
-    /**
-     * 获取值
-     *
-     * @param code 键
-     */
+    /// 获取值
+    ///
+    /// @param code 键
     public V get(String code) {
         for (var item : this.internal) {
             if (item.getCode().equals(code)) {
@@ -124,13 +113,11 @@ public class CodeValues<V extends Serializable> implements Collection<CodeValue<
         return null;
     }
 
-    /**
-     * 获取值
-     * 如果不存在指定的值，则从 mappingFunction 中计算获取
-     *
-     * @param code            键
-     * @param mappingFunction 值计算器
-     */
+    /// 获取值
+    /// 如果不存在指定的值，则从 mappingFunction 中计算获取
+    ///
+    /// @param code            键
+    /// @param mappingFunction 值计算器
     public V computeIfAbsent(String code, Function<String, V> mappingFunction) {
         Objects.requireNonNull(mappingFunction);
 
@@ -144,32 +131,26 @@ public class CodeValues<V extends Serializable> implements Collection<CodeValue<
     }
 
 
-    /**
-     * 获取值
-     * 如果不存在指定值，则返回默认值
-     *
-     * @param key          键
-     * @param defaultValue 默认值
-     */
+    /// 获取值
+    /// 如果不存在指定值，则返回默认值
+    ///
+    /// @param key          键
+    /// @param defaultValue 默认值
     public V getOrDefault(String key, V defaultValue) {
         return Objectx.getOrDefault(this.get(key), defaultValue);
     }
 
-    /**
-     * 循环
-     */
+    /// 循环
     public void forEach(BiConsumer<String, V> action) {
         Objects.requireNonNull(action);
         this.forEach(item -> action.accept(item.getCode(), item.getValue()));
     }
 
 
-    /**
-     * 移除指定键
-     *
-     * @param code 键
-     * @return 被移除的值
-     */
+    /// 移除指定键
+    ///
+    /// @param code 键
+    /// @return 被移除的值
     public V remove(String code) {
         var origin = this.internal.stream().filter(it -> it.getCode().equals(code)).findFirst();
         if (origin.isPresent()) {
@@ -180,11 +161,9 @@ public class CodeValues<V extends Serializable> implements Collection<CodeValue<
         }
     }
 
-    /**
-     * 设置 map 中所有的键值
-     *
-     * @param map 键值对
-     */
+    /// 设置 map 中所有的键值
+    ///
+    /// @param map 键值对
     public void putAll(Map<String, V> map) {
         if (Mapx.isNullOrEmpty(map)) {
             return;
@@ -194,16 +173,12 @@ public class CodeValues<V extends Serializable> implements Collection<CodeValue<
         }
     }
 
-    /**
-     * 获取所有键
-     */
+    /// 获取所有键
     public Set<String> codeSet() {
         return this.internal.stream().map(CodeValue::getCode).collect(Collectors.toSet());
     }
 
-    /**
-     * 获取键值对
-     */
+    /// 获取键值对
     public Set<CodeValue<V>> entrySet() {
         return new HashSet<>(this.internal);
     }

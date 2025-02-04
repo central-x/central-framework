@@ -26,17 +26,15 @@ package central.sql.migration;
 
 import central.sql.SqlType;
 import central.sql.datasource.migration.Column;
+import central.sql.datasource.migration.Database;
 import central.sql.datasource.migration.Index;
 import central.sql.datasource.migration.Migration;
-import central.sql.datasource.migration.Database;
 import central.util.Version;
 
 import java.sql.SQLException;
 
-/**
- * @author Alan Yeh
- * @since 2022/09/16
- */
+
+/// @author Alan Yeh
 public class V3 extends Migration {
     public V3() {
         super(Version.of("1.0.1"), Version.of("1.0.2"));
@@ -78,7 +76,7 @@ public class V3 extends Migration {
             // 重命名字段
             var table = database.getTable("XT_ORIGIN");
             var column = table.getColumn("TYPE");
-            if (column != null){
+            if (column != null) {
                 column.rename("CATEGORY");
             }
         }
@@ -87,7 +85,7 @@ public class V3 extends Migration {
             // 恢复索引
             var table = database.getTable("XT_ORIGIN");
             var index = table.getIndex("XT_ORIGIN_CATEGORY");
-            if (index == null){
+            if (index == null) {
                 table.addIndex(Index.of("XT_ORIGIN_CATEGORY", false, "CATEGORY"));
             }
         }
@@ -96,7 +94,7 @@ public class V3 extends Migration {
             // 删除索引
             var table = database.getTable("XT_ORIGIN");
             var index = table.getIndex("UNI_CODE");
-            if (index != null){
+            if (index != null) {
                 index.drop();
             }
         }
@@ -105,7 +103,7 @@ public class V3 extends Migration {
             // 删除字段
             var table = database.getTable("XT_ORIGIN");
             var column = table.getColumn("TEST_COL");
-            if (column != null){
+            if (column != null) {
                 column.drop();
             }
         }

@@ -26,12 +26,9 @@ package central.net.http;
 
 import central.net.http.executor.java.JavaExecutor;
 
-/**
- * Java Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/18
- */
+/// Java Test Cases
+///
+/// @author Alan Yeh
 public class TestJava extends TestHttp {
 
     @Override

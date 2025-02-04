@@ -32,21 +32,14 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
 
-/**
- * 条件连接符
- *
- * @author Alan Yeh
- * @since 2022/07/20
- */
+/// 条件连接符
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public enum Connectors {
-    /**
-     * AND
-     */
+    /// AND
     AND("AND"),
-    /**
-     * OR
-     */
+    /// OR
     OR("OR");
 
     @Getter

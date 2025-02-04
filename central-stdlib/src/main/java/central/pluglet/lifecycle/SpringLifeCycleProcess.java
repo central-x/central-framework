@@ -33,25 +33,22 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 
-/**
- * Spring LifeCycle
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// Spring LifeCycle
+///
+/// @author Alan Yeh
 public class SpringLifeCycleProcess implements LifeCycleProcessor {
     private final ApplicationContext applicationContext;
 
-    public SpringLifeCycleProcess(ApplicationContext applicationContext){
+    public SpringLifeCycleProcess(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
     @Override
     public void afterCreated(InstanceRef<?> instance) {
-        if (instance.getInstance() instanceof ApplicationContextAware aware){
+        if (instance.getInstance() instanceof ApplicationContextAware aware) {
             aware.setApplicationContext(this.applicationContext);
         }
-        if (instance.getInstance() instanceof EnvironmentAware aware){
+        if (instance.getInstance() instanceof EnvironmentAware aware) {
             aware.setEnvironment(this.applicationContext.getEnvironment());
         }
     }
@@ -59,7 +56,7 @@ public class SpringLifeCycleProcess implements LifeCycleProcessor {
     @Override
     @SneakyThrows
     public void afterPropertySet(InstanceRef<?> instance) {
-        if (instance.getInstance() instanceof InitializingBean bean){
+        if (instance.getInstance() instanceof InitializingBean bean) {
             bean.afterPropertiesSet();
         }
     }
@@ -67,7 +64,7 @@ public class SpringLifeCycleProcess implements LifeCycleProcessor {
     @Override
     @SneakyThrows
     public void beforeDestroy(InstanceRef<?> instance) {
-        if (instance.getInstance() instanceof DisposableBean bean){
+        if (instance.getInstance() instanceof DisposableBean bean) {
             bean.destroy();
         }
     }

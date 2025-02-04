@@ -26,24 +26,15 @@ package central.sql.meta.database;
 
 import lombok.Data;
 
-/**
- * 索引元数据
- *
- * @author Alan Yeh
- * @since 2022/09/01
- */
+/// 索引元数据
+///
+/// @author Alan Yeh
 @Data
 public class IndexMeta {
-    /**
-     * 索引名
-     */
+    /// 索引名
     private String name;
-    /**
-     * 是否唯一索引
-     */
+    /// 是否唯一索引
     private boolean unique;
-    /**
-     * 索引所在的列名
-     */
+    /// 索引所在的列名
     private String column;
 }

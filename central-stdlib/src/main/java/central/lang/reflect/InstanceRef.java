@@ -31,13 +31,11 @@ import lombok.Getter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-/**
- * Instance Reference
- * 实例引用
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// Instance Reference
+///
+/// 实例引用
+///
+/// @author Alan Yeh
 public abstract class InstanceRef<T> {
     @Getter(onMethod_ = @Nonnull)
     private final TypeRef<? extends T> type;
@@ -82,24 +80,18 @@ public abstract class InstanceRef<T> {
         }
     }
 
-    /**
-     * 实例是否为空
-     */
+    /// 实例是否为空
     public boolean isNull() {
         return this.instance == null;
     }
 
-    /**
-     * 是否不为空
-     */
+    /// 是否不为空
     public boolean isNotNull() {
         return this.instance != null;
     }
 
-//    /**
-//     * 获取类型
-//     */
-//    public TypeReference<T> getType(){
+//    /// 获取类型
+//    public TypeReference<T> getType() {
 //        return this.isNull() ? null : TypeReference.forInstance(this.instance);
 //    }
 }

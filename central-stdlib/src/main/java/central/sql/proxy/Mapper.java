@@ -24,8 +24,8 @@
 
 package central.sql.proxy;
 
-import central.sql.data.Entity;
 import central.bean.Page;
+import central.sql.data.Entity;
 import central.sql.query.Columns;
 import central.sql.query.Conditions;
 import central.sql.query.Orders;
@@ -34,338 +34,290 @@ import jakarta.annotation.Nullable;
 
 import java.util.List;
 
-/**
- * 通用 Mapper
- *
- * @author Alan Yeh
- * @since 2022/07/18
- */
+/// 通用 Mapper
+///
+/// @author Alan Yeh
 public interface Mapper<E extends Entity> {
-    /**
-     * 销毁 ORM 实例
-     * 注意，本操作会导致整个 ORM 需要重新初始化
-     */
+    /// 销毁 ORM 实例
+    /// 注意，本操作会导致整个 ORM 需要重新初始化
     void destroy();
 
-    /**
-     * 创建其它 Mapper
-     *
-     * @param mapper Mapper 类型
-     * @return Mapper 实例
-     */
+    /// 创建其它 Mapper
+    ///
+    /// @param mapper Mapper 类型
+    /// @return Mapper 实例
     <T extends Mapper<?>> T getMapper(Class<T> mapper);
 
-    /**
-     * 插入单条数据
-     * {@code INSERT INTO TABLE(COL1, COL2, COL3, ...) VALUES (?, ?, ?, ...)}
-     *
-     * @param entity 数据实体
-     * @return 是否插入成功
-     */
+    /// 插入单条数据
+    ///
+    /// ```sql
+    /// INSERT INTO TABLE(COL1, COL2, COL3, ...) VALUES (?, ?, ?, ...)
+    /// ```
+    ///
+    /// @param entity 数据实体
+    /// @return 是否插入成功
     boolean insert(@Nonnull E entity);
 
-    /**
-     * 批量插入数据
-     * {@code INSERT INTO TABLE(COL1, COL2, COL3, ...) VALUES (?, ?, ?, ...)}
-     *
-     * @param entities 数据实体
-     * @return 已插入的数据数量
-     */
+    /// 批量插入数据
+    ///
+    /// ```sql
+    /// INSERT INTO TABLE(COL1, COL2, COL3, ...) VALUES (?, ?, ?, ...)
+    /// ```
+    ///
+    /// @param entities 数据实体
+    /// @return 已插入的数据数量
     long insertBatch(@Nonnull List<? extends E> entities);
 
-    /**
-     * 根据主键批量删除数据
-     * {@code DELETE FROM TABLE WHERE ID IN (?, ?, ?, ...)}
-     *
-     * @param ids 数据主键
-     * @return 受影响数据量
-     */
+    /// 根据主键批量删除数据
+    ///
+    /// ```sql
+    /// DELETE FROM TABLE WHERE ID IN (?, ?, ?, ...)
+    /// ```
+    ///
+    /// @param ids 数据主键
+    /// @return 受影响数据量
     long deleteByIds(List<String> ids);
 
-    /**
-     * 根据主键删除数据
-     * {@code DELETE FROM TABLE WHERE ID = ?}
-     *
-     * @param id 数据主键
-     * @return 受影响数据量
-     */
+    /// 根据主键删除数据
+    ///
+    /// ```sql
+    /// DELETE FROM TABLE WHERE ID = ?
+    /// ```
+    ///
+    /// @param id 数据主键
+    /// @return 受影响数据量
     long deleteById(@Nonnull String id);
 
-    /**
-     * 根据条件删除数据
-     *
-     * @param conditions 参数条件，如果条件为空，将清空表
-     * @return 受影响的数据量
-     */
+    /// 根据条件删除数据
+    ///
+    /// @param conditions 参数条件，如果条件为空，将清空表
+    /// @return 受影响的数据量
     long deleteBy(@Nullable Conditions<? extends E> conditions);
 
-    /**
-     * 清空表
-     *
-     * @return 受影响的数据量
-     */
+    /// 清空表
+    ///
+    /// @return 受影响的数据量
     long deleteAll();
 
-    /**
-     * 更新数据
-     *
-     * @param entity 待更新数据实体(主键不能为空)
-     * @return 是否更新成功
-     */
+    /// 更新数据
+    ///
+    /// @param entity 待更新数据实体(主键不能为空)
+    /// @return 是否更新成功
     boolean update(@Nonnull E entity);
 
-    /**
-     * 仅更新字段不为 null 的信息
-     *
-     * @param entity 待更新数据实体(主键不能为空)
-     * @return 是否更新成功
-     */
+    /// 仅更新字段不为 null 的信息
+    ///
+    /// @param entity 待更新数据实体(主键不能为空)
+    /// @return 是否更新成功
     boolean updateBy(@Nonnull E entity);
 
-    /**
-     * 根据条件更新数据
-     *
-     * @param entity     待更新数据实体（主键为空）
-     * @param conditions 条件
-     * @return 受影响数据量
-     */
+    /// 根据条件更新数据
+    ///
+    /// @param entity     待更新数据实体（主键为空）
+    /// @param conditions 条件
+    /// @return 受影响数据量
     long updateBy(@Nonnull E entity, @Nullable Conditions<? extends E> conditions);
 
-    /**
-     * 根据主键查询
-     * <p>
-     * 如果没有找到，则返回 null
-     * <p>
-     * {@code SELECT * FROM TABLE WHERE ID = ?}
-     *
-     * @param id 主键
-     * @return 数据实体
-     */
+    /// 根据主键查询
+    ///
+    /// 如果没有找到，则返回 null
+    ///
+    /// ```sql
+    /// SELECT * FROM TABLE WHERE ID = ?
+    /// ```
+    ///
+    /// @param id 主键
+    /// @return 数据实体
     @Nullable
     E findById(@Nullable String id);
 
-    /**
-     * 根据主键查询，只返回指定字段信息
-     * <p>
-     * 如果没有找到，则返回 null
-     * <p>
-     * {@code SELECT column1, column2, ... FROM TABLE WHERE ID = ?}
-     *
-     * @param id      主键
-     * @param columns 字段列表
-     * @return 数据实体
-     */
+    /// 根据主键查询，只返回指定字段信息
+    ///
+    /// 如果没有找到，则返回 null
+    ///
+    /// ```sql
+    /// SELECT column1, column2, ... FROM TABLE WHERE ID = ?
+    /// ```
+    ///
+    /// @param id      主键
+    /// @param columns 字段列表
+    /// @return 数据实体
     @Nullable
     E findById(@Nullable String id, @Nullable Columns<? extends E> columns);
 
-    /**
-     * 根据主键查询
-     * <p>
-     * {@code SELECT * FROM TABLE WHERE ID IN (?, ?, ?, ...)}
-     *
-     * @param ids 主键列表
-     * @return 数据实体列表
-     */
+    /// 根据主键查询
+    ///
+    /// ```sql
+    /// SELECT * FROM TABLE WHERE ID IN (?, ?, ?, ...)
+    /// ```
+    ///
+    /// @param ids 主键列表
+    /// @return 数据实体列表
     @Nonnull
     List<E> findByIds(@Nullable List<String> ids);
 
-    /**
-     * 根据主键查询
-     * <p>
-     * {@code SELECT column1, column2, ... FROM TABLE WHERE ID IN (?, ?, ?, ...)}
-     *
-     * @param ids     主键列表
-     * @param columns 字段列表
-     * @return 数据实体列表
-     */
+    /// 根据主键查询
+    ///
+    /// ```sql
+    /// SELECT column1, column2, ... FROM TABLE WHERE ID IN (?, ?, ?, ...)
+    /// ```
+    ///
+    /// @param ids     主键列表
+    /// @param columns 字段列表
+    /// @return 数据实体列表
     @Nonnull
     List<E> findByIds(@Nullable List<String> ids, @Nullable Columns<? extends E> columns);
 
-    /**
-     * 根据条件获取第一条数据
-     *
-     * @param conditions 查询条件
-     * @param orders     排序
-     * @return 实体数据
-     */
+    /// 根据条件获取第一条数据
+    ///
+    /// @param conditions 查询条件
+    /// @param orders     排序
+    /// @return 实体数据
     @Nullable
     E findFirstBy(@Nullable Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
-    /**
-     * 根据条件获取第一条数据
-     *
-     * @param columns    字段列表
-     * @param conditions 查询条件
-     * @param orders     排序
-     * @return 实体数据
-     */
+    /// 根据条件获取第一条数据
+    ///
+    /// @param columns    字段列表
+    /// @param conditions 查询条件
+    /// @param orders     排序
+    /// @return 实体数据
     @Nullable
     E findFirstBy(@Nullable Columns<? extends E> columns, @Nullable Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
-    /**
-     * 根据条件获取第一条数据
-     *
-     * @param conditions 查询条件
-     * @return 实体数据
-     */
+    /// 根据条件获取第一条数据
+    ///
+    /// @param conditions 查询条件
+    /// @return 实体数据
     @Nullable
     E findFirstBy(@Nullable Conditions<? extends E> conditions);
 
-    /**
-     * 根据条件获取第一条数据
-     *
-     * @param columns    字段列表
-     * @param conditions 查询条件
-     * @return 实体数据
-     */
+    /// 根据条件获取第一条数据
+    ///
+    /// @param columns    字段列表
+    /// @param conditions 查询条件
+    /// @return 实体数据
     @Nullable
     E findFirstBy(@Nullable Columns<? extends E> columns, @Nullable Conditions<? extends E> conditions);
 
-    /**
-     * 根据条件获取实体列表
-     *
-     * @param first      取前几条数据，如果为空，则取所有值
-     * @param offset     偏移量。如果为空，则不偏移。此值在 first 不为空时才生效
-     * @param conditions 查询条件
-     * @param orders     排序
-     * @return 实体列表
-     */
+    /// 根据条件获取实体列表
+    ///
+    /// @param first      取前几条数据，如果为空，则取所有值
+    /// @param offset     偏移量。如果为空，则不偏移。此值在 first 不为空时才生效
+    /// @param conditions 查询条件
+    /// @param orders     排序
+    /// @return 实体列表
     @Nonnull
     List<E> findBy(@Nullable Long first, @Nullable Long offset, @Nullable Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
-    /**
-     * 根据条件获取实体列表
-     *
-     * @param first      取前几条数据，如果为空，则取所有值
-     * @param offset     偏移量。如果为空，则不偏移。此值在 first 不为空时才生效
-     * @param columns    字段列表
-     * @param conditions 查询条件
-     * @param orders     排序
-     * @return 实体列表
-     */
+    /// 根据条件获取实体列表
+    ///
+    /// @param first      取前几条数据，如果为空，则取所有值
+    /// @param offset     偏移量。如果为空，则不偏移。此值在 first 不为空时才生效
+    /// @param columns    字段列表
+    /// @param conditions 查询条件
+    /// @param orders     排序
+    /// @return 实体列表
     @Nonnull
     List<E> findBy(@Nullable Long first, @Nullable Long offset, @Nullable Columns<? extends E> columns, @Nullable Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
-    /**
-     * 根据条件获取实体列表
-     *
-     * @param conditions 过滤条件
-     * @param orders     排序
-     * @return 实体列表
-     */
+    /// 根据条件获取实体列表
+    ///
+    /// @param conditions 过滤条件
+    /// @param orders     排序
+    /// @return 实体列表
     @Nonnull
     List<E> findBy(@Nullable Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
-    /**
-     * 根据条件获取实体列表
-     *
-     * @param columns    字段列表
-     * @param conditions 查询条件
-     * @param orders     排序
-     * @return 实体列表
-     */
+    /// 根据条件获取实体列表
+    ///
+    /// @param columns    字段列表
+    /// @param conditions 查询条件
+    /// @param orders     排序
+    /// @return 实体列表
     @Nonnull
     List<E> findBy(@Nullable Columns<? extends E> columns, @Nullable Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
 
-    /**
-     * 根据条件获取实体列表
-     *
-     * @param conditions 过滤条件
-     * @return 实体列表
-     */
+    /// 根据条件获取实体列表
+    ///
+    /// @param conditions 过滤条件
+    /// @return 实体列表
     @Nonnull
     List<E> findBy(@Nullable Conditions<? extends E> conditions);
 
-    /**
-     * 根据条件获取实体列表
-     *
-     * @param columns    字段列表
-     * @param conditions 查询条件
-     * @return 实体列表
-     */
+    /// 根据条件获取实体列表
+    ///
+    /// @param columns    字段列表
+    /// @param conditions 查询条件
+    /// @return 实体列表
     @Nonnull
     List<E> findBy(@Nullable Columns<? extends E> columns, @Nullable Conditions<? extends E> conditions);
 
-    /**
-     * 获取所有数据
-     *
-     * @param orders 排序
-     * @return 实体列表
-     */
+    /// 获取所有数据
+    ///
+    /// @param orders 排序
+    /// @return 实体列表
     @Nonnull
     List<E> findAll(@Nullable Orders<? extends E> orders);
 
-    /**
-     * 获取所有数据
-     *
-     * @param columns 字段列表
-     * @param orders  查询条件
-     * @return 实体列表
-     */
+    /// 获取所有数据
+    ///
+    /// @param columns 字段列表
+    /// @param orders  查询条件
+    /// @return 实体列表
     @Nonnull
     List<E> findAll(@Nullable Columns<? extends E> columns, @Nullable Orders<? extends E> orders);
 
-    /**
-     * 获取所有数据
-     *
-     * @return 实体列表
-     */
+    /// 获取所有数据
+    ///
+    /// @return 实体列表
     @Nonnull
     List<E> findAll();
 
-    /**
-     * 根据条件分页查询数据
-     *
-     * @param pageIndex  分页起始（从 1 开始）
-     * @param pageSize   分页大小
-     * @param conditions 查询条件
-     * @param orders     排序
-     * @return 分页结果
-     */
+    /// 根据条件分页查询数据
+    ///
+    /// @param pageIndex  分页起始（从 1 开始）
+    /// @param pageSize   分页大小
+    /// @param conditions 查询条件
+    /// @param orders     排序
+    /// @return 分页结果
     @Nonnull
     Page<E> findPageBy(@Nonnull Long pageIndex, @Nonnull Long pageSize, @Nullable Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
-    /**
-     * 根据条件分页查询数据
-     *
-     * @param pageIndex  分页起始（从 1 开始）
-     * @param pageSize   分页大小
-     * @param columns    字段列表
-     * @param conditions 查询条件
-     * @param orders     排序
-     * @return 分页结果
-     */
+    /// 根据条件分页查询数据
+    ///
+    /// @param pageIndex  分页起始（从 1 开始）
+    /// @param pageSize   分页大小
+    /// @param columns    字段列表
+    /// @param conditions 查询条件
+    /// @param orders     排序
+    /// @return 分页结果
     @Nonnull
     Page<E> findPageBy(@Nonnull Long pageIndex, @Nonnull Long pageSize, @Nullable Columns<? extends E> columns, @Nullable Conditions<? extends E> conditions, @Nullable Orders<? extends E> orders);
 
-    /**
-     * 询查表的数据量
-     * {@code SELECT COUNT(1) FROM TABLE WHERE 1 = 1}
-     *
-     * @return 数量
-     */
+    /// 询查表的数据量
+    ///
+    /// ```sql
+    /// SELECT COUNT(1) FROM TABLE WHERE 1 = 1
+    /// ```
+    ///
+    /// @return 数量
     long count();
 
-    /**
-     * 根据条件查询数量
-     *
-     * @param conditions 条件参数
-     * @return 数量
-     */
+    /// 根据条件查询数量
+    ///
+    /// @param conditions 条件参数
+    /// @return 数量
     long countBy(@Nullable Conditions<? extends E> conditions);
 
-    /**
-     * 根据条件查询数据是否存在
-     *
-     * @param conditions 条件参数
-     * @return 是否存在满足条件的数据
-     */
+    /// 根据条件查询数据是否存在
+    ///
+    /// @param conditions 条件参数
+    /// @return 是否存在满足条件的数据
     boolean existsBy(@Nullable Conditions<? extends E> conditions);
 
-    /**
-     * 打印 Mapper 信息
-     */
+    /// 打印 Mapper 信息
     @Override
     String toString();
 }

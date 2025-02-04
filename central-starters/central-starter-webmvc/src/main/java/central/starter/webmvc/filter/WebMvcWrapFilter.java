@@ -41,14 +41,11 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
-/**
- * WebMvcRequest Wrap Filter
- * <p>
- * 将 HttpServletRequest 封装成 WebMvcRequest
- *
- * @author Alan Yeh
- * @since 2023/03/08
- */
+/// WebMvcRequest Wrap Filter
+///
+/// 将 HttpServletRequest 封装成 WebMvcRequest
+///
+/// @author Alan Yeh
 public class WebMvcWrapFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain filterChain) throws ServletException, IOException {

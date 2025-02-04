@@ -27,12 +27,9 @@ package central.starter.graphql;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * 测试应用
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// 测试应用
+///
+/// @author Alan Yeh
 @SpringBootApplication
 public class TestApplication {
     public static void main(String[] args) {

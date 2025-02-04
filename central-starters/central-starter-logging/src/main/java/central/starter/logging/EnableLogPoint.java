@@ -29,21 +29,16 @@ import org.springframework.core.Ordered;
 
 import java.lang.annotation.*;
 
-/**
- * 启用日志切面
- *
- * @author Alan Yeh
- * @since 2023/02/05
- */
+/// 启用日志切面
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Import(StarterConfiguration.class)
 public @interface EnableLogPoint {
-    /**
-     * 日志切面优先级
-     * <p>
-     * 一般情况下，日志切面应用是最后执行的
-     */
+    /// 日志切面优先级
+    ///
+    /// 一般情况下，日志切面应用是最后执行的
     int order() default Ordered.LOWEST_PRECEDENCE;
 }

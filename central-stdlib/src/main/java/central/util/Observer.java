@@ -26,17 +26,12 @@ package central.util;
 
 import jakarta.annotation.Nonnull;
 
-/**
- * 观查者
- *
- * @author Alan Yeh
- * @since 2022/11/11
- */
+/// 观查者
+///
+/// @author Alan Yeh
 public interface Observer<O extends Observable<O>> {
-    /**
-     * 被观查者变更回调
-     *
-     * @param event 变更事件
-     */
+    /// 被观查者变更回调
+    ///
+    /// @param event 变更事件
     void update(@Nonnull ObserveEvent<O> event);
 }

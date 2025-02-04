@@ -26,7 +26,6 @@ package central.sql.impl.standard;
 
 import central.lang.Assertx;
 import central.lang.CompareResult;
-import central.sql.query.Conditions;
 import central.sql.SqlExecutor;
 import central.sql.SqlMetaManager;
 import central.sql.SqlType;
@@ -35,6 +34,7 @@ import central.sql.datasource.migration.data.MigrationEntity;
 import central.sql.datasource.migration.data.MigrationMapper;
 import central.sql.datasource.migration.migrator.DatabaseMigrator;
 import central.sql.meta.database.DatabaseMeta;
+import central.sql.query.Conditions;
 import central.util.Version;
 import central.validation.Label;
 import jakarta.annotation.Nonnull;
@@ -51,32 +51,23 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * 数据源迁移（版本管理）
- *
- * @author Alan Yeh
- * @since 2022/08/09
- */
+/// 数据源迁移（版本管理）
+///
+/// @author Alan Yeh
 public class StandardDataSourceMigrator implements DataSourceMigrator {
-    /**
-     * 应用名
-     */
+    /// 应用名
     @Nonnull
     @Getter
     private final String name;
 
-    /**
-     * 目标版本
-     * 如果目标版本比当前版本高，那么就会升级该版本
-     */
+    /// 目标版本
+    /// 如果目标版本比当前版本高，那么就会升级该版本
     @Nonnull
     @Getter
     private final Version target;
 
-    /**
-     * 基础版本
-     * 跳过指定版本的，只执行指定版本之后的脚本
-     */
+    /// 基础版本
+    /// 跳过指定版本的，只执行指定版本之后的脚本
     @Nullable
     @Getter
     private final Version baseline;
@@ -110,11 +101,9 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
         INITIALIZATION.upgrade(executor);
     }
 
-    /**
-     * 升级数据源
-     *
-     * @param executor Sql 执行器
-     */
+    /// 升级数据源
+    ///
+    /// @param executor Sql 执行器
     public void upgrade(SqlExecutor executor) throws SQLException {
         this.init(executor);
 
@@ -171,11 +160,9 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
         }
     }
 
-    /**
-     * 降级数据源
-     *
-     * @param executor Sql 执行器
-     */
+    /// 降级数据源
+    ///
+    /// @param executor Sql 执行器
     @Override
     public void downgrade(SqlExecutor executor) throws SQLException {
         this.init(executor);
@@ -228,9 +215,7 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
         }
     }
 
-    /**
-     * 构建升级路线
-     */
+    /// 构建升级路线
     private List<Migration> buildUpgradeMigration(List<Migration> migrations) {
         migrations = new ArrayList<>(migrations);
         // 根据起始版本号排序
@@ -274,9 +259,7 @@ public class StandardDataSourceMigrator implements DataSourceMigrator {
         return result;
     }
 
-    /**
-     * 构建降级路线
-     */
+    /// 构建降级路线
     private List<Migration> buildDowngradeMigration(List<Migration> migrations) {
         migrations = new ArrayList<>(migrations);
 

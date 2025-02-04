@@ -28,12 +28,9 @@ import central.validation.Prefix;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-/**
- * 前缀校验器
- *
- * @author Alan Yeh
- * @since 2022/11/07
- */
+/// 前缀校验器
+///
+/// @author Alan Yeh
 public class PrefixValidator implements ConstraintValidator<Prefix, Object> {
 
     private String prefix;

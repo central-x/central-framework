@@ -24,9 +24,9 @@
 
 package central.starter.probe;
 
+import central.starter.probe.properties.AuthorizerProperties;
 import central.starter.probe.properties.CacheProperties;
 import central.starter.probe.properties.EndpointProperties;
-import central.starter.probe.properties.AuthorizerProperties;
 import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -34,36 +34,23 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 探针配置属性
- *
- * @author Alan Yeh
- * @since 2023/12/27
- */
+/// 探针配置属性
+///
+/// @author Alan Yeh
 @Data
 @ConfigurationProperties(prefix = "central.probe")
 public class ProbeProperties {
-    /**
-     * 是否启用探针服务
-     */
+    /// 是否启用探针服务
     private boolean enabled = true;
-    /**
-     * 每个探针的执行超时时间（毫秒）
-     */
+    /// 每个探针的执行超时时间（毫秒）
     private long timeout = 5000;
-    /**
-     * 缓存
-     */
+    /// 缓存
     @Valid
     private CacheProperties cache = new CacheProperties();
-    /**
-     * 探测监权
-     */
+    /// 探测监权
     @Valid
     private AuthorizerProperties authorizer = new AuthorizerProperties();
-    /**
-     * 探测端点配置
-     */
+    /// 探测端点配置
     @Valid
     private List<EndpointProperties> points = new ArrayList<>();
 }

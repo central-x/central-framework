@@ -48,12 +48,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * Person Query
- *
- * @author Alan Yeh
- * @since 2022/09/29
- */
+/// Person Query
+///
+/// @author Alan Yeh
 @Component
 @GraphQLSchema(path = "person", types = PersonDTO.class)
 public class PersonQuery {
@@ -61,11 +58,9 @@ public class PersonQuery {
     @Setter(onMethod_ = @Autowired)
     private PersonPersistence persistence;
 
-    /**
-     * 批量数据加载器
-     *
-     * @param ids 主键
-     */
+    /// 批量数据加载器
+    ///
+    /// @param ids 主键
     @GraphQLBatchLoader
     public @Nonnull Map<String, PersonDTO> batchLoader(@RequestParam List<String> ids) {
         var data = this.persistence.findByIds(ids);
@@ -73,36 +68,30 @@ public class PersonQuery {
                 .collect(Collectors.toMap(Entity::getId, Function.identity()));
     }
 
-    /**
-     * 根据主键查询数据
-     *
-     * @param id 主键
-     */
+    /// 根据主键查询数据
+    ///
+    /// @param id 主键
     @GraphQLFetcher
     public @Nullable PersonDTO findById(@RequestParam String id) {
         var data = this.persistence.findById(id);
         return DTO.wrap(data, PersonDTO.class);
     }
 
-    /**
-     * 查询数据
-     *
-     * @param ids 主键
-     */
+    /// 查询数据
+    ///
+    /// @param ids 主键
     @GraphQLFetcher
     public @Nonnull List<PersonDTO> findByIds(@RequestParam List<String> ids) {
         var data = this.persistence.findByIds(ids);
         return DTO.wrap(data, PersonDTO.class);
     }
 
-    /**
-     * 查询数据
-     *
-     * @param limit      获取前 N 条数据
-     * @param offset     偏移量
-     * @param conditions 过滤条件
-     * @param orders     排序条件
-     */
+    /// 查询数据
+    ///
+    /// @param limit      获取前 N 条数据
+    /// @param offset     偏移量
+    /// @param conditions 过滤条件
+    /// @param orders     排序条件
     @GraphQLFetcher
     public @Nonnull List<PersonDTO> findBy(@RequestParam(required = false) Long limit,
                                            @RequestParam(required = false) Long offset,
@@ -112,14 +101,12 @@ public class PersonQuery {
         return DTO.wrap(data, PersonDTO.class);
     }
 
-    /**
-     * 分页查询数据
-     *
-     * @param pageIndex  分页下标
-     * @param pageSize   分页大小
-     * @param conditions 过滤条件
-     * @param orders     排序条件
-     */
+    /// 分页查询数据
+    ///
+    /// @param pageIndex  分页下标
+    /// @param pageSize   分页大小
+    /// @param conditions 过滤条件
+    /// @param orders     排序条件
     @GraphQLFetcher
     public @Nonnull Page<PersonDTO> pageBy(@RequestParam long pageIndex,
                                            @RequestParam long pageSize,
@@ -129,11 +116,9 @@ public class PersonQuery {
         return DTO.wrap(data, PersonDTO.class);
     }
 
-    /**
-     * 查询符合条件的数据数量
-     *
-     * @param conditions 筛选条件
-     */
+    /// 查询符合条件的数据数量
+    ///
+    /// @param conditions 筛选条件
     @GraphQLFetcher
     public Long countBy(@RequestParam Conditions<PersonEntity> conditions) {
         return this.persistence.countBy(conditions);

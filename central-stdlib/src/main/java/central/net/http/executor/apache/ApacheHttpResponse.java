@@ -41,12 +41,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
-/**
- * Apache Http Response
- *
- * @author Alan Yeh
- * @since 2024/01/11
- */
+/// Apache Http Response
+///
+/// @author Alan Yeh
 public class ApacheHttpResponse extends HttpResponse {
     private final ClassicHttpResponse response;
 
@@ -54,13 +51,13 @@ public class ApacheHttpResponse extends HttpResponse {
     private final HttpHeaders headers = new HttpHeaders();
 
     @Getter
-    private final  Body body;
+    private final Body body;
 
     @SneakyThrows(IOException.class)
     public ApacheHttpResponse(HttpRequest request, ClassicHttpResponse response) {
         super(request);
         this.response = response;
-        for (var header : response.getHeaders()){
+        for (var header : response.getHeaders()) {
             this.headers.add(header.getName(), header.getValue());
         }
         var cache = Files.createDirectories(Path.of("tmp", "http"));

@@ -32,12 +32,9 @@ import org.junit.jupiter.api.Test;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-/**
- * TemplateRender Test Cases
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// TemplateRender Test Cases
+///
+/// @author Alan Yeh
 public class TestTemplateRender {
     @Test
     public void case1() {

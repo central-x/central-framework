@@ -32,15 +32,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-/**
- * 数据库测试
- * 其它的功能测试在 stdlib 里面已经测试过了，不重复测试
- *
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// 数据库测试
+///
+/// 其它的功能测试在 stdlib 里面已经测试过了，不重复测试
+///
+/// @author Alan Yeh
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = TestApplication.class)
 public class TestAccountMapper {
 

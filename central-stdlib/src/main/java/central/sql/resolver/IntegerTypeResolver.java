@@ -31,12 +31,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-/**
- * Integer 解析
- *
- * @author Alan Yeh
- * @since 2022/08/10
- */
+/// Integer 解析
+///
+/// @author Alan Yeh
 public class IntegerTypeResolver implements SqlTypeResolver {
     @Override
     public Object resolve(SqlDialect dialect, ResultSet cursor, ResultSetMetaData meta, int index) throws SQLException {

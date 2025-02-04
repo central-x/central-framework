@@ -27,32 +27,21 @@ package central.sql.meta.entity;
 import central.lang.Stringx;
 import lombok.Data;
 
-/**
- * 外键关系元数据
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// 外键关系元数据
+///
+/// @author Alan Yeh
 @Data
 public class ForeignMeta {
-    /**
-     * 关系别名
-     */
+    /// 关系别名
     private String alias;
 
-    /**
-     * 关联的属性
-     */
+    /// 关联的属性
     private PropertyMeta property;
 
-    /**
-     * 目标实体
-     */
+    /// 目标实体
     private EntityMeta target;
 
-    /**
-     * 目标实体属性
-     */
+    /// 目标实体属性
     private PropertyMeta referencedProperty;
 
     @Override

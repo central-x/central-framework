@@ -32,12 +32,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.sql.SQLException;
 
-/**
- * 删除字段脚本
- *
- * @author Alan Yeh
- * @since 2022/08/30
- */
+/// 删除字段脚本
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class DropColumnMigration implements MigrateAction {
 

@@ -26,12 +26,9 @@ package central.lang;
 
 import lombok.experimental.UtilityClass;
 
-/**
- * Exception 工具类
- *
- * @author Alan Yeh
- * @since 2022/07/20
- */
+/// Exception 工具类
+///
+/// @author Alan Yeh
 @PublicApi
 @UtilityClass
 public class Exceptionx {

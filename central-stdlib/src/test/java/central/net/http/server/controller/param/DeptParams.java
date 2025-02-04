@@ -24,9 +24,6 @@
 
 package central.net.http.server.controller.param;
 
-/**
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// @author Alan Yeh
 public class DeptParams {
 }

@@ -33,12 +33,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 
-/**
- * Starter Configuration
- *
- * @author Alan Yeh
- * @since 2022/07/17
- */
+/// Starter Configuration
+///
+/// @author Alan Yeh
 @EnableConfigurationProperties(LoggingProperties.class)
 public class StarterConfiguration implements ImportAware {
 

@@ -25,21 +25,18 @@
 package central.util.cache.memory;
 
 import central.lang.Stringx;
+import central.util.Range;
 import central.util.cache.CacheList;
 import central.util.cache.DataType;
-import central.util.Range;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-/**
- * 内存缓存列表
- *
- * @author Alan Yeh
- * @since 2023/07/02
- */
+/// 内存缓存列表
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class MemoryCacheList implements CacheList {
 

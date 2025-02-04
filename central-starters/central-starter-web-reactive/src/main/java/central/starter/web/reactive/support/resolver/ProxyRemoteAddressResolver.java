@@ -24,19 +24,16 @@
 
 package central.starter.web.reactive.support.resolver;
 
-import central.util.Listx;
 import central.starter.web.reactive.support.RemoteAddressResolver;
+import central.util.Listx;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.server.ServerWebExchange;
 
 import java.net.InetSocketAddress;
 
-/**
- * 解析代理远程地址
- *
- * @author Alan Yeh
- * @since 2022/10/18
- */
+/// 解析代理远程地址
+///
+/// @author Alan Yeh
 @Slf4j
 public class ProxyRemoteAddressResolver implements RemoteAddressResolver {
 

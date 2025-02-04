@@ -30,16 +30,13 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * LazyValue Test Cases
- *
- * @author Alan Yeh
- * @since 2022/12/09
- */
+/// LazyValue Test Cases
+///
+/// @author Alan Yeh
 public class TestLazyValue {
 
     @Test
-    public void case1(){
+    public void case1() {
         var lazy = LazyValue.of(() -> Collections.singletonList("test"));
         assertFalse(lazy.isInitialized());
         var value = lazy.get();

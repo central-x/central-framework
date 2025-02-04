@@ -37,22 +37,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-/**
- * 图片工具
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// 图片工具
+///
+/// @author Alan Yeh
 @PublicApi
 @UtilityClass
 public class Imagex {
-    /**
-     * 调整图片大小
-     *
-     * @param imageFile 图片文件，只支持 PNG
-     * @param width     图片宽度
-     * @param height    图片高度
-     */
+    /// 调整图片大小
+    ///
+    /// @param imageFile 图片文件，只支持 PNG
+    /// @param width     图片宽度
+    /// @param height    图片高度
     public static void resize(File imageFile, int width, int height) throws IOException {
         var sourceImage = new ImageIcon(imageFile.getCanonicalPath()).getImage();
         var originWidth = sourceImage.getWidth(null);

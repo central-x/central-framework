@@ -30,12 +30,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * 删除字段
- *
- * @author Alan Yeh
- * @since 2022/08/09
- */
+/// 删除字段
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

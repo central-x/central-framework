@@ -24,9 +24,9 @@
 
 package central.starter.graphql.core.resolver;
 
+import central.lang.Stringx;
 import central.util.Context;
 import central.util.Objectx;
-import central.lang.Stringx;
 import graphql.GraphQLException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;
@@ -38,13 +38,10 @@ import org.springframework.web.bind.annotation.ValueConstants;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
-/**
- * 处理请求头参数注入
- *
- * @author Alan Yeh
- * @see RequestHeader
- * @since 2022/09/09
- */
+/// 处理请求头参数注入
+///
+/// @author Alan Yeh
+/// @see RequestHeader
 public class RequestHeaderParameterResolver extends SpringAnnotatedParameterResolver {
     public RequestHeaderParameterResolver() {
         super(RequestHeader.class);

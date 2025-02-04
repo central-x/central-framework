@@ -33,12 +33,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * 索引信息
- *
- * @author Alan Yeh
- * @since 2022/08/31
- */
+/// 索引信息
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

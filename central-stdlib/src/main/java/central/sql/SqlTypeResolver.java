@@ -28,12 +28,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-/**
- * 数据库类型解析成 Java 类型
- *
- * @author Alan Yeh
- * @since 2022/08/10
- */
+/// 数据库类型解析成 Java 类型
+///
+/// @author Alan Yeh
 public interface SqlTypeResolver {
     Object resolve(SqlDialect dialect, ResultSet cursor, ResultSetMetaData meta, int index) throws SQLException;
 }

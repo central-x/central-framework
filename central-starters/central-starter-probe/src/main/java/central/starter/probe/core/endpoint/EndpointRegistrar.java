@@ -40,12 +40,9 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 
-/**
- * 探测端口注册器
- *
- * @author Alan Yeh
- * @since 2023/12/31
- */
+/// 探测端口注册器
+///
+/// @author Alan Yeh
 public class EndpointRegistrar implements ImportBeanDefinitionRegistrar, EnvironmentAware {
 
     @Setter

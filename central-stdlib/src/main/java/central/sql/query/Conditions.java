@@ -24,16 +24,16 @@
 
 package central.sql.query;
 
-import central.sql.data.Entity;
 import central.bean.Orderable;
 import central.bean.Treeable;
-import central.validation.Validatable;
-import central.lang.Assertx;
-import central.lang.reflect.PropertyRef;
 import central.lang.Arrayx;
+import central.lang.Assertx;
+import central.lang.Stringx;
+import central.lang.reflect.PropertyRef;
+import central.sql.data.Entity;
 import central.util.Collectionx;
 import central.util.Listx;
-import central.lang.Stringx;
+import central.validation.Validatable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotEmpty;
@@ -48,12 +48,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-/**
- * 条件
- *
- * @author Alan Yeh
- * @since 2022/07/20
- */
+/// 条件
+///
+/// @author Alan Yeh
 public class Conditions<T extends Entity> implements Collection<Conditions.Condition<T>>, Cloneable, Validatable {
     @Getter
     @Setter
@@ -113,16 +110,12 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         return conditions;
     }
 
-    /**
-     * 空条件
-     */
+    /// 空条件
     public static <T extends Entity> Conditions<T> empty() {
         return new Conditions<>();
     }
 
-    /**
-     * 快速构造器
-     */
+    /// 快速构造器
     public static <T extends Entity> Conditions<T> of(Class<T> type) {
         return new Conditions<>();
     }
@@ -134,23 +127,20 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         return conditions;
     }
 
-    /**
-     * 将条件使用 () 封装起来
-     */
+    /// 将条件使用 () 封装起来
     public static <T extends Entity> Conditions<T> group(Conditions<T> conditions) {
         return new Conditions<T>().nested(conditions);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 条件构造方法
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * 添加相等条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param value    值
-     */
+    /*******************************************************************************************************************
+     * 条件构造方法
+     ******************************************************************************************************************/
+
+    /// 添加相等条件
+    ///
+    /// @param property 实体属性的Getter方法引用，Entity::Getter
+    /// @param value    值
     public Conditions<T> eq(PropertyRef<T, ?> property, Object value) {
         if (value == null) {
             return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
@@ -159,12 +149,10 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         }
     }
 
-    /**
-     * 添加相等条件
-     *
-     * @param property 实体属性名
-     * @param value    值
-     */
+    /// 添加相等条件
+    ///
+    /// @param property 实体属性名
+    /// @param value    值
     public Conditions<T> eq(String property, Object value) {
         if (value == null) {
             return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
@@ -173,12 +161,10 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         }
     }
 
-    /**
-     * 添加不相等条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param value    值
-     */
+    /// 添加不相等条件
+    ///
+    /// @param property 实体属性的 Getter 方法引用，`Entity::Getter``
+    /// @param value    值
     public Conditions<T> ne(PropertyRef<T, ?> property, Object value) {
         if (value == null) {
             return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
@@ -187,12 +173,10 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         }
     }
 
-    /**
-     * 添加不相等条件
-     *
-     * @param property 实体属性名
-     * @param value    值
-     */
+    /// 添加不相等条件
+    ///
+    /// @param property 实体属性名
+    /// @param value    值
     public Conditions<T> ne(String property, Object value) {
         if (value == null) {
             return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
@@ -201,259 +185,207 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         }
     }
 
-    /**
-     * 添加大于条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param value    值
-     */
+    /// 添加大于条件
+    ///
+    /// @param property 实体属性的 Getter 方法引用，`Entity::Getter`
+    /// @param value    值
     public Conditions<T> gt(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GT, value));
     }
 
-    /**
-     * 添加大于条件
-     *
-     * @param property 实体属性名
-     * @param value    值
-     */
+    /// 添加大于条件
+    ///
+    /// @param property 实体属性名
+    /// @param value    值
     public Conditions<T> gt(String property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GT, value));
     }
 
-    /**
-     * 添加大于等于条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param value    值
-     */
+    /// 添加大于等于条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter`
+    /// @param value    值
     public Conditions<T> ge(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GE, value));
     }
 
-    /**
-     * 添加大于等于条件
-     *
-     * @param property 实体属性名
-     * @param value    值
-     */
+    /// 添加大于等于条件
+    ///
+    /// @param property 实体属性名
+    /// @param value    值
     public Conditions<T> ge(String property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.GE, value));
     }
 
-    /**
-     * 添加小于条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param value    值
-     */
+    /// 添加小于条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter`
+    /// @param value    值
     public Conditions<T> lt(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LT, value));
     }
 
-    /**
-     * 添加小于条件
-     *
-     * @param property 实体属性名
-     * @param value    值
-     */
+    /// 添加小于条件
+    ///
+    /// @param property 实体属性名
+    /// @param value    值
     public Conditions<T> lt(String property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LT, value));
     }
 
-    /**
-     * 添加小于等于条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param value    值
-     */
+    /// 添加小于等于条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter`
+    /// @param value    值
     public Conditions<T> le(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LE, value));
     }
 
-    /**
-     * 添加小于等于条件
-     *
-     * @param property 实体属性名
-     * @param value    值
-     */
+    /// 添加小于等于条件
+    ///
+    /// @param property 实体属性名
+    /// @param value    值
     public Conditions<T> le(String property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LE, value));
     }
 
-    /**
-     * 添加相似条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param value    值
-     */
+    /// 添加相似条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter`
+    /// @param value    值
     public Conditions<T> like(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LIKE, value));
     }
 
-    /**
-     * 添加相似条件
-     *
-     * @param property 实体属性名
-     * @param value    值
-     */
+    /// 添加相似条件
+    ///
+    /// @param property 实体属性名
+    /// @param value    值
     public Conditions<T> like(String property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.LIKE, value));
     }
 
-    /**
-     * 添加不相似条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param value    值
-     */
+    /// 添加不相似条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter`
+    /// @param value    值
     public Conditions<T> notLike(PropertyRef<T, ?> property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_LIKE, value));
     }
 
-    /**
-     * 添加不相似条件
-     *
-     * @param property 实体属性名
-     * @param value    值
-     */
+    /// 添加不相似条件
+    ///
+    /// @param property 实体属性名
+    /// @param value    值
     public Conditions<T> notLike(String property, Object value) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_LIKE, value));
     }
 
-    /**
-     * 添加介于条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param start    开始值
-     * @param end      结束值
-     */
+    /// 添加介于条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter`
+    /// @param start    开始值
+    /// @param end      结束值
     public Conditions<T> between(PropertyRef<T, ?> property, Object start, Object end) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.BETWEEN, start, end));
     }
 
-    /**
-     * 添加介于条件
-     *
-     * @param property 实体属性名
-     * @param start    开始值
-     * @param end      结束值
-     */
+    /// 添加介于条件
+    ///
+    /// @param property 实体属性名
+    /// @param start    开始值
+    /// @param end      结束值
     public Conditions<T> between(String property, Object start, Object end) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.BETWEEN, start, end));
     }
 
-    /**
-     * 添加不介于条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param start    开始值
-     * @param end      结束值
-     */
+    /// 添加不介于条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter`
+    /// @param start    开始值
+    /// @param end      结束值
     public Conditions<T> notBetween(PropertyRef<T, ?> property, Object start, Object end) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_BETWEEN, start, end));
     }
 
-    /**
-     * 添加不介于条件
-     *
-     * @param property 实体属性名
-     * @param start    开始值
-     * @param end      结束值
-     */
+    /// 添加不介于条件
+    ///
+    /// @param property 实体属性名
+    /// @param start    开始值
+    /// @param end      结束值
     public Conditions<T> notBetween(String property, Object start, Object end) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_BETWEEN, start, end));
     }
 
-    /**
-     * 添加为空条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     */
+    /// 添加为空条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter`
     public Conditions<T> isNull(PropertyRef<T, ?> property) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
     }
 
-    /**
-     * 添加为空条件
-     *
-     * @param property 实体属性名
-     */
+    /// 添加为空条件
+    ///
+    /// @param property 实体属性名
     public Conditions<T> isNull(String property) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NULL));
     }
 
-    /**
-     * 添加不为空条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     */
+    /// 添加不为空条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter`
     public Conditions<T> isNotNull(PropertyRef<T, ?> property) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
     }
 
-    /**
-     * 添加不为空条件
-     *
-     * @param property 实体属性名
-     */
+    /// 添加不为空条件
+    ///
+    /// @param property 实体属性名
     public Conditions<T> isNotNull(String property) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IS_NOT_NULL));
     }
 
-    /**
-     * 添加范围条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param args     数据项
-     */
+    /// 添加范围条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter`
+    /// @param args     数据项
     public Conditions<T> in(PropertyRef<T, ?> property, Object... args) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IN, args));
     }
 
-    /**
-     * 添加范围条件
-     *
-     * @param property 实体属性名
-     * @param args     数据项
-     */
+    /// 添加范围条件
+    ///
+    /// @param property 实体属性名
+    /// @param args     数据项
     public Conditions<T> in(String property, Object... args) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.IN, args));
     }
 
-    /**
-     * 添加不在范围条件
-     *
-     * @param property 实体属性的Getter方法引用，Entity::Getter
-     * @param args     数据项
-     */
+    /// 添加不在范围条件
+    ///
+    /// @param property 实体属性的Getter方法引用，`Entity::Getter`
+    /// @param args     数据项
     public Conditions<T> notIn(PropertyRef<T, ?> property, Object... args) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_IN, args));
     }
 
-    /**
-     * 添加不在范围条件
-     *
-     * @param property 实体属性名
-     * @param args     数据项
-     */
+    /// 添加不在范围条件
+    ///
+    /// @param property 实体属性名
+    /// @param args     数据项
     public Conditions<T> notIn(String property, Object... args) {
         return this.addCondition(new Condition<>(String.valueOf(this.idGenerator.getAndIncrement()), this.getId(), this.index.getAndIncrement(), this.nextConnector, property, Operators.NOT_IN, args));
     }
 
-    /**
-     * 下一个条件使用 OR 连接
-     */
+    /// 下一个条件使用 OR 连接
     public Conditions<T> or() {
         this.nextConnector = Connectors.OR;
         return this;
     }
 
-    /**
-     * Or 嵌套查询
-     *
-     * @param consumer 嵌套查询条件
-     */
+    /// Or 嵌套查询
+    ///
+    /// @param consumer 嵌套查询条件
     public Conditions<T> or(Consumer<Conditions<T>> consumer) {
         var conditions = new Conditions<T>();
         consumer.accept(conditions);
@@ -462,29 +394,23 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         return this.nested(conditions);
     }
 
-    /**
-     * Or 嵌套查询
-     *
-     * @param conditions 嵌套查询条件
-     */
+    /// Or 嵌套查询
+    ///
+    /// @param conditions 嵌套查询条件
     public Conditions<T> or(Conditions<T> conditions) {
         this.nextConnector = Connectors.OR;
         return this.nested(conditions);
     }
 
-    /**
-     * 下一个条件使用 AND 连接
-     */
+    /// 下一个条件使用 AND 连接
     public Conditions<T> and() {
         this.nextConnector = Connectors.AND;
         return this;
     }
 
-    /**
-     * and 嵌套查询
-     *
-     * @param consumer 嵌套查询条件
-     */
+    /// and 嵌套查询
+    ///
+    /// @param consumer 嵌套查询条件
     public Conditions<T> and(Consumer<Conditions<T>> consumer) {
         var conditions = new Conditions<T>();
         consumer.accept(conditions);
@@ -492,32 +418,26 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         return this.nested(conditions);
     }
 
-    /**
-     * and 嵌套查询
-     *
-     * @param conditions 嵌套查询条件
-     */
+    /// and 嵌套查询
+    ///
+    /// @param conditions 嵌套查询条件
     public Conditions<T> and(Conditions<T> conditions) {
         this.nextConnector = Connectors.AND;
         return this.nested(conditions);
     }
 
-    /**
-     * 嵌套查询
-     *
-     * @param consumer 嵌套查询条件
-     */
+    /// 嵌套查询
+    ///
+    /// @param consumer 嵌套查询条件
     public Conditions<T> nested(Consumer<Conditions<T>> consumer) {
         var conditions = new Conditions<T>();
         consumer.accept(conditions);
         return this.nested(conditions);
     }
 
-    /**
-     * 嵌套查询
-     *
-     * @param conditions 被嵌套的条件
-     */
+    /// 嵌套查询
+    ///
+    /// @param conditions 被嵌套的条件
     public Conditions<T> nested(Conditions<T> conditions) {
         if (Collectionx.isNotEmpty(conditions)) {
             // 处理当前集合的关系
@@ -587,69 +507,52 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 原生条件构造方法
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /*******************************************************************************************************************
+     * 原生条件构造方法
+     ******************************************************************************************************************/
     @NoArgsConstructor
     public static class Condition<T extends Entity> implements Treeable<Condition<T>>, Orderable<Condition<T>>, Cloneable, Validatable {
         public static <T extends Entity> Comparator<Condition<T>> defaultComparator() {
             return Comparator.comparing(Condition::getOrder);
         }
 
-        /**
-         * 条件标识
-         */
+        /// 条件标识
         @Getter
         @Setter
         private String id;
 
-        /**
-         * 条件类型
-         */
+        /// 条件类型
         @Getter
         @Setter
         private Types type;
 
-        /**
-         * 父条件标识
-         */
+        /// 父条件标识
         @Getter
         @Setter
         private String parentId;
 
-        /**
-         * 子条件列表
-         */
+        /// 子条件列表
         @Setter
         @Getter(onMethod_ = @JsonIgnore)
         private transient List<Condition<T>> children;
 
-        /**
-         * 排序号
-         */
+        /// 排序号
         @Getter
         @Setter
         private Integer order;
 
-        /**
-         * 与上一个条件的连接符（AND/OR）
-         */
+        /// 与上一个条件的连接符（AND/OR）
         @Getter
         @Setter
         private Connectors connector;
 
-        /**
-         * 属性
-         */
+        /// 属性
         @Getter
         @Setter
         @NotEmpty(message = "属性[property]必须不为空")
         private String property;
 
-        /**
-         * 别名
-         */
+        /// 别名
         private transient String alias;
 
         @JsonIgnore
@@ -669,24 +572,18 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
             return alias;
         }
 
-        /**
-         * 操作符
-         */
+        /// 操作符
         @Getter
         @Setter
         @NotNull(message = "操作符[operator]必须不为空")
         private Operators operator;
 
-        /**
-         * 参数
-         */
+        /// 参数
         @Getter
         @Setter
         private Object[] values;
 
-        /**
-         * 条件分组
-         */
+        /// 条件分组
         public Condition(String id, String parentId, Integer order, Connectors connector, List<Condition<T>> children) {
             this.id = id;
             this.parentId = parentId;
@@ -702,9 +599,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
             this.validate();
         }
 
-        /**
-         * 使用属性构造条件
-         */
+        /// 使用属性构造条件
         public Condition(String id, String parentId, Integer order, Connectors connector, String property, Operators operator, Object... values) {
             this.id = id;
             this.parentId = parentId;
@@ -723,9 +618,7 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
             this.validate();
         }
 
-        /**
-         * 使用方法引用构造条件
-         */
+        /// 使用方法引用构造条件
         public Condition(String id, String parentId, Integer order, Connectors connector, PropertyRef<T, ?> property, Operators operator, Object... values) {
             this.id = id;
             this.parentId = parentId;
@@ -935,11 +828,9 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
         }
     }
 
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Collection 方法
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /*******************************************************************************************************************
+     * Collection 方法
+     ******************************************************************************************************************/
     public Set<String> getProperties() {
         return this.conditions.stream().map(Condition::getProperty).collect(Collectors.toSet());
     }
@@ -970,7 +861,6 @@ public class Conditions<T extends Entity> implements Collection<Conditions.Condi
     }
 
     @Override
-    @SuppressWarnings("SuspiciousToArrayCall")
     public <A> A[] toArray(@Nonnull A[] a) {
         return this.conditions.toArray(a);
     }

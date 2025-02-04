@@ -25,8 +25,8 @@
 package central.starter.graphql.stub;
 
 import central.net.http.executor.apache.ApacheHttpClientExecutor;
-import central.net.http.processor.impl.TextResponseProcessor;
 import central.net.http.processor.impl.SetHeaderProcessor;
+import central.net.http.processor.impl.TextResponseProcessor;
 import central.net.http.processor.impl.TransmitForwardedProcessor;
 import central.net.http.proxy.HttpProxyFactory;
 import central.net.http.proxy.contract.spring.SpringContract;
@@ -37,12 +37,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-/**
- * 应用配置
- *
- * @author Alan Yeh
- * @since 2022/09/30
- */
+/// 应用配置
+///
+/// @author Alan Yeh
 @Configuration
 public class ApplicationConfiguration {
 

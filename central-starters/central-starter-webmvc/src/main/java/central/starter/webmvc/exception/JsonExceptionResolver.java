@@ -42,12 +42,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExc
 
 import java.util.List;
 
-/**
- * 全局异常处理
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// 全局异常处理
+///
+/// @author Alan Yeh
 @Slf4j
 @Component
 public class JsonExceptionResolver extends ExceptionHandlerExceptionResolver {

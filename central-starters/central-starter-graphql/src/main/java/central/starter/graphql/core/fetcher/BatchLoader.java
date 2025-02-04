@@ -46,38 +46,26 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-/**
- * BatchLoader 命令
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// BatchLoader 命令
+///
+/// @author Alan Yeh
 public class BatchLoader implements BatchLoaderWithContext<String, Object> {
-    /**
-     * 线程池，用于执行 load 方法
-     * 这里使用阿里 transmittable-thread-local 框架包装线程池，支持线程池内线程在运行时共享父线程 TransmittableThreadLocal 上下文，解决 DataLoader在不同线程上运行，动态数据源切换失败问题
-     */
+    /// 线程池，用于执行 load 方法
+    ///
+    /// 这里使用阿里 transmittable-thread-local 框架包装线程池，支持线程池内线程在运行时共享父线程 TransmittableThreadLocal 上下文，解决 DataLoader在不同线程上运行，动态数据源切换失败问题
     private static final Executor executor = TtlExecutors.getTtlExecutorService(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2, new CustomizableThreadFactory("graphql-dataloader")));
 
-    /**
-     * 命令名
-     */
+    /// 命令名
     @Getter
     private final String name;
 
-    /**
-     * 命令所在对象
-     */
+    /// 命令所在对象
     private final Source source;
 
-    /**
-     * 命令对应方法
-     */
+    /// 命令对应方法
     private final Method method;
 
-    /**
-     * 异常处理链
-     */
+    /// 异常处理链
     private final ExceptionHandleChain handler;
 
     @Setter

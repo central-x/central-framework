@@ -28,12 +28,9 @@ import central.lang.PublicApi;
 
 import java.io.Serial;
 
-/**
- * 实体验校错误
- *
- * @author Alan Yeh
- * @since 2022/08/05
- */
+/// 实体验校错误
+///
+/// @author Alan Yeh
 @PublicApi
 public class BeanValidateException extends RuntimeException {
     @Serial

@@ -26,12 +26,9 @@ package central.starter.graphql.stub;
 
 import org.springframework.context.annotation.Configuration;
 
-/**
- * 配置
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// 配置
+///
+/// @author Alan Yeh
 @Configuration
 public class StarterConfiguration {
 }

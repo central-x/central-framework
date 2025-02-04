@@ -26,14 +26,11 @@ package central.starter.webmvc.servlet;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- * WebMvc Response
- * <p>
- * 支持常见的一些操作
- *
- * @author Alan Yeh
- * @since 2023/03/12
- */
+/// WebMvc Response
+///
+/// 支持常见的一些操作
+///
+/// @author Alan Yeh
 public interface WebMvcResponse extends HttpServletResponse {
 
     static WebMvcResponse of(HttpServletResponse response) {

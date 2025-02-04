@@ -40,24 +40,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-/**
- * Shell
- *
- * @author Alan Yeh
- * @since 2022/11/25
- */
+/// Shell
+///
+/// @author Alan Yeh
 public abstract class Shell implements AutoCloseable {
 
-    /**
-     * 字符集
-     */
+    /// 字符集
     @Getter
     @Setter
     protected Charset charset = StandardCharsets.UTF_8;
 
-    /**
-     * 工作目录
-     */
+    /// 工作目录
     @Getter
     @Setter
     protected Path workDir = Path.of("~");
@@ -78,98 +71,74 @@ public abstract class Shell implements AutoCloseable {
 
     protected final Map<String, Object> features = new HashMap<>();
 
-    /**
-     * 设置环境变量
-     *
-     * @param name  变量名
-     * @param value 变量值
-     */
+    /// 设置环境变量
+    ///
+    /// @param name  变量名
+    /// @param value 变量值
     public void setEnvironment(String name, String value) {
         this.environments.put(name, value);
     }
 
-    /**
-     * 设置功能
-     *
-     * @param feature 功能
-     * @param value   值
-     */
+    /// 设置功能
+    ///
+    /// @param feature 功能
+    /// @param value   值
     public <T> void setFeature(Attribute<T> feature, T value) {
         this.features.put(feature.getCode(), value);
     }
 
-    /**
-     * 获取功能
-     *
-     * @param feature 功能
-     */
+    /// 获取功能
+    ///
+    /// @param feature 功能
     public <T> T getFeature(Attribute<T> feature) {
         return (T) this.features.getOrDefault(feature.getCode(), feature.getValue());
     }
 
-    /**
-     * 添加标准输出监听
-     *
-     * @param listener 监听
-     */
+    /// 添加标准输出监听
+    ///
+    /// @param listener 监听
     public void addStdoutListener(Consumer<String> listener) {
         this.stdoutListeners.add(listener);
     }
 
-    /**
-     * 通知标准输出监听
-     */
+    /// 通知标准输出监听
     protected void notifyStdoutListener(String line) {
         for (var listener : this.stdoutListeners) {
             listener.accept(line);
         }
     }
 
-    /**
-     * 添加标准错误输出监听
-     *
-     * @param listener 监听
-     */
+    /// 添加标准错误输出监听
+    ///
+    /// @param listener 监听
     public void addStderrListener(Consumer<String> listener) {
         this.stderrListeners.add(listener);
     }
 
-    /**
-     * 通知标准异常输出监听
-     */
+    /// 通知标准异常输出监听
     protected void notifyStderrListener(String line) {
         for (var listener : this.stderrListeners) {
             listener.accept(line);
         }
     }
 
-    /**
-     * 获取标准输出
-     */
+    /// 获取标准输出
     public String getStdout() {
         return this.stdout.toString(this.charset);
     }
 
-    /**
-     * 获取标准错误
-     */
+    /// 获取标准错误
     public String getStderr() {
         return this.stderr.toString(this.charset);
     }
 
-    /**
-     * 连接到服务器
-     */
+    /// 连接到服务器
     public abstract void connect(Duration timeout) throws ShellException;
 
-    /**
-     * 当前是否已连接到服务器
-     */
+    /// 当前是否已连接到服务器
     public abstract boolean isConnected();
 
-    /**
-     * 断开连接
-     */
+    /// 断开连接
     public abstract void disconnect() throws ShellException;
 
     @Override
@@ -177,49 +146,37 @@ public abstract class Shell implements AutoCloseable {
         this.disconnect();
     }
 
-    /**
-     * 移除远程目录
-     *
-     * @param remoteFile 远程文件（夹），支持相对路径
-     */
+    /// 移除远程目录
+    ///
+    /// @param remoteFile 远程文件（夹），支持相对路径
     public abstract boolean rm(Path remoteFile) throws ShellException, IOException;
 
-    /**
-     * 创建文件夹
-     *
-     * @param remotePath 远程目录，支持相对路径
-     */
+    /// 创建文件夹
+    ///
+    /// @param remotePath 远程目录，支持相对路径
     public abstract boolean mkdirs(Path remotePath) throws ShellException, IOException;
 
-    /**
-     * 将本地文件写入当前工作目录
-     *
-     * @param localFile 本地文件（夹）
-     */
+    /// 将本地文件写入当前工作目录
+    ///
+    /// @param localFile 本地文件（夹）
     public abstract boolean transferTo(Path localFile) throws ShellException, IOException;
 
-    /**
-     * 将本地文件写入指定远程目录
-     *
-     * @param localFile  本地文件（夹）
-     * @param remotePath 指定远程目录，支持相对路径
-     */
+    /// 将本地文件写入指定远程目录
+    ///
+    /// @param localFile  本地文件（夹）
+    /// @param remotePath 指定远程目录，支持相对路径
     public abstract boolean transferTo(Path localFile, Path remotePath) throws ShellException, IOException;
 
-    /**
-     * 将指定的远程文件（夹）写入本地目录
-     *
-     * @param remoteFile 远程文件（夹），支持相对路径
-     * @param localPath  本地文件目录
-     */
+    /// 将指定的远程文件（夹）写入本地目录
+    ///
+    /// @param remoteFile 远程文件（夹），支持相对路径
+    /// @param localPath  本地文件目录
     public abstract boolean transferFrom(Path remoteFile, Path localPath) throws ShellException, IOException;
 
-    /**
-     * 执行命令
-     *
-     * @param command 命令
-     * @param args    参数
-     * @return 执行结果（0 为正常，其余异常[一般抛异常]）
-     */
+    /// 执行命令
+    ///
+    /// @param command 命令
+    /// @param args    参数
+    /// @return 执行结果（0 为正常，其余异常[一般抛异常]）
     public abstract int exec(String command, String... args) throws ShellException;
 }

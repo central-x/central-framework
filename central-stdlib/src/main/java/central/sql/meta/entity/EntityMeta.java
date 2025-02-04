@@ -24,11 +24,11 @@
 
 package central.sql.meta.entity;
 
+import central.lang.Stringx;
 import central.sql.SqlConversion;
 import central.sql.data.Entity;
 import central.util.Listx;
 import central.util.Objectx;
-import central.lang.Stringx;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
@@ -39,62 +39,47 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * 实体元数据
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// 实体元数据
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class EntityMeta {
-    /**
-     * 实体类
-     */
+    /// 实体类
     @Nonnull
     private Class<? extends Entity> type;
 
-    /**
-     * 表名
-     * 如果为空的话，表示开发者没有指定表名
-     */
+    /// 表名
+    ///
+    /// 如果为空的话，表示开发者没有指定表名
     @Nullable
     private String tableName;
 
-    /**
-     * 获取表名
-     * 如果开发者没的指定表名，则根据开发者指定的命名规则将类名转成表名
-     *
-     * @param conversion 命名规则
-     */
+    /// 获取表名
+    ///
+    /// 如果开发者没的指定表名，则根据开发者指定的命名规则将类名转成表名
+    ///
+    /// @param conversion 命名规则
     public String getTableName(SqlConversion conversion) {
         return Objectx.getOrDefault(this.tableName, conversion.getTableName(this.type));
     }
 
-    /**
-     * 备注
-     */
+    /// 备注
     @Nullable
     private String remarks;
 
-    /**
-     * 主键
-     */
+    /// 主键
     @Nonnull
     private PropertyMeta id;
 
-    /**
-     * 属性列表
-     */
+    /// 属性列表
     @Nonnull
     private List<PropertyMeta> properties = new ArrayList<>();
 
-    /**
-     * 获取属性
-     *
-     * @param property 属性名
-     */
+    /// 获取属性
+    ///
+    /// @param property 属性名
     @Nullable
     public PropertyMeta getProperty(String property) {
         return Listx.asStream(this.getProperties())
@@ -103,16 +88,12 @@ public class EntityMeta {
                 .orElse(null);
     }
 
-    /**
-     * 外键关系（一对一，一对多）
-     */
+    /// 外键关系（一对一，一对多）
     private List<ForeignMeta> foreigns = new ArrayList<>();
 
-    /**
-     * 根据 alias 查询外键关系（一对一，一对多）
-     *
-     * @param alias 关系别名
-     */
+    /// 根据 alias 查询外键关系（一对一，一对多）
+    ///
+    /// @param alias 关系别名
     @Nullable
     public ForeignMeta getForeign(String alias) {
         return Listx.asStream(this.getForeigns())
@@ -121,16 +102,12 @@ public class EntityMeta {
                 .orElse(null);
     }
 
-    /**
-     * 外键关系（多对多）
-     */
+    /// 外键关系（多对多）
     private List<ForeignTableMeta> foreignTables = new ArrayList<>();
 
-    /**
-     * 根据 alias 查询外键关系（多对多）
-     *
-     * @param alias 关系别名
-     */
+    /// 根据 alias 查询外键关系（多对多）
+    ///
+    /// @param alias 关系别名
     @Nullable
     public ForeignTableMeta getForeignTable(String alias) {
         return Listx.asStream(this.getForeignTables())

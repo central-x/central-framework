@@ -29,14 +29,11 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * IOStreamx Test Cases
- *
- * @author Alan Yeh
- * @since 2022/11/27
- */
+/// IOStreamx Test Cases
+///
+/// @author Alan Yeh
 public class TestIOStreamx {
 
     @Test

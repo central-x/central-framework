@@ -31,12 +31,9 @@ import com.alibaba.druid.pool.DruidDataSource;
 
 import javax.sql.DataSource;
 
-/**
- * Druid
- *
- * @author Alan Yeh
- * @since 2022/08/05
- */
+/// Druid
+///
+/// @author Alan Yeh
 public class DruidDataSourceFactory implements DataSourceFactory {
     private final DruidProperties properties;
 

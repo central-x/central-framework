@@ -34,27 +34,20 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-/**
- * 属性
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// 属性
+///
+/// @author Alan Yeh
 @PublicApi
 @RequiredArgsConstructor
 public class Attribute<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = -821276198244689067L;
 
-    /**
-     * Code
-     */
+    /// Code
     @Getter
     private final String code;
 
-    /**
-     * Value Supplier
-     */
+    /// Value Supplier
     private final Supplier<T> supplier;
 
     public Attribute(String code) {
@@ -74,9 +67,7 @@ public class Attribute<T> implements Serializable {
         return new Attribute<>(code);
     }
 
-    /**
-     * Get value from supplier
-     */
+    /// Get value from supplier
     public @Nullable T getValue() {
         if (supplier != null) {
             return supplier.get();
@@ -85,9 +76,7 @@ public class Attribute<T> implements Serializable {
         }
     }
 
-    /**
-     * Get nonnull value from supplier
-     */
+    /// Get nonnull value from supplier
     public @Nonnull T requireValue() {
         return Assertx.requireNotNull(this.getValue(), IllegalStateException::new, "Cannot return null value form supplier");
     }

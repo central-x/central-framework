@@ -32,12 +32,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * 上传文件
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 上传文件
+///
+/// @author Alan Yeh
 @Data
 public class FileParams implements Serializable {
     @Serial

@@ -32,12 +32,9 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.Collection;
 
-/**
- * 枚举校验器
- *
- * @author Alan Yeh
- * @since 2022/11/07
- */
+/// 枚举校验器
+///
+/// @author Alan Yeh
 public class EnumsValidator implements ConstraintValidator<Enums, Object> {
 
     private Class<? extends OptionalEnum<?>> enumType;

@@ -36,12 +36,9 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
-/**
- * 重定向
- *
- * @author Alan Yeh
- * @since 2022/10/09
- */
+/// 重定向
+///
+/// @author Alan Yeh
 public class RedirectRender extends Render<RedirectRender> {
     public RedirectRender(ServerWebExchange exchange) {
         super(exchange);

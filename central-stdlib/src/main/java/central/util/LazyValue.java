@@ -26,53 +26,38 @@ package central.util;
 
 import java.util.function.Supplier;
 
-/**
- * 延迟初始化
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// 延迟初始化
+///
+/// @author Alan Yeh
 public class LazyValue<T> {
-    /**
-     * 实例
-     */
+    /// 实例
     private volatile T instance;
 
-    /**
-     * 实例初始化器
-     */
+    /// 实例初始化器
     private final Supplier<T> supplier;
 
-    /**
-     * 构建延迟初始化器
-     *
-     * @param supplier 实体初始化器
-     */
+    /// 构建延迟初始化器
+    ///
+    /// @param supplier 实体初始化器
     public LazyValue(Supplier<T> supplier) {
         this.supplier = supplier;
     }
 
-    /**
-     * 构建延迟初始化器
-     *
-     * @param supplier 实体初始化器
-     */
+    /// 构建延迟初始化器
+    ///
+    /// @param supplier 实体初始化器
     public static <T> LazyValue<T> of(Supplier<T> supplier) {
         return new LazyValue<>(supplier);
     }
 
-    /**
-     * 当前是否已经初始化
-     */
+    /// 当前是否已经初始化
     public boolean isInitialized() {
         return this.instance != null;
     }
 
-    /**
-     * 获取实例
-     * <p>
-     * 如果实例不存在，则通过实始初始化器初始化实例
-     */
+    /// 获取实例
+    ///
+    /// 如果实例不存在，则通过实始初始化器初始化实例
     public synchronized T get() {
         if (this.instance == null) {
             this.instance = supplier.get();

@@ -42,12 +42,9 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
-/**
- * Servlet 相关参数
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// Servlet 相关参数
+///
+/// @author Alan Yeh
 public class ServletParameterResolver implements ParameterResolver {
     @Override
     public boolean support(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter) {

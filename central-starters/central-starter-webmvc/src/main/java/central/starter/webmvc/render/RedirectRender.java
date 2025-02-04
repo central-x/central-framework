@@ -33,19 +33,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 
-/**
- * 重定向
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// 重定向
+///
+/// @author Alan Yeh
 public class RedirectRender extends Render<RedirectRender> {
-    /**
-     * 设置请求上下文
-     *
-     * @param request  HttpServletRequest
-     * @param response HttpServletResponse
-     */
+    /// 设置请求上下文
+    ///
+    /// @param request  HttpServletRequest
+    /// @param response HttpServletResponse
     public RedirectRender(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
         super(request, response);
     }

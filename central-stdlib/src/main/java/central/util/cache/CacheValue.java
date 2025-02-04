@@ -29,104 +29,85 @@ import jakarta.annotation.Nullable;
 
 import java.time.Duration;
 
-/**
- * 缓存值
- *
- * @author Alan Yeh
- * @since 2023/06/10
- */
+/// 缓存值
+///
+/// @author Alan Yeh
 public interface CacheValue {
-    /**
-     * 设置值
-     *
-     * @param value 缓存值
-     * @return 原来的缓存值
-     */
-    @Nullable String set(@Nonnull String value);
+    /// 设置值
+    ///
+    /// @param value 缓存值
+    /// @return 原来的缓存值
+    @Nullable
+    String set(@Nonnull String value);
 
-    /**
-     * 设置值，并设置该值的有效期
-     *
-     * @param value   缓存值
-     * @param timeout 有效期
-     * @return 原来的缓存值
-     */
-    @Nullable String set(@Nonnull String value, @Nullable Duration timeout);
+    /// 设置值，并设置该值的有效期
+    ///
+    /// @param value   缓存值
+    /// @param timeout 有效期
+    /// @return 原来的缓存值
+    @Nullable
+    String set(@Nonnull String value, @Nullable Duration timeout);
 
-    /**
-     * 如果值不存在时，设置值
-     *
-     * @param value 缓存值
-     * @return 如果原来有值，则返回 false
-     */
+    /// 如果值不存在时，设置值
+    ///
+    /// @param value 缓存值
+    /// @return 如果原来有值，则返回`false`
     boolean setIfAbsent(@Nonnull String value);
 
-    /**
-     * 如果值不存在时，设置值，并设置该值的有效期
-     *
-     * @param value   缓存值
-     * @param timeout 缓存超时时间
-     * @return 如果原来有值，则返回 false
-     */
+    /// 如果值不存在时，设置值，并设置该值的有效期
+    ///
+    /// @param value   缓存值
+    /// @param timeout 缓存超时时间
+    /// @return 如果原来有值，则返回`false`
     boolean setIfAbsent(@Nonnull String value, @Nullable Duration timeout);
 
-    /**
-     * 如果值存在时，覆盖该值为新值
-     *
-     * @param value 缓存值
-     * @return 如果原来有值，则返回 true
-     */
+    /// 如果值存在时，覆盖该值为新值
+    ///
+    /// @param value 缓存值
+    /// @return 如果原来有值，则返回`true`
     boolean setIfPresent(@Nonnull String value);
 
-    /**
-     * 如果值存在时，覆盖该值为新值，并设置该值的有效期
-     *
-     * @param value 缓存值
-     * @return 如果原来有值，则返回 true
-     */
+    /// 如果值存在时，覆盖该值为新值，并设置该值的有效期
+    ///
+    /// @param value 缓存值
+    /// @return 如果原来有值，则返回`true`
     boolean setIfPresent(@Nonnull String value, @Nullable Duration timeout);
 
-    /**
-     * 获取缓存值
-     */
-    @Nullable String getValue();
+    /// 获取缓存值
+    @Nullable
+    String getValue();
 
-    /**
-     * 获取缓存值并删除
-     */
-    @Nullable String getAndDelete();
+    /// 获取缓存值并删除
+    @Nullable
+    String getAndDelete();
 
-    /**
-     * 自增数字
-     *
-     * @return 自增后数字
-     * @throws NumberFormatException 原来的值不是数字时抛该异常
-     */
-    @Nonnull Long increment() throws NumberFormatException;
+    /// 自增数字
+    ///
+    /// @return 自增后数字
+    /// @throws NumberFormatException 原来的值不是数字时抛该异常
+    @Nonnull
+    Long increment() throws NumberFormatException;
 
-    /**
-     * 自增数字
-     *
-     * @param delta 自增量
-     * @return 自增后数字
-     * @throws NumberFormatException 原来的值不是数字时抛该异常
-     */
-    @Nonnull Long increment(long delta) throws NumberFormatException;
+    /// 自增数字
+    ///
+    /// @param delta 自增量
+    /// @return 自增后数字
+    /// @throws NumberFormatException 原来的值不是数字时抛该异常
+    @Nonnull
+    Long increment(long delta) throws NumberFormatException;
 
-    /**
-     * 自减数字
-     *
-     * @return 自减后数字
-     * @throws NumberFormatException 原来的值不是数字时抛该异常
-     */
-    @Nonnull Long decrement() throws NumberFormatException;
+    /// 自减数字
+    ///
+    /// @return 自减后数字
+    /// @throws NumberFormatException 原来的值不是数字时抛该异常
+    @Nonnull
+    Long decrement() throws NumberFormatException;
 
-    /**
-     * 自减数字
-     *
-     * @param delta 自减量
-     * @return 自减后数字
-     * @throws NumberFormatException 原来的值不是数字时抛该异常
-     */
-    @Nonnull Long decrement(long delta) throws NumberFormatException;
+    /// 自减数字
+    ///
+    /// @param delta 自减量
+    /// @return 自减后数字
+    /// @throws NumberFormatException 原来的值不是数字时抛该异常
+    @Nonnull
+    Long decrement(long delta) throws NumberFormatException;
 }

@@ -34,12 +34,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
-/**
- * Redis 缓存仓库
- *
- * @author Alan Yeh
- * @since 2023/06/10
- */
+/// Redis 缓存仓库
+///
+/// @author Alan Yeh
 public class RedisCacheRepository implements CacheRepository {
     @Override
     public boolean hasKey(@NotNull String key) {

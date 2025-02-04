@@ -34,12 +34,9 @@ import lombok.Data;
 import java.io.Serial;
 import java.util.List;
 
-/**
- * 根据标识查询
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 根据标识查询
+///
+/// @author Alan Yeh
 @Data
 public class CodesQuery<E extends Entity & Codeable> implements Query<E> {
     @Serial

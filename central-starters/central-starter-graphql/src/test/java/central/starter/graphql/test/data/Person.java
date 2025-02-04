@@ -33,12 +33,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.util.List;
 
-/**
- * Person
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// Person
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

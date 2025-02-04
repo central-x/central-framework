@@ -33,12 +33,9 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
 
-/**
- * Jsonx Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// Jsonx Test Cases
+///
+/// @author Alan Yeh
 public class TestJsonx {
 
     @Test

@@ -24,12 +24,12 @@
 
 package central.sql.builder.script;
 
+import central.lang.Stringx;
 import central.sql.SqlBuilder;
 import central.sql.SqlScript;
 import central.sql.builder.script.index.AddIndexScript;
 import central.sql.builder.script.index.DropIndexScript;
 import central.util.Objectx;
-import central.lang.Stringx;
 import central.validation.Validatex;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -39,18 +39,12 @@ import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 索引相关脚本解析器
- *
- * @author Alan Yeh
- * @since 2022/08/09
- */
+/// 索引相关脚本解析器
+///
+/// @author Alan Yeh
 class IndexScriptParser {
 
-
-    /**
-     * 解析 XML
-     */
+    /// 解析 XML
     public static List<SqlScript> parse(SqlBuilder dialect, Node parent) throws SQLSyntaxErrorException {
         List<SqlScript> sqls = new ArrayList<>();
 
@@ -86,9 +80,7 @@ class IndexScriptParser {
     }
 
 
-    /**
-     * 解析添加索引脚本
-     */
+    /// 解析添加索引脚本
     private static List<AddIndexScript> parseAddIndexScript(Node parent) {
         List<AddIndexScript> scripts = new ArrayList<>();
 
@@ -112,9 +104,7 @@ class IndexScriptParser {
         return scripts;
     }
 
-    /**
-     * 解析删除索引脚本
-     */
+    /// 解析删除索引脚本
     private static List<DropIndexScript> parseDropIndexScript(Node parent) {
 
         List<DropIndexScript> scripts = new ArrayList<>();

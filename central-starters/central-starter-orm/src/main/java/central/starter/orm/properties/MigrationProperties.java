@@ -27,10 +27,7 @@ package central.starter.orm.properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// @author Alan Yeh
 @Data
 @ConfigurationProperties(prefix = "central.orm.migration")
 public class MigrationProperties {

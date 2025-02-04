@@ -35,12 +35,9 @@ import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 添加 Cookie
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// 添加 Cookie
+///
+/// @author Alan Yeh
 public class AddCookieProcessor implements HttpProcessor, ReactiveHttpProcessor {
     private final Map<String, String> cookies = new HashMap<>();
 

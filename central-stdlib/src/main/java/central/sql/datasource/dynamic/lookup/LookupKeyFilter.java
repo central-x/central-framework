@@ -30,12 +30,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-/**
- * 动态切换数据源
- *
- * @author Alan Yeh
- * @since 2022/09/23
- */
+/// 动态切换数据源
+///
+/// @author Alan Yeh
 public class LookupKeyFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

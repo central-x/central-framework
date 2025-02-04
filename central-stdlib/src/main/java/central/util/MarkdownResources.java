@@ -36,25 +36,23 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-/**
- * Markdown 文件加载器
- * <p>
- * 这个功能是从 Beetl 中抄过来的，使用 Markdown 来管理一些自定义语句非常方便，而且可视化效果非常好。
- * <p>
- * 格式如下：
- * <p>
- * {@code
- * command
- * ===
- * * 这是一个命令
- * <p>
- * ```sql
- * SELECT * FROM TABLE WHERE 1 = 1
- * }
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// Markdown 文件加载器
+///
+/// 这个功能是从 Beetl 中抄过来的，使用 Markdown 来管理一些自定义语句非常方便，而且可视化效果非常好。
+///
+/// 格式如下：
+///
+/// ```markdown
+/// command
+/// ===
+/// * 这是一个命令
+///
+/// ` ` `sql
+/// SELECT * FROM TABLE WHERE 1 = 1
+/// ` ` `
+/// ```
+///
+/// @author Alan Yeh
 public class MarkdownResources implements Map<String, MarkdownResources.Resource> {
     private Map<String, Resource> resources;
 
@@ -62,21 +60,17 @@ public class MarkdownResources implements Map<String, MarkdownResources.Resource
         resources = new LinkedHashMap<>();
     }
 
-    /**
-     * 加载指定流
-     *
-     * @param stream Markdown 文件流
-     */
+    /// 加载指定流
+    ///
+    /// @param stream Markdown 文件流
     public MarkdownResources(@Nonnull InputStream stream) throws IOException {
         Assertx.mustNotNull(stream, "[MarkdownResources] 参数错误: stream 不能为空");
         this.load(null, stream);
     }
 
-    /**
-     * 加载指定文件
-     *
-     * @param markdown Markdown 文件
-     */
+    /// 加载指定文件
+    ///
+    /// @param markdown Markdown 文件
     public MarkdownResources(@Nonnull File markdown) throws IOException {
         Assertx.mustNotNull(markdown, "[MarkdownResources] 参数错误: markdown 不能为空");
         Assertx.mustTrue(markdown.isFile(), "[MarkdownResources] 参数错误: markdown 不是文件类型");
@@ -85,21 +79,17 @@ public class MarkdownResources implements Map<String, MarkdownResources.Resource
         this.load(null, new FileInputStream(markdown));
     }
 
-    /**
-     * 加载文件
-     *
-     * @param stream 数据流
-     */
+    /// 加载文件
+    ///
+    /// @param stream 数据流
     public void load(InputStream stream) throws IOException {
         this.load(null, stream);
     }
 
-    /**
-     * 加载资源
-     *
-     * @param prefix 前缀
-     * @param stream 数据流
-     */
+    /// 加载资源
+    ///
+    /// @param prefix 前缀
+    /// @param stream 数据流
     public void load(String prefix, InputStream stream) throws IOException {
         try (Reader reader = new Reader(stream)) {
             do {
@@ -117,29 +107,19 @@ public class MarkdownResources implements Map<String, MarkdownResources.Resource
         }
     }
 
-    /**
-     * Markdown Item
-     */
+    /// Markdown Item
     @Data
     @EqualsAndHashCode
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Resource {
-        /**
-         * ID
-         */
+        /// ID
         private String id;
-        /**
-         * 注释
-         */
+        /// 注释
         private String comment;
-        /**
-         * 内容
-         */
+        /// 内容
         private String content;
-        /**
-         * 行号
-         */
+        /// 行号
         private int line;
 
         @Override
@@ -148,9 +128,7 @@ public class MarkdownResources implements Map<String, MarkdownResources.Resource
         }
     }
 
-    /**
-     * Markdown 解析工具
-     */
+    /// Markdown 解析工具
     private static class Reader implements Closeable {
         private final BufferedReader bufferedReader;
         private int line; // 当前读取哪一行
@@ -291,9 +269,7 @@ public class MarkdownResources implements Map<String, MarkdownResources.Resource
             }
         }
 
-        /**
-         * 读取下一行文本
-         */
+        /// 读取下一行文本
         private String nextLine() throws IOException {
             String text = bufferedReader.readLine();
             this.line++;
@@ -311,7 +287,8 @@ public class MarkdownResources implements Map<String, MarkdownResources.Resource
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Map Implementation
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public int size() {

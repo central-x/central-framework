@@ -32,13 +32,11 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Version 1
- * 这个版本是 TestMapper 里面要用到的数据结构，是正常的数据结构
- *
- * @author Alan Yeh
- * @since 2022/09/14
- */
+/// Version 1
+///
+/// 这个版本是 TestMapper 里面要用到的数据结构，是正常的数据结构
+///
+/// @author Alan Yeh
 public class V1 extends Migration {
     public V1() {
         super(Version.of("1.0.0"));

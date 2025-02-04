@@ -24,24 +24,21 @@
 
 package central.net.http.proxy.contract.spring.resolver;
 
+import central.lang.Assertx;
 import central.lang.Attribute;
+import central.lang.Stringx;
 import central.net.http.HttpRequest;
 import central.net.http.proxy.contract.spring.SpringResolver;
-import central.lang.Assertx;
 import central.util.Objectx;
-import central.lang.Stringx;
 import org.springframework.web.bind.annotation.RequestAttribute;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
-/**
- * 处理请求属性
- *
- * @author Alan Yeh
- * @see RequestAttribute
- * @since 2022/07/18
- */
+/// 处理请求属性
+///
+/// @author Alan Yeh
+/// @see RequestAttribute
 public class RequestAttributeResolver implements SpringResolver {
     @Override
     public boolean support(Parameter parameter) {

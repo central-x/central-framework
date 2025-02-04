@@ -32,12 +32,9 @@ import org.springframework.web.reactive.DispatcherHandler;
 import reactor.core.publisher.Hooks;
 import reactor.core.publisher.Operators;
 
-/**
- * Trace Configuration
- *
- * @author Alan Yeh
- * @since 2022/10/25
- */
+/// Trace Configuration
+///
+/// @author Alan Yeh
 @Configuration
 @Import(WebFluxTraceFilter.class)
 @ConditionalOnBean(DispatcherHandler.class)

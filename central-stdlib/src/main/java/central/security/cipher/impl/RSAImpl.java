@@ -41,12 +41,9 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
-/**
- * RSA 加解密实现
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// RSA 加解密实现
+///
+/// @author Alan Yeh
 public class RSAImpl implements CipherImpl {
     private static final String ALGORITHM = "RSA";
 
@@ -68,25 +65,23 @@ public class RSAImpl implements CipherImpl {
         return new KeyPair(keyPair.getPublic(), keyPair.getPrivate());
     }
 
-    /**
-     * 获取公钥
-     * 在 RSA 算法中，公钥用于加密
-     *
-     * @param keySpec Base64 字符串，通过 Base64.getEncoder().encode(publicKey.getEncoded()) 生成
-     * @return 公钥
-     */
+    /// 获取公钥
+    ///
+    /// 在 RSA 算法中，公钥用于加密
+    ///
+    /// @param keySpec Base64 字符串，通过`Base64.getEncoder().encode(publicKey.getEncoded())`生成
+    /// @return 公钥
     @Override
     public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(keySpec)));
     }
 
-    /**
-     * 获取私钥
-     * 在 RSA 算法中，私钥用于解密
-     *
-     * @param keySpec Base64 字符串，通过 Base64.getEncoder().encode(privateKey.getEncoded()) 生成
-     * @return 私钥
-     */
+    /// 获取私钥
+    ///
+    /// 在 RSA 算法中，私钥用于解密
+    ///
+    /// @param keySpec Base64 字符串，通过`Base64.getEncoder().encode(privateKey.getEncoded())`生成
+    /// @return 私钥
     @Override
     public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder().decode(keySpec)));

@@ -25,19 +25,16 @@
 package central.starter.probe;
 
 import central.starter.probe.core.ProbeRegistrar;
-import central.starter.probe.core.endpoint.EndpointRegistrar;
 import central.starter.probe.core.authorizer.AuthorizerRegistrar;
+import central.starter.probe.core.endpoint.EndpointRegistrar;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-/**
- * 配置
- *
- * @author Alan Yeh
- * @since 2023/12/27
- */
+/// 配置
+///
+/// @author Alan Yeh
 @Configuration
 @Import({ProbeRegistrar.class, AuthorizerRegistrar.class, EndpointRegistrar.class})
 @EnableConfigurationProperties(ProbeProperties.class)

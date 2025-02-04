@@ -26,20 +26,13 @@ package central.starter.probe.core.cache;
 
 import java.util.Map;
 
-/**
- * 探针缓存
- *
- * @author Alan Yeh
- * @since 2024/01/04
- */
+/// 探针缓存
+///
+/// @author Alan Yeh
 public interface Cache {
-    /**
-     * 获取缓存
-     */
+    /// 获取缓存
     Map<String, String> get();
 
-    /**
-     * 保存数据到缓存
-     */
+    /// 保存数据到缓存
     void put(Map<String, String> data);
 }

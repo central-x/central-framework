@@ -28,22 +28,15 @@ import central.bean.OptionalEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * 压缩类型
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 压缩类型
+///
+/// @author Alan Yeh
 @Getter
 @AllArgsConstructor
 public enum CompressType implements OptionalEnum<String> {
-    /**
-     * GZIP
-     */
+    /// GZIP
     GZIP("GZIP", "gzip"),
-    /**
-     * DEFLATE
-     */
+    /// DEFLATE
     DEFLATE("DEFLATE", "deflate");
 
     private final String name;

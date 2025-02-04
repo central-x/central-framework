@@ -26,15 +26,10 @@ package central.starter.probe.core.endpoint;
 
 import central.starter.probe.core.ProbeException;
 
-/**
- * 探针
- *
- * @author Alan Yeh
- * @since 2023/12/29
- */
+/// 探针
+///
+/// @author Alan Yeh
 public interface Endpoint {
-    /**
-     * 执行探测
-     */
+    /// 执行探测
     void perform() throws ProbeException;
 }

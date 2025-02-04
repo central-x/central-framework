@@ -28,12 +28,9 @@ import central.sql.proxy.Mapper;
 import central.starter.graphql.database.persistence.entity.PersonEntity;
 import org.springframework.stereotype.Repository;
 
-/**
- * Person
- *
- * @author Alan Yeh
- * @since 2022/09/28
- */
+/// Person
+///
+/// @author Alan Yeh
 @Repository
 public interface PersonMapper extends Mapper<PersonEntity> {
 }

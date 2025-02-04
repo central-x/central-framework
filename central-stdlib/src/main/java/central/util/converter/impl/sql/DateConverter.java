@@ -29,12 +29,9 @@ import central.util.converter.Converter;
 
 import java.sql.Date;
 
-/**
- * Date Converter
- *
- * @author Alan Yeh
- * @since 2022/09/16
- */
+/// Date Converter
+///
+/// @author Alan Yeh
 public class DateConverter implements Converter<Date> {
     @Override
     public boolean support(Class<?> source) {

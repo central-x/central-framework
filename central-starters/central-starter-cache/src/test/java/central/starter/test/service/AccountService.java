@@ -39,12 +39,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-/**
- * Test Service
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// Test Service
+///
+/// @author Alan Yeh
 @Service
 public class AccountService {
 

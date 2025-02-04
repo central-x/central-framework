@@ -27,47 +27,30 @@ package central.sql.meta.entity;
 import central.lang.Stringx;
 import lombok.Data;
 
-/**
- * 多对多关系
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// 多对多关系
+///
+/// @author Alan Yeh
 @Data
 public class ForeignTableMeta {
-    /**
-     * 关系别名
-     */
+    /// 关系别名
     private String alias;
 
-    /**
-     * 关联表实体信息
-     */
+    /// 关联表实体信息
     private EntityMeta entity;
 
-    /**
-     * 目标实体信息
-     */
+    /// 目标实体信息
     private EntityMeta target;
 
-    /**
-     * 主表关联字段
-     */
+    /// 主表关联字段
     private PropertyMeta property;
 
-    /**
-     * 关联实体与主表关联字段
-     */
+    /// 关联实体与主表关联字段
     private PropertyMeta relationProperty;
 
-    /**
-     * 目标实体的关联字段
-     */
+    /// 目标实体的关联字段
     private PropertyMeta targetProperty;
 
-    /**
-     * 关联实体与目标实体关联字段
-     */
+    /// 关联实体与目标实体关联字段
     private PropertyMeta targetRelationProperty;
 
     @Override

@@ -34,12 +34,9 @@ import org.springframework.http.MediaType;
 import java.io.InputStream;
 import java.net.http.HttpResponse;
 
-/**
- * Java Response
- *
- * @author Alan Yeh
- * @since 2022/07/18
- */
+/// Java Response
+///
+/// @author Alan Yeh
 public class JavaResponse extends central.net.http.HttpResponse {
 
     @Getter

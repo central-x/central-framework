@@ -26,30 +26,21 @@ package central.bean;
 
 import jakarta.persistence.PreUpdate;
 
-/**
- * Versional Entity
- * <p>
- * 版本化的实体
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// Versional Entity
+///
+/// 版本化的实体
+///
+/// @author Alan Yeh
 public interface Versional {
-    /**
-     * 获取实体版本号
-     */
+    /// 获取实体版本号
     Integer getVersion();
 
-    /**
-     * 设置实体版本号
-     *
-     * @param version 版本号
-     */
+    /// 设置实体版本号
+    ///
+    /// @param version 版本号
     void setVersion(Integer version);
 
-    /**
-     * 递增版本号
-     */
+    /// 递增版本号
     @PreUpdate
     default void increaseVersion() {
         if (this.getVersion() == null) {

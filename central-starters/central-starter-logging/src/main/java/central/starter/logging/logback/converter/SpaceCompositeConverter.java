@@ -27,12 +27,9 @@ package central.starter.logging.logback.converter;
 import central.lang.Stringx;
 import ch.qos.logback.core.pattern.CompositeConverter;
 
-/**
- * 去空格后，在尾部加空格
- *
- * @author Alan Yeh
- * @since 2022/07/19
- */
+/// 去空格后，在尾部加空格
+///
+/// @author Alan Yeh
 public class SpaceCompositeConverter<E> extends CompositeConverter<E> {
     @Override
     protected String transform(E event, String in) {

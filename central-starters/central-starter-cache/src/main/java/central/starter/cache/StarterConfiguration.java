@@ -33,13 +33,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 
-
-/**
- * 缓存配置
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// 缓存配置
+///
+/// @author Alan Yeh
 @Configuration
 @ComponentScan
 @Import(MemoryStorage.class)

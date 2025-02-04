@@ -26,14 +26,11 @@ package central.bean;
 
 import java.lang.annotation.*;
 
-/**
- * 可空的
- * <p>
- * 本注解仅做标识，不做约束
- *
- * @author Alan Yeh
- * @since 2022/11/03
- */
+/// 可空的
+///
+/// 本注解仅做标识，不做约束
+///
+/// @author Alan Yeh
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})

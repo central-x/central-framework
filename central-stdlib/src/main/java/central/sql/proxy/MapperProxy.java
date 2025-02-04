@@ -25,6 +25,7 @@
 package central.sql.proxy;
 
 import central.lang.Assertx;
+import central.lang.Stringx;
 import central.lang.reflect.TypeRef;
 import central.sql.SqlExecutor;
 import central.sql.SqlScript;
@@ -34,7 +35,6 @@ import central.sql.datasource.dynamic.lookup.LookupKeyHolder;
 import central.sql.proxy.mapper.*;
 import central.util.Mapx;
 import central.util.MarkdownResources;
-import central.lang.Stringx;
 import lombok.Getter;
 
 import java.lang.reflect.InvocationHandler;
@@ -45,44 +45,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Mapper 代理
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// Mapper 代理
+///
+/// @author Alan Yeh
 public class MapperProxy<T extends Mapper<?>> implements InvocationHandler {
 
-    /**
-     * Mapper 类型
-     */
+    /// Mapper 类型
     @Getter
     private final Class<T> mapperType;
 
-    /**
-     * 方法处理器
-     */
+    /// 方法处理器
     private final Map<String, MapperHandler> handlers;
 
-    /**
-     * 实体类型
-     */
+    /// 实体类型
     @Getter
     private final Class<? extends Entity> entityType;
 
-    /**
-     * Sql 执行器
-     */
+    /// Sql 执行器
     private final SqlExecutor executor;
 
-    /**
-     * Markdown 资源
-     */
+    /// Markdown 资源
     private final MarkdownResources resources;
 
-    /**
-     * 当前 Proxy 是否有指定数据源
-     */
+    /// 当前 Proxy 是否有指定数据源
     private final String lookupKey;
 
     @SuppressWarnings("unchecked")

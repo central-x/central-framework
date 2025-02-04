@@ -29,15 +29,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Orders Test Cases
- *
- * @author Alan Yeh
- * @since 2022/08/02
- */
+/// Orders Test Cases
+///
+/// @author Alan Yeh
 public class TestOrders {
     @Test
-    public void case1(){
+    public void case1() {
         var orders = Orders.of(AccountEntity.class).asc(AccountEntity::getAge);
         assertEquals("age", orders.toSql());
 
@@ -46,7 +43,7 @@ public class TestOrders {
     }
 
     @Test
-    public void case2(){
+    public void case2() {
         var orders = Orders.of(AccountEntity.class).asc(AccountEntity::getAge).desc(AccountEntity::getName);
         assertEquals("age, name DESC", orders.toSql());
     }

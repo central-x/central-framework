@@ -28,13 +28,11 @@ import central.sql.proxy.Mapper;
 import central.starter.graphql.stub.database.persistence.entity.ProjectEntity;
 import org.springframework.stereotype.Repository;
 
-/**
- * Project
- * 项目
- *
- * @author Alan Yeh
- * @since 2022/10/04
- */
+/// Project
+///
+/// 项目
+///
+/// @author Alan Yeh
 @Repository
 public interface ProjectMapper extends Mapper<ProjectEntity> {
 }

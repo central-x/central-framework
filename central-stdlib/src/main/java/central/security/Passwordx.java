@@ -34,14 +34,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-/**
- * 密码工具
- * 将任意密码摘要成 64 位摘要信息
- * 即使相同的密码产生的接摘要也是不一样的
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// 密码工具
+///
+/// 将任意密码摘要成 64 位摘要信息
+///
+/// 即使相同的密码产生的接摘要也是不一样的
+///
+/// @author Alan Yeh
 @UtilityClass
 public class Passwordx {
     // 密钥大小
@@ -49,18 +48,14 @@ public class Passwordx {
     // 生成随机加密盐
     private static SecureRandom random = new SecureRandom();
 
-    /**
-     * 将输入的文本生成摘要
-     */
+    /// 将输入的文本生成摘要
     public static String digest(@Nonnull String plainPassword) {
         return Digestx.SHA256.digest(plainPassword, StandardCharsets.UTF_8);
     }
 
-    /**
-     * 将输入的文本，生成随机的8位salt，并将文本使用 sha256 进行摘要
-     * <p>
-     * 用于生成安全密码
-     */
+    /// 将输入的文本，生成随机的8位salt，并将文本使用 sha256 进行摘要
+    ///
+    /// 用于生成安全密码
     public static String encrypt(@Nonnull String plainPassword) {
         Assertx.mustNotNull(plainPassword, "Argument 'plainPassword' must not null");
 
@@ -68,12 +63,10 @@ public class Passwordx {
         return generatePassword(plainPassword, salt);
     }
 
-    /**
-     * 验证两个密码是否相等
-     *
-     * @param plainPassword 明文密码
-     * @param password      密文密码
-     */
+    /// 验证两个密码是否相等
+    ///
+    /// @param plainPassword 明文密码
+    /// @param password      密文密码
     public static boolean verify(@Nonnull String plainPassword, @Nonnull String password) {
         Assertx.mustNotNull(plainPassword, "Argument 'plainPassword' must not null");
         Assertx.mustNotNull(password, "Argument 'password' must not null");

@@ -28,12 +28,9 @@ import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
-/**
- * 启用探针服务
- *
- * @author Alan Yeh
- * @since 2023/12/27
- */
+/// 启用探针服务
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

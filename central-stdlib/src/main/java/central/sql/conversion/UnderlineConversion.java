@@ -24,16 +24,13 @@
 
 package central.sql.conversion;
 
+import central.lang.Stringx;
 import central.sql.SqlConversion;
 import central.sql.data.Entity;
-import central.lang.Stringx;
 
-/**
- * 下划线命名
- *
- * @author Alan Yeh
- * @since 2022/08/05
- */
+/// 下划线命名
+///
+/// @author Alan Yeh
 public class UnderlineConversion implements SqlConversion {
     @Override
     public String getTableName(Class<? extends Entity> type) {

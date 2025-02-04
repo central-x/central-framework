@@ -32,52 +32,43 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.experimental.UtilityClass;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-/**
- * 对象工具
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// 对象工具
+///
+/// @author Alan Yeh
 @UtilityClass
 public class Objectx {
 
-    /**
-     * 判断对象是否为空
-     *
-     * @param obj 待判断对象
-     */
+    /// 判断对象是否为空
+    ///
+    /// @param obj 待判断对象
     public static boolean isNull(@Nullable Object obj) {
         return obj == null;
     }
 
-    /**
-     * 判断对象是否不为空
-     *
-     * @param obj 待判断对象
-     */
+    /// 判断对象是否不为空
+    ///
+    /// @param obj 待判断对象
     public static boolean isNotNull(@Nullable Object obj) {
         return obj != null;
     }
 
-    /**
-     * 调用 toString，如果 obj 为空，返回空
-     */
+    /// 调用 toString，如果 obj 为空，返回空
     @Nullable
     public static String toString(@Nullable Object obj) {
         return obj == null ? null : obj.toString();
     }
 
-    /**
-     * 获取值
-     *
-     * @param value    可空值
-     * @param fallback 取值失败时的储备
-     * @param <T>      类型
-     */
+    /// 获取值
+    ///
+    /// @param value    可空值
+    /// @param fallback 取值失败时的储备
+    /// @param <T>      类型
     public static @Nonnull <T> T getOrDefault(@Nullable T value, @Nonnull T fallback) {
         if (value instanceof String string) {
             if (Stringx.isNullOrEmpty(string)) {
@@ -96,13 +87,11 @@ public class Objectx {
         }
     }
 
-    /**
-     * 获取值
-     *
-     * @param value    可空值
-     * @param supplier 如果值为空时，通过 supplier 获取
-     * @param <T>      类型
-     */
+    /// 获取值
+    ///
+    /// @param value    可空值
+    /// @param supplier 如果值为空时，通过 supplier 获取
+    /// @param <T>      类型
     public static @Nonnull <T> T getOrDefault(@Nullable T value, @Nonnull Supplier<T> supplier) {
         Assertx.mustNotNull(supplier, "Argument 'supplier' must not null");
         if (value instanceof String string) {
@@ -123,9 +112,7 @@ public class Objectx {
     }
 
 
-    /**
-     * 根据传入的对象转成 Map
-     */
+    /// 根据传入的对象转成 Map
     public static Map<String, Object> toMap(@Nullable Object obj) {
         if (obj == null) {
             return Mapx.newHashMap();
@@ -133,19 +120,15 @@ public class Objectx {
         return Jsonx.Default().deserialize(Jsonx.Default().serialize(obj), TypeRef.ofMap(String.class, Object.class));
     }
 
-    /**
-     * List 数组对象转 {@code List<Map>}
-     */
+    /// List 数组对象转 {@code List<Map>}
     public static List<Map<String, Object>> toList(List<?> list) {
         return Listx.asStream(list).map(Objectx::toMap).collect(Collectors.toList());
     }
 
-    /**
-     * 获取类型
-     *
-     * @param instance 获取对象类型
-     * @return 对象的类型
-     */
+    /// 获取类型
+    ///
+    /// @param instance 获取对象类型
+    /// @return 对象的类型
     public static Class<?> getClass(@Nullable Object instance) {
         if (instance == null) {
             return null;
@@ -154,16 +137,14 @@ public class Objectx {
         }
     }
 
-    /**
-     * 安静地获取值
-     * <p>
-     * 如果获取的过程中发生异常，将返回空
-     *
-     * @param supplier 值提供者
-     * @param <T>      值类型
-     * @param <E>      异常类型
-     * @return 获取的值
-     */
+    /// 安静地获取值
+    ///
+    /// 如果获取的过程中发生异常，将返回空
+    ///
+    /// @param supplier 值提供者
+    /// @param <T>      值类型
+    /// @param <E>      异常类型
+    /// @return 获取的值
     public static <T, E extends Exception> @Nullable T getSilently(@Nonnull ThrowableSupplier<T, E> supplier) {
         try {
             return supplier.get();

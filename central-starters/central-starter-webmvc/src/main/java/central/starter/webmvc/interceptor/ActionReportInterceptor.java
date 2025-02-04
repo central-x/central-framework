@@ -24,9 +24,9 @@
 
 package central.starter.webmvc.interceptor;
 
+import central.lang.Stringx;
 import central.util.Logx;
 import central.web.XForwardedHeaders;
-import central.lang.Stringx;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -42,12 +42,9 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * 打印请求信息
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// 打印请求信息
+///
+/// @author Alan Yeh
 @Slf4j
 @ExtensionMethod(Logx.class)
 public class ActionReportInterceptor implements HandlerInterceptor {

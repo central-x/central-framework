@@ -30,12 +30,9 @@ import lombok.experimental.UtilityClass;
 
 import java.util.UUID;
 
-/**
- * 随机主键生成
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// 随机主键生成
+///
+/// @author Alan Yeh
 @UtilityClass
 public class Guidx {
     private static String digits(long val, int digits) {

@@ -32,12 +32,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.sql.SQLException;
 
-/**
- * 添加索引脚本
- *
- * @author Alan Yeh
- * @since 2022/08/30
- */
+/// 添加索引脚本
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class AddIndexMigration implements MigrateAction {
 

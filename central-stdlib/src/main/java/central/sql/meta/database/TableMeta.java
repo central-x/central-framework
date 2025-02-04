@@ -24,62 +24,43 @@
 
 package central.sql.meta.database;
 
-import central.util.Mapx;
 import central.lang.Stringx;
+import central.util.Mapx;
 import lombok.Data;
 import lombok.experimental.ExtensionMethod;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 表元数据
- *
- * @author Alan Yeh
- * @since 2022/08/06
- */
+/// 表元数据
+///
+/// @author Alan Yeh
 @Data
 @ExtensionMethod(Mapx.class)
 public class TableMeta {
-    /**
-     * 表所在的 Catalog
-     */
+    /// 表所在的 Catalog
     private String catalog;
-    /**
-     * 表所在的 Schema
-     */
+    /// 表所在的 Schema
     private String schema;
-    /**
-     * 表名
-     */
+    /// 表名
     private String name;
-    /**
-     * 注释
-     */
+    /// 注释
     private String remarks;
-    /**
-     * 字段
-     */
+    /// 字段
     private Map<String, ColumnMeta> columns = new HashMap<String, ColumnMeta>().caseInsensitive().threadSafe();
-    /**
-     * 索引
-     */
+    /// 索引
     private Map<String, IndexMeta> indies = new HashMap<String, IndexMeta>().caseInsensitive().threadSafe();
 
-    /**
-     * 获取字段元数据
-     *
-     * @param name 字段名
-     */
+    /// 获取字段元数据
+    ///
+    /// @param name 字段名
     public ColumnMeta getColumn(String name) {
         return this.columns.getOrNull(name);
     }
 
-    /**
-     * 获取索引元数据
-     *
-     * @param name 索引名
-     */
+    /// 获取索引元数据
+    ///
+    /// @param name 索引名
     public IndexMeta getIndex(String name) {
         return this.indies.getOrNull(name);
     }

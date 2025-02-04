@@ -31,12 +31,9 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
 
-/**
- * Not Found Http Exception
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Not Found Http Exception
+///
+/// @author Alan Yeh
 public class NotFoundHttpException extends ClientSeriesHttpException {
     @Serial
     private static final long serialVersionUID = 7032910792867715453L;

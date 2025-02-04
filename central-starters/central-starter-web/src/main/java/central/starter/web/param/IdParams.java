@@ -31,12 +31,9 @@ import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * 主键参数
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 主键参数
+///
+/// @author Alan Yeh
 @Data
 public class IdParams implements Serializable {
     @Serial

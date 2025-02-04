@@ -41,12 +41,9 @@ import org.springframework.core.Ordered;
 import java.io.Serial;
 import java.lang.reflect.Method;
 
-/**
- * 日志切面
- *
- * @author Alan Yeh
- * @since 2023/02/05
- */
+/// 日志切面
+///
+/// @author Alan Yeh
 @Slf4j
 public class LogAdvisor extends AbstractPointcutAdvisor implements MethodInterceptor, Ordered {
     @Serial

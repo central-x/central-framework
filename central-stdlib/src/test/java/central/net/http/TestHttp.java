@@ -46,12 +46,9 @@ import org.springframework.http.MediaType;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-/**
- * Http Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/18
- */
+/// Http Test Cases
+///
+/// @author Alan Yeh
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = TestHttpApplication.class)
 public abstract class TestHttp {
     protected HttpClient client;
@@ -67,9 +64,7 @@ public abstract class TestHttp {
 
     protected abstract HttpExecutor getExecutor();
 
-    /**
-     * Test GET
-     */
+    /// Test GET
     @Test
     public void case1() throws Throwable {
         String accountId = Guidx.nextID();
@@ -85,9 +80,7 @@ public abstract class TestHttp {
         }
     }
 
-    /**
-     * Test POST
-     */
+    /// Test POST
     @Test
     public void case2() throws Throwable {
         try (var request = HttpRequest.post(HttpUrl.of("/api/accounts"))) {
@@ -108,9 +101,7 @@ public abstract class TestHttp {
         }
     }
 
-    /**
-     * Test PUT
-     */
+    /// Test PUT
     @Test
     public void case3() throws Throwable {
         try (var request = HttpRequest.put(HttpUrl.of("/api/accounts"))) {
@@ -132,9 +123,7 @@ public abstract class TestHttp {
         }
     }
 
-    /**
-     * Test DELETE
-     */
+    /// Test DELETE
     @Test
     public void case4() throws Throwable {
         try (var request = HttpRequest.delete(HttpUrl.of("/api/accounts").addQuery("ids", Guidx.nextID()).addQuery("ids", Guidx.nextID()))) {
@@ -148,9 +137,7 @@ public abstract class TestHttp {
         }
     }
 
-    /**
-     * Test Processor
-     */
+    /// Test Processor
     @Test
     public void case5() throws Throwable {
         try (var request = HttpRequest.get(HttpUrl.of("/api/info"))) {
@@ -170,9 +157,7 @@ public abstract class TestHttp {
         }
     }
 
-    /**
-     * Test Upload
-     */
+    /// Test Upload
     @Test
     public void case6() throws Throwable {
         try (var request = HttpRequest.post(HttpUrl.of("/api/uploads"))) {

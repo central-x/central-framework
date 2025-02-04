@@ -28,12 +28,9 @@ import central.util.converter.Converter;
 
 import java.util.Objects;
 
-/**
- * String Converter
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// String Converter
+///
+/// @author Alan Yeh
 public class StringConverter implements Converter<String> {
     @Override
     public boolean support(Class<?> source) {

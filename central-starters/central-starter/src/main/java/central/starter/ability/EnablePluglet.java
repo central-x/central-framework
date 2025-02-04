@@ -28,12 +28,9 @@ import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
-/**
- * 启用插件工厂
- *
- * @author Alan Yeh
- * @since 2024/02/04
- */
+/// 启用插件工厂
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

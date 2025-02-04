@@ -35,13 +35,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * MethodArgumentNotValidException Handler
- *
- * @author Alan Yeh
- * @see MethodArgumentNotValidException
- * @since 2022/07/17
- */
+/// MethodArgumentNotValidException Handler
+///
+/// @author Alan Yeh
+/// @see MethodArgumentNotValidException
 @Component
 public class MethodArgumentNotValidExceptionHandler implements ExceptionHandler {
 

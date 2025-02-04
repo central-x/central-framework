@@ -49,55 +49,42 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-/**
- * Error Render
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// Error Render
+///
+/// @author Alan Yeh
 public class ErrorRender extends Render<ErrorRender> {
     public ErrorRender(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
         super(request, response);
     }
 
-    /**
-     * 异常
-     */
+    /// 异常
     @Getter
     @Setter
     private Throwable throwable;
 
-    /**
-     * 调试模式
-     */
+    /// 调试模式
     @Getter
     @Setter
     private boolean debug = false;
 
-    /**
-     * 设置错误信息
-     *
-     * @param message 错误信息
-     */
+    /// 设置错误信息
+    ///
+    /// @param message 错误信息
     public ErrorRender setError(String message) {
         return this.setError(HttpStatus.INTERNAL_SERVER_ERROR, new RuntimeException(message));
     }
 
-    /**
-     * 设置错误信息和状态码
-     *
-     * @param status  状态码
-     * @param message 错误信息
-     */
+    /// 设置错误信息和状态码
+    ///
+    /// @param status  状态码
+    /// @param message 错误信息
     public ErrorRender setError(HttpStatusCode status, String message) {
         return this.setError(status, new RuntimeException(message));
     }
 
-    /**
-     * 设置异常
-     *
-     * @param throwable 异常
-     */
+    /// 设置异常
+    ///
+    /// @param throwable 异常
     public ErrorRender setError(Throwable throwable) {
         if (throwable instanceof ResponseStatusException exception) {
             return setError(exception.getStatusCode(), throwable);
@@ -106,72 +93,58 @@ public class ErrorRender extends Render<ErrorRender> {
         }
     }
 
-    /**
-     * 设置状态码和异常
-     *
-     * @param status    状态码
-     * @param throwable 异常
-     */
+    /// 设置状态码和异常
+    ///
+    /// @param status    状态码
+    /// @param throwable 异常
     public ErrorRender setError(HttpStatusCode status, Throwable throwable) {
         this.setStatus(status);
         this.throwable = throwable;
         return this;
     }
 
-    /**
-     * 打开调试模式
-     * <p>
-     * 输出异常栈
-     */
+    /// 打开调试模式
+    ///
+    /// 输出异常栈
     public ErrorRender debug() {
         this.debug = true;
         return this;
     }
 
-    /**
-     * 设置是否为调试模式
-     * <p>
-     * 是否输出异常栈
-     */
+    /// 设置是否为调试模式
+    ///
+    /// 是否输出异常栈
     public ErrorRender debug(boolean debug) {
         this.debug = debug;
         return this;
     }
 
-    /**
-     * 执行渲染
-     *
-     * @param message 错误信息
-     */
+    /// 执行渲染
+    ///
+    /// @param message 错误信息
     public void render(String message) throws IOException {
         this.setError(message).render();
     }
 
-    /**
-     * 执行渲染
-     *
-     * @param status  状态码
-     * @param message 错误信息
-     */
+    /// 执行渲染
+    ///
+    /// @param status  状态码
+    /// @param message 错误信息
     public void render(HttpStatusCode status, String message) throws IOException {
         this.setError(status, message).render();
     }
 
-    /**
-     * 执行渲染
-     *
-     * @param status    状态码
-     * @param throwable 异常
-     */
+    /// 执行渲染
+    ///
+    /// @param status    状态码
+    /// @param throwable 异常
     public void render(HttpStatus status, Throwable throwable) throws IOException {
         this.setError(status, throwable).render();
     }
 
-    /**
-     * 执行渲染
-     *
-     * @param throwable 异常
-     */
+    /// 执行渲染
+    ///
+    /// @param throwable 异常
     public void render(Throwable throwable) throws IOException {
         this.setError(throwable).render();
     }
@@ -200,9 +173,7 @@ public class ErrorRender extends Render<ErrorRender> {
 
     private static final String JSON_CONTENT_TYPE = new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8).toString();
 
-    /**
-     * 渲染 JSON
-     */
+    /// 渲染 JSON
     private void renderJson() throws IOException {
         this.getResponse().setContentType(JSON_CONTENT_TYPE);
 
@@ -231,9 +202,7 @@ public class ErrorRender extends Render<ErrorRender> {
 
     private static final String HTML_CONTENT_TYPE = new MediaType(MediaType.TEXT_HTML, StandardCharsets.UTF_8).toString();
 
-    /**
-     * 渲染 HTML
-     */
+    /// 渲染 HTML
     private void renderHtml() throws IOException {
         // 返回 HTML 异常信息
         this.getResponse().setContentType(HTML_CONTENT_TYPE);

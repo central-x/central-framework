@@ -29,12 +29,9 @@ import central.lang.Stringx;
 
 import java.io.Serial;
 
-/**
- * 类型检查异常
- *
- * @author Alan Yeh
- * @since 2022/07/12
- */
+/// 类型检查异常
+///
+/// @author Alan Yeh
 @PublicApi
 public class TypeCheckException extends RuntimeException {
     @Serial

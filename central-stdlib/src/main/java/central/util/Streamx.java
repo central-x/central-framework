@@ -24,12 +24,9 @@
 
 package central.util;
 
-/**
- * Stream 工具
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// Stream 工具
+///
+/// @author Alan Yeh
 public class Streamx {
 
 }

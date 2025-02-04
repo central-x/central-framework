@@ -39,12 +39,9 @@ import java.security.spec.X509EncodedKeySpec;
 import java.text.ParseException;
 import java.util.Base64;
 
-/**
- * ECDSA 签名算法
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
+/// ECDSA 签名算法
+///
+/// @author Alan Yeh
 public abstract class ECDSAImpl implements SignerImpl {
     private static final int BUFFER_SIZE = 8 * 1024;
     // 密钥长度在 256、384 或 521 是比较安全的

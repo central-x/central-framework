@@ -28,12 +28,9 @@ import central.sql.proxy.Mapper;
 import central.test.orm.data.entity.AccountEntity;
 import org.springframework.stereotype.Repository;
 
-/**
- * 帐户操作
- *
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// 帐户操作
+///
+/// @author Alan Yeh
 @Repository
 public interface AccountMapper extends Mapper<AccountEntity> {
 }

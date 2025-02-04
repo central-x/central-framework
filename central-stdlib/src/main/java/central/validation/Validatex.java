@@ -27,18 +27,17 @@ package central.validation;
 import central.bean.BeanValidateException;
 import central.lang.Arrayx;
 import central.util.Setx;
-import jakarta.validation.*;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.ValidatorFactory;
 import jakarta.validation.groups.Default;
 import org.hibernate.validator.HibernateValidator;
 
 import java.util.function.Function;
 
-/**
- * 参数校验工具
- *
- * @author Alan Yeh
- * @since 2022/08/04
- */
+/// 参数校验工具
+///
+/// @author Alan Yeh
 public class Validatex {
 
     private final ValidatorFactory factory;
@@ -67,19 +66,15 @@ public class Validatex {
         }
     }
 
-    /**
-     * 校验 Bean
-     *
-     * @param object 待校验对象
-     * @param groups 校验分组
-     */
+    /// 校验 Bean
+    ///
+    /// @param object 待校验对象
+    /// @param groups 校验分组
     public <T> void validateBean(T object, Class<?>... groups) throws BeanValidateException {
         this.validate(object, groups, violation -> new BeanValidateException(violation.getMessage()));
     }
 
-    /**
-     * 校验参数
-     */
+    /// 校验参数
     public <T> void validate(T object, Class<?>... groups) throws IllegalArgumentException {
         this.validate(object, groups, violation -> new IllegalArgumentException(violation.getMessage()));
     }

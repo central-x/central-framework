@@ -29,12 +29,9 @@ import central.util.converter.Converter;
 
 import java.util.Date;
 
-/**
- * Long Converter
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Long Converter
+///
+/// @author Alan Yeh
 public class LongConverter implements Converter<Long> {
     @Override
     public boolean support(Class<?> source) {

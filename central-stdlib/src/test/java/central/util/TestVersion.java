@@ -28,16 +28,11 @@ import central.lang.CompareResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/**
- * Version Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// Version Test Cases
+///
+/// @author Alan Yeh
 public class TestVersion {
-    /**
-     * 测试解析版本
-     */
+    /// 测试解析版本
     @Test
     public void case1() {
         var version = new Version("1.2.3.45678");
@@ -48,9 +43,7 @@ public class TestVersion {
         Assertions.assertEquals(45678, version.getBuild());
     }
 
-    /**
-     * 测试版本号对比
-     */
+    /// 测试版本号对比
     @Test
     public void case2() {
         var first = new Version("1.0.0");

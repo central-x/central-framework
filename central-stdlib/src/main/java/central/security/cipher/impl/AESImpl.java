@@ -37,12 +37,9 @@ import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.util.Base64;
 
-/**
- * AES 加解密算法
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
+/// AES 加解密算法
+///
+/// @author Alan Yeh
 public class AESImpl implements CipherImpl {
     private static final String ALGORITHM = "AES";
 
@@ -64,23 +61,21 @@ public class AESImpl implements CipherImpl {
         return new KeyPair(key, key);
     }
 
-    /**
-     * 获取 AES Key
-     * 加密密钥与解密密钥是相同的
-     *
-     * @param keySpec 密钥，必须是 16 + N * 8 位
-     */
+    /// 获取 AES Key
+    ///
+    /// 加密密钥与解密密钥是相同的
+    ///
+    /// @param keySpec 密钥，必须是 16 + N * 8 位
     @Override
     public @Nonnull Key getEncryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return this.getKey(keySpec);
     }
 
-    /**
-     * 获取 AES Key
-     * 加密密钥与解密密钥是相同的
-     *
-     * @param keySpec 密钥，必须是 16 + N * 8 位
-     */
+    /// 获取 AES Key
+    ///
+    /// 加密密钥与解密密钥是相同的
+    ///
+    /// @param keySpec 密钥，必须是 16 + N * 8 位
     @Override
     public @Nonnull Key getDecryptKey(@Nonnull String keySpec) throws GeneralSecurityException {
         return this.getKey(keySpec);

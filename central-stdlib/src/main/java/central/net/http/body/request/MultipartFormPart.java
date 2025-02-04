@@ -24,12 +24,12 @@
 
 package central.net.http.body.request;
 
+import central.io.IOStreamx;
+import central.lang.Assertx;
+import central.lang.Stringx;
 import central.net.http.body.Body;
 import central.net.http.body.InputStreamBody;
-import central.lang.Assertx;
 import central.util.Listx;
-import central.io.IOStreamx;
-import central.lang.Stringx;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.springframework.http.ContentDisposition;
@@ -38,14 +38,13 @@ import org.springframework.http.MediaType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-/**
- * MultipartForm Part
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// MultipartForm Part
+///
+/// @author Alan Yeh
 public class MultipartFormPart implements Body {
 
     private static final byte[] COLONSPACE = {':', ' '};

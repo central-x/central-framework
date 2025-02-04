@@ -32,12 +32,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 
-/**
- * Project
- *
- * @author Alan Yeh
- * @since 2022/10/04
- */
+/// Project
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,18 +43,12 @@ public class Project extends ModifiableEntity {
     @Serial
     private static final long serialVersionUID = 5832489444595408547L;
 
-    /**
-     * 名称
-     */
+    /// 名称
     private String name;
 
-    /**
-     * 项目组主键
-     */
+    /// 项目组主键
     private String groupId;
 
-    /**
-     * 项目组
-     */
+    /// 项目组
     private Group group;
 }

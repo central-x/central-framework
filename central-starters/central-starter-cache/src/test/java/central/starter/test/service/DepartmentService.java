@@ -37,12 +37,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-/**
- * Department
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// Department
+///
+/// @author Alan Yeh
 @Component
 public class DepartmentService {
 

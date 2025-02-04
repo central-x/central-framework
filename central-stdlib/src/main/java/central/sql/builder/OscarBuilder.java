@@ -24,12 +24,9 @@
 
 package central.sql.builder;
 
-/**
- * 神舟方言
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// 神舟方言
+///
+/// @author Alan Yeh
 public class OscarBuilder extends StandardSqlBuilder {
 
 }

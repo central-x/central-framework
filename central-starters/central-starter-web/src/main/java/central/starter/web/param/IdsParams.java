@@ -32,12 +32,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * 主键参数
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 主键参数
+///
+/// @author Alan Yeh
 @Data
 public class IdsParams implements Serializable {
     @Serial

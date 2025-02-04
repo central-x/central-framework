@@ -29,22 +29,15 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * Sql Script
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// Sql Script
+///
+/// @author Alan Yeh
 @Data
 public class SqlScript {
-    /**
-     * Sql
-     */
+    /// Sql
     private String sql;
 
-    /**
-     * Sql 参数
-     */
+    /// Sql 参数
     private List<Object> args;
 
     public SqlScript(String sql, List<Object> args) {

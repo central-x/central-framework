@@ -28,18 +28,13 @@ import org.springframework.boot.logging.LogLevel;
 
 import java.lang.annotation.*;
 
-/**
- * 日志切面点
- *
- * @author Alan Yeh
- * @since 2023/02/05
- */
+/// 日志切面点
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LogPoint {
-    /**
-     * 打印日志时的日志等级
-     */
+    /// 打印日志时的日志等级
     LogLevel level() default LogLevel.INFO;
 }

@@ -31,25 +31,19 @@ import jakarta.annotation.Nonnull;
 import lombok.Data;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 模板查询
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 模板查询
+///
+/// @author Alan Yeh
 @Data
 public abstract class KeywordQuery<E extends Entity> implements Query<E> {
     @Serial
     private static final long serialVersionUID = -1863820286887438610L;
 
-    /**
-     * 通过模糊查询
-     * 使用空格分隔多个关键字
-     */
+    /// 通过模糊查询
+    /// 使用空格分隔多个关键字
     private String keyword;
 
     public @Nonnull List<String> getKeywords() {

@@ -31,12 +31,9 @@ import central.starter.graphql.stub.test.data.Group;
 import central.starter.graphql.stub.test.input.GroupInput;
 import org.springframework.stereotype.Repository;
 
-/**
- * Group Repository
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// Group Repository
+///
+/// @author Alan Yeh
 @Repository
 @GraphQLStub(client = "httpClient")
 @BodyPath("groups")

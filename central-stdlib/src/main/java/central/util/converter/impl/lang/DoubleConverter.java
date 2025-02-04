@@ -27,12 +27,9 @@ package central.util.converter.impl.lang;
 import central.util.converter.ConvertException;
 import central.util.converter.Converter;
 
-/**
- * Double Converter
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Double Converter
+///
+/// @author Alan Yeh
 public class DoubleConverter implements Converter<Double> {
     @Override
     public boolean support(Class<?> source) {

@@ -28,13 +28,11 @@ import central.sql.proxy.Mapper;
 import central.starter.graphql.stub.database.persistence.entity.GroupEntity;
 import org.springframework.stereotype.Repository;
 
-/**
- * Group
- * 项目组
- *
- * @author Alan Yeh
- * @since 2022/10/04
- */
+/// Group
+///
+/// 项目组
+///
+/// @author Alan Yeh
 @Repository
 public interface GroupMapper extends Mapper<GroupEntity> {
 }

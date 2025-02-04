@@ -31,12 +31,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-/**
- * Timestamp 解析
- *
- * @author Alan Yeh
- * @since 2022/08/10
- */
+/// Timestamp 解析
+///
+/// @author Alan Yeh
 public class TimestampTypeResolver implements SqlTypeResolver {
     @Override
     public Object resolve(SqlDialect dialect, ResultSet cursor, ResultSetMetaData meta, int index) throws SQLException {

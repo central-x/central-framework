@@ -24,57 +24,33 @@
 
 package central.web;
 
-/**
- * X-Forwarded-*
- * 这些请求头用于在微服务端流转
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// X-Forwarded-*
+///
+/// 这些请求头用于在微服务端流转
+///
+/// @author Alan Yeh
 public interface XForwardedHeaders {
-    /**
-     * 被代理的主机信息
-     */
+    /// 被代理的主机信息
     String HOST = "X-Forwarded-Host";
-    /**
-     * 被代理的端口信息
-     */
+    /// 被代理的端口信息
     String PORT = "X-Forwarded-Port";
-    /**
-     * 被代理的协议信息
-     */
+    /// 被代理的协议信息
     String SCHEMA = "X-Forwarded-Proto";
-    /**
-     * 代理客户端信息
-     */
+    /// 代理客户端信息
     String FOR = "X-Forwarded-For";
-    /**
-     * 租户标识
-     */
+    /// 租户标识
     String TENANT = "X-Forwarded-Tenant";
-    /**
-     * 租户路径
-     */
+    /// 租户路径
     String PATH = "X-Forwarded-Prefix";
-    /**
-     * 凭证信息
-     */
+    /// 凭证信息
     String TOKEN = "X-Forwarded-Token";
-    /**
-     * 原始请求信息
-     */
+    /// 原始请求信息
     String ORIGIN_URI = "X-Forwarded-OriginUri";
-    /**
-     * 原始请求方法
-     */
+    /// 原始请求方法
     String METHOD = "X-Forwarded-OriginMethod";
-    /**
-     * 请求版本信息
-     * 用于控制后端微服务的灰度版本信息，让请求在指定版本的微服务中流转
-     */
+    /// 请求版本信息
+    /// 用于控制后端微服务的灰度版本信息，让请求在指定版本的微服务中流转
     String VERSION = "X-Forwarded-Version";
-    /**
-     * 追踪信息
-     */
+    /// 追踪信息
     String TRACE = "X-Forwarded-Trace";
 }

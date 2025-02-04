@@ -27,16 +27,12 @@ package central.starter.graphql;
 import central.starter.orm.EnableOrm;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * 应用配置
- *
- * @author Alan Yeh
- * @since 2022/09/28
- */
+/// 应用配置
+///
+/// @author Alan Yeh
 @EnableOrm
 @EnableGraphQL
 @Configuration
 public class ApplicationConfiguration {
-
 
 }

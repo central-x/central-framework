@@ -60,12 +60,9 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
-/**
- * Http 探针
- *
- * @author Alan Yeh
- * @since 2023/12/29
- */
+/// Http 探针
+///
+/// @author Alan Yeh
 @Slf4j
 @ExtensionMethod(Logx.class)
 public class HttpEndpoint implements Endpoint, BeanNameAware, InitializingBean {
@@ -85,11 +82,8 @@ public class HttpEndpoint implements Endpoint, BeanNameAware, InitializingBean {
     @Label("访问地址")
     private String url;
 
-    /**
-     * 0 -> name, value
-     * <p>
-     * 1 -> name, value
-     */
+    /// - 0 -> name, value
+    /// - 1 -> name, value
     @Setter
     @Label("请求头")
     private Map<String, Map<String, String>> headers;
@@ -105,14 +99,10 @@ public class HttpEndpoint implements Endpoint, BeanNameAware, InitializingBean {
 
     private HttpClient client;
 
-    /**
-     * 期望响应状态码
-     */
+    /// 期望响应状态码
     private List<Integer> expectedStatus;
 
-    /**
-     * 期望内容
-     */
+    /// 期望内容
     private String expectedContent;
 
     @Override

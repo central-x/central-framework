@@ -25,7 +25,10 @@
 package central.sql.builder;
 
 import central.lang.Assertx;
-import central.sql.*;
+import central.lang.Stringx;
+import central.sql.SqlExecutor;
+import central.sql.SqlScript;
+import central.sql.SqlType;
 import central.sql.meta.entity.EntityMeta;
 import central.sql.meta.entity.ForeignMeta;
 import central.sql.meta.entity.ForeignTableMeta;
@@ -35,7 +38,6 @@ import central.sql.query.Orders;
 import central.util.Collectionx;
 import central.util.Listx;
 import central.util.Setx;
-import central.lang.Stringx;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
@@ -45,13 +47,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Oracle 方言
- * 主要是很多 SQL 不支持 AS 语法，分页方式不一样
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// Oracle 方言
+///
+/// 主要是很多 SQL 不支持 AS 语法，分页方式不一样
+///
+/// @author Alan Yeh
 public class OracleBuilder extends StandardSqlBuilder {
 
     @Override
@@ -63,9 +63,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         }
     }
 
-    /**
-     * 和 StandardSqlBuilder，主要去掉了 AS
-     */
+    /// 和 StandardSqlBuilder，主要去掉了 AS
     @Override
     public SqlScript forCountBy(SqlExecutor executor, EntityMeta meta, Conditions<?> conditions) throws SQLSyntaxErrorException {
         conditions = Conditions.of(conditions);
@@ -109,9 +107,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         return new SqlScript(sql.toString(), args);
     }
 
-    /**
-     * 和 StandardSqlBuilder，主要去掉了 AS
-     */
+    /// 和 StandardSqlBuilder，主要去掉了 AS
     @Override
     public SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Columns<?> columns, Conditions<?> conditions, Orders<?> orders) throws SQLSyntaxErrorException {
         // SELECT DISTINCT a.* FROM ${TABLE} a
@@ -182,9 +178,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         return new SqlScript(sql.toString(), args);
     }
 
-    /**
-     * 和 StandardSqlBuilder，主要去掉了 AS
-     */
+    /// 和 StandardSqlBuilder，主要去掉了 AS
     @Override
     public SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions<?> conditions) throws SQLSyntaxErrorException {
         conditions = Conditions.of(conditions);
@@ -213,9 +207,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         return new SqlScript(sql.toString(), args);
     }
 
-    /**
-     * 和 StandardSqlBuilder，主要去掉了 AS
-     */
+    /// 和 StandardSqlBuilder，主要去掉了 AS
     @Override
     @SneakyThrows({IllegalAccessException.class, InvocationTargetException.class})
     protected SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions, boolean includeNull) throws SQLSyntaxErrorException {
@@ -290,9 +282,7 @@ public class OracleBuilder extends StandardSqlBuilder {
         return new SqlScript(sql.toString(), args);
     }
 
-    /**
-     * ORACLE 的分页
-     */
+    /// ORACLE 的分页
     @Override
     protected StringBuilder applyPage(StringBuilder sql, Long offset, Long pageSize) {
         // Oracle 需要包装一层，根据 rownum 分页
@@ -302,9 +292,7 @@ public class OracleBuilder extends StandardSqlBuilder {
                 .append(" WHERE pager_rn >= ").append(offset + 1);
     }
 
-    /**
-     * 和 StandardSqlBuilder，主要去掉了 AS
-     */
+    /// 和 StandardSqlBuilder，主要去掉了 AS
     @Override
     protected void applyJoin(SqlExecutor executor, EntityMeta main, ForeignMeta foreign, StringBuilder sql) {
         var target = foreign.getTarget();
@@ -317,9 +305,7 @@ public class OracleBuilder extends StandardSqlBuilder {
                 this.processColumn(foreign.getReferencedProperty().getColumnName(executor.getSource().getConversion()))));
     }
 
-    /**
-     * 和 StandardSqlBuilder，主要去掉了 AS
-     */
+    /// 和 StandardSqlBuilder，主要去掉了 AS
     @Override
     protected void applyJoin(SqlExecutor executor, EntityMeta main, ForeignTableMeta foreign, StringBuilder sql) {
         var rel = foreign.getEntity();

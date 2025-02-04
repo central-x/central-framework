@@ -52,12 +52,9 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-/**
- * SpringContract Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/19
- */
+/// SpringContract Test Cases
+///
+/// @author Alan Yeh
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = TestHttpApplication.class)
 public class TestSpringContract {
 
@@ -83,9 +80,7 @@ public class TestSpringContract {
         Filex.delete(Path.of("cache").toFile());
     }
 
-    /**
-     * Test GET
-     */
+    /// Test GET
     @Test
     public void case1() {
         var accountId = Guidx.nextID();
@@ -96,9 +91,7 @@ public class TestSpringContract {
         assertNotNull(account.getDept());
     }
 
-    /**
-     * Test POST
-     */
+    /// Test POST
     @Test
     public void case2() {
         var params = new AccountParams();
@@ -112,9 +105,7 @@ public class TestSpringContract {
         assertEquals("张三", account.getName());
     }
 
-    /**
-     * Test PUT
-     */
+    /// Test PUT
     @Test
     public void case3() {
         var params = new AccountParams();
@@ -129,18 +120,14 @@ public class TestSpringContract {
         assertEquals(params.getName(), account.getName());
     }
 
-    /**
-     * Test DELETE
-     */
+    /// Test DELETE
     @Test
     public void case4() {
         var count = this.server.delete(List.of(Guidx.nextID(), Guidx.nextID()));
         assertEquals(2L, count);
     }
 
-    /**
-     * Test Processor
-     */
+    /// Test Processor
     @Test
     public void case5() {
         var info = this.server.info();
@@ -150,9 +137,7 @@ public class TestSpringContract {
         assertEquals("443", headers.get("X-Forwarded-Port"));
     }
 
-    /**
-     * Test Upload
-     */
+    /// Test Upload
     @Test
     public void case6() throws Exception {
         var file = new File("test.txt");
@@ -170,9 +155,7 @@ public class TestSpringContract {
         }
     }
 
-    /**
-     * Test Download
-     */
+    /// Test Download
     @Test
     public void case7() throws Exception {
         var file = this.server.download(Guidx.nextID());
@@ -182,9 +165,7 @@ public class TestSpringContract {
         assertEquals("This is the file content", content);
     }
 
-    /**
-     * Test default method
-     */
+    /// Test default method
     @Test
     public void case8() throws Exception {
         var result = this.server.testDefault();
@@ -196,7 +177,7 @@ public class TestSpringContract {
         var accountId = Guidx.nextID();
 
         var request = HttpRequest.get(HttpUrl.of("/api/accounts").setQuery("id", accountId));
-        var account = this.server.findByRequest( request);
+        var account = this.server.findByRequest(request);
 
         assertNotNull(account);
         assertEquals(accountId, account.getId());

@@ -24,18 +24,13 @@
 
 package central.validation;
 
-/**
- * 可验证的
- *
- * @author Alan Yeh
- * @since 2022/08/02
- */
+/// 可验证的
+///
+/// @author Alan Yeh
 public interface Validatable {
-    /**
-     * 验证
-     *
-     * @param groups 参数组
-     */
+    /// 验证
+    ///
+    /// @param groups 参数组
     default void validate(Class<?>... groups) {
         Validatex.Default().validate(this, groups);
     }

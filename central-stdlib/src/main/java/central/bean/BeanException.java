@@ -28,12 +28,9 @@ import central.lang.PublicApi;
 
 import java.io.Serial;
 
-/**
- * 实体异常
- *
- * @author Alan Yeh
- * @since 2022/08/08
- */
+/// 实体异常
+///
+/// @author Alan Yeh
 @PublicApi
 public class BeanException extends RuntimeException {
     @Serial

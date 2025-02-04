@@ -33,38 +33,31 @@ import jakarta.annotation.Nullable;
 import java.sql.SQLException;
 import java.util.function.Predicate;
 
-/**
- * 元数据管理
- *
- * @author Alan Yeh
- * @since 2022/09/13
- */
+/// 元数据管理
+///
+/// @author Alan Yeh
 public interface SqlMetaManager {
-    /**
-     * 构建数据库元数据
-     * 由于数据库里面有许多表，为了减少扫描表的时间，可以通过表匹配器确认哪些表需要扫描
-     *
-     * @param executor Sql 执行器
-     * @param matcher  表匹配器，参数为表名。如果表匹配器为空，或返回 true 时解析表
-     * @return 数据库元数据
-     */
-    @Nonnull DatabaseMeta getMeta(@Nonnull SqlExecutor executor, @Nullable Predicate<String> matcher) throws SQLException;
+    /// 构建数据库元数据
+    /// 由于数据库里面有许多表，为了减少扫描表的时间，可以通过表匹配器确认哪些表需要扫描
+    ///
+    /// @param executor Sql 执行器
+    /// @param matcher  表匹配器，参数为表名。如果表匹配器为空，或返回 true 时解析表
+    /// @return 数据库元数据
+    @Nonnull
+    DatabaseMeta getMeta(@Nonnull SqlExecutor executor, @Nullable Predicate<String> matcher) throws SQLException;
 
-    /**
-     * 构建数据库元数据
-     *
-     * @param executor Sql 执行器
-     * @return 数据库元数据
-     */
+    /// 构建数据库元数据
+    ///
+    /// @param executor Sql 执行器
+    /// @return 数据库元数据
     default @Nonnull DatabaseMeta getMeta(@Nonnull SqlExecutor executor) throws SQLException {
         return this.getMeta(executor, null);
     }
 
-    /**
-     * 构建实体元数据
-     *
-     * @param entity 实体类型
-     * @return 实体元数据
-     */
-    @Nonnull EntityMeta getMeta(@Nonnull Class<? extends Entity> entity);
+    /// 构建实体元数据
+    ///
+    /// @param entity 实体类型
+    /// @return 实体元数据
+    @Nonnull
+    EntityMeta getMeta(@Nonnull Class<? extends Entity> entity);
 }

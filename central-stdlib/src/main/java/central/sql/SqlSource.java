@@ -30,44 +30,29 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * 数据源
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// 数据源
+///
+/// @author Alan Yeh
 public interface SqlSource {
-    /**
-     * 数据源方言
-     */
+    /// 数据源方言
     SqlDialect getDialect();
 
-    /**
-     * 数据库命名规则
-     */
+    /// 数据库命名规则
     SqlConversion getConversion();
 
-    /**
-     * 数据源迁移
-     */
+    /// 数据源迁移
     DataSourceMigrator getMigrator();
 
-    /**
-     * 获取数据源
-     */
+    /// 获取数据源
     DataSource getDataSource();
 
-    /**
-     * 获取数据库连接
-     * 获取出来的数据库连接不允许关闭，应在使用完后通过 #returnConnection 归还
-     */
+    /// 获取数据库连接
+    /// 获取出来的数据库连接不允许关闭，应在使用完后通过 #returnConnection 归还
     Connection getConnection() throws SQLException;
 
-    /**
-     * 归还数据库连接
-     *
-     * @param connection 待归还数据库连接
-     */
+    /// 归还数据库连接
+    ///
+    /// @param connection 待归还数据库连接
     void returnConnection(Connection connection) throws SQLException;
 
 }

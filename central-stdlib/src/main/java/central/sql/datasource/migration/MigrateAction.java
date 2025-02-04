@@ -29,18 +29,13 @@ import jakarta.annotation.Nonnull;
 
 import java.sql.SQLException;
 
-/**
- * 迁移作动
- *
- * @author Alan Yeh
- * @since 2022/08/30
- */
+/// 迁移作动
+///
+/// @author Alan Yeh
 public interface MigrateAction {
-    /**
-     * 执行迁移脚本
-     *
-     * @param executor 待迁移的 Sql 执行器
-     * @throws SQLException SQL 执行异常
-     */
+    /// 执行迁移脚本
+    ///
+    /// @param executor 待迁移的 Sql 执行器
+    /// @throws SQLException SQL 执行异常
     void migrate(@Nonnull SqlExecutor executor) throws SQLException;
 }

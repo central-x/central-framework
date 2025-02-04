@@ -28,12 +28,9 @@ import central.bean.LifeCycle;
 import central.lang.reflect.InstanceRef;
 import central.pluglet.LifeCycleProcessor;
 
-/**
- * 处理实现了 LifeCycle 接口的实体
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// 处理实现了 LifeCycle 接口的实体
+///
+/// @author Alan Yeh
 public class NormalLifeCycleProcessor implements LifeCycleProcessor {
 
     @Override

@@ -42,13 +42,10 @@ import central.sql.query.Orders;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
-/**
- * FindPageBy Handler
- *
- * @author Alan Yeh
- * @see Mapper#findPageBy
- * @since 2022/08/11
- */
+/// FindPageBy Handler
+///
+/// @author Alan Yeh
+/// @see Mapper#findPageBy
 public class FindPageByHandler implements MapperHandler {
     @Override
     public Object handle(MapperProxy<?> proxy, SqlExecutor executor, SqlBuilder builder, EntityMeta meta, Method method, Object[] args) throws SQLException {

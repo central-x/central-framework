@@ -24,33 +24,24 @@
 
 package central.sql;
 
-/**
- * Sql 拦载器
- *
- * @author Alan Yeh
- * @since 2022/08/05
- */
+/// Sql 拦载器
+///
+/// @author Alan Yeh
 public interface SqlInterceptor {
 
-    /**
-     * Sql 执行之前
-     *
-     * @param context Sql 执行上下文
-     */
+    /// Sql 执行之前
+    ///
+    /// @param context Sql 执行上下文
     void before(SqlContext context);
 
-    /**
-     * Sql 执行之后
-     *
-     * @param context Sql 执行上下文
-     */
+    /// Sql 执行之后
+    ///
+    /// @param context Sql 执行上下文
     void after(SqlContext context);
 
-    /**
-     * Sql 执行异常
-     *
-     * @param context   Sql 执行上下文
-     * @param throwable 异常信息
-     */
+    /// Sql 执行异常
+    ///
+    /// @param context   Sql 执行上下文
+    /// @param throwable 异常信息
     void error(SqlContext context, Throwable throwable);
 }

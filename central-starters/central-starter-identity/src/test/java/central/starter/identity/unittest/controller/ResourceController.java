@@ -34,13 +34,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Resource Controller
- * 资源控制器
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// Resource Controller
+///
+/// 资源控制器
+///
+/// @author Alan Yeh
 @RestController
 @RequiresPermissions(ResourceController.Permissions.VIEW)
 @RequestMapping("/api/resources")

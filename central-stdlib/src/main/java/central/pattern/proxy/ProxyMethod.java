@@ -26,30 +26,23 @@ package central.pattern.proxy;
 
 import java.lang.reflect.Method;
 
-/**
- * 代理方法
- *
- * @author Alan Yeh
- * @since 2022/07/20
- */
+/// 代理方法
+///
+/// @author Alan Yeh
 public interface ProxyMethod {
-    /**
-     * 判断是否支持处理
-     *
-     * @param method 方法
-     */
+    /// 判断是否支持处理
+    ///
+    /// @param method 方法
     default boolean support(Method method) {
         return true;
     }
 
-    /**
-     * 调用方法
-     *
-     * @param proxy  被代理的对象
-     * @param method 被调用的方法
-     * @param args   调用方法时的参数
-     * @return 调用结果
-     * @throws Throwable 异常
-     */
+    /// 调用方法
+    ///
+    /// @param proxy  被代理的对象
+    /// @param method 被调用的方法
+    /// @param args   调用方法时的参数
+    /// @return 调用结果
+    /// @throws Throwable 异常
     Object invoke(Object proxy, Method method, Object[] args) throws Throwable;
 }

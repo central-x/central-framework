@@ -29,55 +29,42 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 
-/**
- * Attributed HttpServletRequest
- * <p>
- * 支持属性操作
- *
- * @author Alan Yeh
- * @since 2023/03/08
- */
+/// Attributed HttpServletRequest
+///
+/// 支持属性操作
+///
+/// @author Alan Yeh
 public interface AttributedHttpServletRequest extends HttpServletRequest {
 
-    /**
-     * 获取属性集合
-     */
+    /// 获取属性集合
     HttpAttributes getAttributes();
 
-    /**
-     * 获取属性
-     *
-     * @param attribute 属性
-     * @param <T>       属性类型
-     * @return 属性值
-     */
+    /// 获取属性
+    ///
+    /// @param attribute 属性
+    /// @param <T>       属性类型
+    /// @return 属性值
     <T> @Nullable T getAttribute(@Nonnull Attribute<T> attribute);
 
-    /**
-     * 获取属性
-     *
-     * @param attribute 属性
-     * @param <T>       属性类型
-     * @return 属性值
-     */
+    /// 获取属性
+    ///
+    /// @param attribute 属性
+    /// @param <T>       属性类型
+    /// @return 属性值
     <T> @Nonnull T getRequiredAttribute(@Nonnull Attribute<T> attribute);
 
-    /**
-     * 获取属性
-     *
-     * @param attribute    属性
-     * @param defaultValue 默认值
-     * @param <T>          属性类型
-     * @return 属性值
-     */
+    /// 获取属性
+    ///
+    /// @param attribute    属性
+    /// @param defaultValue 默认值
+    /// @param <T>          属性类型
+    /// @return 属性值
     <T> @Nonnull T getAttributeOrDefault(@Nonnull Attribute<T> attribute, @Nonnull T defaultValue);
 
-    /**
-     * 保存属性
-     *
-     * @param attribute 属性
-     * @param value     属性值
-     * @param <T>       属性类型
-     */
+    /// 保存属性
+    ///
+    /// @param attribute 属性
+    /// @param value     属性值
+    /// @param <T>       属性类型
     <T> void setAttribute(@Nonnull Attribute<T> attribute, @Nullable T value);
 }

@@ -26,12 +26,9 @@ package central.starter.graphql.test;
 
 import lombok.Data;
 
-/**
- * GraphQL 查询结果
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// GraphQL 查询结果
+///
+/// @author Alan Yeh
 @Data
 public class GraphqlResult<T> {
     private T result;

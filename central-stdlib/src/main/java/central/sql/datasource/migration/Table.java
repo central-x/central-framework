@@ -37,71 +37,48 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 表结构
- *
- * @author Alan Yeh
- * @since 2022/08/29
- */
+/// 表结构
+///
+/// @author Alan Yeh
 public interface Table {
-    /**
-     * 表名
-     */
+    /// 表名
     String getName();
 
-    /**
-     * 备注
-     */
+    /// 备注
     String getRemarks();
 
-    /**
-     * 字段信息
-     */
+    /// 字段信息
     List<Column> getColumns();
 
-    /**
-     * 获取字段信息
-     *
-     * @param name 字段名
-     */
+    /// 获取字段信息
+    ///
+    /// @param name 字段名
     Column getColumn(String name);
 
-    /**
-     * 添加字段
-     *
-     * @param column 字段信息
-     */
+    /// 添加字段
+    ///
+    /// @param column 字段信息
     Table addColumn(Column column);
 
-    /**
-     * 获取索引列表
-     */
+    /// 获取索引列表
     List<Index> getIndices();
 
-    /**
-     * 获取索引信息
-     *
-     * @param name 索引名
-     */
+    /// 获取索引信息
+    ///
+    /// @param name 索引名
     Index getIndex(String name);
 
-    /**
-     * 添加索引
-     *
-     * @param index 索引信息
-     */
+    /// 添加索引
+    ///
+    /// @param index 索引信息
     Table addIndex(Index index);
 
-    /**
-     * 删除表
-     */
+    /// 删除表
     void drop();
 
-    /**
-     * 重命名表
-     *
-     * @param newName 新表名
-     */
+    /// 重命名表
+    ///
+    /// @param newName 新表名
     void rename(String newName);
 
     static Table of(String name, String remarks, List<Column> columns, List<Index> indices) {

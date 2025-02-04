@@ -33,12 +33,9 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
-/**
- * 分页查询
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 分页查询
+///
+/// @author Alan Yeh
 @Data
 @EqualsAndHashCode(callSuper = true)
 public abstract class PageQuery<E extends Entity> extends KeywordQuery<E> {
@@ -57,7 +54,7 @@ public abstract class PageQuery<E extends Entity> extends KeywordQuery<E> {
     @Label("分页大小")
     private Long pageSize;
 
-    public Long getPageSize(){
+    public Long getPageSize() {
         return Objectx.getOrDefault(this.pageSize, 20L);
     }
 }

@@ -25,8 +25,8 @@
 package central.starter.webmvc.render;
 
 import central.io.IOStreamx;
-import central.util.Range;
 import central.lang.Stringx;
+import central.util.Range;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,27 +36,20 @@ import org.springframework.http.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-/**
- * 断点下载
- *
- * @author Alan Yeh
- * @since 2022/07/16
- */
+/// 断点下载
+///
+/// @author Alan Yeh
 public class ResumableFileRender extends Render<ResumableFileRender> {
     public ResumableFileRender(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
         super(request, response);
     }
 
-    /**
-     * 待响应的文件
-     */
+    /// 待响应的文件
     @Getter
     private File file;
 
-    /**
-     * 指定文件名
-     * 如果不认置，则使用 file#getName
-     */
+    /// 指定文件名
+    /// 如果不认置，则使用 file#getName
     @Getter
     private String fileName;
 
@@ -65,10 +58,8 @@ public class ResumableFileRender extends Render<ResumableFileRender> {
         return this;
     }
 
-    /**
-     * 文件消息摘要
-     * 可以用于唯一确认文件
-     */
+    /// 文件消息摘要
+    /// 可以用于唯一确认文件
     @Getter
     private String digest;
 
@@ -97,9 +88,7 @@ public class ResumableFileRender extends Render<ResumableFileRender> {
         return MediaTypeFactory.getMediaType(this.fileName).orElse(MediaType.APPLICATION_OCTET_STREAM).toString();
     }
 
-    /**
-     * 用于下载时指定文件名
-     */
+    /// 用于下载时指定文件名
     @Getter
     private String contentDisposition;
 

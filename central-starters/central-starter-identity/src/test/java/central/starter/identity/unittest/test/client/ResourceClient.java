@@ -32,12 +32,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Resource Client
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// Resource Client
+///
+/// @author Alan Yeh
 public interface ResourceClient {
 
     @GetMapping(value = "/api/resources", consumes = MediaType.APPLICATION_JSON_VALUE)

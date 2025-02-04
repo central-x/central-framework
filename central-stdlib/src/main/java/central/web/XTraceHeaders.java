@@ -24,16 +24,12 @@
 
 package central.web;
 
-/**
- * X-Trace-*
- * 这些请求头用于在微服务跟踪请求
- *
- * @author Alan Yeh
- * @since 2024/11/23
- */
+/// X-Trace-*
+///
+/// 这些请求头用于在微服务跟踪请求
+///
+/// @author Alan Yeh
 public interface XTraceHeaders {
-    /**
-     * 应用标识
-     */
+    /// 应用标识
     String APPLICATION = "X-Trace-Application";
 }

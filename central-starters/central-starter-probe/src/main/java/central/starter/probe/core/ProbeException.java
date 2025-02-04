@@ -26,12 +26,9 @@ package central.starter.probe.core;
 
 import java.io.Serial;
 
-/**
- * 探测异常
- *
- * @author Alan Yeh
- * @since 2023/12/29
- */
+/// 探测异常
+///
+/// @author Alan Yeh
 public class ProbeException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 6090991949685132907L;

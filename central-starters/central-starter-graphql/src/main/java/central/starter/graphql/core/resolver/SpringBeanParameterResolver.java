@@ -24,8 +24,8 @@
 
 package central.starter.graphql.core.resolver;
 
-import central.lang.reflect.invoke.ParameterResolver;
 import central.lang.Stringx;
+import central.lang.reflect.invoke.ParameterResolver;
 import central.util.Context;
 import graphql.GraphQLException;
 import org.jetbrains.annotations.NotNull;
@@ -39,14 +39,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Objects;
 
-/**
- * 处理 Spring Bean 参数注入
- *
- * @author Alan Yeh
- * @see Autowired
- * @see Qualifier
- * @since 2022/09/09
- */
+/// 处理 Spring Bean 参数注入
+///
+/// @author Alan Yeh
+/// @see Autowired
+/// @see Qualifier
 public class SpringBeanParameterResolver implements ParameterResolver {
     @Override
     public boolean support(@NotNull Class<?> clazz, @NotNull Method method, @NotNull Parameter parameter) {

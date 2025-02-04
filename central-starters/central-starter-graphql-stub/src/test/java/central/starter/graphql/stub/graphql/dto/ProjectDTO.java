@@ -34,13 +34,11 @@ import org.dataloader.DataLoader;
 import java.io.Serial;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Project
- * 项目
- *
- * @author Alan Yeh
- * @since 2022/10/04
- */
+/// Project
+///
+/// 项目
+///
+/// @author Alan Yeh
 @Data
 @GraphQLType("Project")
 @EqualsAndHashCode(callSuper = true)

@@ -30,19 +30,14 @@ import lombok.Getter;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * 空
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// 空
+///
+/// @author Alan Yeh
 public class Null implements Serializable {
     @Serial
     private static final long serialVersionUID = -1861988079822461591L;
 
-    /**
-     * 请不要为此值赋值
-     */
+    /// 请不要为此值赋值
     @Getter
     private String value;
 

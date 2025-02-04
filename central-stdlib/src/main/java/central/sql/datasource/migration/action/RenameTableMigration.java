@@ -32,12 +32,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.sql.SQLException;
 
-/**
- * 重命名表
- *
- * @author Alan Yeh
- * @since 2022/08/30
- */
+/// 重命名表
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class RenameTableMigration implements MigrateAction {
 

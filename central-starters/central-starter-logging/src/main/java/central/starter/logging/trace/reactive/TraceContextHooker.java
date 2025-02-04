@@ -34,12 +34,9 @@ import reactor.util.context.Context;
 
 import java.util.function.Consumer;
 
-/**
- * 追踪上下文 Hooker
- *
- * @author Alan Yeh
- * @since 2022/10/25
- */
+/// 追踪上下文 Hooker
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 class TraceContextHooker<T> implements CoreSubscriber<T> {
     private final CoreSubscriber<T> delegate;

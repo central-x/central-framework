@@ -37,12 +37,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 内存缓存队列
- *
- * @author Alan Yeh
- * @since 2023/07/02
- */
+/// 内存缓存队列
+///
+/// @author Alan Yeh
 @RequiredArgsConstructor
 public class MemoryCacheQueue implements CacheQueue {
     private final String key;

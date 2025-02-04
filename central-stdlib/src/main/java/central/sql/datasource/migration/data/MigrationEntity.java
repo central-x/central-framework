@@ -33,12 +33,9 @@ import lombok.*;
 
 import java.io.Serial;
 
-/**
- * 数据库迁移信息
- * 
- * @author Alan Yeh
- * @since 2022/08/17
- */
+/// 数据库迁移信息
+///
+/// @author Alan Yeh
 @Data
 @Builder
 @NoArgsConstructor

@@ -34,12 +34,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 
-/**
- * Blob 解析
- *
- * @author Alan Yeh
- * @since 2022/08/10
- */
+/// Blob 解析
+///
+/// @author Alan Yeh
 public class BlobTypeResolver implements SqlTypeResolver {
     @Override
     public Object resolve(SqlDialect dialect, ResultSet cursor, ResultSetMetaData meta, int index) throws SQLException {

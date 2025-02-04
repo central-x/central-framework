@@ -36,12 +36,9 @@ import org.springframework.http.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * OKHttp Response
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// OKHttp Response
+///
+/// @author Alan Yeh
 public class OkHttpResponse extends HttpResponse {
     @Getter
     private final Response response;

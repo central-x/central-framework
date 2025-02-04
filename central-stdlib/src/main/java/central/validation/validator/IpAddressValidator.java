@@ -30,12 +30,9 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.net.InetAddress;
 
-/**
- * IP 地址格式校验
- *
- * @author Alan Yeh
- * @since 2022/11/13
- */
+/// IP 地址格式校验
+///
+/// @author Alan Yeh
 public class IpAddressValidator implements ConstraintValidator<IpAddress, String> {
 
     @Override

@@ -55,12 +55,9 @@ import java.security.SignatureException;
 import java.util.Arrays;
 import java.util.Base64;
 
-/**
- * 国密 SM2 签名算法
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// 国密 SM2 签名算法
+///
+/// @author Alan Yeh
 public class SM2Impl implements SignerImpl {
     private static final ECNamedCurveParameterSpec PARAMS = ECNamedCurveTable.getParameterSpec("sm2p256v1");
     private static final ECCurve CURVE = PARAMS.getCurve();

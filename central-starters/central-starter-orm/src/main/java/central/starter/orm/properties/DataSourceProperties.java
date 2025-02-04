@@ -25,9 +25,6 @@
 package central.starter.orm.properties;
 
 
-/**
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// @author Alan Yeh
 public class DataSourceProperties {
 }

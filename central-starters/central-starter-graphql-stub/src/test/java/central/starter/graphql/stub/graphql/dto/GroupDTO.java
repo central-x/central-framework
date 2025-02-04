@@ -38,13 +38,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.Serial;
 import java.util.List;
 
-/**
- * Group
- * 项目组
- *
- * @author Alan Yeh
- * @since 2022/10/04
- */
+/// Group
+///
+/// 项目组
+///
+/// @author Alan Yeh
 @Data
 @GraphQLType("Group")
 @EqualsAndHashCode(callSuper = true)

@@ -27,12 +27,9 @@ package central.starter.identity.unittest;
 import central.starter.identity.EnableIdentity;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * 应用配置
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// 应用配置
+///
+/// @author Alan Yeh
 @EnableIdentity
 @Configuration
 public class ApplicationConfiguration {

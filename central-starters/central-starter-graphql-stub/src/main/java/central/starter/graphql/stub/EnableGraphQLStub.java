@@ -29,20 +29,15 @@ import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
-/**
- * 启用 GraphQL 代理
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// 启用 GraphQL 代理
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Import({StarterConfiguration.class, ProviderStubRegistrar.class})
 public @interface EnableGraphQLStub {
 
-    /**
-     * 等扫描的包
-     */
+    /// 等扫描的包
     String[] packages() default {};
 }

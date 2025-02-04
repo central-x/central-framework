@@ -31,28 +31,19 @@ import lombok.Data;
 
 import java.util.Map;
 
-/**
- * 探针鉴权设置
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
+/// 探针鉴权设置
+///
+/// @author Alan Yeh
 @Data
 public class AuthorizerProperties {
-    /**
-     * 是否启用探针鉴权
-     */
+    /// 是否启用探针鉴权
     @Label("是否启用鉴权")
     private boolean enabled = true;
-    /**
-     * 鉴权类型
-     */
+    /// 鉴权类型
     @NotNull
     @Label("鉴权类型")
     private AuthorizerType type = AuthorizerType.NONE;
-    /**
-     * 初始化参数
-     */
+    /// 初始化参数
     @Label("初始化参数")
     private Map<String, Object> params;
 }

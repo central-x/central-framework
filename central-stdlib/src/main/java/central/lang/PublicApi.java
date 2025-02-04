@@ -24,13 +24,10 @@
 
 package central.lang;
 
-/**
- * 外部标记
- * <p>
- * 外部标记的类或接口等表示已稳定，基本不会变动，可放心使用
- *
- * @author Alan Yeh
- * @since 2022/09/08
- */
+/// 外部标记
+///
+/// 外部标记的类或接口等表示已稳定，基本不会变动，可放心使用
+///
+/// @author Alan Yeh
 public @interface PublicApi {
 }

@@ -26,51 +26,36 @@ package central.starter.cache.core.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * 更新缓存
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// 更新缓存
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CachePut {
-    /**
-     * 缓存键
-     * <p>
-     * 支持模板语法
-     * <p>
-     * 可以使用的上下文对象包括:
-     *
-     * <ul>
-     *     <li>args: Object[] 参数列表</li>
-     *     <li>method: Method 方法</li>
-     *     <li>target: Object 待执行方法的对象</li>
-     * </ul>
-     */
+    /// 缓存键
+    ///
+    /// 支持模板语法
+    ///
+    /// 可以使用的上下文对象包括:
+    ///
+    /// - args: Object[] 参数列表
+    /// - method: Method 方法
+    /// - target: Object 待执行方法的对象
     String key() default "";
 
-    /**
-     * 缓存键
-     */
+    /// 缓存键
     CacheKey[] keys() default {};
 
-    /**
-     * 缓存有效期（毫秒）
-     */
+    /// 缓存有效期（毫秒）
     long expires() default 30 * 60 * 1000L;
 
-    /**
-     * 缓存依赖
-     * <p>
-     * 当保存此缓存时，会依赖指定的缓存键。如果指定的缓存键被手动清除时，本缓存也会跟随清除。
-     */
+    /// 缓存依赖
+    ///
+    /// 当保存此缓存时，会依赖指定的缓存键。如果指定的缓存键被手动清除时，本缓存也会跟随清除。
     String[] dependencies() default {};
 
-    /**
-     * 当满足条件时才保存缓存。支持通过模板语法，返回 true 时保存缓存
-     */
+    /// 当满足条件时才保存缓存。支持通过模板语法，返回 true 时保存缓存
     String condition() default "";
 
     @Documented

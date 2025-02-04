@@ -35,12 +35,9 @@ import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
-/**
- * 配置
- *
- * @author Alan Yeh
- * @since 2022/10/09
- */
+/// 配置
+///
+/// @author Alan Yeh
 @Configuration
 @ComponentScan("central.starter.web.reactive.exception")
 public class StarterConfiguration implements WebFluxConfigurer {

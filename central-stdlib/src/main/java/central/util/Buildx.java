@@ -29,12 +29,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/**
- * 通用 Builder
- *
- * @author Alan Yeh
- * @since 2022/08/23
- */
+/// 通用 Builder
+///
+/// @author Alan Yeh
 public class Buildx<T> {
     private final Supplier<T> instance;
     private final List<Consumer<T>> modifiers = new ArrayList<>();

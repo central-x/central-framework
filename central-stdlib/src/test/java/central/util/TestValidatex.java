@@ -34,12 +34,9 @@ import lombok.Data;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/**
- * Validatorx Test Cases
- *
- * @author Alan Yeh
- * @since 2022/08/04
- */
+/// Validatorx Test Cases
+///
+/// @author Alan Yeh
 public class TestValidatex {
 
     @Data

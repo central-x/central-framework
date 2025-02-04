@@ -26,16 +26,13 @@ package central.util;
 
 import org.junit.jupiter.api.Test;
 
-/**
- * Capacity Test Cases
- *
- * @author Alan Yeh
- * @since 2022/11/01
- */
+/// Capacity Test Cases
+///
+/// @author Alan Yeh
 public class TestCapacity {
 
     @Test
-    public void case1(){
+    public void case1() {
         var capacity = Capacity.ofB(1521L);
         var string = capacity.toString();
         System.out.println(string);

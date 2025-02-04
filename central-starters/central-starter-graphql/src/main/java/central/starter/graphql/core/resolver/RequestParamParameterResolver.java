@@ -31,7 +31,10 @@ import central.util.*;
 import central.validation.Validatable;
 import central.validation.Validatex;
 import graphql.GraphQLException;
-import graphql.schema.*;
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLInputObjectType;
+import graphql.schema.GraphQLList;
 import jakarta.validation.groups.Default;
 import org.dataloader.BatchLoaderEnvironment;
 import org.jetbrains.annotations.NotNull;
@@ -46,13 +49,10 @@ import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * 处理入参
- *
- * @author Alan Yeh
- * @see RequestParam
- * @since 2022/09/09
- */
+/// 处理入参
+///
+/// @author Alan Yeh
+/// @see RequestParam
 public class RequestParamParameterResolver extends SpringAnnotatedParameterResolver {
     public RequestParamParameterResolver() {
         super(RequestParam.class);

@@ -24,75 +24,58 @@
 
 package central.bean;
 
-import central.util.Collectionx;
 import central.lang.Stringx;
+import central.util.Collectionx;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Treeable Entity
- * <p>
- * 可构建成树状的数据
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// Treeable Entity
+///
+/// 可构建成树状的数据
+///
+/// @author Alan Yeh
 public interface Treeable<T extends Treeable<T>> extends Identifiable {
-    /**
-     * 节点唯一标识
-     */
+    /// 节点唯一标识
     @Override
     String getId();
 
-    /**
-     * 父节点唯一标识
-     * <p>
-     * 如果父节点为空，则认为是根节点
-     */
+    /// 父节点唯一标识
+    ///
+    /// 如果父节点为空，则认为是根节点
     @Nullable
     String getParentId();
 
-    /**
-     * 设置父节点唯一标识
-     *
-     * @param parentId 父节点唯一标识
-     */
+    /// 设置父节点唯一标识
+    ///
+    /// @param parentId 父节点唯一标识
     void setParentId(@Nullable String parentId);
 
-    /**
-     * 获取子节点
-     */
+    /// 获取子节点
     List<T> getChildren();
 
-    /**
-     * 设置子节点
-     *
-     * @param children 子节点列表
-     */
+    /// 设置子节点
+    ///
+    /// @param children 子节点列表
     void setChildren(@Nullable List<T> children);
 
 
-    /**
-     * 将数据构建成树
-     *
-     * @param data 数据
-     * @param <T>  数据类型
-     * @return 已构造成树的数据
-     */
+    /// 将数据构建成树
+    ///
+    /// @param data 数据
+    /// @param <T>  数据类型
+    /// @return 已构造成树的数据
     static <T extends Treeable<T>> List<T> build(@Nullable Collection<T> data) {
         return Treeable.build(data, null);
     }
 
-    /**
-     * 将数据构建成树
-     *
-     * @param data       数据
-     * @param comparator 每个层级的排序器
-     * @param <T>        数据类型
-     * @return 已构造成树的数据
-     */
+    /// 将数据构建成树
+    ///
+    /// @param data       数据
+    /// @param comparator 每个层级的排序器
+    /// @param <T>        数据类型
+    /// @return 已构造成树的数据
     static <T extends Treeable<T>> List<T> build(@Nullable Collection<T> data, @Nullable Comparator<T> comparator) {
         if (Collectionx.isNullOrEmpty(data)) {
             return Collections.emptyList();

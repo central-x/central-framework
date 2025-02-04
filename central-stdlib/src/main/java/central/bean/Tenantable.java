@@ -24,24 +24,17 @@
 
 package central.bean;
 
-/**
- * Tenantable Entity
- * <p>
- * 可划分租户的数据
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// Tenantable Entity
+///
+/// 可划分租户的数据
+///
+/// @author Alan Yeh
 public interface Tenantable {
-    /**
-     * 获取租户标识
-     */
+    /// 获取租户标识
     String getTenantCode();
 
-    /**
-     * 设置租户标识
-     *
-     * @param tenantCode 租户标识
-     */
+    /// 设置租户标识
+    ///
+    /// @param tenantCode 租户标识
     void setTenantCode(String tenantCode);
 }

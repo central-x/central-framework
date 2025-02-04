@@ -24,12 +24,9 @@
 
 package central.sql.builder;
 
-/**
- * 人大金仓方言
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// 人大金仓方言
+///
+/// @author Alan Yeh
 public class KingbaseBuilder extends StandardSqlBuilder {
 
 }

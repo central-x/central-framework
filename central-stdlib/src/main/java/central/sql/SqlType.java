@@ -25,8 +25,8 @@
 package central.sql;
 
 import central.bean.OptionalEnum;
-import central.sql.resolver.*;
 import central.lang.Arrayx;
+import central.sql.resolver.*;
 import central.util.Listx;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
@@ -38,12 +38,9 @@ import java.sql.Types;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 数据库字段类型
- *
- * @author Alan Yeh
- * @since 2022/08/09
- */
+/// 数据库字段类型
+///
+/// @author Alan Yeh
 @Getter
 @AllArgsConstructor
 public enum SqlType implements OptionalEnum<String> {
@@ -58,25 +55,15 @@ public enum SqlType implements OptionalEnum<String> {
 
     UNKNOWN("未知", "UNKNOWN", Object.class, null, Collections.emptyList());
 
-    /**
-     * 类型名称
-     */
+    /// 类型名称
     private final String name;
-    /**
-     * 类型
-     */
+    /// 类型
     private final String value;
-    /**
-     * 对应的 Java 数据类型
-     */
+    /// 对应的 Java 数据类型
     private final Class<?> type;
-    /**
-     * 对应的数据库类型解析器
-     */
+    /// 对应的数据库类型解析器
     private final SqlTypeResolver resolver;
-    /**
-     * 对应的数据库类型
-     */
+    /// 对应的数据库类型
     private final List<Integer> types;
 
     public static @Nullable SqlType resolve(String value) {

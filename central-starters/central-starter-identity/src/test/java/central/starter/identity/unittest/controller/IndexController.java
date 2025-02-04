@@ -30,14 +30,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Index Controller
- * <p>
- * 首页控制器
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Index Controller
+///
+/// 首页控制器
+///
+/// @author Alan Yeh
 @RestController
 @RequestMapping("/api")
 public class IndexController {

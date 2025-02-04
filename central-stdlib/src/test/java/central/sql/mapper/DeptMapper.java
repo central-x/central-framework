@@ -27,11 +27,8 @@ package central.sql.mapper;
 import central.sql.data.DeptEntity;
 import central.sql.proxy.Mapper;
 
-/**
- * 部门操作类
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// 部门操作类
+///
+/// @author Alan Yeh
 public interface DeptMapper extends Mapper<DeptEntity> {
 }

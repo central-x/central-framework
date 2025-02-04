@@ -24,12 +24,12 @@
 
 package central.net.http.proxy.contract.spring.resolver;
 
+import central.lang.Assertx;
+import central.lang.Stringx;
 import central.net.http.HttpRequest;
 import central.net.http.body.HttpConverters;
 import central.net.http.proxy.contract.spring.SpringResolver;
-import central.lang.Assertx;
 import central.util.Objectx;
-import central.lang.Stringx;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ValueConstants;
 
@@ -40,13 +40,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * 处理请求头
- *
- * @author Alan Yeh
- * @see RequestHeader
- * @since 2022/07/18
- */
+/// 处理请求头
+///
+/// @author Alan Yeh
+/// @see RequestHeader
 public class RequestHeaderResolver implements SpringResolver {
     @Override
     public boolean support(Parameter parameter) {

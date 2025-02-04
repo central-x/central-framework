@@ -32,12 +32,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-/**
- * 调用方法
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// 调用方法
+///
+/// @author Alan Yeh
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class InvokeProcessor extends CacheProcessor {

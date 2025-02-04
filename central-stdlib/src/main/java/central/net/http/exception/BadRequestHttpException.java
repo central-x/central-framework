@@ -31,12 +31,9 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
 
-/**
- * Bad Request Exception
- *
- * @author Alan Yeh
- * @since 2023/12/25
- */
+/// Bad Request Exception
+///
+/// @author Alan Yeh
 public class BadRequestHttpException extends ClientSeriesHttpException {
     @Serial
     private static final long serialVersionUID = -8283208843056389877L;

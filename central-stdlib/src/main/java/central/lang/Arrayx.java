@@ -28,113 +28,91 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.experimental.UtilityClass;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-/**
- * Array 工具
- *
- * @author Alan Yeh
- * @since 2022/07/12
- */
+/// Array 工具
+///
+/// @author Alan Yeh
 @UtilityClass
 public class Arrayx {
 
-    /**
-     * 判断数组是否为空
-     *
-     * @param array 数组
-     * @param <T>   数组类型
-     */
+    /// 判断数组是否为空
+    ///
+    /// @param array 数组
+    /// @param <T>   数组类型
     public static <T> boolean isNullOrEmpty(@Nullable T[] array) {
         return array == null || array.length == 0;
     }
 
-    /**
-     * 判断数组是否为空
-     *
-     * @param array 数组
-     */
+    /// 判断数组是否为空
+    ///
+    /// @param array 数组
     public static boolean isNullOrEmpty(@Nullable byte[] array) {
         return array == null || array.length == 0;
     }
 
-    /**
-     * 判断数组是否不为空
-     *
-     * @param array 数组
-     * @param <T>   数组类型
-     */
+    /// 判断数组是否不为空
+    ///
+    /// @param array 数组
+    /// @param <T>   数组类型
     public static <T> boolean isNotEmpty(@Nullable T[] array) {
         return array != null && array.length != 0;
     }
 
-    /**
-     * 转成 Stream
-     *
-     * @param array 数组
-     * @param <T>   数组类型
-     */
+    /// 转成 Stream
+    ///
+    /// @param array 数组
+    /// @param <T>   数组类型
     public static <T> Stream<T> asStream(@Nullable T[] array) {
         return isNullOrEmpty(array) ? Stream.empty() : Arrays.stream(array);
     }
 
-    /**
-     * 获取第一个元素
-     *
-     * @param array 数组
-     * @param <T>   数组类型
-     */
+    /// 获取第一个元素
+    ///
+    /// @param array 数组
+    /// @param <T>   数组类型
     public static <T> @Nonnull Optional<T> getFirst(@Nonnull T[] array) {
         return Optional.ofNullable(getFirstOrNull(array));
     }
 
-    /**
-     * 获取第一个元素
-     *
-     * @param array 数组
-     * @param <T>   数组类型
-     */
+    /// 获取第一个元素
+    ///
+    /// @param array 数组
+    /// @param <T>   数组类型
     public static <T> @Nullable T getFirstOrNull(@Nullable T[] array) {
         return isNullOrEmpty(array) ? null : array[0];
     }
 
-    /**
-     * 获取最后一个元素
-     *
-     * @param array 数组
-     * @param <T>   数组类型
-     */
+    /// 获取最后一个元素
+    ///
+    /// @param array 数组
+    /// @param <T>   数组类型
     public static <T> @Nonnull Optional<T> getLast(@Nonnull T[] array) {
         return Optional.ofNullable(getLastOrNull(array));
     }
 
-    /**
-     * 获取最后一个元素
-     *
-     * @param array 数组
-     * @param <T>   数组类型
-     */
+    /// 获取最后一个元素
+    ///
+    /// @param array 数组
+    /// @param <T>   数组类型
     public static <T> @Nullable T getLastOrNull(@Nullable T[] array) {
         return isNullOrEmpty(array) ? null : array[array.length - 1];
     }
 
-    /**
-     * 获取指定下标的元素
-     *
-     * @param array 数组
-     * @param <T>   数组类型
-     */
+    /// 获取指定下标的元素
+    ///
+    /// @param array 数组
+    /// @param <T>   数组类型
     public static <T> @Nonnull Optional<T> get(@Nullable T[] array, int index) {
         return Optional.ofNullable(getOrNull(array, index));
     }
 
-    /**
-     * 获取指定下标的元素
-     *
-     * @param array 数组
-     * @param <T>   数组类型
-     */
+    /// 获取指定下标的元素
+    ///
+    /// @param array 数组
+    /// @param <T>   数组类型
     public static <T> T getOrNull(@Nullable T[] array, int index) {
         if (array == null || array.length <= index) {
             return null;
@@ -143,13 +121,11 @@ public class Arrayx {
         }
     }
 
-    /**
-     * 连接两个组数
-     *
-     * @param first  第一个数组
-     * @param second 第二个数组
-     * @return 连接后的数组
-     */
+    /// 连接两个组数
+    ///
+    /// @param first  第一个数组
+    /// @param second 第二个数组
+    /// @return 连接后的数组
     @Nonnull
     public static <T> T[] concat(@Nullable T[] first, @Nonnull T[] second) {
         if (isNullOrEmpty(first)) {
@@ -161,13 +137,11 @@ public class Arrayx {
         }
     }
 
-    /**
-     * 连接两个组数
-     *
-     * @param first  第一个数组
-     * @param second 第二个数组
-     * @return 连接后的数组
-     */
+    /// 连接两个组数
+    ///
+    /// @param first  第一个数组
+    /// @param second 第二个数组
+    /// @return 连接后的数组
     @Nonnull
     public static byte[] concat(@Nullable byte[] first, @Nonnull byte[] second) {
         if (isNullOrEmpty(first)) {
@@ -179,12 +153,10 @@ public class Arrayx {
         }
     }
 
-    /**
-     * 新建数组
-     *
-     * @param elements 元素
-     * @param <T>      元素类型
-     */
+    /// 新建数组
+    ///
+    /// @param elements 元素
+    /// @param <T>      元素类型
     @SafeVarargs
     public static <T> T[] newArray(T... elements) {
         return elements;

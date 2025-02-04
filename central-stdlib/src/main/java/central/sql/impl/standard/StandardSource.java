@@ -24,9 +24,9 @@
 
 package central.sql.impl.standard;
 
-import central.sql.SqlSource;
 import central.sql.SqlConversion;
 import central.sql.SqlDialect;
+import central.sql.SqlSource;
 import central.sql.conversion.UnderlineConversion;
 import central.sql.datasource.migration.DataSourceMigrator;
 import central.validation.Label;
@@ -40,31 +40,22 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * 标准方言数据源
- *
- * @author Alan Yeh
- * @since 2022/09/23
- */
+/// 标准方言数据源
+///
+/// @author Alan Yeh
 public class StandardSource implements SqlSource {
     @Getter
     private final DataSource dataSource;
 
-    /**
-     * 数据源方言
-     */
+    /// 数据源方言
     @Getter
     private final SqlDialect dialect;
 
-    /**
-     * 数据库命名规则
-     */
+    /// 数据库命名规则
     @Getter
     private final SqlConversion conversion;
 
-    /**
-     * 数据库迁移
-     */
+    /// 数据库迁移
     @Getter
     @Setter
     private DataSourceMigrator migrator;

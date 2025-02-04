@@ -49,31 +49,20 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.zip.GZIPOutputStream;
 
-/**
- * Central Log Appender
- *
- * @author Alan Yeh
- * @since 2022/10/24
- */
+/// Central Log Appender
+///
+/// @author Alan Yeh
 public abstract class CentralAppender extends AppenderBase<ILoggingEvent> {
-    /**
-     * 应用编码
-     */
+    /// 应用编码
     public abstract String getApplicationCode();
 
-    /**
-     * 最大批量发送大小
-     */
+    /// 最大批量发送大小
     public abstract int getBatchSize();
 
-    /**
-     * 最大批量发送时间
-     */
+    /// 最大批量发送时间
     public abstract int getBatchTime();
 
-    /**
-     * 缓存目录
-     */
+    /// 缓存目录
     public abstract String getTmpPath();
 
     private ConsumableQueue<LogContext, BlockedQueue<LogContext>> queue;
@@ -104,21 +93,13 @@ public abstract class CentralAppender extends AppenderBase<ILoggingEvent> {
 
     @RequiredArgsConstructor
     private static class Writer implements Consumer<BlockedQueue<LogContext>> {
-        /**
-         * 日志目录
-         */
+        /// 日志目录
         private final File dir;
-        /**
-         * 最大批量发送大小
-         */
+        /// 最大批量发送大小
         private final int batchSize;
-        /**
-         * 最大批量发送时间
-         */
+        /// 最大批量发送时间
         private final int batchTime;
-        /**
-         * 随机数，防止文件名冲突
-         */
+        /// 随机数，防止文件名冲突
         private final Random random = new Random(System.currentTimeMillis());
 
         @Override

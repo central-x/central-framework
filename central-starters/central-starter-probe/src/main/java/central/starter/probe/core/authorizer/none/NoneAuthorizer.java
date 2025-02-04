@@ -26,12 +26,9 @@ package central.starter.probe.core.authorizer.none;
 
 import central.starter.probe.core.authorizer.Authorizer;
 
-/**
- * 无监权
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
+/// 无监权
+///
+/// @author Alan Yeh
 public class NoneAuthorizer implements Authorizer {
     @Override
     public void authorize(String authorization) {

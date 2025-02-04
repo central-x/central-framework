@@ -27,12 +27,12 @@ package central.starter.graphql.core;
 import central.bean.*;
 import central.lang.Arrayx;
 import central.lang.Assertx;
+import central.lang.Stringx;
 import central.lang.reflect.invoke.ParameterResolver;
-import central.sql.data.*;
-import central.starter.graphql.*;
+import central.sql.data.Entity;
+import central.sql.data.Modifiable;
+import central.starter.graphql.GraphQLConfigurer;
 import central.starter.graphql.annotation.*;
-import central.starter.graphql.annotation.GraphQLSchema;
-import central.starter.graphql.annotation.GraphQLType;
 import central.starter.graphql.core.fetcher.BatchLoader;
 import central.starter.graphql.core.fetcher.SourceFetcher;
 import central.starter.graphql.core.resolver.*;
@@ -40,11 +40,11 @@ import central.starter.graphql.core.source.GraphQLSource;
 import central.starter.graphql.core.source.SpringSource;
 import central.starter.graphql.core.source.StaticSource;
 import central.util.Listx;
-import central.lang.Stringx;
 import central.util.Objectx;
 import graphql.GraphQL;
 import graphql.GraphQLException;
-import graphql.schema.*;
+import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLScalarType;
 import graphql.schema.idl.*;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -62,36 +62,25 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Executor Factory
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// Executor Factory
+///
+/// @author Alan Yeh
 @Slf4j
 public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, InitializingBean {
-    /**
-     * Executor 配置器
-     */
+    /// Executor 配置器
     @Setter(onMethod_ = @Autowired)
     private GraphQLConfigurer configurer;
 
-    /**
-     * 参数解析器
-     */
+    /// 参数解析器
     private final List<ParameterResolver> resolvers = new ArrayList<>();
 
     private GraphQL graphQL;
 
-    /**
-     * 异常处理
-     */
+    /// 异常处理
     private ExceptionHandleChain handler;
 
-    /**
-     * 批量数据加载注册中心
-     * 此功能用于解决 N + 1 查询性能问题
-     */
+    /// 批量数据加载注册中心
+    /// 此功能用于解决 N + 1 查询性能问题
     private final LoaderRegistry loaderRegistry = new LoaderRegistry();
 
     @Override
@@ -118,9 +107,7 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
         this.graphQL = GraphQL.newGraphQL(new SchemaGenerator().makeExecutableSchema(registry, wiring.build())).build();
     }
 
-    /**
-     * 初始化标量
-     */
+    /// 初始化标量
     private void initScalars(RuntimeWiring.Builder wiring) {
         wiring.scalar(Scalars.ANY).scalar(Scalars.TIMESTAMP).scalar(Scalars.LONG);
 
@@ -132,9 +119,7 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
         }
     }
 
-    /**
-     * 初始化参数解析器
-     */
+    /// 初始化参数解析器
     private void initParameterResolvers() {
         // 添加默认的参数解析器
         this.resolvers.add(new GraphQLBeanParameterResolver());
@@ -148,16 +133,12 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
         this.resolvers.addAll(Objectx.getOrDefault(configurer.getParameterResolvers(), Collections.emptyList()));
     }
 
-    /**
-     * 初始化异常处理链
-     */
+    /// 初始化异常处理链
     private void initExceptionHandleChain() {
         this.handler = new ExceptionHandleChain(this.configurer.getExceptionHandlers());
     }
 
-    /**
-     * 初始化 GraphQL 根声明
-     */
+    /// 初始化 GraphQL 根声明
     private void initRootSchema(TypeDefinitionRegistry registry, RuntimeWiring.Builder wiring) throws IOException {
         // Schema 解析器
         SchemaParser parser = new SchemaParser();
@@ -178,13 +159,11 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
         }
     }
 
-    /**
-     * 根据源类型递归扫描后面的所有类型
-     *
-     * @param source  源类型
-     * @param types   已注册类型
-     * @param schemas 忆注册 Schemas
-     */
+    /// 根据源类型递归扫描后面的所有类型
+    ///
+    /// @param source  源类型
+    /// @param types   已注册类型
+    /// @param schemas 忆注册 Schemas
     private void scanTypes(@Nonnull Class<?> source, @Nonnull Map<String, Class<?>> types, @Nonnull Set<String> schemas) throws IOException {
         {
             // 注册类型
@@ -218,9 +197,7 @@ public class GraphQLExecutorFactory implements FactoryBean<GraphQLExecutor>, Ini
         }
     }
 
-    /**
-     * 初始化 GraphQL Query 声明
-     */
+    /// 初始化 GraphQL Query 声明
     private void initSchema(TypeDefinitionRegistry registry, RuntimeWiring.Builder wiring) throws IOException {
         // Schema 解析器
         SchemaParser parser = new SchemaParser();

@@ -30,35 +30,26 @@ import org.springframework.http.MediaType;
 
 import java.net.URI;
 
-/**
- * WebMvc Request
- * <p>
- * 支持常见的操作
- *
- * @author Alan Yeh
- * @since 2023/03/08
- */
+/// WebMvc Request
+///
+/// 支持常见的操作
+///
+/// @author Alan Yeh
 public interface WebMvcRequest extends AttributedHttpServletRequest, TenantedHttpServletRequest {
 
     static WebMvcRequest of(HttpServletRequest request) {
         return DefaultWebMvcRequest.of(request);
     }
 
-    /**
-     * 获取当前请求地址
-     */
+    /// 获取当前请求地址
     @Nonnull
     URI getUri();
 
-    /**
-     * 获取 Cookie 值
-     */
+    /// 获取 Cookie 值
     String getCookie(String name);
 
-    /**
-     * 是否支持指定响应体
-     *
-     * @param contentType 响应体类型
-     */
+    /// 是否支持指定响应体
+    ///
+    /// @param contentType 响应体类型
     boolean isAcceptContentType(MediaType contentType);
 }

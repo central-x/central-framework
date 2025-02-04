@@ -49,12 +49,9 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-/**
- * 测试用的接口
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 测试用的接口
+///
+/// @author Alan Yeh
 @RestController
 @RequestMapping("/api")
 public class IndexController {

@@ -31,13 +31,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * ByteArray Body
- * 用于传输 byte[]
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// ByteArray Body
+///
+/// 用于传输 byte[]
+///
+/// @author Alan Yeh
 public class ByteArrayBody implements Body {
     private final byte[] body;
 

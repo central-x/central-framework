@@ -24,22 +24,15 @@
 
 package central.net.http;
 
-/**
- * 请求执行器
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 请求执行器
+///
+/// @author Alan Yeh
 public interface HttpExecutor {
-    /**
-     * 执行器名称
-     */
+    /// 执行器名称
     String getName();
 
-    /**
-     * 执行 Http 请求
-     *
-     * @param request 请求
-     */
+    /// 执行 Http 请求
+    ///
+    /// @param request 请求
     HttpResponse execute(HttpRequest request) throws Exception;
 }

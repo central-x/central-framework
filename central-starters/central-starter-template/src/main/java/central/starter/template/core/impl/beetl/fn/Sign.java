@@ -31,14 +31,11 @@ import org.beetl.core.Function;
 
 import java.nio.charset.StandardCharsets;
 
-/**
- * 参数签名
- * <p>
- * 计算规则: md5('arg0:' + args[0].hashCode() + '[' + args[0].toString() + ']' + ',arg1:' + args[1].hashCode() + '[' + args[1].toString() + ']' + ...)
- *
- * @author Alan Yeh
- * @since 2022/11/16
- */
+/// 参数签名
+///
+/// 计算规则: `md5('arg0:' + args[0].hashCode() + '[' + args[0].toString() + ']' + ',arg1:' + args[1].hashCode() + '[' + args[1].toString() + ']' + ...)``
+///
+/// @author Alan Yeh
 public class Sign implements Function {
     @Override
     public Object call(Object[] paras, Context ctx) {

@@ -24,11 +24,8 @@
 
 package central.util.regex;
 
-/**
- * Ant 风格正则匹配
- *
- * @author Alan Yeh
- * @since 2023/08/27
- */
+/// Ant 风格正则匹配
+///
+/// @author Alan Yeh
 public class AntPattern {
 }

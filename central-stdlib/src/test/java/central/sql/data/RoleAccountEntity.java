@@ -35,12 +35,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 
-/**
- * 帐户与角色绑定关系
- *
- * @author Alan Yeh
- * @since 2022/09/16
- */
+/// 帐户与角色绑定关系
+///
+/// @author Alan Yeh
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

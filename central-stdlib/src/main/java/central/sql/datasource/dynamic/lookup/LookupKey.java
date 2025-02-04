@@ -26,19 +26,14 @@ package central.sql.datasource.dynamic.lookup;
 
 import java.lang.annotation.*;
 
-/**
- * 强制指定数据源
- *
- * @author Alan Yeh
- * @since 2022/08/11
- */
+/// 强制指定数据源
+///
+/// @author Alan Yeh
 @Inherited
 @Documented
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LookupKey {
-    /**
-     * 数据源名称
-     */
+    /// 数据源名称
     String value();
 }

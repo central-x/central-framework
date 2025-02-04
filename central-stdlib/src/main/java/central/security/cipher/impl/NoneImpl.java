@@ -34,12 +34,9 @@ import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.util.Arrays;
 
-/**
- * 不加密
- *
- * @author Alan Yeh
- * @since 2022/07/10
- */
+/// 不加密
+///
+/// @author Alan Yeh
 public class NoneImpl implements CipherImpl {
 
     @Override

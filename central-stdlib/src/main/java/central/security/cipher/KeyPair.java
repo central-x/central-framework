@@ -29,22 +29,14 @@ import lombok.Data;
 
 import java.security.Key;
 
-/**
- * 加解密密钥对
- *
- * @author Alan Yeh
- * @since 2022/07/05
- */
-
+/// 加解密密钥对
+///
+/// @author Alan Yeh
 @Data
 @AllArgsConstructor
 public class KeyPair {
-    /**
-     * 加密密钥
-     */
+    /// 加密密钥
     private Key encryptKey;
-    /**
-     * 解密密钥
-     */
+    /// 解密密钥
     private Key decryptKey;
 }

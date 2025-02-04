@@ -30,28 +30,19 @@ import lombok.Getter;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 过期无素
- *
- * @author Alan Yeh
- * @since 2022/11/09
- */
+/// 过期元素
+///
+/// @author Alan Yeh
 @EqualsAndHashCode
 public class ExpiredElement<E> implements Expired {
 
-    /**
-     * 创建时间
-     */
+    /// 创建时间
     @Getter
     private final long timestamp = System.currentTimeMillis();
-    /**
-     * 失效时间
-     */
+    /// 失效时间
     @Getter
     private final Duration expires;
-    /**
-     * 元素
-     */
+    /// 元素
     @Getter
     private final E element;
 

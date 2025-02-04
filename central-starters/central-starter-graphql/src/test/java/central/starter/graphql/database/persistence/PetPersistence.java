@@ -48,23 +48,18 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Pet Persistence
- *
- * @author Alan Yeh
- * @since 2024/12/30
- */
+/// Pet Persistence
+///
+/// @author Alan Yeh
 @Component
 public class PetPersistence {
-    
+
     @Setter(onMethod_ = @Autowired)
     private PetMapper mapper;
 
-    /**
-     * 根据主键查询数据
-     *
-     * @param id 主键
-     */
+    /// 根据主键查询数据
+    ///
+    /// @param id 主键
     public @Nullable PetEntity findById(@Nullable String id) {
         if (Stringx.isNullOrBlank(id)) {
             return null;
@@ -72,11 +67,9 @@ public class PetPersistence {
         return this.mapper.findById(id);
     }
 
-    /**
-     * 查询数据
-     *
-     * @param ids 主键
-     */
+    /// 查询数据
+    ///
+    /// @param ids 主键
     public @Nonnull List<PetEntity> findByIds(@Nullable List<String> ids) {
         if (Listx.isNullOrEmpty(ids)) {
             return new ArrayList<>();
@@ -84,56 +77,48 @@ public class PetPersistence {
         return this.mapper.findByIds(ids);
     }
 
-    /**
-     * 查询数据
-     *
-     * @param limit      获取前 N 条数据
-     * @param offset     偏移量
-     * @param conditions 过滤条件
-     * @param orders     排序条件
-     */
+    /// 查询数据
+    ///
+    /// @param limit      获取前 N 条数据
+    /// @param offset     偏移量
+    /// @param conditions 过滤条件
+    /// @param orders     排序条件
     public @Nonnull List<PetEntity> findBy(@Nullable Long limit,
-                                              @Nullable Long offset,
-                                              @Nullable Columns<? extends PetEntity> columns,
-                                              @Nullable Conditions<? extends PetEntity> conditions,
-                                              @Nullable Orders<? extends PetEntity> orders) {
+                                           @Nullable Long offset,
+                                           @Nullable Columns<? extends PetEntity> columns,
+                                           @Nullable Conditions<? extends PetEntity> conditions,
+                                           @Nullable Orders<? extends PetEntity> orders) {
         return this.mapper.findBy(limit, offset, columns, conditions, orders);
     }
 
-    /**
-     * 分页查询数据
-     *
-     * @param pageIndex  分页下标
-     * @param pageSize   分页大小
-     * @param columns    字段列表
-     * @param conditions 过滤条件
-     * @param orders     排序条件
-     */
+    /// 分页查询数据
+    ///
+    /// @param pageIndex  分页下标
+    /// @param pageSize   分页大小
+    /// @param columns    字段列表
+    /// @param conditions 过滤条件
+    /// @param orders     排序条件
     public @Nonnull Page<PetEntity> pageBy(@Nonnull Long pageIndex,
-                                              @Nonnull Long pageSize,
-                                              @Nullable Columns<? extends PetEntity> columns,
-                                              @Nullable Conditions<? extends PetEntity> conditions,
-                                              @Nullable Orders<? extends PetEntity> orders) {
+                                           @Nonnull Long pageSize,
+                                           @Nullable Columns<? extends PetEntity> columns,
+                                           @Nullable Conditions<? extends PetEntity> conditions,
+                                           @Nullable Orders<? extends PetEntity> orders) {
         return this.mapper.findPageBy(pageIndex, pageSize, columns, conditions, orders);
     }
 
-    /**
-     * 查询符合条件的数据数量
-     *
-     * @param conditions 筛选条件
-     */
+    /// 查询符合条件的数据数量
+    ///
+    /// @param conditions 筛选条件
     public long countBy(@Nullable Conditions<? extends PetEntity> conditions) {
         return this.mapper.countBy(conditions);
     }
 
 
-    /**
-     * 保存数据
-     *
-     * @param input    数据输入
-     * @param operator 操作帐号
-     * @return 保存后的数据
-     */
+    /// 保存数据
+    ///
+    /// @param input    数据输入
+    /// @param operator 操作帐号
+    /// @return 保存后的数据
     public PetEntity insert(@Validated({Insert.class, Default.class}) PetInput input, @Nonnull String operator) {
         var entity = new PetEntity();
         entity.fromInput(input);
@@ -143,22 +128,18 @@ public class PetPersistence {
         return entity;
     }
 
-    /**
-     * 批量保存数据
-     *
-     * @param inputs   数据输入
-     * @param operator 操作人
-     */
+    /// 批量保存数据
+    ///
+    /// @param inputs   数据输入
+    /// @param operator 操作人
     public List<PetEntity> insertBatch(@Validated({Insert.class, Default.class}) List<PetInput> inputs, @Nonnull String operator) {
         return Listx.asStream(inputs).map(it -> this.insert(it, operator)).toList();
     }
 
-    /**
-     * 更新数据
-     *
-     * @param input    数据输入
-     * @param operator 操作人
-     */
+    /// 更新数据
+    ///
+    /// @param input    数据输入
+    /// @param operator 操作人
     public PetEntity update(@Validated({Update.class, Default.class}) PetInput input, @Nonnull String operator) {
         var entity = this.mapper.findById(input.getId());
         if (entity == null) {
@@ -172,21 +153,17 @@ public class PetPersistence {
         return entity;
     }
 
-    /**
-     * 批量更新数据
-     *
-     * @param inputs   数据输入
-     * @param operator 操作人
-     */
+    /// 批量更新数据
+    ///
+    /// @param inputs   数据输入
+    /// @param operator 操作人
     public List<PetEntity> updateBatch(@Validated({Update.class, Default.class}) List<PetInput> inputs, @Nonnull String operator) {
         return Listx.asStream(inputs).map(it -> this.update(it, operator)).toList();
     }
 
-    /**
-     * 根据主键删除数据
-     *
-     * @param ids 主键
-     */
+    /// 根据主键删除数据
+    ///
+    /// @param ids 主键
     public long deleteByIds(@Nullable List<String> ids) {
         if (Listx.isNullOrEmpty(ids)) {
             return 0;
@@ -195,11 +172,9 @@ public class PetPersistence {
         return this.mapper.deleteByIds(ids);
     }
 
-    /**
-     * 根据条件删除数据
-     *
-     * @param conditions 条件
-     */
+    /// 根据条件删除数据
+    ///
+    /// @param conditions 条件
     public long deleteBy(@Nullable Conditions<? extends PetEntity> conditions) {
         return this.mapper.deleteBy(conditions);
     }

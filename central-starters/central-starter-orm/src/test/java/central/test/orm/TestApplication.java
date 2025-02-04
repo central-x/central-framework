@@ -28,12 +28,9 @@ import central.starter.orm.EnableOrm;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * 测试应用
- *
- * @author Alan Yeh
- * @since 2022/09/22
- */
+/// 测试应用
+///
+/// @author Alan Yeh
 @EnableOrm
 @SpringBootApplication
 public class TestApplication {

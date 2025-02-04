@@ -28,12 +28,9 @@ import central.sql.proxy.Mapper;
 import central.starter.graphql.database.persistence.entity.PetEntity;
 import org.springframework.stereotype.Repository;
 
-/**
- * Pet
- *
- * @author Alan Yeh
- * @since 2022/09/28
- */
+/// Pet
+///
+/// @author Alan Yeh
 @Repository
 public interface PetMapper extends Mapper<PetEntity> {
 }

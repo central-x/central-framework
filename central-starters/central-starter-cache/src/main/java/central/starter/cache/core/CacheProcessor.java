@@ -42,38 +42,28 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * 缓存处理
- *
- * @author Alan Yeh
- * @since 2022/11/15
- */
+/// 缓存处理
+/// @author Alan Yeh
 public abstract class CacheProcessor implements Processor<MethodInvocation, Object> {
 
     @Setter(onMethod_ = @Autowired)
     private TemplateRender render;
 
-    /**
-     * 构建表达式 Boolean 结果
-     *
-     * @param expression 表达式
-     * @param invocation 调用过程
-     * @param result     调用结果
-     * @return Boolean 值
-     */
+/// 构建表达式 Boolean 结果
+/// @param expression 表达式
+/// @param invocation 调用过程
+/// @param result     调用结果
+/// @return Boolean 值
     protected Boolean evaluateBoolean(String expression, MethodInvocation invocation, Object result) {
         var value = this.evaluate(expression, invocation, result);
         return "true".equalsIgnoreCase(value);
     }
 
-    /**
-     * 构建表达式结果
-     *
-     * @param expression
-     * @param invocation
-     * @param result
-     * @return
-     */
+/// 构建表达式结果
+/// @param expression
+/// @param invocation
+/// @param result
+/// @return
     protected String evaluate(String expression, MethodInvocation invocation, Object result) {
         var params = new HashMap<String, Object>();
         params.put("args", invocation.getArguments());
@@ -91,15 +81,12 @@ public abstract class CacheProcessor implements Processor<MethodInvocation, Obje
         }
     }
 
-    /**
-     * 构建表达式枚举键
-     *
-     * @param expression
-     * @param invocation
-     * @param result
-     * @param iterableExpression
-     * @return
-     */
+/// 构建表达式枚举键
+/// @param expression
+/// @param invocation
+/// @param result
+/// @param iterableExpression
+/// @return
     protected List<String> evaluateKeys(String expression, MethodInvocation invocation, Object result, String iterableExpression) {
         var params = new HashMap<String, Object>();
         params.put("args", invocation.getArguments());

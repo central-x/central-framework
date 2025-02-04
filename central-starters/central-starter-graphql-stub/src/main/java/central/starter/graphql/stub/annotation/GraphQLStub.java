@@ -26,22 +26,16 @@ package central.starter.graphql.stub.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * 数据代理
- *
- * @author Alan Yeh
- * @since 2022/09/25
- */
+/// 数据代理
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GraphQLStub {
-    /**
-     * GraphQL 查询声明文件位置
-     */
+    /// GraphQL 查询声明文件位置
     String path() default "";
-    /**
-     * 指定通信的 Bean 名称
-     */
+
+    /// 指定通信的 Bean 名称
     String client() default "";
 }

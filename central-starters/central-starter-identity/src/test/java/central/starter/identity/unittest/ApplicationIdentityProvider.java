@@ -33,12 +33,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
-/**
- * 应用安全配转走
- *
- * @author Alan Yeh
- * @since 2023/02/13
- */
+/// 应用安全配置
+///
+/// @author Alan Yeh
 @Component
 public class ApplicationIdentityProvider implements IdentityProvider {
     @Override

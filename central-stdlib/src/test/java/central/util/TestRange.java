@@ -30,12 +30,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Rang Test Cases
- *
- * @author Alan Yeh
- * @since 2023/07/20
- */
+/// Rang Test Cases
+///
+/// @author Alan Yeh
 public class TestRange {
     @Test
     public void case1() {

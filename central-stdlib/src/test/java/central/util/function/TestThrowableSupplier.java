@@ -29,12 +29,9 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 
-/**
- * ThrowableSupplier Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// ThrowableSupplier Test Cases
+///
+/// @author Alan Yeh
 public class TestThrowableSupplier {
     @Test
     public void case1() {
@@ -87,7 +84,7 @@ public class TestThrowableSupplier {
     }
 
     @Test
-    public void case5(){
+    public void case5() {
         var result = ThrowableSupplier.of(() -> "1").andThen(Integer::parseInt);
 
         Assertions.assertEquals(Integer.valueOf(1), result.get());

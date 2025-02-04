@@ -24,8 +24,8 @@
 
 package central.net.http.body.request;
 
-import central.net.http.body.Body;
 import central.lang.Stringx;
+import central.net.http.body.Body;
 import org.springframework.http.MediaType;
 
 import java.io.File;
@@ -34,13 +34,11 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
-/**
- * File Body
- * 主要用于传输文件
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// File Body
+///
+/// 主要用于传输文件
+///
+/// @author Alan Yeh
 public class FileBody implements Body {
 
     private final File body;

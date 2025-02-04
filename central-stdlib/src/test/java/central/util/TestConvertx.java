@@ -33,17 +33,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Converterx Test Cases
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Converterx Test Cases
+///
+/// @author Alan Yeh
 public class TestConvertx {
 
-    /**
-     * Boolean Convert
-     */
+    /// Boolean Convert
     @Test
     public void case1() {
         // Boolean
@@ -118,9 +113,7 @@ public class TestConvertx {
         assertEquals(Boolean.TRUE, target);
     }
 
-    /**
-     * Byte Convert
-     */
+    /// Byte Convert
     @Test
     public void case2() {
         // Byte
@@ -145,9 +138,7 @@ public class TestConvertx {
         assertEquals(byteSource, target);
     }
 
-    /**
-     * Double Convert
-     */
+    /// Double Convert
     @Test
     public void case3() {
         // Double
@@ -178,9 +169,7 @@ public class TestConvertx {
         assertEquals(doubleSource, target);
     }
 
-    /**
-     * Float Convert
-     */
+    /// Float Convert
     @Test
     public void case4() {
         // Float
@@ -211,9 +200,7 @@ public class TestConvertx {
         assertEquals(floatSource, target);
     }
 
-    /**
-     * Integer Convert
-     */
+    /// Integer Convert
     @Test
     public void case5() {
         // Integer
@@ -238,9 +225,7 @@ public class TestConvertx {
         assertEquals(intSource, target);
     }
 
-    /**
-     * Long Convert
-     */
+    /// Long Convert
     @Test
     public void case6() {
         // Long
@@ -277,9 +262,7 @@ public class TestConvertx {
         assertEquals(timestampSource.getTime(), target.longValue());
     }
 
-    /**
-     * Short Convert
-     */
+    /// Short Convert
     @Test
     public void case7() {
         // Short
@@ -310,9 +293,7 @@ public class TestConvertx {
         assertEquals(shortSource, target);
     }
 
-    /**
-     * String Convert
-     */
+    /// String Convert
     @Test
     public void case8() {
         // String
@@ -335,9 +316,7 @@ public class TestConvertx {
     }
 
 
-    /**
-     * Timestamp Convert
-     */
+    /// Timestamp Convert
     @Test
     public void case9() {
         // Timestamp
@@ -353,9 +332,7 @@ public class TestConvertx {
         assertEquals(timestampSource.getTime(), target.getTime());
     }
 
-    /**
-     * Test Register
-     */
+    /// Test Register
     @Test
     public void case10() {
         var converter = new Convertx(List.of(new LazyConverter()));
@@ -371,9 +348,7 @@ public class TestConvertx {
         assertEquals(1, value);
     }
 
-    /**
-     * Test Register/Deregister
-     */
+    /// Test Register/Deregister
     @Test
     public void case11() {
         var converter = new Convertx();

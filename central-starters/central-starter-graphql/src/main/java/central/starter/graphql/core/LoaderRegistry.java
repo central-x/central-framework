@@ -34,51 +34,40 @@ import org.dataloader.DataLoaderRegistry;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * BatchLoader 注册中心
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// BatchLoader 注册中心
+///
+/// @author Alan Yeh
 public class LoaderRegistry {
 
     @Getter
     private final Map<String, BatchLoader> commands = new ConcurrentHashMap<>();
 
-    /**
-     * 注册 DataLoader 命令
-     *
-     * @param command loader 命令
-     */
+    /// 注册 DataLoader 命令
+    ///
+    /// @param command loader 命令
     public LoaderRegistry register(BatchLoader command) {
         this.commands.put(command.getName(), command);
         return this;
     }
 
-    /**
-     * 取消注册 DataLoader 命令
-     *
-     * @param name loader 命令名
-     */
+    /// 取消注册 DataLoader 命令
+    ///
+    /// @param name loader 命令名
     public LoaderRegistry unregister(String name) {
         this.commands.remove(name);
         return this;
     }
 
-    /**
-     * 判断是否已注册该 Loader
-     *
-     * @param name loader 命令名
-     */
+    /// 判断是否已注册该 Loader
+    ///
+    /// @param name loader 命令名
     public boolean isRegistered(String name) {
         return this.commands.containsKey(name);
     }
 
-    /**
-     * 构建 DataLoaderRegister
-     *
-     * @param context 执行上下文
-     */
+    /// 构建 DataLoaderRegister
+    ///
+    /// @param context 执行上下文
     public DataLoaderRegistry buildRegistry(Context context) {
         var registry = new DataLoaderRegistry();
         var options = DataLoaderOptions.newOptions().setCachingEnabled(false).setBatchingEnabled(true).setMaxBatchSize(1000).setBatchLoaderContextProvider(() -> context);

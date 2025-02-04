@@ -24,12 +24,9 @@
 
 package central.security.signer.impl;
 
-/**
- * RSA 384 签名算法
- *
- * @author Alan Yeh
- * @since 2024/01/03
- */
+/// RSA 384 签名算法
+///
+/// @author Alan Yeh
 public class RSA384Impl extends RSAImpl {
     // 数字签名 签名/验证算法
     public static final String ALGORITHM = "SHA384withRSA";

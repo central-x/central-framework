@@ -29,12 +29,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-/**
- * Starter Configuration
- *
- * @author Alan Yeh
- * @since 2022/11/14
- */
+/// Starter Configuration
+///
+/// @author Alan Yeh
 @Configuration
 @Import(BeetlRender.class)
 @EnableConfigurationProperties(TemplateProperties.class)

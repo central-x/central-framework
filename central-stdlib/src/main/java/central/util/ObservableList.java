@@ -30,19 +30,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-/**
- * Observable List
- * <p>
- * 当里面的元数发生变动时，会向观察者发出通知
- *
- * @author Alan Yeh
- * @since 2022/11/11
- */
+/// Observable List
+///
+/// 当里面的元数发生变动时，会向观察者发出通知
+///
+/// @author Alan Yeh
 public class ObservableList<E> extends Observable<ObservableList<E>> implements List<E> {
 
-    /**
-     * 元素被添加事件
-     */
+    /// 元素被添加事件
     @Getter
     @RequiredArgsConstructor
     public static class ElementAdded<E> implements ObserveEvent<ObservableList<E>> {
@@ -59,9 +54,7 @@ public class ObservableList<E> extends Observable<ObservableList<E>> implements 
         }
     }
 
-    /**
-     * 元素被移除事件
-     */
+    /// 元素被移除事件
     @Getter
     @RequiredArgsConstructor
     public static class ElementRemoved<E> implements ObserveEvent<ObservableList<E>> {
@@ -212,7 +205,7 @@ public class ObservableList<E> extends Observable<ObservableList<E>> implements 
     public void clear() {
         var removed = new ArrayList<Object>(this.data);
         this.data.clear();
-        if (Listx.isNotEmpty(removed)){
+        if (Listx.isNotEmpty(removed)) {
             this.notifyObservers(ElementRemoved.of(this, removed));
         }
     }

@@ -30,43 +30,33 @@ import central.lang.Stringx;
 import jakarta.annotation.Nullable;
 import lombok.*;
 
-/**
- * 版本号
- * <p>
- * 主要用于解析 主版本号 . 子版本号 [ 修正版本号 [. 编译版本号 ]]
- * 如：
- * 1.2
- * 1.2.0
- * 1.2.0.1234
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// 版本号
+///
+/// 主要用于解析 主版本号 . 子版本号 [ 修正版本号 [. 编译版本号 ]]
+///
+/// 如：
+/// - `1.2`
+/// - `1.2.0`
+/// - `1.2.0.1234`
+///
+/// @author Alan Yeh
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class Version implements Comparable<Version> {
-    /**
-     * 主版本号
-     */
+    /// 主版本号
     @Getter
     @Setter
     int major;
-    /**
-     * 子版本号
-     */
+    /// 子版本号
     @Getter
     @Setter
     int minor;
-    /**
-     * 修正版本号
-     */
+    /// 修正版本号
     @Getter
     @Setter
     int revision;
-    /**
-     * 编译版本号
-     */
+    /// 编译版本号
     @Getter
     @Setter
     int build;
@@ -111,12 +101,10 @@ public class Version implements Comparable<Version> {
         }
     }
 
-    /**
-     * 比较两个版本号
-     *
-     * @param v 另一个版本号
-     * @return 比较结果
-     */
+    /// 比较两个版本号
+    ///
+    /// @param v 另一个版本号
+    /// @return 比较结果
     @Override
     public int compareTo(@Nullable Version v) {
         if (v == null) return 1;

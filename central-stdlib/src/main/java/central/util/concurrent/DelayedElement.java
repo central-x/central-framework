@@ -31,30 +31,19 @@ import java.time.Duration;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 延迟队列元素
- *
- * @author Alan Yeh
- * @since 2022/07/14
- */
+/// 延迟队列元素
+///
+/// @author Alan Yeh
 @Getter
 @EqualsAndHashCode
 public class DelayedElement<E> implements Delayed {
-    /**
-     * 创建时间
-     */
+    /// 创建时间
     private final long timestamp;
-    /**
-     * 延迟时间
-     */
+    /// 延迟时间
     private final Duration delay;
-    /**
-     * 再次延迟次数
-     */
+    /// 再次延迟次数
     private final int times;
-    /**
-     * 元素
-     */
+    /// 元素
     private final E element;
 
     public DelayedElement(E element) {
@@ -72,9 +61,7 @@ public class DelayedElement<E> implements Delayed {
         this.times = times;
     }
 
-    /**
-     * 再次延长
-     */
+    /// 再次延长
     public DelayedElement<E> delay(Duration delay) {
         return new DelayedElement<>(this.getElement(), this.getTimestamp(), Duration.ofMillis(this.getDelay().toMillis() + delay.toMillis()), this.getTimes() + 1);
     }

@@ -30,18 +30,13 @@ import lombok.Getter;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 比较结果
- * <p>
- * -1: {@code left < right}
- * <p>
- * 0: {@code left = right}
- * <p>
- * 1: {@code left > right}
- *
- * @author Alan Yeh
- * @since 2022/07/13
- */
+/// 比较结果
+///
+/// - -1: `left < right`
+/// - 0: `left = right`
+/// - 1: `left > right`
+///
+/// @author Alan Yeh
 @Getter
 @PublicApi
 public enum CompareResult implements OptionalEnum<String> {
@@ -73,18 +68,16 @@ public enum CompareResult implements OptionalEnum<String> {
         }
     }
 
-    /**
-     * 是否匹配结果
-     * <p>
-     * 例：
-     * <p>
-     * {@code CompareResultEnum.GREATER.matches(first, second) } 的结果为 true 时，表示 {@code first > second}
-     * {@code CompareResultEnum.LESS.matches(first, second) } 的结果为 true 时，表示 {@code first < second}
-     *
-     * @param first  第一个待比较的对象
-     * @param second 第二个待比较的对象
-     * @return 匹配结果
-     */
+    /// 是否匹配结果
+    ///
+    /// 例:
+    ///
+    /// - `CompareResultEnum.GREATER.matches(first, second)`的结果为 true 时，表示`first > second`
+    /// - `CompareResultEnum.LESS.matches(first, second)`的结果为 true 时，表示`first < second`
+    ///
+    /// @param first  第一个待比较的对象
+    /// @param second 第二个待比较的对象
+    /// @return 匹配结果
     public <T extends Comparable<T>> boolean matches(T first, T second) {
         int compare = first.compareTo(second);
         return this.result.stream().anyMatch(it -> it == compare);

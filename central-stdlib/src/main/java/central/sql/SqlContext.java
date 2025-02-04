@@ -26,48 +26,33 @@ package central.sql;
 
 import java.util.List;
 
-/**
- * Sql 执行上下文
- *
- * @author Alan Yeh
- * @since 2022/09/15
- */
+/// Sql 执行上下文
+///
+/// @author Alan Yeh
 public interface SqlContext {
-    /**
-     * Sql 执行器
-     */
+    /// Sql 执行器
     SqlExecutor getExecutor();
 
-    /**
-     * 待执行 Sql
-     */
+    /// 待执行 Sql
     String getSql();
 
-    /**
-     * Sql 参数
-     */
+    /// Sql 参数
     List<List<Object>> getArgs();
 
-    /**
-     * 执行结果
-     */
+    /// 执行结果
     Object getResult();
 
-    /**
-     * 保存执行过程信息
-     *
-     * @param key   键
-     * @param value 值
-     * @param <T>   值类型
-     */
+    /// 保存执行过程信息
+    ///
+    /// @param key   键
+    /// @param value 值
+    /// @param <T>   值类型
     <T> void put(String key, T value);
 
-    /**
-     * 获取执行过程信息
-     *
-     * @param key 键
-     * @param <T> 值类型
-     * @return 值
-     */
+    /// 获取执行过程信息
+    ///
+    /// @param key 键
+    /// @param <T> 值类型
+    /// @return 值
     <T> T get(String key);
 }

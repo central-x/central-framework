@@ -24,11 +24,8 @@
 
 package central.sql.builder;
 
-/**
- * H2
- *
- * @author Alan Yeh
- * @since 2022/08/03
- */
+/// H2
+///
+/// @author Alan Yeh
 public class H2Builder extends StandardSqlBuilder {
 }

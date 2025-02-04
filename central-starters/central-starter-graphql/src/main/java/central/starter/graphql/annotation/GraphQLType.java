@@ -26,18 +26,13 @@ package central.starter.graphql.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * 用于关联 GraphQL 类型
- *
- * @author Alan Yeh
- * @since 2022/09/09
- */
+/// 用于关联 GraphQL 类型
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GraphQLType {
-    /**
-     * Java 实体对应的 GraphQL 实体名称
-     */
+    /// Java 实体对应的 GraphQL 实体名称
     String value() default "";
 }

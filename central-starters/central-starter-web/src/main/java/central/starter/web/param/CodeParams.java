@@ -31,12 +31,9 @@ import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * 标识参数
- *
- * @author Alan Yeh
- * @since 2022/07/15
- */
+/// 标识参数
+///
+/// @author Alan Yeh
 @Data
 public class CodeParams implements Serializable {
     @Serial

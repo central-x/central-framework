@@ -24,53 +24,36 @@
 
 package central.sql.meta.database;
 
-import central.util.Mapx;
 import central.lang.Stringx;
+import central.util.Mapx;
 import lombok.Data;
 import lombok.experimental.ExtensionMethod;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 数据库元数据
- *
- * @author Alan Yeh
- * @since 2022/09/01
- */
+/// 数据库元数据
+///
+/// @author Alan Yeh
 @Data
 @ExtensionMethod(Mapx.class)
 public class DatabaseMeta {
-    /**
-     * 数据库 URL
-     */
+    /// 数据库 URL
     private String url;
-    /**
-     * 数据库产品名称
-     */
+    /// 数据库产品名称
     private String name;
-    /**
-     * 数据库版本
-     */
+    /// 数据库版本
     private String version;
-    /**
-     * 数据库驱动名称
-     */
+    /// 数据库驱动名称
     private String driverName;
-    /**
-     * 数据库驱动版本
-     */
+    /// 数据库驱动版本
     private String driverVersion;
-    /**
-     * 表信息
-     */
+    /// 表信息
     private final Map<String, TableMeta> tables = new HashMap<String, TableMeta>().caseInsensitive().threadSafe();
 
-    /**
-     * 获取表元数据
-     *
-     * @param name 表名
-     */
+    /// 获取表元数据
+    ///
+    /// @param name 表名
     public TableMeta getTable(String name) {
         return this.tables.getOrNull(name);
     }

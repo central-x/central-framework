@@ -30,12 +30,9 @@ import jakarta.annotation.Nonnull;
 import java.io.Serial;
 import java.util.Objects;
 
-/**
- * Bean Initialize Exception
- *
- * @author Alan Yeh
- * @since 2022/07/11
- */
+/// Bean Initialize Exception
+///
+/// @author Alan Yeh
 @PublicApi
 public class InitializeException extends RuntimeException {
     @Serial

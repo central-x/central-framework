@@ -44,14 +44,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-/**
- * Group Mutation
- * <p>
- * 项目组修改
- *
- * @author Alan Yeh
- * @since 2022/10/04
- */
+/// Group Mutation
+///
+/// 项目组修改
+///
+/// @author Alan Yeh
 @Component
 @GraphQLSchema(path = "mutation", types = GroupDTO.class)
 public class GroupMutation {
@@ -59,12 +56,10 @@ public class GroupMutation {
     @Setter(onMethod_ = @Autowired)
     private GroupPersistence persistence;
 
-    /**
-     * 保存数据
-     *
-     * @param input    数据输入
-     * @param operator 操作人
-     */
+    /// 保存数据
+    ///
+    /// @param input    数据输入
+    /// @param operator 操作人
     @GraphQLFetcher
     public @Nonnull GroupDTO insert(@RequestParam @Validated({Insert.class, Default.class}) GroupInput input,
                                     @RequestParam String operator) {
@@ -72,12 +67,10 @@ public class GroupMutation {
         return DTO.wrap(data, GroupDTO.class);
     }
 
-    /**
-     * 批量保存数据
-     *
-     * @param inputs   数据输入
-     * @param operator 操作人
-     */
+    /// 批量保存数据
+    ///
+    /// @param inputs   数据输入
+    /// @param operator 操作人
     @GraphQLFetcher
     public @Nonnull List<GroupDTO> insertBatch(@RequestParam @Validated({Insert.class, Default.class}) List<GroupInput> inputs,
                                                @RequestParam String operator) {
@@ -85,12 +78,10 @@ public class GroupMutation {
         return DTO.wrap(data, GroupDTO.class);
     }
 
-    /**
-     * 更新数据
-     *
-     * @param input    数据输入
-     * @param operator 操作人
-     */
+    /// 更新数据
+    ///
+    /// @param input    数据输入
+    /// @param operator 操作人
     @GraphQLFetcher
     public @Nonnull GroupDTO update(@RequestParam @Validated({Update.class, Default.class}) GroupInput input,
                                     @RequestParam String operator) {
@@ -98,12 +89,10 @@ public class GroupMutation {
         return DTO.wrap(data, GroupDTO.class);
     }
 
-    /**
-     * 批量更新数据
-     *
-     * @param inputs   数据输入
-     * @param operator 操作人
-     */
+    /// 批量更新数据
+    ///
+    /// @param inputs   数据输入
+    /// @param operator 操作人
     @GraphQLFetcher
     public @Nonnull List<GroupDTO> updateBatch(@RequestParam @Validated({Update.class, Default.class}) List<GroupInput> inputs,
                                                @RequestParam String operator) {
@@ -111,21 +100,17 @@ public class GroupMutation {
         return DTO.wrap(data, GroupDTO.class);
     }
 
-    /**
-     * 根据主键删除数据
-     *
-     * @param ids 主键
-     */
+    /// 根据主键删除数据
+    ///
+    /// @param ids 主键
     @GraphQLFetcher
     public long deleteByIds(@RequestParam List<String> ids) {
         return this.persistence.deleteByIds(ids);
     }
 
-    /**
-     * 根据条件删除数据
-     *
-     * @param conditions 条件
-     */
+    /// 根据条件删除数据
+    ///
+    /// @param conditions 条件
     @GraphQLFetcher
     public long deleteBy(@RequestParam Conditions<GroupEntity> conditions) {
         return this.persistence.deleteBy(conditions);

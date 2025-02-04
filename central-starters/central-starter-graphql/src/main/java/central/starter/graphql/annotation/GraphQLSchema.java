@@ -26,30 +26,22 @@ package central.starter.graphql.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * 注册 Schema
- *
- * @author Alan Yeh
- * @since 2022/09/30
- */
+/// 注册 Schema
+///
+/// @author Alan Yeh
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GraphQLSchema {
-    /**
-     * Schema 分组
-     * 框架会从 central/graphql/${path}/${name}.graphql 读取 graphql 文件
-     */
+    /// Schema 分组
+    ///
+    /// 框架会从`central/graphql/${path}/${name}.graphql`读取 graphql 文件
     String path() default "";
 
-    /**
-     * Schema 文件名
-     * 如果为空，则根据当前的类名取值
-     */
+    /// Schema 文件名
+    /// 如果为空，则根据当前的类名取值
     String name() default "";
 
-    /**
-     * 注册数据类型
-     */
+    /// 注册数据类型
     Class<?>[] types() default {};
 }

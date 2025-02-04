@@ -29,48 +29,31 @@ import central.validation.Label;
 import central.validation.Validatable;
 import lombok.Data;
 
-/**
- * 字段
- *
- * @author Alan Yeh
- * @since 2022/08/29
- */
+/// 字段
+///
+/// @author Alan Yeh
 public interface Column {
-    /**
-     * 字段名
-     */
+    /// 字段名
     String getName();
 
-    /**
-     * 是否主键
-     */
+    /// 是否主键
     boolean isPrimary();
 
-    /**
-     * 字段类型
-     */
+    /// 字段类型
     SqlType getType();
 
-    /**
-     * 字段长度
-     */
+    /// 字段长度
     Integer getSize();
 
-    /**
-     * 备注
-     */
+    /// 备注
     String getRemarks();
 
-    /**
-     * 删除字段
-     */
+    /// 删除字段
     void drop();
 
-    /**
-     * 重命名字段
-     *
-     * @param newName 新的字段名
-     */
+    /// 重命名字段
+    ///
+    /// @param newName 新的字段名
     void rename(String newName);
 
     static Column of(String name, SqlType type, String remarks) {

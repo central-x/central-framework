@@ -29,12 +29,9 @@ import central.lang.Stringx;
 import central.util.Context;
 import org.springframework.context.ApplicationContext;
 
-/**
- * Spring 动态源
- *
- * @author Alan Yeh
- * @since 2022/10/03
- */
+/// Spring 动态源
+///
+/// @author Alan Yeh
 public class SpringSource implements Source {
     private final String qualifier;
     private final Class<?> requiredType;

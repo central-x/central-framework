@@ -41,167 +41,126 @@ import jakarta.annotation.Nonnull;
 import java.sql.SQLSyntaxErrorException;
 import java.util.List;
 
-/**
- * Sql Dialect
- *
- * @author Alan Yeh
- * @since 2022/08/01
- */
+/// Sql Dialect
+///
+/// @author Alan Yeh
 public interface SqlBuilder {
 
-    /**
-     * 处理表名
-     *
-     * @param table 原始表名
-     * @return 处理后的表名
-     */
+    /// 处理表名
+    ///
+    /// @param table 原始表名
+    /// @return 处理后的表名
     String processTable(String table);
 
-    /**
-     * 处理字段名
-     *
-     * @param column 字段名
-     * @return 处理后的字段名
-     */
+    /// 处理字段名
+    ///
+    /// @param column 字段名
+    /// @return 处理后的字段名
     String processColumn(String column);
 
-    /**
-     * 处理索引名
-     *
-     * @param index 索引名
-     * @return 处理后的索引名
-     */
+    /// 处理索引名
+    ///
+    /// @param index 索引名
+    /// @return 处理后的索引名
     String processIndex(String index);
 
-    /**
-     * Count Sql
-     *
-     * @param executor   Sql 执行器
-     * @param meta       主表元数据
-     * @param conditions 筛选条件
-     * @return 构建好的 Sql
-     */
+    /// Count Sql
+    ///
+    /// @param executor   Sql 执行器
+    /// @param meta       主表元数据
+    /// @param conditions 筛选条件
+    /// @return 构建好的 Sql
     SqlScript forCountBy(SqlExecutor executor, EntityMeta meta, Conditions<?> conditions) throws SQLSyntaxErrorException;
 
-    /**
-     * Select Sql
-     *
-     * @param executor   Sql 执行器
-     * @param meta       主表元数据
-     * @param first      查询前 N 条数据
-     * @param offset     跳过前 N 条数据
-     * @param columns    字段列表
-     * @param conditions 筛选条件
-     * @param orders     排序条件
-     * @return 构建好的 Sql
-     */
+    /// Select Sql
+    ///
+    /// @param executor   Sql 执行器
+    /// @param meta       主表元数据
+    /// @param first      查询前 N 条数据
+    /// @param offset     跳过前 N 条数据
+    /// @param columns    字段列表
+    /// @param conditions 筛选条件
+    /// @param orders     排序条件
+    /// @return 构建好的 Sql
     SqlScript forFindBy(SqlExecutor executor, EntityMeta meta, Long first, Long offset, Columns<?> columns, Conditions<?> conditions, Orders<?> orders) throws SQLSyntaxErrorException;
 
-    /**
-     * Insert Sql
-     *
-     * @param executor Sql 执行器
-     * @param meta     主表元数据
-     * @param entity   实体数据
-     * @return 构建好的 Sql
-     */
+    /// Insert Sql
+    ///
+    /// @param executor Sql 执行器
+    /// @param meta     主表元数据
+    /// @param entity   实体数据
+    /// @return 构建好的 Sql
     SqlScript forInsert(SqlExecutor executor, EntityMeta meta, Object entity) throws SQLSyntaxErrorException;
 
-    /**
-     * Insert Batch Sql
-     *
-     * @param executor Sql 执行器
-     * @param meta     主表元数据
-     * @param entities 实体数据
-     * @return 构建好的 Sql
-     */
+    /// Insert Batch Sql
+    ///
+    /// @param executor Sql 执行器
+    /// @param meta     主表元数据
+    /// @param entities 实体数据
+    /// @return 构建好的 Sql
     SqlBatchScript forInsertBatch(SqlExecutor executor, EntityMeta meta, List<Object> entities) throws SQLSyntaxErrorException;
 
-    /**
-     * Delete Sql
-     *
-     * @param executor   Sql 执行器
-     * @param meta       主表元数据
-     * @param conditions 筛选条件
-     * @return 构建好的 Sql
-     */
+    /// Delete Sql
+    ///
+    /// @param executor   Sql 执行器
+    /// @param meta       主表元数据
+    /// @param conditions 筛选条件
+    /// @return 构建好的 Sql
     SqlScript forDeleteBy(SqlExecutor executor, EntityMeta meta, Conditions<?> conditions) throws SQLSyntaxErrorException;
 
-    /**
-     * Insert Sql
-     *
-     * @param executor   Sql 执行器
-     * @param meta       主表元数据
-     * @param entity     实体数据
-     * @param conditions 更新条件
-     * @return 构建好的 Sql
-     */
+    /// Insert Sql
+    ///
+    /// @param executor   Sql 执行器
+    /// @param meta       主表元数据
+    /// @param entity     实体数据
+    /// @param conditions 更新条件
+    /// @return 构建好的 Sql
     SqlScript forUpdateBy(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions) throws SQLSyntaxErrorException;
 
-    /**
-     * Insert Sql
-     *
-     * @param executor   Sql 执行器
-     * @param meta       主表元数据
-     * @param entity     实体数据
-     * @param conditions 更新条件
-     * @return 构建好的 Sql
-     */
+    /// Insert Sql
+    ///
+    /// @param executor   Sql 执行器
+    /// @param meta       主表元数据
+    /// @param entity     实体数据
+    /// @param conditions 更新条件
+    /// @return 构建好的 Sql
     SqlScript forUpdate(SqlExecutor executor, EntityMeta meta, Object entity, Conditions<?> conditions) throws SQLSyntaxErrorException;
 
-    /**
-     * 处理数据类型
-     *
-     * @param type   Sql 类型
-     * @param length 类型长度
-     */
+    /// 处理数据类型
+    ///
+    /// @param type   Sql 类型
+    /// @param length 类型长度
     String handleSqlType(SqlType type, Integer length);
 
-    /**
-     * 创建表
-     */
+    /// 创建表
     @Nonnull
     List<SqlScript> forAddTable(@Nonnull AddTableScript script) throws SQLSyntaxErrorException;
 
-    /**
-     * 删除表
-     */
+    /// 删除表
     @Nonnull
     List<SqlScript> forDropTable(@Nonnull DropTableScript script) throws SQLSyntaxErrorException;
 
-    /**
-     * 重命名表
-     */
+    /// 重命名表
     @Nonnull
     List<SqlScript> forRenameTable(@Nonnull RenameTableScript script) throws SQLSyntaxErrorException;
 
-    /**
-     * 添加字段
-     */
+    /// 添加字段
     @Nonnull
     List<SqlScript> forAddColumn(@Nonnull AddColumnScript script) throws SQLSyntaxErrorException;
 
-    /**
-     * 删除字段
-     */
+    /// 删除字段
     @Nonnull
     List<SqlScript> forDropColumn(@Nonnull DropColumnScript script) throws SQLSyntaxErrorException;
 
-    /**
-     * 重命名字段
-     */
+    /// 重命名字段
     @Nonnull
     List<SqlScript> forRenameColumn(@Nonnull RenameColumnScript script) throws SQLSyntaxErrorException;
 
-    /**
-     * 添加索引
-     */
+    /// 添加索引
     @Nonnull
     List<SqlScript> forAddIndex(@Nonnull AddIndexScript script) throws SQLSyntaxErrorException;
 
-    /**
-     * 删除索引
-     */
+    /// 删除索引
     @Nonnull
     List<SqlScript> forDropIndex(@Nonnull DropIndexScript script) throws SQLSyntaxErrorException;
 }

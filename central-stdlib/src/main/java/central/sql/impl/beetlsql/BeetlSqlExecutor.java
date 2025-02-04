@@ -24,11 +24,8 @@
 
 package central.sql.impl.beetlsql;
 
-/**
- * BeetlSql 实现
- *
- * @author Alan Yeh
- * @since 2022/08/06
- */
+/// BeetlSql 实现
+///
+/// @author Alan Yeh
 public class BeetlSqlExecutor {
 }

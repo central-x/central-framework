@@ -29,12 +29,9 @@ import central.util.Convertx;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-/**
- * 标准 Sql Converter
- *
- * @author Alan Yeh
- * @since 2022/09/14
- */
+/// 标准 Sql Converter
+///
+/// @author Alan Yeh
 public class StandardConverter implements SqlConverter {
 
     private final Convertx converter;
